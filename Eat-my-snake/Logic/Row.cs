@@ -36,13 +36,17 @@ namespace Eat_my_snake.Logic
         {
             int a = (int)content;
             int b = (int)except;
-            int c = (int)andOrState;
-            return a ^ b ^ c;
+            return a ^ b;
         }
 
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            Row _row = (Row)obj;
+            if (except == Except.No)
+            {
+                return content == _row.content;
+            }
+            return content != _row.content;
         }
     }
 }
