@@ -1,0 +1,13 @@
+obj
+bin
+_ReSharper.*
+*.suo
+*.user
+*.bak
+*.orig
+*.sln.docstates
+*.sdf
+*/setup/Debug/*.*
+*/Release
+*/Debug
+*.ipch
