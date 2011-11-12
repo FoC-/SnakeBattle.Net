@@ -31,5 +31,18 @@ namespace Eat_my_snake.Logic
             this.except = except;
             this.andOrState = andOrState;
         }
+
+        public override int GetHashCode()
+        {
+            int a = (int)content;
+            int b = (int)except;
+            int c = (int)andOrState;
+            return a ^ b ^ c;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
     }
 }
