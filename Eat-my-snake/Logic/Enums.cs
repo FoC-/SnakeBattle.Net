@@ -1,4 +1,4 @@
-﻿namespace Eat_my_snake.Logic
+﻿namespace EatMySnake.Core.Logic
 {
     enum Content
     {

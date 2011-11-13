@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Eat_my_snake.Logic
+namespace EatMySnake.Core.Logic
 {
     class Field
     {
