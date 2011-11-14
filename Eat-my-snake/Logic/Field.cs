@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EatMySnake.Core.Logic
 {
-    class Field
+    public class Field
     {
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }

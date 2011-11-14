@@ -15,14 +15,14 @@ namespace EatMySnake.Core.Logic
         {
             this.content = Content.Empty;
             this.except = Except.No;
-            this.andOrState = AndOrState.And_Grey;
+            this.andOrState = AndOrState.AndGrey;
         }
 
         public Row(Content content)
         {
             this.content = content;
             this.except = Except.No;
-            this.andOrState = AndOrState.And_Grey;
+            this.andOrState = AndOrState.AndGrey;
         }
 
         public Row(Content content, Except except, AndOrState andOrState)
@@ -41,12 +41,12 @@ namespace EatMySnake.Core.Logic
 
         public override bool Equals(object obj)
         {
-            Row _row = (Row)obj;
+            Row row = (Row)obj;
             if (except == Except.No)
             {
-                return content == _row.content;
+                return content == row.content;
             }
-            return content != _row.content;
+            return content != row.content;
         }
     }
 }
