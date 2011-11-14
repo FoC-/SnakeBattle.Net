@@ -33,7 +33,6 @@ namespace EatMySnake.Core.Logic
                     else
                     {
                         field[x, y] = new Row();
-                        int h = field[x, y].GetHashCode();
                     }
                 }
             }

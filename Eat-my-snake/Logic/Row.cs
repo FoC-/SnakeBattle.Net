@@ -35,8 +35,12 @@ namespace EatMySnake.Core.Logic
         public override int GetHashCode()
         {
             int a = (int)content;
-            int b = (int)except;
-            return a ^ b;
+            if (except == Except.No)
+            {
+                return a;
+            }
+            //36 is a sum of fields in enum Content
+            return 36 - a;
         }
 
         public override bool Equals(object obj)
