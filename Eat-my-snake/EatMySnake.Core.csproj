@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logic\Enums.cs" />
+    <Compile Include="Logic\Content.cs" />
+    <Compile Include="Logic\AndOrState.cs" />
+    <Compile Include="Logic\Except.cs" />
     <Compile Include="Logic\Field.cs" />
     <Compile Include="Logic\Row.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
