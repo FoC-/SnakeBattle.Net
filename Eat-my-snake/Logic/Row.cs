@@ -5,36 +5,36 @@ using System.Text;
 
 namespace EatMySnake.Core.Logic
 {
-    class Row
+    public class Row
     {
-        private Content content;
+        public Content Content { get; set; }
         private Except except;
         private AndOrState andOrState;
 
         public Row()
         {
-            this.content = Content.Empty;
+            this.Content = Content.Empty;
             this.except = Except.No;
             this.andOrState = AndOrState.AndGrey;
         }
 
         public Row(Content content)
         {
-            this.content = content;
+            this.Content = content;
             this.except = Except.No;
             this.andOrState = AndOrState.AndGrey;
         }
 
         public Row(Content content, Except except, AndOrState andOrState)
         {
-            this.content = content;
+            this.Content = content;
             this.except = except;
             this.andOrState = andOrState;
         }
 
         public override int GetHashCode()
         {
-            int a = (int)content;
+            int a = (int)Content;
             if (except == Except.No)
             {
                 return a;
@@ -48,9 +48,9 @@ namespace EatMySnake.Core.Logic
             Row row = (Row)obj;
             if (except == Except.No)
             {
-                return content == row.content;
+                return Content == row.Content;
             }
-            return content != row.content;
+            return Content != row.Content;
         }
     }
 }

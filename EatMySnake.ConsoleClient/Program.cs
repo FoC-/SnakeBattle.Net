@@ -11,7 +11,7 @@ namespace EatMySnake.ConsoleClient
     {
         static void Main(string[] args)
         {
-            Field field = new Field(10, 10);
+            Matrix field = new Matrix(10, 10);
 
             Console.Read();
         }
