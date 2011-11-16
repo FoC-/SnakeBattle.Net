@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logic\Comparer.cs" />
     <Compile Include="Logic\Content.cs" />
     <Compile Include="Logic\AndOrState.cs" />
     <Compile Include="Logic\Except.cs" />
