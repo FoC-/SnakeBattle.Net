@@ -50,12 +50,14 @@
   <ItemGroup>
     <Compile Include="Logic\Content.cs" />
     <Compile Include="Logic\AndOrState.cs" />
+    <Compile Include="Logic\Core.cs" />
     <Compile Include="Logic\Except.cs" />
     <Compile Include="Logic\Matrix.cs" />
+    <Compile Include="Logic\Move.cs" />
     <Compile Include="Logic\Row.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Snake\Direction.cs" />
-    <Compile Include="Snake\Body.cs" />
+    <Compile Include="Logic\Direction.cs" />
+    <Compile Include="Snake\Snake.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
