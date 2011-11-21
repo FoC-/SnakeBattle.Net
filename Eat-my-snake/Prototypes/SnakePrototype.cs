@@ -16,10 +16,10 @@ namespace EatMySnake.Core.Prototypes
         {
             //fire event: eventBus.Publish(new SnakeBitedEvent(this, bitedSnake))
             bitedSnake.LooseTail();
-            this.Enlarge();
+            this.Grow();
         }
 
-        private void Enlarge()
+        private void Grow()
         {
             throw new NotImplementedException();
         }
