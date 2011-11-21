@@ -15,7 +15,7 @@ namespace EatMySnake.Core.Prototypes
         public void Bite(SnakePrototype bitedSnake)
         {
             //fire event: eventBus.Publish(new SnakeBitedEvent(this, bitedSnake))
-            bitedSnake.LooseTail();
+            bitedSnake.Decrease();
             this.Grow();
         }
 
@@ -24,7 +24,7 @@ namespace EatMySnake.Core.Prototypes
             throw new NotImplementedException();
         }
 
-        private void LooseTail()
+        private void Decrease()
         {
             throw new NotImplementedException();
         }
