@@ -25,7 +25,7 @@ namespace EatMySnake.Specifications
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Battle.feature"
+#line 1 "Addition.feature"
 #line hidden
         
         [NUnit.Framework.TestFixtureSetUpAttribute()]

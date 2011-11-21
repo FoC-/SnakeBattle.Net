@@ -56,10 +56,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BattleFeature.cs" />
-    <Compile Include="Battle.feature.cs">
+    <Compile Include="Addition.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Battle.feature</DependentUpon>
+      <DependentUpon>Addition.feature</DependentUpon>
     </Compile>
     <Compile Include="Battle\BattleReplay.feature.cs">
       <AutoGen>True</AutoGen>
@@ -72,9 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Battle.feature">
+    <None Include="Addition.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Battle.feature.cs</LastGenOutput>
+      <LastGenOutput>Addition.feature.cs</LastGenOutput>
     </None>
     <None Include="Battle\BattleReplay.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

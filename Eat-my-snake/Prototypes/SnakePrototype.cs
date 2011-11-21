@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,15 +8,18 @@ namespace EatMySnake.Core.Prototypes
 {
     class SnakePrototype : ISnake
     {
+        private VisibleArea visibleArea;
+        private List<LogicalChip> logicalChips;
+
         public int BodyLength
         {
             get { throw new NotImplementedException(); }
         }
 
-        public void Bite(SnakePrototype bitedSnake)
+        private void Bite(SnakePrototype snakeToBite)
         {
-            //fire event: eventBus.Publish(new SnakeBitedEvent(this, bitedSnake))
-            bitedSnake.Decrease();
+            //fire event: eventBus.Publish(new SnakeBitedEvent(this, snakeToBite))
+            snakeToBite.Decrease();
             this.Grow();
         }
 
@@ -28,6 +32,44 @@ namespace EatMySnake.Core.Prototypes
         {
             throw new NotImplementedException();
         }
+
+        public void Move()
+        {
+            MoveDirection moveDirection = GetNextMoveDirection();
+
+           /* if (EnemiesTailIsOnMoveDirection()) 
+            * {
+            *   var tailOwner = GetTailOwner(...);
+            *   Bite(tailOwner);
+            * }
+            */
+        }
+
+        private MoveDirection GetNextMoveDirection()
+        {
+            /* List<MoveDirection> movingDirections;
+             * movingDirections = movingDirections.Shuffle();
+             *  get move direction using visibleArea and logicalChips
+             */
+
+            throw new NotImplementedException();
+        }
+    }
+
+    internal enum MoveDirection
+    {
+        Left,
+        Right,
+        Forward,
+        None
+    }
+
+    internal class LogicalChip
+    {
+    }
+
+    internal class VisibleArea 
+    {
     }
 
     /*
@@ -42,15 +84,14 @@ namespace EatMySnake.Core.Prototypes
 
     class BattlePrototype
     {
-        public event EventHandler NextTurn;
+        private IEnumerable<SnakePrototype> snakes;
 
-        public void OnNextTurn(EventArgs e)
+        public void NextTurn()
         {
-            EventHandler handler = NextTurn;
-            if (handler != null) handler(this, e);
+            //foreach (var snake in snakes.Shuffle())
+            //{
+            //    snake.Move();
+            //}
         }
-
-
-
     }
 }
