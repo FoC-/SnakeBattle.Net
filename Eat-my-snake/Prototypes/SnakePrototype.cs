@@ -19,7 +19,7 @@ namespace EatMySnake.Core.Prototypes
         private void Bite(SnakePrototype snakeToBite)
         {
             //fire event: eventBus.Publish(new SnakeBitedEvent(this, snakeToBite))
-            snakeToBite.Decrease();
+            snakeToBite.Shorten();
             this.Grow();
         }
 
@@ -28,7 +28,7 @@ namespace EatMySnake.Core.Prototypes
             throw new NotImplementedException();
         }
 
-        private void Decrease()
+        private void Shorten()
         {
             throw new NotImplementedException();
         }
