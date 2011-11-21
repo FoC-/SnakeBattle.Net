@@ -57,6 +57,7 @@
     <Compile Include="Logic\Row.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Logic\Direction.cs" />
+    <Compile Include="Prototypes\SnakePrototype.cs" />
     <Compile Include="Snake\Snake.cs" />
   </ItemGroup>
   <ItemGroup>
