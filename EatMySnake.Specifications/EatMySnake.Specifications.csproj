@@ -55,7 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BattleFeature.cs" />
+    <Compile Include="AddtionFeatureDefinition.cs" />
     <Compile Include="Addition.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -67,6 +67,7 @@
       <DependentUpon>BattleReplay.feature</DependentUpon>
     </Compile>
     <Compile Include="Calculator.cs" />
+    <Compile Include="Tests\CalculatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\when_Enter_is_called_with_valid_number.cs" />
   </ItemGroup>

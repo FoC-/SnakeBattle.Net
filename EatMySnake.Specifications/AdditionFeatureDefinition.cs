@@ -8,12 +8,12 @@ using TechTalk.SpecFlow;
 namespace EatMySnake.Specifications
 {
     [Binding]
-    public class BattleFeature
+    public class AddtionFeatureDefinition
     {
         private readonly Calculator calculator = new Calculator();
         private int resultOnTheScreen;
 
-        [Given(@"I have entered 50 into the calculator")]
+        [Given(@"I have entered 50 into the calculator ")]
         public void GivenIHaveEntered50IntoTheCalculator()
         {
             calculator.Enter(50);
