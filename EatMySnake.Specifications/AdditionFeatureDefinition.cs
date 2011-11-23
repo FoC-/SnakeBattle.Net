@@ -8,7 +8,7 @@ using TechTalk.SpecFlow;
 namespace EatMySnake.Specifications
 {
     [Binding]
-    public class AddtionFeatureDefinition
+    public class AdditionFeatureDefinition
     {
         private readonly Calculator calculator = new Calculator();
         private int resultOnTheScreen;
