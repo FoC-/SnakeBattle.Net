@@ -68,8 +68,7 @@
     </Compile>
     <Compile Include="Calculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\Core\Extensions\when__Shuffle__is_called.cs" />
-    <Compile Include="Tests\Core\Extensions\when__Shuffle__is_called_twice_in_a_row.cs" />
+    <Compile Include="Tests\Core\Extensions\IEnumerable\ShuffleSpec.cs" />
     <Compile Include="Tests\when_Enter_is_called_with_valid_number.cs" />
   </ItemGroup>
   <ItemGroup>
