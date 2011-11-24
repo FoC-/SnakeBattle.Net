@@ -45,4 +45,6 @@ namespace EatMySnake.Specifications.Tests.Core.Extensions
         private static IEnumerable<int> shuffledEnumerableA;
         private static IEnumerable<int> shuffledEnumerableB;
     }
+
+
 }
