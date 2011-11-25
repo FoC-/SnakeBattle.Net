@@ -1,4 +1,4 @@
-﻿namespace EatMySnake.Core.Snake
+﻿namespace EatMySnake.Core.Common
 {
     public enum Direction
     {

@@ -1,29 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using EatMySnake.Core.Logic;
+using EatMySnake.Core.Common;
 
-namespace EatMySnake.Core.Snake
+namespace EatMySnake.Core.Battle
 {
-    class Snake
+    public class Snake
     {
         public string Name { get; private set; }
+        public int VisionRadius { get; private set; }
         public Guid Uid { get; private set; }
 
         public List<Matrix> BrainModules = new List<Matrix>();
         LinkedList<Move> BodyParts = new LinkedList<Move>();
 
-        public bool LoadSnake(Guid uid)
+        public Snake()
+        {
+            VisionRadius = 7;
+            Name = Guid.NewGuid().ToString();
+        }
+
+        public Snake LoadSnake(Guid uid)
         {
             Uid = uid;
             Name = Guid.NewGuid().ToString();
-            return true;
+            return this;
         }
 
         public bool SaveSnake()
         {
             return true;
+        }
+
+        public Move GetHeadPosition()
+        {
+            return BodyParts.First();
         }
 
         public void NextMove(Move newHeadPosition)

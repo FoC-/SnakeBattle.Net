@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EatMySnake.Core.Snake;
-
-namespace EatMySnake.Core.Logic
+﻿namespace EatMySnake.Core.Common
 {
-    struct Move
+    public struct Move
     {
         public int x;
         public int y;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using EatMySnake.Core.Logic; 
+using EatMySnake.Core.Battle;
 
 
 namespace EatMySnake.ConsoleClient
@@ -11,7 +11,7 @@ namespace EatMySnake.ConsoleClient
     {
         static void Main(string[] args)
         {
-            Matrix field = new Matrix(10, 10);
+            BattleManager battleManager = new BattleManager();
 
             Console.Read();
         }
