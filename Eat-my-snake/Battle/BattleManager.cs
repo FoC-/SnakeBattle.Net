@@ -14,13 +14,80 @@ namespace EatMySnake.Core.Battle
         {
             _battleField = new BattleField();
             _snakes = new List<Snake>();
+            //following code for test usage only
+            _snakes.Add(new Snake());
+            _snakes.Add(new Snake());
+            _snakes.Add(new Snake());
+            _snakes.Add(new Snake());
+            InitializeField();
+        }
+
+        /// <summary>
+        /// Initialize battle field with snakes, each snake "growth" from th middle of the wall
+        /// </summary>
+        public void InitializeField()
+        {
+            //set heads positions (bite: walls in the mmiddle) 
+            int n = 0;
+            foreach (Snake snake in _snakes)
+            {
+                snake.Bite(_battleField.Gateways[n++]);
+            }
+            //move each head in direction (bite: 9 times empty space in front of head)
+            for (int i = 0; i < 9; i++)
+            {
+                foreach (Snake snake in _snakes)
+                {
+                    int headX = snake.GetHeadPosition().X;
+                    int headY = snake.GetHeadPosition().Y;
+                    Direction direction = snake.GetHeadPosition().direction;
+                    switch (direction)
+                    {
+                        case Direction.North:
+                            snake.Bite(new Move(headX, headY + 1, Direction.North));
+                            break;
+                        case Direction.West:
+                            snake.Bite(new Move(headX - 1, headY, Direction.West));
+                            break;
+                        case Direction.East:
+                            snake.Bite(new Move(headX + 1, headY, Direction.East));
+                            break;
+                        case Direction.South:
+                            snake.Bite(new Move(headX, headY - 1, Direction.South));
+                            break;
+                    }
+                }
+            }
+            //move one more time (move: once to empty walls from tails)
+            foreach (Snake snake in _snakes)
+            {
+                int headX = snake.GetHeadPosition().X;
+                int headY = snake.GetHeadPosition().Y;
+                Direction direction = snake.GetHeadPosition().direction;
+                switch (direction)
+                {
+                    case Direction.North:
+                        snake.NextMove(new Move(headX, headY + 1, Direction.North));
+                        break;
+                    case Direction.West:
+                        snake.NextMove(new Move(headX - 1, headY, Direction.West));
+                        break;
+                    case Direction.East:
+                        snake.NextMove(new Move(headX + 1, headY, Direction.East));
+                        break;
+                    case Direction.South:
+                        snake.NextMove(new Move(headX, headY - 1, Direction.South));
+                        break;
+                }
+            }
         }
 
         public void Move()
         {
+            Move newHeadPosition;
             //we need shuffle snakes order for moves
             ShuffleSnakes();
-            Move newHeadPosition;
+            //each snake should make own move
             foreach (Snake snake in _snakes)
             {
                 //todo: genarate vissible area for snake and put it to next move for analyze
@@ -55,7 +122,7 @@ namespace EatMySnake.Core.Battle
         /// </summary>
         /// <param name="snakeBiter">Snake who try to bite</param>
         /// <param name="newHeadPosition">New position of header genarated by initial algorithm</param>
-        private void TryToBite(Snake snakeBiter,Move newHeadPosition)
+        private void TryToBite(Snake snakeBiter, Move newHeadPosition)
         {
             foreach (Snake snake in _snakes)
             {
@@ -113,12 +180,12 @@ namespace EatMySnake.Core.Battle
             }
         }
 
-        private Matrix GetObservableArea(Snake snake)
+        private Matrix GetViewPort(Snake snake)
         {
             //todo: need to check if head near borders
             Move headPosition = snake.GetHeadPosition();
 
-            int maxX = 0, minX = 0;
+            int maxX, minX;
             if (headPosition.X + snake.VisionRadius > _battleField.SizeX)
             {
                 maxX = _battleField.SizeX - headPosition.X;
@@ -137,7 +204,7 @@ namespace EatMySnake.Core.Battle
                 minX = headPosition.X - snake.VisionRadius;
             }
 
-            int maxY = 0, minY = 0;
+            int maxY, minY;
             if (headPosition.Y + snake.VisionRadius > _battleField.SizeY)
             {
                 maxY = _battleField.SizeY - headPosition.Y;
@@ -178,6 +245,7 @@ namespace EatMySnake.Core.Battle
             {
 
             }
+            throw new NotImplementedException();
         }
 
         private List<Matrix> CreateRotatedMatrix(Matrix area)

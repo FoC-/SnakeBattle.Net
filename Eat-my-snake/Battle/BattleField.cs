@@ -1,4 +1,6 @@
-﻿using EatMySnake.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using EatMySnake.Core.Common;
 
 namespace EatMySnake.Core.Battle
 {
@@ -8,13 +10,22 @@ namespace EatMySnake.Core.Battle
         public int SizeY;
 
         public Matrix CurrentState;
+        public List<Move> Gateways;
 
         public BattleField()
         {
-            SizeX = 25;
-            SizeY = 25;
+            SizeX = 27;
+            SizeY = 27;
             CurrentState = new Matrix(SizeX, SizeY);
             SetWalls();
+            Gateways = new List<Move>
+                           {
+                               new Move(0, 13, Direction.East),
+                               new Move(26, 13, Direction.West),
+                               new Move(13, 0, Direction.North),
+                               new Move(13, 26, Direction.South)
+                           };
+
         }
 
         public BattleField(int sizeX, int sizeY)
@@ -23,6 +34,13 @@ namespace EatMySnake.Core.Battle
             SizeY = sizeY;
             CurrentState = new Matrix(sizeX, sizeY);
             SetWalls();
+            CreateGateways();
+        }
+
+        private void CreateGateways()
+        {
+            //todo: need to add ability place gateways for different fields
+            throw new NotImplementedException();
         }
 
         private void SetWalls()
