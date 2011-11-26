@@ -6,6 +6,7 @@ namespace EatMySnake.Core.Battle
 {
     public class BattleManager
     {
+        Random random = new Random();
         private BattleField _battleField;
         private List<Snake> _snakes;
 
@@ -14,6 +15,13 @@ namespace EatMySnake.Core.Battle
             _battleField = new BattleField();
             _snakes = new List<Snake>();
         }
+
+        public void Move()
+        {
+            //we need random order for snakes
+            NextMove(_battleField.CurrentState, new Snake());
+        }
+
 
         public void DetermDirection(Snake snake, Matrix observableArea)
         {
@@ -35,41 +43,41 @@ namespace EatMySnake.Core.Battle
             Move headPosition = snake.GetHeadPosition();
 
             int maxX = 0, minX = 0;
-            if (headPosition.x + snake.VisionRadius > _battleField.SizeX)
+            if (headPosition.X + snake.VisionRadius > _battleField.SizeX)
             {
-                maxX = _battleField.SizeX - headPosition.x;
+                maxX = _battleField.SizeX - headPosition.X;
             }
             else
             {
-                maxX = headPosition.x + snake.VisionRadius;
+                maxX = headPosition.X + snake.VisionRadius;
             }
 
-            if (headPosition.x - snake.VisionRadius < 0)
+            if (headPosition.X - snake.VisionRadius < 0)
             {
-                minX = headPosition.x;
+                minX = headPosition.X;
             }
             else
             {
-                minX = headPosition.x - snake.VisionRadius;
+                minX = headPosition.X - snake.VisionRadius;
             }
 
             int maxY = 0, minY = 0;
-            if (headPosition.y + snake.VisionRadius > _battleField.SizeY)
+            if (headPosition.Y + snake.VisionRadius > _battleField.SizeY)
             {
-                maxY = _battleField.SizeY - headPosition.y;
+                maxY = _battleField.SizeY - headPosition.Y;
             }
             else
             {
-                maxY = headPosition.y + snake.VisionRadius;
+                maxY = headPosition.Y + snake.VisionRadius;
             }
 
-            if (headPosition.y - snake.VisionRadius < 0)
+            if (headPosition.Y - snake.VisionRadius < 0)
             {
-                minY = headPosition.y;
+                minY = headPosition.Y;
             }
             else
             {
-                minY = headPosition.y - snake.VisionRadius;
+                minY = headPosition.Y - snake.VisionRadius;
             }
 
             //todo: error exist need to verify logic
@@ -87,48 +95,46 @@ namespace EatMySnake.Core.Battle
             return tmpArea;
         }
 
-        public Move NextMove(Matrix currentStateOfBattleField)
+        private Move NextMove(Matrix viewPort, Snake snake)
         {
             //Check if movement is possible
-            //if (CheckPossibleMoves(currentStateOfBattleField)[0] == Direction.NoWay)
-            //{
-            //    //Return current position of head
-            //    return new Move();
-            //}
-
-            Snake snake = new Snake();
-
-            throw new NotImplementedException();
-            //After calculation we should return new positon of head
-            //add leangth if any tail is eaten or add new head and delete tail);
+            List<Move> possibleMoves = CheckPossibleMoves(viewPort, snake);
+            //check is first move is not head position
+            if (possibleMoves[0].Equals(snake.GetHeadPosition()))
+            {
+                //Return current position of head
+                return snake.GetHeadPosition();
+            }
+            //Try to move according brainchip
+            foreach (Matrix brainModule in snake.BrainModules)
+            {
+                throw new NotImplementedException();
+            }
+            //Move in random direction
+            return possibleMoves[random.Next(possibleMoves.Count)];
         }
 
-        //private List<Direction> CheckPossibleMoves(Matrix currentStateOfBattleField)
-        //{
-        //    List<Direction> directions = new List<Direction>();
-        //    int headX = BodyParts[0].x;
-        //    int headY = BodyParts[0].y;
-        //    if (currentStateOfBattleField.Rows[headX, headY + 1].Content == Content.Empty
-        //        || currentStateOfBattleField.Rows[headX, headY + 1].Content == Content.EnemyTail
-        //        || currentStateOfBattleField.Rows[headX, headY + 1].Content == Content.OwnTail)
-        //        directions.Add(Direction.North);
-        //    if (currentStateOfBattleField.Rows[headX - 1, headY].Content == Content.Empty
-        //        || currentStateOfBattleField.Rows[headX - 1, headY].Content == Content.EnemyTail
-        //        || currentStateOfBattleField.Rows[headX - 1, headY].Content == Content.OwnTail)
-        //        directions.Add(Direction.South);
-        //    if (currentStateOfBattleField.Rows[headX - 1, headY].Content == Content.Empty
-        //        || currentStateOfBattleField.Rows[headX - 1, headY].Content == Content.EnemyTail
-        //        || currentStateOfBattleField.Rows[headX - 1, headY].Content == Content.OwnTail)
-        //        directions.Add(Direction.West);
-        //    if (currentStateOfBattleField.Rows[headX + 1, headY].Content == Content.Empty
-        //        || currentStateOfBattleField.Rows[headX + 1, headY].Content == Content.EnemyTail
-        //        || currentStateOfBattleField.Rows[headX + 1, headY].Content == Content.OwnTail)
-        //        directions.Add(Direction.East);
-        //    if (directions.Count == 0)
-        //    {
-        //        directions.Add(Direction.NoWay);
-        //    }
-        //    return directions;
-        //}
+        private List<Move> CheckPossibleMoves(Matrix viewPort, Snake snake)
+        {
+            List<Move> possibleMoves = new List<Move>();
+
+            List<Content> passable = new List<Content>();
+            passable.Add(Content.Empty);
+            passable.Add(Content.EnemyTail);
+            passable.Add(Content.OwnTail);
+
+            int headX = snake.GetHeadPosition().X;
+            int headY = snake.GetHeadPosition().Y;
+
+            foreach (Content content in passable)
+            {
+                if (viewPort[headX, headY + 1].Content == content) possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
+                if (viewPort[headX, headY - 1].Content == content) possibleMoves.Add(new Move(headX, headY - 1, Direction.South));
+                if (viewPort[headX - 1, headY].Content == content) possibleMoves.Add(new Move(headX - 1, headY, Direction.West));
+                if (viewPort[headX + 1, headY].Content == content) possibleMoves.Add(new Move(headX + 1, headY, Direction.East));
+            }
+            if (0 == possibleMoves.Count) possibleMoves.Add(snake.GetHeadPosition());
+            return possibleMoves;
+        }
     }
 }
