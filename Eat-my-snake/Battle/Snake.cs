@@ -37,6 +37,11 @@ namespace EatMySnake.Core.Battle
             return BodyParts.First();
         }
 
+        public Move GetTailPosition()
+        {
+            return BodyParts.Last();
+        }
+
         public void NextMove(Move newHeadPosition)
         {
             BodyParts.AddFirst(newHeadPosition);
