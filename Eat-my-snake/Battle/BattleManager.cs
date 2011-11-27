@@ -109,10 +109,10 @@ namespace EatMySnake.Core.Battle
                 return snake.GetHeadPosition();
             }
             //Try to move according brainchip
-            foreach (Matrix brainModule in snake.BrainModules)
-            {
-                throw new NotImplementedException();
-            }
+            //foreach (Matrix brainModule in snake.BrainModules)
+            //{
+            //    throw new NotImplementedException();
+            //}
             //Move in random direction
             return possibleMoves[random.Next(possibleMoves.Count)];
         }
@@ -133,6 +133,7 @@ namespace EatMySnake.Core.Battle
                     return;
                 }
             }
+            snakeBiter.NextMove(newHeadPosition);
         }
 
         /// <summary>
