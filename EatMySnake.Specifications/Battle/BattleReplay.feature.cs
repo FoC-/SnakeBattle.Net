@@ -20,6 +20,7 @@ namespace EatMySnake.Specifications.Battle
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Battle replay")]
+    [NUnit.Framework.CategoryAttribute("scenarios")]
     public partial class BattleReplayFeature
     {
         
@@ -33,7 +34,8 @@ namespace EatMySnake.Specifications.Battle
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Battle replay", "In order to analize snake\'s behaviour or simply review a battle\r\nAs a player\r\nI w" +
-                    "ant to be able to see battle replay", ProgrammingLanguage.CSharp, ((string[])(null)));
+                    "ant to be able to see battle replay", ProgrammingLanguage.CSharp, new string[] {
+                        "scenarios"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -67,18 +69,20 @@ namespace EatMySnake.Specifications.Battle
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Step by step replay")]
+        [NUnit.Framework.CategoryAttribute("scenarios")]
         public virtual void StepByStepReplay()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Step by step replay", ((string[])(null)));
-#line 6
-this.ScenarioSetup(scenarioInfo);
-#line 7
- testRunner.Given("I have started battle replay");
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Step by step replay", new string[] {
+                        "scenarios"});
 #line 8
- testRunner.And("I have choosen step-by-step option");
+this.ScenarioSetup(scenarioInfo);
 #line 9
- testRunner.When("I press \"Next step\"");
+ testRunner.Given("I have started battle replay");
 #line 10
+ testRunner.And("I have choosen step-by-step option");
+#line 11
+ testRunner.When("I press \"Next step\"");
+#line 12
  testRunner.Then("I should be able to see next battle step");
 #line hidden
             this.ScenarioCleanup();

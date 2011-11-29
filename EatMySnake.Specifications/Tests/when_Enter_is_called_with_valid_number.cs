@@ -3,7 +3,7 @@ using Machine.Specifications;
 
 namespace EatMySnake.Specifications.Tests
 {
-    [Subject(typeof(Calculator))]
+    [Subject(typeof(Calculator)), Tags("sample")]
     public class when_correct_number_is_entered
     {
         //arrange

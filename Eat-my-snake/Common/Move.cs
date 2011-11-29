@@ -19,6 +19,8 @@ namespace EatMySnake.Core.Common
             return String.Format("{0}{1}",X,Y).GetHashCode();
         }
 
+        //restuta->foc: this doesn't include direction comparison, why two Move objects with the same X and Y
+        //but different directions should be considered as equal?
         public override bool Equals(object obj)
         {
             Move move = (Move)obj;
