@@ -1,4 +1,5 @@
 ﻿using System;
+using EatMySnake.Core.Extensions;
 
 namespace EatMySnake.Core.Common
 {
@@ -16,7 +17,7 @@ namespace EatMySnake.Core.Common
 
         public override int GetHashCode()
         {
-            return String.Format("{0}{1}",X,Y).GetHashCode();
+            return "{0}{1}".F(X, Y).GetHashCode();
         }
 
         //restuta->foc: this doesn't include direction comparison, why two Move objects with the same X and Y
@@ -29,7 +30,7 @@ namespace EatMySnake.Core.Common
 
         public override string ToString()
         {
-            return String.Format("X={0},Y={1},Direction is {2}", X, Y, direction);
+            return "X={0},Y={1},Direction is {2}".F(X, Y, direction);
         }
     }
 }
