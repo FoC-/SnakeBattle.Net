@@ -1,4 +1,4 @@
-﻿namespace EatMySnake.Core.Logic
+﻿namespace EatMySnake.Core.Common
 {
     public enum AndOrState
     {

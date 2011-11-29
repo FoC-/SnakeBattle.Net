@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace EatMySnake.Core.Logic
+﻿namespace EatMySnake.Core.Common
 {
     public class Row
     {
@@ -51,6 +46,11 @@ namespace EatMySnake.Core.Logic
                 return Content == row.Content;
             }
             return Content != row.Content;
+        }
+
+        public override string ToString()
+        {
+            return Content.ToString();
         }
     }
 }
