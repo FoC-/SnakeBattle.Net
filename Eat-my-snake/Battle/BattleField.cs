@@ -4,19 +4,13 @@ using EatMySnake.Core.Common;
 
 namespace EatMySnake.Core.Battle
 {
-    class BattleField
+    class BattleField : Matrix
     {
-        public int SizeX;
-        public int SizeY;
-
-        public Matrix CurrentState;
         public List<Move> Gateways;
 
         public BattleField()
+            : base(27, 27)
         {
-            SizeX = 27;
-            SizeY = 27;
-            CurrentState = new Matrix(SizeX, SizeY);
             SetWalls();
             Gateways = new List<Move>
                            {
@@ -29,10 +23,8 @@ namespace EatMySnake.Core.Battle
         }
 
         public BattleField(int sizeX, int sizeY)
+            : base(sizeX, sizeY)
         {
-            SizeX = sizeX;
-            SizeY = sizeY;
-            CurrentState = new Matrix(sizeX, sizeY);
             SetWalls();
             CreateGateways();
         }
@@ -51,11 +43,11 @@ namespace EatMySnake.Core.Battle
                 {
                     if (x == 0 || y == 0 || x == SizeX - 1 || y == SizeY - 1)
                     {
-                        CurrentState[x, y] = new Row(Content.Wall);
+                        Rows[x, y] = new Row(Content.Wall);
                     }
                     else
                     {
-                        CurrentState[x, y] = new Row();
+                        Rows[x, y] = new Row();
                     }
                 }
             }

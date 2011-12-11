@@ -27,7 +27,7 @@ namespace EatMySnake.Core.Common
 
         public override string ToString()
         {
-            return String.Format("X={0},Y={1},Direction is {2}", X, Y, direction);
+            return String.Format("X={0,2},Y={1,2},Direction is {2,5}", X, Y, direction);
         }
     }
 }

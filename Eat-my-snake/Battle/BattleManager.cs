@@ -31,7 +31,12 @@ namespace EatMySnake.Core.Battle
             int n = 0;
             foreach (Snake snake in _snakes)
             {
-                snake.Bite(_battleField.Gateways[n++]);
+                snake.Biting += new Snake.ActionHandler(snake_Biting);
+                snake.Moving += new Snake.ActionHandler(snake_Moving);
+                Move move = _battleField.Gateways[n++];
+                snake.Bite(move);
+                //draw snake heads
+                _battleField[move.X, move.Y] = new Row(Content.OwnHead);
             }
             //move each head in direction (bite: 9 times empty space in front of head)
             for (int i = 0; i < 9; i++)
@@ -82,6 +87,26 @@ namespace EatMySnake.Core.Battle
             }
         }
 
+        void snake_Moving(Snake snake, Move move)
+        {
+            if (snake.Length == 0) return;
+            //Move head = snake.GetHeadPosition();
+            //Move tail = snake.GetTailPosition();
+            //_battleField[head.X, head.Y].Content = Content.OwnBody;
+            //_battleField[move.X, move.Y].Content = Content.OwnHead;
+            //_battleField[tail.X, tail.Y].Content = Content.Empty;
+            Console.WriteLine(snake.Name + " Move " + move + " Len = " + snake.Length);
+        }
+
+        void snake_Biting(Snake snake, Move move)
+        {
+            if (snake.Length == 0) return;
+            //Move head = snake.GetHeadPosition();
+            //_battleField[head.X, head.Y].Content = Content.OwnBody;
+            //_battleField[move.X, move.Y].Content = Content.OwnHead;
+            Console.WriteLine(snake.Name + " Bite " + move + " Len = " + snake.Length);
+        }
+
         public void Move()
         {
             Move newHeadPosition;
@@ -91,7 +116,7 @@ namespace EatMySnake.Core.Battle
             foreach (Snake snake in _snakes)
             {
                 //todo: genarate vissible area for snake and put it to next move for analyze
-                newHeadPosition = NextMove(_battleField.CurrentState, snake);
+                newHeadPosition = NextMove(_battleField, snake);
                 TryToBite(snake, newHeadPosition);
             }
 
@@ -231,7 +256,7 @@ namespace EatMySnake.Core.Battle
             {
                 for (int y = minY; y < maxY; y++)
                 {
-                    tmpArea[tx, ty] = _battleField.CurrentState[x, y];
+                    tmpArea[tx, ty] = _battleField[x, y];
                     ty++;
                 }
                 tx++;
