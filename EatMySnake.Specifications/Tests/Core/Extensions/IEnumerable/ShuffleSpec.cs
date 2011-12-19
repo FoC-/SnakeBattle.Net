@@ -14,7 +14,7 @@ namespace EatMySnake.Specifications.Tests.Core.Extensions
         Because of = () =>
             suffledEnumerable = enumerable.Shuffle();
 
-        It should_return_elements_in_random_order = () => 
+        It should_return_elements_in_random_order = () =>
             suffledEnumerable.ShouldNotEqual(enumerable);
 
         private static IEnumerable<int> enumerable;

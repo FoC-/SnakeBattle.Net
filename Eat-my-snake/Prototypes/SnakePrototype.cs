@@ -37,7 +37,7 @@ namespace EatMySnake.Core.Prototypes
         {
             MoveDirection moveDirection = GetNextMoveDirection();
 
-           /* if (EnemiesTailIsOnMoveDirection()) 
+           /* if (EnemiesTailIsOnMoveDirection())
             * {
             *   var tailOwner = GetTailOwner(...);
             *   Bite(tailOwner);
@@ -68,7 +68,7 @@ namespace EatMySnake.Core.Prototypes
     {
     }
 
-    internal class VisibleArea 
+    internal class VisibleArea
     {
     }
 

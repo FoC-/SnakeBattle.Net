@@ -10,7 +10,7 @@ namespace EatMySnake.Specifications
     /// </summary>
     public class Calculator
     {
-        private readonly List<int> enteredNumbers = new List<int>(); 
+        private readonly List<int> enteredNumbers = new List<int>();
 
         public void Enter(int number)
         {
