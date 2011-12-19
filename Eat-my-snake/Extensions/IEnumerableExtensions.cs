@@ -17,7 +17,7 @@ namespace EatMySnake.Core.Extensions
         public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> enumerable)
         {
             //this could be implemented in one line: return enumerable.OrderBy(_ => r.Next());
-            //but according to this http://stackoverflow.com/questions/1287567/c-is-using-random-and-orderby-a-good-shuffle-algorithm 
+            //but according to this http://stackoverflow.com/questions/1287567/c-is-using-random-and-orderby-a-good-shuffle-algorithm
             //I decided to use Fisher-Yates shuffle
 
             T[] elements = enumerable.ToArray();
@@ -33,7 +33,7 @@ namespace EatMySnake.Core.Extensions
             }
 
             // there is one item remaining that was not returned - we return it now
-            yield return elements[0]; 
+            yield return elements[0];
         }
     }
 }
