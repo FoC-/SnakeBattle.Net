@@ -11,7 +11,7 @@ namespace EatMySnake.Specifications.Tests
             calculator = new Calculator();
 
         //act
-        Because of = () => 
+        Because of = () =>
             calculator.Enter(NumberWasEntered);
 
         //assert
