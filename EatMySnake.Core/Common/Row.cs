@@ -3,7 +3,7 @@
     public class Row
     {
         public Content Content { get; set; }
-        private Except except;
+        private readonly Except except;
         private AndOrState andOrState;
 
         public Row()
@@ -35,6 +35,7 @@
                 return a;
             }
             //36 is a sum of fields in enum Content
+            //todo restuta->foc(!): and this is stupid hardcore, when enum will change I don't want to care about this sum, why should I keep it in mind?
             return 36 - a;
         }
 
