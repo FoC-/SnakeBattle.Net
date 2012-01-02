@@ -1,0 +1,3 @@
+﻿1. Provide possibility to programm snake on C# (or any language).
+	+ input data would be visible area
+	+ output would be (left, right or forward)
