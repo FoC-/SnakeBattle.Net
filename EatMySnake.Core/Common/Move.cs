@@ -30,7 +30,7 @@ namespace EatMySnake.Core.Common
 
         public override string ToString()
         {
-            return "X={0},Y={1},Direction is {2}".F(X, Y, direction);
+            return "X={0,2},Y={1,2},Direction is {2,5}".F(X, Y, direction);
         }
     }
 }
