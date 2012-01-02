@@ -16,3 +16,14 @@ Scenario: Battle that ends when one snake is left
 	And only one snake is left after some time
 	Then battle should be finished
 		And snake should be anounced as a winner
+
+Scenario: All snakes are stuck
+	Given I have started a battle
+	And all snakes are stuck
+	Then battle should be finished automatically
+
+Scenario: Any snake can't be bitten
+	Given I have started a battle
+	And all snakes except one are stuck in the way their tail can't be bitten
+	And one snake is not stuck
+	Then battle should be finished automatically

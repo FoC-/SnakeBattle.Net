@@ -104,6 +104,42 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("All snakes are stuck")]
+        public virtual void AllSnakesAreStuck()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("All snakes are stuck", ((string[])(null)));
+#line 20
+this.ScenarioSetup(scenarioInfo);
+#line 21
+ testRunner.Given("I have started a battle");
+#line 22
+ testRunner.And("all snakes are stuck");
+#line 23
+ testRunner.Then("battle should be finished automatically");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Any snake can\'t be bitten")]
+        public virtual void AnySnakeCanTBeBitten()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Any snake can\'t be bitten", ((string[])(null)));
+#line 25
+this.ScenarioSetup(scenarioInfo);
+#line 26
+ testRunner.Given("I have started a battle");
+#line 27
+ testRunner.And("all snakes except one are stuck in the way their tail can\'t be bitten");
+#line 28
+ testRunner.And("one snake is not stuck");
+#line 29
+ testRunner.Then("battle should be finished automatically");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
