@@ -79,9 +79,28 @@ this.ScenarioSetup(scenarioInfo);
 #line 9
  testRunner.Given("I have started a battle");
 #line 10
- testRunner.And("it cannot be finished during pre-determined amount of moves");
-#line 11
- testRunner.Then("it should be finished automatically");
+ testRunner.And("it cannot be finished during pre-determined amount of turns");
+#line 12
+ testRunner.Then("it should be finished automatically after the last turn");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Battle that ends when one snake is left")]
+        public virtual void BattleThatEndsWhenOneSnakeIsLeft()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Battle that ends when one snake is left", ((string[])(null)));
+#line 14
+this.ScenarioSetup(scenarioInfo);
+#line 15
+ testRunner.Given("I have started a battle with more than one snake");
+#line 16
+ testRunner.And("only one snake is left after some time");
+#line 17
+ testRunner.Then("battle should be finished");
+#line 18
+  testRunner.And("snake should be anounced as a winner");
 #line hidden
             this.ScenarioCleanup();
         }

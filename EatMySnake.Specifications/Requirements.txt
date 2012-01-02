@@ -10,3 +10,6 @@
 	e. snakes get points as a result of each battle
 		i. //todo: determine exact amount of points
 	e. if two snakes with the same body length left at the end
+3. Battle replay
+	a. should containt information about every pattern that was applied on any step for target snake (or any snake)
+	b. 

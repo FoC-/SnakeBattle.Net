@@ -47,10 +47,10 @@ namespace EatMySnake.Core.Prototypes
         {
             //fire event: eventBus.Publish(new SnakeBittenEvent(this, snakeToBite))
             snakeToBite.Shorten();
-            this.Grow();
+            this.Lengthen();
         }
 
-        private void Grow()
+        private void Lengthen()
         {
             throw new NotImplementedException();
         }
