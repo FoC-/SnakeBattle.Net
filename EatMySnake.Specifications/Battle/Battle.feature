@@ -27,3 +27,8 @@ Scenario: No snake can be bitten
 	And all snakes except one are stuck in the way their tail can't be bitten
 	And one snake is not stuck
 	Then battle should be finished automatically
+
+Scenario: Only one snake is left
+	Given I have started a battle
+	And after several turns only one snake is left
+	Then battle should be finished

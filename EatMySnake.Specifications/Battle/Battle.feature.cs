@@ -140,6 +140,23 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Only one snake is left")]
+        public virtual void OnlyOneSnakeIsLeft()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Only one snake is left", ((string[])(null)));
+#line 31
+this.ScenarioSetup(scenarioInfo);
+#line 32
+ testRunner.Given("I have started a battle");
+#line 33
+ testRunner.And("after several turns only one snake is left");
+#line 34
+ testRunner.Then("battle should be finished");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
