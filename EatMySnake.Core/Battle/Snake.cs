@@ -58,13 +58,14 @@ namespace EatMySnake.Core.Battle
 
         private void FireMoveEvent(Move move)
         {
-            if (null != Moving)
+            //todo restuta->foc: oh no, this isn't a c++, so if (someVar = value) will not compile (except of someVar is of type bool), thats why you don't need to write null at the frist place
+            if (Moving != null)
                 Moving(this, move);
         }
 
         private void FireBiteEvent(Move move)
         {
-            if (null != Biting)
+            if (Biting != null)
                 Biting(this, move);
         }
     }
