@@ -15,7 +15,6 @@ namespace EatMySnake.Core.Prototypes
                 throw new NotImplementedException();
             }
         }
-
         public BodyPart Tail
         {
             get
@@ -23,11 +22,5 @@ namespace EatMySnake.Core.Prototypes
                 throw new NotImplementedException();
             }
         }
-
-    }
-
-    internal struct BodyPart
-    {
-        public Coordinate Coordinate { get; set; }
     }
 }

@@ -68,6 +68,7 @@
     <Compile Include="Prototypes\BattleField.cs" />
     <Compile Include="Prototypes\BattleSnake.cs" />
     <Compile Include="Prototypes\Body.cs" />
+    <Compile Include="Prototypes\BodyPart.cs" />
     <Compile Include="Prototypes\Mind.cs" />
     <Compile Include="Prototypes\MindChip.cs" />
     <Compile Include="Prototypes\Passport.cs" />
