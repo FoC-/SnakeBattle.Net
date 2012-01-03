@@ -22,7 +22,7 @@ Scenario: All snakes are stuck
 	And all snakes are stuck
 	Then battle should be finished automatically
 
-Scenario: Any snake can't be bitten
+Scenario: No snake can be bitten
 	Given I have started a battle
 	And all snakes except one are stuck in the way their tail can't be bitten
 	And one snake is not stuck

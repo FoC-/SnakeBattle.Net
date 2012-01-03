@@ -123,10 +123,10 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Any snake can\'t be bitten")]
-        public virtual void AnySnakeCanTBeBitten()
+        [NUnit.Framework.DescriptionAttribute("No snake can be bitten")]
+        public virtual void NoSnakeCanBeBitten()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Any snake can\'t be bitten", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No snake can be bitten", ((string[])(null)));
 #line 25
 this.ScenarioSetup(scenarioInfo);
 #line 26
