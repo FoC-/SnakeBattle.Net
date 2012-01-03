@@ -22,14 +22,14 @@ namespace EatMySnake.Core.Prototypes
 
         public void Move()
         {
-            var moveDirection = mind.GetNextMoveDirection();
+            //var moveDirection = mind.GetNextMoveDirection();
 
-            if (TailOnMyWay(moveDirection))
-            {
-                battleField.GetTailOwner(tail)
-            }
+            //if (TailOnMyWay(moveDirection))
+            //{
+            //    battleField.GetTailOwner(tail)
+            //}
 
-            MakeMove(move);
+            //MakeMove(move);
 
         }
     }
