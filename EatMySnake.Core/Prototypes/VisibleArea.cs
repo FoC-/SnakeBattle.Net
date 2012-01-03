@@ -1,6 +1,6 @@
 namespace EatMySnake.Core.Prototypes
 {
-    internal class VisibleArea
+    public struct VisibleArea
     {
     }
 }
