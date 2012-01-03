@@ -1,5 +1,14 @@
 namespace EatMySnake.Core.Prototypes
 {
+    /* var snakeSpecification = new SnakeSpecification()
+     * .UsingMind<Mind>()
+     * .UsingBody<Body>()
+     * .SizeOfVisibleArea(6);
+     * 
+     * var battleSnake = battleSnakeBuilder.BuildFrom(snake).Using(snakeSpecification);
+     * */
+
+
     /// <summary>
     /// Represents a snake on a battle field.
     /// </summary>
@@ -8,7 +17,8 @@ namespace EatMySnake.Core.Prototypes
         private readonly BattleField battleField;
         private readonly Snake snake;
         private Mind mind;
-        private Body body;
+
+        public Body Body { get; private set; }
         public int SizeOfVisibleArea { get; private set; }
 
         /// <summary>
@@ -24,13 +34,24 @@ namespace EatMySnake.Core.Prototypes
         {
             //var moveDirection = mind.GetNextMoveDirection();
 
-            //if (TailOnMyWay(moveDirection))
+            //var moveCoordinates = GetMoveCoordinates(moveDirection);
+            //BodyPart tail = battleField.GetTail(moveCoordinates);
+            //
+
+            //if (tail != null)
             //{
-            //    battleField.GetTailOwner(tail)
+            //    var tailOwner = battleField.GetTailOwner(tail);
+            //    Bite(tailOwner);
+            //    
+            //}
+            //else
+            //{
+            //   MakeMove(moveDirection);
             //}
 
             //MakeMove(move);
-
         }
+
+
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EatMySnake.Core.Prototypes
 {
-    internal class Body
+    public class Body
     {
         private LinkedList<BodyPart> bodyParts;
 
