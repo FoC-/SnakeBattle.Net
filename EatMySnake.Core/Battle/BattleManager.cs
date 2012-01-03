@@ -190,6 +190,7 @@ namespace EatMySnake.Core.Battle
             return possibleMoves;
         }
 
+        //todo restuta->foc: I've already wrote shuffle, you should review changes made by me
         /// <summary>
         /// Shuffle snakes to genarate new sequense in witch snakes will move
         /// </summary>
