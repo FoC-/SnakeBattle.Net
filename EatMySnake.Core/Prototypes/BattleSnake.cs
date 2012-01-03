@@ -8,7 +8,6 @@ namespace EatMySnake.Core.Prototypes
      * var battleSnake = battleSnakeBuilder.BuildFrom(snake).Using(snakeSpecification);
      * */
 
-
     /// <summary>
     /// Represents a snake on a battle field.
     /// </summary>
@@ -32,11 +31,12 @@ namespace EatMySnake.Core.Prototypes
 
         public void Move()
         {
-            //var moveDirection = mind.GetNextMoveDirection();
+            //var visibleArea = battleField.GetVisibleAreaFor(this);
+            //var moveDirection = mind.GetNextMoveDirection(visibleArea);
 
+            //todo: decide what is more logical way of getting tail or tail owner from the battle field in order to bite a tail
             //var moveCoordinates = GetMoveCoordinates(moveDirection);
             //BodyPart tail = battleField.GetTail(moveCoordinates);
-            //
 
             //if (tail != null)
             //{
@@ -51,7 +51,5 @@ namespace EatMySnake.Core.Prototypes
 
             //MakeMove(move);
         }
-
-
     }
 }
