@@ -7,6 +7,33 @@ using EatMySnake.Core.Extensions;
 
 namespace EatMySnake.Core.Prototypes
 {
+
+    class Battle
+    {
+        /*
+                 * new Battle(battleField, snakes){
+                 *  var battleSnakes = snakes.ForEach(snake => new BattleSnake(snake));
+                 *  battleField.AddSnakes(battleSnakes.Shuffle());
+                 *  
+                 *  battleSnakes.ForEach(snake => snake.Died += this.SnakeDiedHandler());
+                 * }
+                 * 
+                 * Battle.Start(){
+                 *  for (int i = 0; i < totalTurns; i++)
+                 *  {
+                 *    if (AllSnakesAreStuck() || NoSnakeCanBeBitten() || OnlyOneSnakeIsLeft())
+                 *    {
+                 *      Finish();
+                 *    }
+                 *    
+                 *    CheckIfAnyTailCanBeCut();
+                 *    battleSnakes.Shuffle().ForEach(snake => snake.Move());
+                 *  }
+                 * }
+                 * */
+    }
+
+
     class BattleManager
     {
         private List<SnakePrototype> snakes;
@@ -16,6 +43,9 @@ namespace EatMySnake.Core.Prototypes
             //Battle.NextMove();
             foreach(var snake in snakes.Shuffle())
             {
+                
+
+
                 /* Move nextMove = snake.GetIntentedNextMove(); //gets move that snake is going to make
                  * if (nextMove.IsAllowed())
                  * {
@@ -105,10 +135,6 @@ namespace EatMySnake.Core.Prototypes
     }
 
     internal class LogicalChip
-    {
-    }
-
-    internal class VisibleArea
     {
     }
 
