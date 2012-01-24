@@ -32,7 +32,7 @@ namespace EatMySnake.Core.Prototypes
         public void Move()
         {
             //var visibleArea = battleField.GetVisibleAreaFor(this);
-            //var moveDirection = CommonMind.GetNextMoveDirection(visibleArea);
+            //var moveDirection = mi, .GetMoveDirection(visibleArea);
 
             //todo: decide what is more logical way of getting tail or tail owner from the battle field in order to bite a tail
             //var moveCoordinates = GetMoveCoordinates(moveDirection);

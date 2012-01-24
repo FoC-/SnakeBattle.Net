@@ -25,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\EatMySnake.Core.XML</DocumentationFile>
+    <NoWarn>CS1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -64,6 +65,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Direction.cs" />
+    <Compile Include="Prototypes\Battle.cs" />
     <Compile Include="Prototypes\BattleField.cs" />
     <Compile Include="Prototypes\BattleSnake.cs" />
     <Compile Include="Prototypes\Body.cs" />
