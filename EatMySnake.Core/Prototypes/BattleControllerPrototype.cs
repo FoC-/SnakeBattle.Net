@@ -16,7 +16,7 @@ namespace EatMySnake.Core.Prototypes
             battle.PlayToEnd();
 
             repository.Save(battle);
-            repository.SaveReplay(battle.Replay);
+            repository.Save(battle.Replay);
 
             return battle.Replay.ToJson();
         }
@@ -42,7 +42,7 @@ namespace EatMySnake.Core.Prototypes
             battle.PlayToEnd();
 
             repository.Save(battle);
-            repository.SaveReplay(battle.Replay);
+            repository.Save(battle.Replay); //saving of replay is relevant not for all battles, that's why it shouldn't be saved when battle is saved
 
             return battle.Replay.ToJson();
         }
