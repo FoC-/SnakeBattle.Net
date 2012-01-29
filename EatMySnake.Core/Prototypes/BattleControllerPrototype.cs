@@ -31,10 +31,10 @@ namespace EatMySnake.Core.Prototypes
             dynamic battle = battleBuilder
                 .Battle
                     .MaxRounds(500)
-                    .BattleFieldSize(17)
+                    .FieldSize(17)
                 .Snakes
                     .Max(4)
-                .Build();
+                .BuildWith(snakes);
 
             //battle = battleFactory.CreateUsing(classicBattleSpecification);
 
