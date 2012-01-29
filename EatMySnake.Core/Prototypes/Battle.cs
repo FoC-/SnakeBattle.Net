@@ -27,9 +27,9 @@ namespace EatMySnake.Core.Prototypes
 
         private void Start()
         {
-            int turnsMax = 500;
+            int roundsMax = 500;
 
-            for (int i = 0; i < turnsMax; i++)
+            for (int i = 0; i < roundsMax; i++)
             {
                 //todo restuta: consider replace direct method call on events (sound more logical here), e.g. battleField.OnNoSnakeCanBeBitten += bla bla..
                 if (battleField.AllSnakesAreStuck() || battleField.NoSnakeCanBeBitten() || battleField.OnlyOneSnakeIsLeft())
@@ -37,7 +37,6 @@ namespace EatMySnake.Core.Prototypes
                     Finish();
                 }
 
-                //CheckIfAnyTailCanBeCut();
                 //battleSnakes.Shuffle().ForEach(snake => snake.Move());
             }
 

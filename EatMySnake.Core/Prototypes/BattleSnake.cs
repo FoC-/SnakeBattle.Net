@@ -1,9 +1,9 @@
 namespace EatMySnake.Core.Prototypes
 {
     /* var snakeSpecification = new SnakeSpecification()
-     * .UsingMind<CommonMind>()
-     * .UsingBody<Body>()
-     * .SizeOfVisibleArea(6);
+     * .UseMind<CommonMind>()
+     * .UseBody<Body>()
+     * .SetSizeOfVisibleAreaTo(6);
      * 
      * var battleSnake = battleSnakeBuilder.BuildFrom(snake).Using(snakeSpecification);
      * */
@@ -32,7 +32,7 @@ namespace EatMySnake.Core.Prototypes
         public void Move()
         {
             //var visibleArea = battleField.GetVisibleAreaFor(this);
-            //var moveDirection = mind`.GetMoveDirection(visibleArea);
+            //var moveDirection = mind.GetMoveDirection(visibleArea);
 
             //todo: decide what is more logical way of getting tail or tail owner from the battle field in order to bite a tail
             //var moveCoordinates = GetMoveCoordinates(moveDirection);
