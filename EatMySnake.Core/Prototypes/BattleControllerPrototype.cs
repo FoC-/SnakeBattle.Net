@@ -21,7 +21,7 @@ namespace EatMySnake.Core.Prototypes
             return battle.Replay.ToJson();
         }
 
-        public dynamic PlayBattle()
+        public dynamic PlayBattle2()
         {
             dynamic repository = new ExpandoObject();
             dynamic battleBuilder = new ExpandoObject();
