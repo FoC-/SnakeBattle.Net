@@ -1,3 +1,5 @@
+using System;
+
 namespace EatMySnake.Core.Prototypes
 {
     /* var snakeSpecification = new SnakeSpecification()
@@ -50,6 +52,30 @@ namespace EatMySnake.Core.Prototypes
             //
 
             
+        }
+
+        private void Bite(BattleSnake snakeToBite)
+        {
+            //fire event: eventBus.Publish(new SnakeBittenEvent(this, snakeToBite))
+            snakeToBite.Shorten();
+            this.Lengthen();
+        }
+
+        private void Lengthen()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Shorten()
+        {
+            /*
+             * body.ShortenTail();
+             * 
+             * if (body.Length == 0)
+             *   Die();
+             */
+
+            throw new NotImplementedException();
         }
     }
 }

@@ -79,7 +79,6 @@
     <Compile Include="Prototypes\Passport.cs" />
     <Compile Include="Prototypes\Coordinate.cs" />
     <Compile Include="Prototypes\Snake.cs" />
-    <Compile Include="Prototypes\SnakePrototype.cs" />
     <Compile Include="Battle\Snake.cs" />
     <Compile Include="Prototypes\VisibleArea.cs" />
   </ItemGroup>
