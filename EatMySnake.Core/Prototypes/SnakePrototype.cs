@@ -49,7 +49,10 @@ namespace EatMySnake.Core.Prototypes
             * {
             *   var tailOwner = GetTailOwner(...);
             *   Bite(tailOwner);
+            *   
             * }
+            * 
+            * MoveTo(MoveDirectdion);
             */
         }
 

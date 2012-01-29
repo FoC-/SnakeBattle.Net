@@ -1,76 +1,51 @@
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 
 namespace EatMySnake.Core.Prototypes
 {
     class Battle
     {
+        private readonly dynamic battleField;
+        private dynamic battleSnakes;
+
         public Battle(dynamic battleField, IEnumerable<Snake> snakes)
         {
-            dynamic battleSnakes = snakes.Select(snake => new BattleSnake(snake));
-            battleField.AddSnakes(battleSnakes.Shuffle());
+            this.battleField = battleField;
 
-           // battleSnakes.ForEach(snake => snake.Died += this.SnakeDiedHandler());
+            battleSnakes = snakes.Select(snake => new BattleSnake(snake));
+            this.battleField.AddSnakes(battleSnakes.Shuffle());
+
+            // battleSnakes.ForEach(snake => snake.Died += this.SnakeDiedHandler());
         }
 
         public void PlayToEnd()
         {
-            
+            Start();
         }
 
-        /*
-                 * new Battle(battleField, snakes){
-                 * 
-                 *  var battleSnakes = snakes.ForEach(snake => new BattleSnake(snake));
-                 *  battleField.AddSnakes(battleSnakes.Shuffle());
-                 *  
-                 *  battleSnakes.ForEach(snake => snake.Died += this.SnakeDiedHandler());
-                 * }
-                 * 
-                 * Battle.Start(){
-                 *  for (int i = 0; i < totalTurns; i++)
-                 *  {
-                 *    //todo restuta: consider replace direct method call on events (sound more logical here), e.g. battleField.OnNoSnakeCanBeBitten += bla bla..
-                 *    if (battleField.AllSnakesAreStuck() || battleField.NoSnakeCanBeBitten() || battleField.OnlyOneSnakeIsLeft())
-                 *    {
-                 *      Finish();
-                 *    }
-                 *    
-                 *    CheckIfAnyTailCanBeCut();
-                 *    battleSnakes.Shuffle().ForEach(snake => snake.Move());
-                 *  }
-                 * }
-                 * */
-
-        public void Start()
+        private void Start()
         {
-            throw new System.NotImplementedException();
-        }
-    }
+            int turnsMax = 500;
 
-    public class BattleControllerPrototype
-    {
-        public dynamic Index()
-        {
-            dynamic repository = new ExpandoObject();
+            for (int i = 0; i < turnsMax; i++)
+            {
+                //todo restuta: consider replace direct method call on events (sound more logical here), e.g. battleField.OnNoSnakeCanBeBitten += bla bla..
+                if (battleField.AllSnakesAreStuck() || battleField.NoSnakeCanBeBitten() || battleField.OnlyOneSnakeIsLeft())
+                {
+                    Finish();
+                }
 
-            BattleField battleField = new BattleField();
-            List<Snake> snakes = GetSnakes();
+                //CheckIfAnyTailCanBeCut();
+                //battleSnakes.Shuffle().ForEach(snake => snake.Move());
+            }
 
-            dynamic battle = new Battle(battleField, snakes);
-            battle.PlayToEnd();
-
-            repository.Save(battle);
-            repository.SaveReplay(battle.Replay);
-
-            return battle.Replay.ToJson();
+            Finish();
         }
 
-        private List<Snake> GetSnakes()
+        private void Finish()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

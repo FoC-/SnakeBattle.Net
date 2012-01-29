@@ -66,6 +66,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Direction.cs" />
     <Compile Include="Prototypes\Battle.cs" />
+    <Compile Include="Prototypes\BattleControllerPrototype.cs" />
     <Compile Include="Prototypes\BattleField.cs" />
     <Compile Include="Prototypes\BattleSnake.cs" />
     <Compile Include="Prototypes\Body.cs" />
