@@ -4,10 +4,11 @@ using System.Linq;
 
 namespace EatMySnake.Core.Prototypes
 {
-    class Battle
+    internal class Battle : IBattle
     {
         private readonly dynamic battleField;
         private dynamic battleSnakes;
+
 
         public Battle(dynamic battleField, IEnumerable<Snake> snakes)
         {
@@ -46,6 +47,11 @@ namespace EatMySnake.Core.Prototypes
         private void Finish()
         {
             throw new NotImplementedException();
+        }
+
+        public BattleReplay Replay
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

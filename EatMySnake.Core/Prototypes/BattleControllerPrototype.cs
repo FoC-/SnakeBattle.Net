@@ -36,7 +36,7 @@ namespace EatMySnake.Core.Prototypes
                     .Max(4)
                 .Build();
 
-            battle = battleFactory.CreateUsing(classicBattleSpecification);
+            //battle = battleFactory.CreateUsing(classicBattleSpecification);
 
             
             battle.PlayToEnd();

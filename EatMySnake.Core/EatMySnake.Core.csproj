@@ -68,10 +68,12 @@
     <Compile Include="Prototypes\Battle.cs" />
     <Compile Include="Prototypes\BattleControllerPrototype.cs" />
     <Compile Include="Prototypes\BattleField.cs" />
+    <Compile Include="Prototypes\BattleReplay.cs" />
     <Compile Include="Prototypes\BattleSnake.cs" />
     <Compile Include="Prototypes\Body.cs" />
     <Compile Include="Prototypes\BodyPart.cs" />
     <Compile Include="Prototypes\CommonMind.cs" />
+    <Compile Include="Prototypes\IBattle.cs" />
     <Compile Include="Prototypes\MindChip.cs" />
     <Compile Include="Prototypes\MoveDirection.cs" />
     <Compile Include="Prototypes\Passport.cs" />
