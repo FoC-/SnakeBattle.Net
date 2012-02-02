@@ -3,7 +3,7 @@ using EatMySnake.Core.Extensions;
 
 namespace EatMySnake.Core.Common
 {
-    public struct Move
+    public class Move : EventArgs
     {
         public readonly int X;
         public readonly int Y;

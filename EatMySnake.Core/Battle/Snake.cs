@@ -7,9 +7,8 @@ namespace EatMySnake.Core.Battle
 {
     public class Snake
     {
-        public delegate void ActionHandler(Snake snake, Move move);
-        public event ActionHandler Biting;
-        public event ActionHandler Moving;
+        public event EventHandler Biting;
+        public event EventHandler Moving;
 
         public string Name { get; private set; }
         public int VisionRadius { get; private set; }
@@ -58,7 +57,6 @@ namespace EatMySnake.Core.Battle
 
         private void FireMoveEvent(Move move)
         {
-            //todo restuta->foc: oh no, this isn't a c++, so "if(someVar = value)" simply won't compile (except if someVar is of type bool), thats why you don't need to write null at the frist place
             if (Moving != null)
                 Moving(this, move);
         }

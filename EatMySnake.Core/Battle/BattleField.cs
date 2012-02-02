@@ -4,53 +4,67 @@ using EatMySnake.Core.Common;
 
 namespace EatMySnake.Core.Battle
 {
-    class BattleField : Matrix
+    public class BattleField : IBattleField
     {
-        public List<Move> Gateways;
+        public int SizeX { get; private set; }
+        public int SizeY { get; private set; }
+        public List<Move> Gateways { get; private set; }
+        private readonly Row[,] _rows;
+
+        public Row this[int x, int y]
+        {
+            get
+            {
+                if (x > -1 && x < SizeX && y > -1 && y < SizeY)
+                    return _rows[x, y];
+                return null;
+            }
+            set
+            {
+                if (x > -1 && x < SizeX && y > -1 && y < SizeY)
+                    _rows[x, y] = value;
+                else
+                    throw new IndexOutOfRangeException();
+            }
+        }
 
         public BattleField()
-            : base(27, 27)
+            : this(27, 27, 1)
         {
-            SetWalls();
-            Gateways = new List<Move>
-                           {
-                               new Move(0, 13, Direction.East),
-                               new Move(26, 13, Direction.West),
-                               new Move(13, 0, Direction.North),
-                               new Move(13, 26, Direction.South)
-                           };
-
         }
 
-        public BattleField(int sizeX, int sizeY)
-            : base(sizeX, sizeY)
+        public BattleField(int sizeX, int sizeY, int numberGatewaysOnSide)
         {
+            SizeX = sizeX;
+            SizeY = sizeY;
+            _rows = new Row[sizeX, sizeY];
             SetWalls();
-            CreateGateways();
+            CreateGateways(numberGatewaysOnSide);
         }
 
-        private void CreateGateways()
+        private void CreateGateways(int numberGatewaysOnTheSide)
         {
-            //todo: need to add ability place gateways for different fields
-            throw new NotImplementedException();
+            Gateways = new List<Move>();
+            int x = SizeX / (numberGatewaysOnTheSide + 1);
+            int y = SizeY / (numberGatewaysOnTheSide + 1);
+
+            for (int i = 1; i < numberGatewaysOnTheSide + 1; i++)
+            {
+                Gateways.Add(new Move(0, i * y, Direction.East));
+                Gateways.Add(new Move(SizeX - 1, i * y, Direction.West));
+                Gateways.Add(new Move(i * x, 0, Direction.North));
+                Gateways.Add(new Move(i * x, SizeY - 1, Direction.South));
+            }
         }
 
         private void SetWalls()
         {
             for (int x = 0; x < SizeX; x++)
-            {
                 for (int y = 0; y < SizeY; y++)
-                {
                     if (x == 0 || y == 0 || x == SizeX - 1 || y == SizeY - 1)
-                    {
-                        Rows[x, y] = new Row(Content.Wall);
-                    }
+                        _rows[x, y] = new Row(Content.Wall);
                     else
-                    {
-                        Rows[x, y] = new Row();
-                    }
-                }
-            }
+                        _rows[x, y] = new Row();
         }
     }
 }

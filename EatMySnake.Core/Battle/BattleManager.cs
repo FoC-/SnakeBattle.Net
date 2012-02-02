@@ -7,12 +7,12 @@ namespace EatMySnake.Core.Battle
     public class BattleManager
     {
         Random random = new Random();
-        private BattleField _battleField;
+        private IBattleField _battleField;
         private List<Snake> _snakes;
 
-        public BattleManager()
+        public BattleManager(IBattleField battleField)
         {
-            _battleField = new BattleField();
+            _battleField = battleField;
             _snakes = new List<Snake>();
             //following code for test usage only
             _snakes.Add(new Snake());
@@ -31,8 +31,8 @@ namespace EatMySnake.Core.Battle
             int n = 0;
             foreach (Snake snake in _snakes)
             {
-                snake.Biting += new Snake.ActionHandler(snake_Biting);
-                snake.Moving += new Snake.ActionHandler(snake_Moving);
+                snake.Biting += snake_Biting;
+                snake.Moving += snake_Moving;
                 Move move = _battleField.Gateways[n++];
                 snake.Bite(move);
                 //draw snake heads
@@ -87,23 +87,27 @@ namespace EatMySnake.Core.Battle
             }
         }
 
-        void snake_Moving(Snake snake, Move move)
+        void snake_Moving(object o, EventArgs e)
         {
+            Snake snake = o as Snake;
+            Move move = e as Move;
             if (snake.Length == 0) return;
-            //Move head = snake.GetHeadPosition();
-            //Move tail = snake.GetTailPosition();
-            //_battleField[head.X, head.Y].Content = Content.OwnBody;
-            //_battleField[move.X, move.Y].Content = Content.OwnHead;
-            //_battleField[tail.X, tail.Y].Content = Content.Empty;
+            Move head = snake.GetHeadPosition();
+            Move tail = snake.GetTailPosition();
+            _battleField[head.X, head.Y].Content = Content.OwnBody;
+            _battleField[move.X, move.Y].Content = Content.OwnHead;
+            _battleField[tail.X, tail.Y].Content = Content.Empty;
             Console.WriteLine(snake.Name + " Move " + move + " Len = " + snake.Length);
         }
 
-        void snake_Biting(Snake snake, Move move)
+        void snake_Biting(object o, EventArgs e)
         {
+            Snake snake = o as Snake;
+            Move move = e as Move;
             if (snake.Length == 0) return;
-            //Move head = snake.GetHeadPosition();
-            //_battleField[head.X, head.Y].Content = Content.OwnBody;
-            //_battleField[move.X, move.Y].Content = Content.OwnHead;
+            Move head = snake.GetHeadPosition();
+            _battleField[head.X, head.Y].Content = Content.OwnBody;
+            _battleField[move.X, move.Y].Content = Content.OwnHead;
             Console.WriteLine(snake.Name + " Bite " + move + " Len = " + snake.Length);
         }
 
@@ -123,7 +127,7 @@ namespace EatMySnake.Core.Battle
             //_battlefield should been updated
         }
 
-        private Move NextMove(Matrix viewPort, Snake snake)
+        private Move NextMove(IBattleField viewPort, Snake snake)
         {
             //Check if movement is possible
             List<Move> possibleMoves = CheckPossibleMoves(viewPort, snake);
@@ -167,7 +171,7 @@ namespace EatMySnake.Core.Battle
         /// <param name="viewPort">Vissible area around snake header</param>
         /// <param name="snake">Snake witch want to move</param>
         /// <returns>List of passable rows or current head position</returns>
-        private List<Move> CheckPossibleMoves(Matrix viewPort, Snake snake)
+        private List<Move> CheckPossibleMoves(IBattleField viewPort, Snake snake)
         {
             List<Move> possibleMoves = new List<Move>();
 
