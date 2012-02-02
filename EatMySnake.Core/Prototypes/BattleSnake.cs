@@ -19,8 +19,8 @@ namespace EatMySnake.Core.Prototypes
         private readonly Snake snake;
         private IMind mind;
 
-        public Body Body { get; private set; }
-        public int SizeOfVisibleArea { get; private set; }
+        public Body Body { get; internal set; }
+        public int SizeOfVisibleArea { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BattleSnake"/> class.
@@ -50,8 +50,19 @@ namespace EatMySnake.Core.Prototypes
             //
             //MoveTo(moveDirection);
             //
+        }
 
-            
+        private void MoveTo(dynamic moveDirection)
+        {
+            /*
+             * so we have to options to imlement snake body movement
+             * 1) add body part at front and remove from end
+             * 2) change each body part coordinate accordingly
+             * 
+             * so for the first one:
+             * 
+             * body.Move(moveDirection);
+             */
         }
 
         private void Bite(BattleSnake snakeToBite)
@@ -63,19 +74,17 @@ namespace EatMySnake.Core.Prototypes
 
         private void Lengthen()
         {
-            throw new NotImplementedException();
+            //Body.Add(new BodyPart());
         }
 
         private void Shorten()
         {
             /*
-             * body.ShortenTail();
+             * Body.RemovePart();
              * 
-             * if (body.Length == 0)
+             * if (Body.Length == 0)
              *   Die();
              */
-
-            throw new NotImplementedException();
         }
     }
 }

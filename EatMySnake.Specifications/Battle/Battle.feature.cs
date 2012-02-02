@@ -69,19 +69,17 @@ namespace EatMySnake.Specifications.Battle
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Battle that ends by timeout")]
-        [NUnit.Framework.CategoryAttribute("scenarios")]
         public virtual void BattleThatEndsByTimeout()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Battle that ends by timeout", new string[] {
-                        "scenarios"});
-#line 8
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Battle that ends by timeout", ((string[])(null)));
+#line 7
 this.ScenarioSetup(scenarioInfo);
-#line 9
+#line 8
  testRunner.Given("I have started a battle");
-#line 10
- testRunner.And("it cannot be finished during pre-determined amount of turns");
-#line 12
- testRunner.Then("it should be finished automatically after the last turn");
+#line 9
+ testRunner.When("it wasn\'t finished after maximum amount of rounds");
+#line 11
+ testRunner.Then("it should be finished automatically after the last round");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -91,15 +89,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void BattleThatEndsWhenOneSnakeIsLeft()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Battle that ends when one snake is left", ((string[])(null)));
-#line 14
+#line 13
 this.ScenarioSetup(scenarioInfo);
-#line 15
+#line 14
  testRunner.Given("I have started a battle with more than one snake");
+#line 15
+ testRunner.When("only one snake is left after some time");
 #line 16
- testRunner.And("only one snake is left after some time");
-#line 17
  testRunner.Then("battle should be finished");
-#line 18
+#line 17
   testRunner.And("snake should be anounced as a winner");
 #line hidden
             this.ScenarioCleanup();
@@ -110,13 +108,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void AllSnakesAreStuck()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("All snakes are stuck", ((string[])(null)));
-#line 20
+#line 19
 this.ScenarioSetup(scenarioInfo);
-#line 21
+#line 20
  testRunner.Given("I have started a battle");
+#line 21
+ testRunner.When("all snakes are stuck");
 #line 22
- testRunner.And("all snakes are stuck");
-#line 23
  testRunner.Then("battle should be finished automatically");
 #line hidden
             this.ScenarioCleanup();
@@ -127,15 +125,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NoSnakeCanBeBitten()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No snake can be bitten", ((string[])(null)));
-#line 25
+#line 24
 this.ScenarioSetup(scenarioInfo);
-#line 26
+#line 25
  testRunner.Given("I have started a battle");
+#line 26
+ testRunner.When("all snakes except one are stuck in the way their tail can\'t be bitten");
 #line 27
- testRunner.And("all snakes except one are stuck in the way their tail can\'t be bitten");
+  testRunner.And("one snake is not stuck");
 #line 28
- testRunner.And("one snake is not stuck");
-#line 29
  testRunner.Then("battle should be finished automatically");
 #line hidden
             this.ScenarioCleanup();
@@ -146,14 +144,34 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void OnlyOneSnakeIsLeft()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Only one snake is left", ((string[])(null)));
-#line 31
+#line 30
 this.ScenarioSetup(scenarioInfo);
-#line 32
+#line 31
  testRunner.Given("I have started a battle");
+#line 32
+ testRunner.When("several turns passed");
 #line 33
- testRunner.And("after several turns only one snake is left");
+  testRunner.And("only one snake is left");
 #line 34
  testRunner.Then("battle should be finished");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Battle is finished")]
+        public virtual void BattleIsFinished()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Battle is finished", ((string[])(null)));
+#line 36
+this.ScenarioSetup(scenarioInfo);
+#line 37
+ testRunner.Given("I have started a battle");
+#line 38
+ testRunner.When("it was finished by any reason");
+#line 39
+ testRunner.Then("all snakes should recive score points according to their body lenth at the moment" +
+                    " of the end of the battle");
 #line hidden
             this.ScenarioCleanup();
         }
