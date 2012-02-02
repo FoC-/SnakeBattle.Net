@@ -62,6 +62,15 @@ namespace EatMySnake.Core.Prototypes
              * so for the first one:
              * 
              * body.Move(moveDirection);
+             * 
+             * note: it's also an interesting question who should check for incorrect moves, e.g. when mind tells
+             * "move forward" and there is a wall or a snake body over there
+             * 1) battle field on something like "OnBeforeMove"
+             * 2) battle field should actually move snake, so it will controll this
+             * 3) it should be implemented inside snake mind (this could be done in a base class for inctanse)
+             *      the drawback of this approach is that it limits you to have a base class, so some of the
+             *      very custom implementations of IMind could broke game logic, so in case when we will have thouse 
+             *      implementations we will be forced to do this validation at some other place
              */
         }
 
