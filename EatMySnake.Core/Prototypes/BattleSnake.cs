@@ -1,9 +1,11 @@
+using System;
+
 namespace EatMySnake.Core.Prototypes
 {
     /* var snakeSpecification = new SnakeSpecification()
-     * .UsingMind<CommonMind>()
-     * .UsingBody<Body>()
-     * .SizeOfVisibleArea(6);
+     * .UseMind<CommonMind>()
+     * .UseBody<Body>()
+     * .SetSizeOfVisibleAreaTo(6);
      * 
      * var battleSnake = battleSnakeBuilder.BuildFrom(snake).Using(snakeSpecification);
      * */
@@ -17,8 +19,8 @@ namespace EatMySnake.Core.Prototypes
         private readonly Snake snake;
         private IMind mind;
 
-        public Body Body { get; private set; }
-        public int SizeOfVisibleArea { get; private set; }
+        public Body Body { get; internal set; }
+        public int SizeOfVisibleArea { get; internal set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BattleSnake"/> class.
@@ -32,24 +34,66 @@ namespace EatMySnake.Core.Prototypes
         public void Move()
         {
             //var visibleArea = battleField.GetVisibleAreaFor(this);
-            //var moveDirection = CommonMind.GetNextMoveDirection(visibleArea);
+            //var moveDirection = mind.GetMoveDirection(visibleArea);
 
             //todo: decide what is more logical way of getting tail or tail owner from the battle field in order to bite a tail
             //var moveCoordinates = GetMoveCoordinates(moveDirection);
             //BodyPart tail = battleField.GetTail(moveCoordinates);
 
-            //if (tail != null)
+            //if (tail != null) //EnemiesTailIsOnMoveDirection()
             //{
             //    var tailOwner = battleField.GetTailOwner(tail);
             //    Bite(tailOwner);
             //    
             //}
-            //else
-            //{
-            //   MakeMove(moveDirection);
-            //}
+            //
+            //
+            //MoveTo(moveDirection);
+            //
+        }
 
-            //MakeMove(move);
+        private void MoveTo(dynamic moveDirection)
+        {
+            /*
+             * so we have to options to imlement snake body movement
+             * 1) add body part at front and remove from end
+             * 2) change each body part coordinate accordingly
+             * 
+             * so for the first one:
+             * 
+             * body.Move(moveDirection);
+             * 
+             * note: it's also an interesting question who should check for incorrect moves, e.g. when mind tells
+             * "move forward" and there is a wall or a snake body over there
+             * 1) battle field on something like "OnBeforeMove"
+             * 2) battle field should actually move snake, so it will controll this
+             * 3) it should be implemented inside snake mind (this could be done in a base class for inctanse)
+             *      the drawback of this approach is that it limits you to have a base class, so some of the
+             *      very custom implementations of IMind could broke game logic, so in case when we will have thouse 
+             *      implementations we will be forced to do this validation at some other place
+             */
+        }
+
+        private void Bite(BattleSnake snakeToBite)
+        {
+            //fire event: eventBus.Publish(new SnakeBittenEvent(this, snakeToBite))
+            snakeToBite.Shorten();
+            this.Lengthen();
+        }
+
+        private void Lengthen()
+        {
+            //Body.Add(new BodyPart());
+        }
+
+        private void Shorten()
+        {
+            /*
+             * Body.RemovePart();
+             * 
+             * if (Body.Length == 0)
+             *   Die();
+             */
         }
     }
 }
