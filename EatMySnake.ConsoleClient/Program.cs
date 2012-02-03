@@ -25,7 +25,7 @@ namespace EatMySnake.ConsoleClient
             BattleManager battleManager = new BattleManager(battleField, snakes);
             for (int i = 0; i < 500000; i++)
             {
-                battleManager.Move();
+                battleManager.Act();
             }
             Console.Read();
         }

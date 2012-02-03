@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EatMySnake.Core.Common;
+using EatMySnake.Core.Extensions;
 
 namespace EatMySnake.Core.Battle
 {
@@ -21,20 +22,14 @@ namespace EatMySnake.Core.Battle
             InitializeField();
         }
 
-        public void Move()
+        public void Act()
         {
-            Move newHeadPosition;
-            //we need shuffle snakes order for moves
-            ShuffleSnakes();
-            //each snake should make own move
-            foreach (Snake snake in _snakes)
+            foreach (Snake snake in _snakes.Shuffle())
             {
                 //todo: generate visible area for snake and put it to next move for analyze
-                newHeadPosition = NextMove(_battleField, snake);
+                Move newHeadPosition = NextMove(_battleField, snake);
                 TryToBite(snake, newHeadPosition);
             }
-
-            //_battlefield should been updated
         }
 
         private void SetupHandlers()
@@ -52,47 +47,42 @@ namespace EatMySnake.Core.Battle
         /// </summary>
         private void InitializeField()
         {
-            //set heads positions (bite: walls in the middle) 
+            //bite: gateways
             int n = 0;
             foreach (Snake snake in _snakes)
-            {
-                Move move = _battleField.Gateways[n++];
-                snake.Bite(move);
-                //draw snake heads
-                _battleField[move.X, move.Y] = new Row(Content.OwnHead);
-            }
-            //move each head in direction (bite: 10 times empty space in front of head)
-            for (int i = 0; i < 10; i++)
-                foreach (Snake snake in _snakes)
-                    InitialMoving(snake);
-            //bite: once to empty walls from tails
+                snake.Bite(_battleField.Gateways[n++]);
+
+            //bite: 10 times empty space in front of head to grow
+            foreach (var snake in _snakes)
+                for (int i = 0; i < 10; i++)
+                    snake.Bite(StraitMove(snake.GetHeadPosition()));
+
+            //bitten: once to empty walls from tails
             foreach (var snake in _snakes)
                 snake.Bitten();
+
             //draw walls
             foreach (var gateway in _battleField.Gateways)
                 _battleField[gateway.X, gateway.Y] = new Row(Content.Wall);
         }
 
-        private static void InitialMoving(Snake snake)
+        private Move StraitMove(Move headPosition)
         {
-            int headX = snake.GetHeadPosition().X;
-            int headY = snake.GetHeadPosition().Y;
-            Direction direction = snake.GetHeadPosition().direction;
+            int headX = headPosition.X;
+            int headY = headPosition.Y;
+            var direction = headPosition.direction;
             switch (direction)
             {
                 case Direction.North:
-                    snake.Bite(new Move(headX, headY + 1, Direction.North));
-                    break;
+                    return new Move(headX, headY + 1, Direction.North);
                 case Direction.West:
-                    snake.Bite(new Move(headX - 1, headY, Direction.West));
-                    break;
+                    return new Move(headX - 1, headY, Direction.West);
                 case Direction.East:
-                    snake.Bite(new Move(headX + 1, headY, Direction.East));
-                    break;
+                    return new Move(headX + 1, headY, Direction.East);
                 case Direction.South:
-                    snake.Bite(new Move(headX, headY - 1, Direction.South));
-                    break;
+                    return new Move(headX, headY - 1, Direction.South);
             }
+            throw new Exception("Something wrong in moving strait!");
         }
 
         private void SnakeMoving(object sender, EventArgs e)
@@ -189,23 +179,6 @@ namespace EatMySnake.Core.Battle
             }
             if (0 == possibleMoves.Count) possibleMoves.Add(snake.GetHeadPosition());
             return possibleMoves;
-        }
-
-        //todo restuta->foc: I've already wrote shuffle, you should review changes made by me
-        /// <summary>
-        /// Shuffle snakes to genarate new sequense in witch snakes will move
-        /// </summary>
-        private void ShuffleSnakes()
-        {
-            int n = _snakes.Count;
-            int p;
-            while (n > 0)
-            {
-                p = random.Next(n);
-                _snakes.Add(_snakes[p]);
-                _snakes.RemoveAt(p);
-                n--;
-            }
         }
 
         private Matrix GetViewPort(Snake snake)
