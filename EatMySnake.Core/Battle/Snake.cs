@@ -51,15 +51,15 @@ namespace EatMySnake.Core.Battle
 
         public void NextMove(Move newHeadPosition)
         {
-            FireMoveEvent(newHeadPosition);
             BodyParts.AddFirst(newHeadPosition);
             BodyParts.RemoveLast();
+            FireMoveEvent(newHeadPosition);
         }
 
         public void Bite(Move newHeadPosition)
         {
-            FireBiteEvent(newHeadPosition);
             BodyParts.AddFirst(newHeadPosition);
+            FireBiteEvent(newHeadPosition);
         }
 
         public void Bitten()
