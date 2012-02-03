@@ -12,7 +12,7 @@ namespace EatMySnake.Core.Battle
         Guid Guid { get; }
         string Name { get; }
         Guid Owner { get; }
-        List<Matrix> BrainModules { get; }
+        IList<Matrix> BrainModules { get; }
         int VisionRadius { get; }
         int Length { get; }
         Move GetHeadPosition();

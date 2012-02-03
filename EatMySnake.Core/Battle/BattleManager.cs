@@ -9,17 +9,15 @@ namespace EatMySnake.Core.Battle
     {
         Random random = new Random();
         private IBattleField _battleField;
-        private List<ISnake> _snakes;
+        private IList<ISnake> _snakes;
 
-        public BattleManager(IBattleField battleField, List<ISnake> snakes)
+        public BattleManager(IBattleField battleField, IList<ISnake> snakes)
         {
             if (snakes.Count > battleField.Gateways.Count)
                 throw new Exception("Number of snakes is more then gateways");
 
             _battleField = battleField;
             _snakes = snakes;
-            SetupHandlers();
-            InitializeField();
         }
 
         public void Act()
@@ -32,7 +30,7 @@ namespace EatMySnake.Core.Battle
             }
         }
 
-        private void SetupHandlers()
+        public void SetupHandlers()
         {
             foreach (var snake in _snakes)
             {
@@ -45,7 +43,7 @@ namespace EatMySnake.Core.Battle
         /// <summary>
         /// Initialize battle field with snakes, each snake "growth" from the middle of the wall
         /// </summary>
-        private void InitializeField()
+        public void InitializeField()
         {
             //bite: gateways
             int n = 0;

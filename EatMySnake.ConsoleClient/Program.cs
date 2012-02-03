@@ -23,6 +23,10 @@ namespace EatMySnake.ConsoleClient
             snakes.Add(new Snake(id, "Snake number 4", id, brainChips));
 
             BattleManager battleManager = new BattleManager(battleField, snakes);
+            battleManager.SetupHandlers();
+            battleManager.InitializeField();
+
+
             for (int i = 0; i < 500000; i++)
             {
                 battleManager.Act();

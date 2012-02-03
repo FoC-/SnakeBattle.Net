@@ -8,7 +8,7 @@ namespace EatMySnake.Core.Battle
     {
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
-        public List<Move> Gateways { get; private set; }
+        public IList<Move> Gateways { get; private set; }
         private readonly Row[,] _rows;
 
         public Row this[int x, int y]

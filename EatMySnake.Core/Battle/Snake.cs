@@ -15,7 +15,7 @@ namespace EatMySnake.Core.Battle
         public string Name { get; private set; }
         public Guid Owner { get; private set; }
 
-        public List<Matrix> BrainModules { get; private set; }
+        public IList<Matrix> BrainModules { get; private set; }
         public int VisionRadius { get; private set; }
         public int Length
         {

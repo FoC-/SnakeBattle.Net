@@ -5,7 +5,7 @@ namespace EatMySnake.Core.Battle
 {
     public interface IBattleField
     {
-        List<Move> Gateways { get; }
+        IList<Move> Gateways { get; }
         int SizeX { get; }
         int SizeY { get; }
         Row this[int x, int y] { get; set; }
