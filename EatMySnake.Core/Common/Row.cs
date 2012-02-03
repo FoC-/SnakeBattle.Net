@@ -7,17 +7,13 @@
         private AndOrState andOrState;
 
         public Row()
+            : this(Content.Empty)
         {
-            this.Content = Content.Empty;
-            this.except = Except.No;
-            this.andOrState = AndOrState.AndGrey;
         }
 
         public Row(Content content)
+            : this(content, Except.No, AndOrState.AndGrey)
         {
-            this.Content = content;
-            this.except = Except.No;
-            this.andOrState = AndOrState.AndGrey;
         }
 
         public Row(Content content, Except except, AndOrState andOrState)
