@@ -11,7 +11,7 @@ namespace EatMySnake.Core.Snake.Implementation
             set
             {
                 Rows[_headPosition.X, _headPosition.Y] = null;
-                Rows[value.X, value.Y] = new Row(Content.OwnHead);
+                Rows[value.X, value.Y] = new Row(Content.Head);
                 _headPosition = value;
             }
         }
@@ -32,7 +32,7 @@ namespace EatMySnake.Core.Snake.Implementation
                 }
             }
             HeadPosition = new Move(SizeX / 2, SizeY / 2, Direction.North);
-            Rows[_headPosition.X, _headPosition.Y] = new Row(Content.OwnHead);
+            Rows[_headPosition.X, _headPosition.Y] = new Row(Content.Head);
         }
     }
 }

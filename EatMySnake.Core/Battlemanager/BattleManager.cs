@@ -73,24 +73,18 @@ namespace EatMySnake.Core.Battlemanager
         {
             var possibleMoves = new List<Move>();
 
-            var passable = new List<Content>
-            {
-                Content.Empty,
-                Content.EnemyTail,
-                Content.OwnTail
-            };
-
             int headX = snake.GetHeadPosition().X;
             int headY = snake.GetHeadPosition().Y;
 
-            foreach (Content content in passable)
-            {
-                if (battleField[headX, headY + 1].Content == content) possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
-                if (battleField[headX, headY - 1].Content == content) possibleMoves.Add(new Move(headX, headY - 1, Direction.South));
-                if (battleField[headX - 1, headY].Content == content) possibleMoves.Add(new Move(headX - 1, headY, Direction.West));
-                if (battleField[headX + 1, headY].Content == content) possibleMoves.Add(new Move(headX + 1, headY, Direction.East));
-            }
-            if (0 == possibleMoves.Count) possibleMoves.Add(snake.GetHeadPosition());
+            if (battleField[headX, headY + 1].Content == Content.Empty || battleField[headX, headY + 1].Content == Content.Tail)
+                possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
+            if (battleField[headX, headY - 1].Content == Content.Empty || battleField[headX, headY - 1].Content == Content.Tail)
+                possibleMoves.Add(new Move(headX, headY - 1, Direction.South));
+            if (battleField[headX - 1, headY].Content == Content.Empty || battleField[headX - 1, headY].Content == Content.Tail)
+                possibleMoves.Add(new Move(headX - 1, headY, Direction.West));
+            if (battleField[headX + 1, headY].Content == Content.Empty || battleField[headX + 1, headY].Content == Content.Tail)
+                possibleMoves.Add(new Move(headX + 1, headY, Direction.East));
+
             return possibleMoves;
         }
 
@@ -167,9 +161,9 @@ namespace EatMySnake.Core.Battlemanager
             var move = e as Move;
             var head = snake.GetHeadPosition();
             var tail = snake.GetTailPosition();
-            _battleField[move.X, move.Y].Content = Content.OwnHead;
-            _battleField[head.X, head.Y].Content = Content.OwnBody;
-            _battleField[tail.X, tail.Y].Content = Content.Empty;
+            _battleField[move.X, move.Y] = new Row(Content.Head, snake.Guid);
+            _battleField[head.X, head.Y] = new Row(Content.Body, snake.Guid);
+            _battleField[tail.X, tail.Y] = new Row();
             Console.WriteLine("{0} Move {1} Len = {2}", snake.Name, move, snake.Length);
         }
 
@@ -179,8 +173,8 @@ namespace EatMySnake.Core.Battlemanager
             if (snake.Length == 0) return;
             var move = e as Move;
             var head = snake.GetHeadPosition();
-            _battleField[move.X, move.Y].Content = Content.OwnHead;
-            _battleField[head.X, head.Y].Content = Content.OwnBody;
+            _battleField[move.X, move.Y] = new Row(Content.Head, snake.Guid);
+            _battleField[head.X, head.Y] = new Row(Content.Body, snake.Guid);
             Console.WriteLine("{0} Bite {1} Len = {2}", snake.Name, move, snake.Length);
         }
 

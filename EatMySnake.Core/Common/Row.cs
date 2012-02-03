@@ -5,17 +5,20 @@ namespace EatMySnake.Core.Common
 {
     public class Row
     {
-        public Content Content { get; set; }
+        public Content Content { get; private set; }
+        public Guid Guid { get; private set; }
+
         private readonly Except except;
         private AndOrState andOrState;
 
         public Row() : this(Content.Empty) { }
 
-        public Row(Content content) : this(content, Except.No, AndOrState.AndGrey) { }
+        public Row(Content content, Guid guid = default (Guid)) : this(content, guid, Except.No, AndOrState.AndGrey) { }
 
-        public Row(Content content, Except except, AndOrState andOrState)
+        public Row(Content content, Guid guid, Except except, AndOrState andOrState)
         {
             this.Content = content;
+            this.Guid = guid;
             this.except = except;
             this.andOrState = andOrState;
         }
