@@ -1,4 +1,7 @@
-﻿namespace EatMySnake.Core.Common
+﻿using System;
+using System.Linq;
+
+namespace EatMySnake.Core.Common
 {
     public class Row
     {
@@ -6,15 +9,9 @@
         private readonly Except except;
         private AndOrState andOrState;
 
-        public Row()
-            : this(Content.Empty)
-        {
-        }
+        public Row() : this(Content.Empty) { }
 
-        public Row(Content content)
-            : this(content, Except.No, AndOrState.AndGrey)
-        {
-        }
+        public Row(Content content) : this(content, Except.No, AndOrState.AndGrey) { }
 
         public Row(Content content, Except except, AndOrState andOrState)
         {
@@ -27,12 +24,10 @@
         {
             int a = (int)Content;
             if (except == Except.No)
-            {
                 return a;
-            }
-            //36 is a sum of fields in enum Content
-            //todo restuta->foc(!): and this is stupid hardcore, when enum will change I don't want to care about this sum, why should I keep it in mind?
-            return 36 - a;
+
+            int hs = Enum.GetValues(typeof(Content)).Cast<int>().Sum();
+            return hs - a;
         }
 
         public override bool Equals(object obj)
