@@ -17,100 +17,8 @@ namespace EatMySnake.Core.Battle
 
             _battleField = battleField;
             _snakes = snakes;
+            SetupHandlers();
             InitializeField();
-        }
-
-        /// <summary>
-        /// Initialize battle field with snakes, each snake "growth" from th middle of the wall
-        /// </summary>
-        public void InitializeField()
-        {
-            //set heads positions (bite: walls in the mmiddle) 
-            int n = 0;
-            foreach (Snake snake in _snakes)
-            {
-                snake.Biting += snake_Biting;
-                snake.Moving += snake_Moving;
-                Move move = _battleField.Gateways[n++];
-                snake.Bite(move);
-                //draw snake heads
-                _battleField[move.X, move.Y] = new Row(Content.OwnHead);
-            }
-            //move each head in direction (bite: 9 times empty space in front of head)
-            for (int i = 0; i < 9; i++)
-            {
-                foreach (Snake snake in _snakes)
-                {
-                    int headX = snake.GetHeadPosition().X;
-                    int headY = snake.GetHeadPosition().Y;
-                    Direction direction = snake.GetHeadPosition().direction;
-                    switch (direction)
-                    {
-                        case Direction.North:
-                            snake.Bite(new Move(headX, headY + 1, Direction.North));
-                            break;
-                        case Direction.West:
-                            snake.Bite(new Move(headX - 1, headY, Direction.West));
-                            break;
-                        case Direction.East:
-                            snake.Bite(new Move(headX + 1, headY, Direction.East));
-                            break;
-                        case Direction.South:
-                            snake.Bite(new Move(headX, headY - 1, Direction.South));
-                            break;
-                    }
-                }
-            }
-            //move one more time (move: once to empty walls from tails)
-            foreach (Snake snake in _snakes)
-            {
-                int headX = snake.GetHeadPosition().X;
-                int headY = snake.GetHeadPosition().Y;
-                Direction direction = snake.GetHeadPosition().direction;
-                switch (direction)
-                {
-                    case Direction.North:
-                        snake.NextMove(new Move(headX, headY + 1, Direction.North));
-                        break;
-                    case Direction.West:
-                        snake.NextMove(new Move(headX - 1, headY, Direction.West));
-                        break;
-                    case Direction.East:
-                        snake.NextMove(new Move(headX + 1, headY, Direction.East));
-                        break;
-                    case Direction.South:
-                        snake.NextMove(new Move(headX, headY - 1, Direction.South));
-                        break;
-                }
-            }
-            foreach (var gateway in _battleField.Gateways)
-            {
-                _battleField[gateway.X, gateway.Y] = new Row(Content.Wall);
-            }
-        }
-
-        void snake_Moving(object o, EventArgs e)
-        {
-            Snake snake = o as Snake;
-            Move move = e as Move;
-            if (snake.Length == 0) return;
-            Move head = snake.GetHeadPosition();
-            Move tail = snake.GetTailPosition();
-            _battleField[head.X, head.Y].Content = Content.OwnBody;
-            _battleField[move.X, move.Y].Content = Content.OwnHead;
-            _battleField[tail.X, tail.Y].Content = Content.Empty;
-            Console.WriteLine(snake.Name + " Move " + move + " Len = " + snake.Length);
-        }
-
-        void snake_Biting(object o, EventArgs e)
-        {
-            Snake snake = o as Snake;
-            Move move = e as Move;
-            if (snake.Length == 0) return;
-            Move head = snake.GetHeadPosition();
-            _battleField[head.X, head.Y].Content = Content.OwnBody;
-            _battleField[move.X, move.Y].Content = Content.OwnHead;
-            Console.WriteLine(snake.Name + " Bite " + move + " Len = " + snake.Length);
         }
 
         public void Move()
@@ -121,12 +29,99 @@ namespace EatMySnake.Core.Battle
             //each snake should make own move
             foreach (Snake snake in _snakes)
             {
-                //todo: genarate vissible area for snake and put it to next move for analyze
+                //todo: generate visible area for snake and put it to next move for analyze
                 newHeadPosition = NextMove(_battleField, snake);
                 TryToBite(snake, newHeadPosition);
             }
 
             //_battlefield should been updated
+        }
+
+        private void SetupHandlers()
+        {
+            foreach (var snake in _snakes)
+            {
+                snake.Moving += SnakeMoving;
+                snake.Biting += SnakeBiting;
+                snake.Dead += SnakeDead;
+            }
+        }
+
+        /// <summary>
+        /// Initialize battle field with snakes, each snake "growth" from the middle of the wall
+        /// </summary>
+        private void InitializeField()
+        {
+            //set heads positions (bite: walls in the middle) 
+            int n = 0;
+            foreach (Snake snake in _snakes)
+            {
+                Move move = _battleField.Gateways[n++];
+                snake.Bite(move);
+                //draw snake heads
+                _battleField[move.X, move.Y] = new Row(Content.OwnHead);
+            }
+            //move each head in direction (bite: 10 times empty space in front of head)
+            for (int i = 0; i < 10; i++)
+                foreach (Snake snake in _snakes)
+                    InitialMoving(snake);
+            //bite: once to empty walls from tails
+            foreach (var snake in _snakes)
+                snake.Bitten();
+            //draw walls
+            foreach (var gateway in _battleField.Gateways)
+                _battleField[gateway.X, gateway.Y] = new Row(Content.Wall);
+        }
+
+        private static void InitialMoving(Snake snake)
+        {
+            int headX = snake.GetHeadPosition().X;
+            int headY = snake.GetHeadPosition().Y;
+            Direction direction = snake.GetHeadPosition().direction;
+            switch (direction)
+            {
+                case Direction.North:
+                    snake.Bite(new Move(headX, headY + 1, Direction.North));
+                    break;
+                case Direction.West:
+                    snake.Bite(new Move(headX - 1, headY, Direction.West));
+                    break;
+                case Direction.East:
+                    snake.Bite(new Move(headX + 1, headY, Direction.East));
+                    break;
+                case Direction.South:
+                    snake.Bite(new Move(headX, headY - 1, Direction.South));
+                    break;
+            }
+        }
+
+        private void SnakeMoving(object sender, EventArgs e)
+        {
+            Snake snake = sender as Snake;
+            Move move = e as Move;
+            if (snake.Length == 0) return;
+            Move head = snake.GetHeadPosition();
+            Move tail = snake.GetTailPosition();
+            _battleField[head.X, head.Y].Content = Content.OwnBody;
+            _battleField[move.X, move.Y].Content = Content.OwnHead;
+            _battleField[tail.X, tail.Y].Content = Content.Empty;
+            Console.WriteLine(snake.Name + " Move " + move + " Len = " + snake.Length);
+        }
+
+        private void SnakeBiting(object sender, EventArgs e)
+        {
+            Snake snake = sender as Snake;
+            Move move = e as Move;
+            if (snake.Length == 0) return;
+            Move head = snake.GetHeadPosition();
+            _battleField[head.X, head.Y].Content = Content.OwnBody;
+            _battleField[move.X, move.Y].Content = Content.OwnHead;
+            Console.WriteLine(snake.Name + " Bite " + move + " Len = " + snake.Length);
+        }
+
+        private void SnakeDead(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
         private Move NextMove(IBattleField viewPort, Snake snake)
@@ -271,7 +266,7 @@ namespace EatMySnake.Core.Battle
             return tmpArea;
         }
 
-        public void DetermDirection(Snake snake, Matrix observableArea)
+        private void DetermDirection(Snake snake, Matrix observableArea)
         {
             List<Matrix> tmpObservAreas = CreateRotatedMatrix(observableArea);
             foreach (Matrix brainModule in snake.BrainModules)
