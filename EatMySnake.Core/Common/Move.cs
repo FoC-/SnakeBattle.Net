@@ -1,5 +1,5 @@
 ﻿using System;
-using EatMySnake.Core.Extensions;
+using SnakeBattleNet.Utils.Extensions;
 
 namespace EatMySnake.Core.Common
 {

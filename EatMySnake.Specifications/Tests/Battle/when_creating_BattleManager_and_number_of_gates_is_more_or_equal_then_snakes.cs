@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using EatMySnake.Core.Battle;
+using EatMySnake.Core.Battlefield;
+using EatMySnake.Core.Battlemanager;
+using EatMySnake.Core.Snake;
 using Machine.Specifications;
 using Moq;
 using It = Machine.Specifications.It;

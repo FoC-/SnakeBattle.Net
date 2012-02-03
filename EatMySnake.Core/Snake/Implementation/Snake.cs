@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EatMySnake.Core.Common;
 
-namespace EatMySnake.Core.Battle
+namespace EatMySnake.Core.Snake.Implementation
 {
     public class Snake : ISnake
     {
@@ -15,7 +15,7 @@ namespace EatMySnake.Core.Battle
         public string Name { get; private set; }
         public Guid Owner { get; private set; }
 
-        public IList<Matrix> BrainModules { get; private set; }
+        public IList<IBrainChip> BrainModules { get; private set; }
         public int VisionRadius { get; private set; }
         public int Length
         {
@@ -29,7 +29,7 @@ namespace EatMySnake.Core.Battle
 
         private LinkedList<Move> BodyParts;
 
-        public Snake(Guid guid, string name, Guid owner, List<Matrix> brainModules, int visionRadius = 7)
+        public Snake(Guid guid, string name, Guid owner, IList<IBrainChip> brainModules, int visionRadius = 7)
         {
             Guid = guid;
             Name = name;

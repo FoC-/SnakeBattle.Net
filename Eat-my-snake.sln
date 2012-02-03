@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EatMySnake.Specifications",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EatMySnake.Core", "EatMySnake.Core\EatMySnake.Core.csproj", "{D01054C3-B067-418C-9A67-11A55F4E5536}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Utils", "SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj", "{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{D01054C3-B067-418C-9A67-11A55F4E5536}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D01054C3-B067-418C-9A67-11A55F4E5536}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D01054C3-B067-418C-9A67-11A55F4E5536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

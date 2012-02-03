@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using EatMySnake.Core.Common;
 
-namespace EatMySnake.Core.Battle
+namespace EatMySnake.Core.Snake
 {
     public interface ISnake
     {
@@ -12,7 +12,7 @@ namespace EatMySnake.Core.Battle
         Guid Guid { get; }
         string Name { get; }
         Guid Owner { get; }
-        IList<Matrix> BrainModules { get; }
+        IList<IBrainChip> BrainModules { get; }
         int VisionRadius { get; }
         int Length { get; }
         Move GetHeadPosition();

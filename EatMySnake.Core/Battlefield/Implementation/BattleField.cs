@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using EatMySnake.Core.Common;
 
-namespace EatMySnake.Core.Battle
+namespace EatMySnake.Core.Battlefield.Implementation
 {
     public class BattleField : IBattleField
     {
@@ -28,10 +28,7 @@ namespace EatMySnake.Core.Battle
             }
         }
 
-        public BattleField()
-            : this(27, 27, 1)
-        {
-        }
+        public BattleField() : this(27, 27, 1) { }
 
         public BattleField(int sizeX, int sizeY, int numberGatewaysOnSide)
         {

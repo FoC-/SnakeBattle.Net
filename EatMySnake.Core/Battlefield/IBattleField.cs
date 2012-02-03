@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using EatMySnake.Core.Common;
 
-namespace EatMySnake.Core.Battle
+namespace EatMySnake.Core.Battlefield
 {
     public interface IBattleField
     {

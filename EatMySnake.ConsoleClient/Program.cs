@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EatMySnake.Core.Battle;
-using EatMySnake.Core.Common;
+using EatMySnake.Core.Battlefield;
+using EatMySnake.Core.Battlefield.Implementation;
+using EatMySnake.Core.Battlemanager;
+using EatMySnake.Core.Snake;
+using EatMySnake.Core.Snake.Implementation;
 
 
 namespace EatMySnake.ConsoleClient
@@ -15,7 +16,7 @@ namespace EatMySnake.ConsoleClient
             IBattleField battleField = new BattleField();
 
             var id = Guid.NewGuid();
-            var brainChips = new List<Matrix>();
+            var brainChips = new List<IBrainChip>();
             var snakes = new List<ISnake>();
             snakes.Add(new Snake(id, "Snake number 1", id, brainChips));
             snakes.Add(new Snake(id, "Snake number 2", id, brainChips));

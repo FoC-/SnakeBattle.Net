@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using EatMySnake.Core.Battlefield;
 using EatMySnake.Core.Common;
-using EatMySnake.Core.Extensions;
+using EatMySnake.Core.Snake;
+using SnakeBattleNet.Utils.Extensions;
 
-namespace EatMySnake.Core.Battle
+namespace EatMySnake.Core.Battlemanager
 {
     public class BattleManager
     {
@@ -22,7 +24,7 @@ namespace EatMySnake.Core.Battle
 
         public void Act()
         {
-            foreach (Snake snake in _snakes.Shuffle())
+            foreach (Snake.Implementation.Snake snake in _snakes.Shuffle())
             {
                 //todo: generate visible area for snake and put it to next move for analyze
                 Move newHeadPosition = NextMove(_battleField, snake);
@@ -47,7 +49,7 @@ namespace EatMySnake.Core.Battle
         {
             //bite: gateways
             int n = 0;
-            foreach (Snake snake in _snakes)
+            foreach (Snake.Implementation.Snake snake in _snakes)
                 snake.Bite(_battleField.Gateways[n++]);
 
             //bite: 10 times empty space in front of head to grow
@@ -85,7 +87,7 @@ namespace EatMySnake.Core.Battle
 
         private void SnakeMoving(object sender, EventArgs e)
         {
-            Snake snake = sender as Snake;
+            Snake.Implementation.Snake snake = sender as Snake.Implementation.Snake;
             Move move = e as Move;
             if (snake.Length == 0) return;
             Move head = snake.GetHeadPosition();
@@ -98,7 +100,7 @@ namespace EatMySnake.Core.Battle
 
         private void SnakeBiting(object sender, EventArgs e)
         {
-            Snake snake = sender as Snake;
+            Snake.Implementation.Snake snake = sender as Snake.Implementation.Snake;
             Move move = e as Move;
             if (snake.Length == 0) return;
             Move head = snake.GetHeadPosition();
@@ -112,7 +114,7 @@ namespace EatMySnake.Core.Battle
             //throw new NotImplementedException();
         }
 
-        private Move NextMove(IBattleField viewPort, Snake snake)
+        private Move NextMove(IBattleField viewPort, Snake.Implementation.Snake snake)
         {
             //Check if movement is possible
             List<Move> possibleMoves = CheckPossibleMoves(viewPort, snake);
@@ -136,9 +138,9 @@ namespace EatMySnake.Core.Battle
         /// </summary>
         /// <param name="snakeBiter">Snake who try to bite</param>
         /// <param name="newHeadPosition">New position of header genarated by initial algorithm</param>
-        private void TryToBite(Snake snakeBiter, Move newHeadPosition)
+        private void TryToBite(Snake.Implementation.Snake snakeBiter, Move newHeadPosition)
         {
-            foreach (Snake snake in _snakes)
+            foreach (Snake.Implementation.Snake snake in _snakes)
             {
                 if (snakeBiter.GetHeadPosition().Equals(snake.GetTailPosition()))
                 {
@@ -156,7 +158,7 @@ namespace EatMySnake.Core.Battle
         /// <param name="viewPort">Vissible area around snake header</param>
         /// <param name="snake">Snake witch want to move</param>
         /// <returns>List of passable rows or current head position</returns>
-        private List<Move> CheckPossibleMoves(IBattleField viewPort, Snake snake)
+        private List<Move> CheckPossibleMoves(IBattleField viewPort, Snake.Implementation.Snake snake)
         {
             List<Move> possibleMoves = new List<Move>();
 
@@ -179,7 +181,7 @@ namespace EatMySnake.Core.Battle
             return possibleMoves;
         }
 
-        private Matrix GetViewPort(Snake snake)
+        private Matrix GetViewPort(Snake.Implementation.Snake snake)
         {
             //todo: need to check if head near borders
             Move headPosition = snake.GetHeadPosition();
@@ -237,7 +239,7 @@ namespace EatMySnake.Core.Battle
             return tmpArea;
         }
 
-        private void DetermDirection(Snake snake, Matrix observableArea)
+        private void DetermDirection(Snake.Implementation.Snake snake, Matrix observableArea)
         {
             List<Matrix> tmpObservAreas = CreateRotatedMatrix(observableArea);
             foreach (Matrix brainModule in snake.BrainModules)
