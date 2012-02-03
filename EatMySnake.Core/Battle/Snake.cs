@@ -5,36 +5,48 @@ using EatMySnake.Core.Common;
 
 namespace EatMySnake.Core.Battle
 {
-    public class Snake
+    public class Snake : ISnake
     {
-        public event EventHandler Biting;
         public event EventHandler Moving;
+        public event EventHandler Biting;
+        public event EventHandler Dead;
 
+        public Guid Guid { get; private set; }
         public string Name { get; private set; }
+        public Guid Owner { get; private set; }
+
+        public List<Matrix> BrainModules { get; private set; }
         public int VisionRadius { get; private set; }
         public int Length
         {
-            get { return BodyParts.Count; }
+            get
+            {
+                if (BodyParts.Count == 0)
+                    FireDeadEvent();
+                return BodyParts.Count;
+            }
         }
-        public Guid Uid { get; private set; }
 
-        public List<Matrix> BrainModules = new List<Matrix>();
-        LinkedList<Move> BodyParts = new LinkedList<Move>();
+        private LinkedList<Move> BodyParts;
 
-        public Snake()
+        public Snake(Guid guid, string name, Guid owner, List<Matrix> brainModules, int visionRadius = 7)
         {
-            VisionRadius = 7;
-            Name = Guid.NewGuid().ToString();
+            Guid = guid;
+            Name = name;
+            Owner = owner;
+            BrainModules = brainModules;
+            VisionRadius = visionRadius;
+            BodyParts = new LinkedList<Move>();
         }
 
         public Move GetHeadPosition()
         {
-            return BodyParts.First();
+            return Length == 0 ? null : BodyParts.First();
         }
 
         public Move GetTailPosition()
         {
-            return BodyParts.Last();
+            return Length < 2 ? null : BodyParts.Last();
         }
 
         public void NextMove(Move newHeadPosition)
@@ -52,16 +64,22 @@ namespace EatMySnake.Core.Battle
 
         public void Bitten()
         {
-            BodyParts.RemoveLast();
+            if (Length != 0) BodyParts.RemoveLast();
         }
 
-        private void FireMoveEvent(Move move)
+        private void FireDeadEvent()
+        {
+            if (Dead != null)
+                Dead(this, EventArgs.Empty);
+        }
+
+        private void FireMoveEvent(EventArgs move)
         {
             if (Moving != null)
                 Moving(this, move);
         }
 
-        private void FireBiteEvent(Move move)
+        private void FireBiteEvent(EventArgs move)
         {
             if (Biting != null)
                 Biting(this, move);

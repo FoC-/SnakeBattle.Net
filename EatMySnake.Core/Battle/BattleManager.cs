@@ -8,17 +8,15 @@ namespace EatMySnake.Core.Battle
     {
         Random random = new Random();
         private IBattleField _battleField;
-        private List<Snake> _snakes;
+        private List<ISnake> _snakes;
 
-        public BattleManager(IBattleField battleField)
+        public BattleManager(IBattleField battleField, List<ISnake> snakes)
         {
+            if (snakes.Count > battleField.Gateways.Count)
+                throw new Exception("Number of snakes is more then gateways");
+
             _battleField = battleField;
-            _snakes = new List<Snake>();
-            //following code for test usage only
-            _snakes.Add(new Snake());
-            _snakes.Add(new Snake());
-            _snakes.Add(new Snake());
-            _snakes.Add(new Snake());
+            _snakes = snakes;
             InitializeField();
         }
 
@@ -84,6 +82,10 @@ namespace EatMySnake.Core.Battle
                         snake.NextMove(new Move(headX, headY - 1, Direction.South));
                         break;
                 }
+            }
+            foreach (var gateway in _battleField.Gateways)
+            {
+                _battleField[gateway.X, gateway.Y] = new Row(Content.Wall);
             }
         }
 

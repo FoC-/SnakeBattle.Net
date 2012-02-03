@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Battle\BrainChip.cs" />
     <Compile Include="Battle\IBattleField.cs" />
+    <Compile Include="Battle\ISnake.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Common\Content.cs" />
     <Compile Include="Common\AndOrState.cs" />
