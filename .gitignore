@@ -12,3 +12,4 @@ _ReSharper.*
 */Debug
 *.ipch
 *.ReSharper
+*.DotSettings

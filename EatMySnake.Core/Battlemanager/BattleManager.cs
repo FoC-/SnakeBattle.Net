@@ -9,9 +9,9 @@ namespace EatMySnake.Core.Battlemanager
 {
     public class BattleManager
     {
-        Random random = new Random();
-        private IBattleField _battleField;
-        private IList<ISnake> _snakes;
+        readonly Random _random = new Random();
+        private readonly IBattleField _battleField;
+        private readonly IList<ISnake> _snakes;
 
         public BattleManager(IBattleField battleField, IList<ISnake> snakes)
         {
@@ -22,34 +22,14 @@ namespace EatMySnake.Core.Battlemanager
             _snakes = snakes;
         }
 
-        public void Act()
-        {
-            foreach (Snake.Implementation.Snake snake in _snakes.Shuffle())
-            {
-                //todo: generate visible area for snake and put it to next move for analyze
-                Move newHeadPosition = NextMove(_battleField, snake);
-                TryToBite(snake, newHeadPosition);
-            }
-        }
-
-        public void SetupHandlers()
-        {
-            foreach (var snake in _snakes)
-            {
-                snake.Moving += SnakeMoving;
-                snake.Biting += SnakeBiting;
-                snake.Dead += SnakeDead;
-            }
-        }
-
         /// <summary>
-        /// Initialize battle field with snakes, each snake "growth" from the middle of the wall
+        /// Initialize battle field with snakes, each snake "growth" from the walls
         /// </summary>
         public void InitializeField()
         {
             //bite: gateways
             int n = 0;
-            foreach (Snake.Implementation.Snake snake in _snakes)
+            foreach (var snake in _snakes)
                 snake.Bite(_battleField.Gateways[n++]);
 
             //bite: 10 times empty space in front of head to grow
@@ -66,6 +46,59 @@ namespace EatMySnake.Core.Battlemanager
                 _battleField[gateway.X, gateway.Y] = new Row(Content.Wall);
         }
 
+        /// <summary>
+        /// Battle manager try to do one move for each snake
+        /// </summary>
+        public void Act()
+        {
+            foreach (var snake in _snakes.Shuffle())
+            {
+                //Check if movement is possible
+                var possibleMoves = new List<Move>(GetPossibleMoves(_battleField, snake));
+                if (possibleMoves.Count == 0) continue;
+
+                //Try to move according brain chip
+                Move move = GetLogicalMove(_battleField, snake);
+                TryToBite(snake, move ?? possibleMoves[_random.Next(possibleMoves.Count)]);
+            }
+        }
+
+        /// <summary>
+        /// We check rows around snake header trying to find passable
+        /// </summary>
+        /// <param name="battleField">Visible area around snake header</param>
+        /// <param name="snake">Snake witch want to move</param>
+        /// <returns>List of passable rows or current head position</returns>
+        private IEnumerable<Move> GetPossibleMoves(IBattleField battleField, ISnake snake)
+        {
+            var possibleMoves = new List<Move>();
+
+            var passable = new List<Content>
+            {
+                Content.Empty,
+                Content.EnemyTail,
+                Content.OwnTail
+            };
+
+            int headX = snake.GetHeadPosition().X;
+            int headY = snake.GetHeadPosition().Y;
+
+            foreach (Content content in passable)
+            {
+                if (battleField[headX, headY + 1].Content == content) possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
+                if (battleField[headX, headY - 1].Content == content) possibleMoves.Add(new Move(headX, headY - 1, Direction.South));
+                if (battleField[headX - 1, headY].Content == content) possibleMoves.Add(new Move(headX - 1, headY, Direction.West));
+                if (battleField[headX + 1, headY].Content == content) possibleMoves.Add(new Move(headX + 1, headY, Direction.East));
+            }
+            if (0 == possibleMoves.Count) possibleMoves.Add(snake.GetHeadPosition());
+            return possibleMoves;
+        }
+
+        /// <summary>
+        /// Move in the current direction to the next row
+        /// </summary>
+        /// <param name="headPosition">Current head position</param>
+        /// <returns>Next move in front of head</returns>
         private Move StraitMove(Move headPosition)
         {
             int headX = headPosition.X;
@@ -85,62 +118,26 @@ namespace EatMySnake.Core.Battlemanager
             throw new Exception("Something wrong in moving strait!");
         }
 
-        private void SnakeMoving(object sender, EventArgs e)
+        /// <summary>
+        /// Make decision for next move
+        /// </summary>
+        /// <param name="battleField">Battle field or part of it</param>
+        /// <param name="snake">Snake who try to move</param>
+        /// <returns>Next move or null, if no idea where to move</returns>
+        private Move GetLogicalMove(IBattleField battleField, ISnake snake)
         {
-            Snake.Implementation.Snake snake = sender as Snake.Implementation.Snake;
-            Move move = e as Move;
-            if (snake.Length == 0) return;
-            Move head = snake.GetHeadPosition();
-            Move tail = snake.GetTailPosition();
-            _battleField[head.X, head.Y].Content = Content.OwnBody;
-            _battleField[move.X, move.Y].Content = Content.OwnHead;
-            _battleField[tail.X, tail.Y].Content = Content.Empty;
-            Console.WriteLine(snake.Name + " Move " + move + " Len = " + snake.Length);
-        }
-
-        private void SnakeBiting(object sender, EventArgs e)
-        {
-            Snake.Implementation.Snake snake = sender as Snake.Implementation.Snake;
-            Move move = e as Move;
-            if (snake.Length == 0) return;
-            Move head = snake.GetHeadPosition();
-            _battleField[head.X, head.Y].Content = Content.OwnBody;
-            _battleField[move.X, move.Y].Content = Content.OwnHead;
-            Console.WriteLine(snake.Name + " Bite " + move + " Len = " + snake.Length);
-        }
-
-        private void SnakeDead(object sender, EventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private Move NextMove(IBattleField viewPort, Snake.Implementation.Snake snake)
-        {
-            //Check if movement is possible
-            List<Move> possibleMoves = CheckPossibleMoves(viewPort, snake);
-            //check is first move is not head position
-            if (possibleMoves[0].Equals(snake.GetHeadPosition()))
-            {
-                //Return current position of head
-                return snake.GetHeadPosition();
-            }
-            //Try to move according brainchip
-            //foreach (Matrix brainModule in snake.BrainModules)
-            //{
-            //    throw new NotImplementedException();
-            //}
-            //Move in random direction
-            return possibleMoves[random.Next(possibleMoves.Count)];
+            #warning Kush: need to finish this
+            return null;
         }
 
         /// <summary>
         /// We try to bite any snake on field if new position of our head is equal to any tail position
         /// </summary>
         /// <param name="snakeBiter">Snake who try to bite</param>
-        /// <param name="newHeadPosition">New position of header genarated by initial algorithm</param>
-        private void TryToBite(Snake.Implementation.Snake snakeBiter, Move newHeadPosition)
+        /// <param name="newHeadPosition">New position of header generated by initial algorithm</param>
+        private void TryToBite(ISnake snakeBiter, Move newHeadPosition)
         {
-            foreach (Snake.Implementation.Snake snake in _snakes)
+            foreach (var snake in _snakes)
             {
                 if (snakeBiter.GetHeadPosition().Equals(snake.GetTailPosition()))
                 {
@@ -152,106 +149,45 @@ namespace EatMySnake.Core.Battlemanager
             snakeBiter.NextMove(newHeadPosition);
         }
 
-        /// <summary>
-        /// We check rows around snake header trying to find passable
-        /// </summary>
-        /// <param name="viewPort">Vissible area around snake header</param>
-        /// <param name="snake">Snake witch want to move</param>
-        /// <returns>List of passable rows or current head position</returns>
-        private List<Move> CheckPossibleMoves(IBattleField viewPort, Snake.Implementation.Snake snake)
+        #region Events for displaying on battlefield
+        public void SetupHandlers()
         {
-            List<Move> possibleMoves = new List<Move>();
-
-            List<Content> passable = new List<Content>();
-            passable.Add(Content.Empty);
-            passable.Add(Content.EnemyTail);
-            passable.Add(Content.OwnTail);
-
-            int headX = snake.GetHeadPosition().X;
-            int headY = snake.GetHeadPosition().Y;
-
-            foreach (Content content in passable)
+            foreach (var snake in _snakes)
             {
-                if (viewPort[headX, headY + 1].Content == content) possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
-                if (viewPort[headX, headY - 1].Content == content) possibleMoves.Add(new Move(headX, headY - 1, Direction.South));
-                if (viewPort[headX - 1, headY].Content == content) possibleMoves.Add(new Move(headX - 1, headY, Direction.West));
-                if (viewPort[headX + 1, headY].Content == content) possibleMoves.Add(new Move(headX + 1, headY, Direction.East));
+                snake.Moving += SnakeMoving;
+                snake.Biting += SnakeBiting;
+                snake.Dead += SnakeDead;
             }
-            if (0 == possibleMoves.Count) possibleMoves.Add(snake.GetHeadPosition());
-            return possibleMoves;
         }
 
-        private Matrix GetViewPort(Snake.Implementation.Snake snake)
+        private void SnakeMoving(object sender, EventArgs e)
         {
-            //todo: need to check if head near borders
-            Move headPosition = snake.GetHeadPosition();
-
-            int maxX, minX;
-            if (headPosition.X + snake.VisionRadius > _battleField.SizeX)
-            {
-                maxX = _battleField.SizeX - headPosition.X;
-            }
-            else
-            {
-                maxX = headPosition.X + snake.VisionRadius;
-            }
-
-            if (headPosition.X - snake.VisionRadius < 0)
-            {
-                minX = headPosition.X;
-            }
-            else
-            {
-                minX = headPosition.X - snake.VisionRadius;
-            }
-
-            int maxY, minY;
-            if (headPosition.Y + snake.VisionRadius > _battleField.SizeY)
-            {
-                maxY = _battleField.SizeY - headPosition.Y;
-            }
-            else
-            {
-                maxY = headPosition.Y + snake.VisionRadius;
-            }
-
-            if (headPosition.Y - snake.VisionRadius < 0)
-            {
-                minY = headPosition.Y;
-            }
-            else
-            {
-                minY = headPosition.Y - snake.VisionRadius;
-            }
-
-            //todo: error exist need to verify logic
-            Matrix tmpArea = new Matrix(maxX, maxY);
-            int tx = 0, ty = 0;
-            for (int x = minX; x < maxX; x++)
-            {
-                for (int y = minY; y < maxY; y++)
-                {
-                    tmpArea[tx, ty] = _battleField[x, y];
-                    ty++;
-                }
-                tx++;
-            }
-            return tmpArea;
+            var snake = sender as ISnake;
+            if (snake.Length == 0) return;
+            var move = e as Move;
+            var head = snake.GetHeadPosition();
+            var tail = snake.GetTailPosition();
+            _battleField[move.X, move.Y].Content = Content.OwnHead;
+            _battleField[head.X, head.Y].Content = Content.OwnBody;
+            _battleField[tail.X, tail.Y].Content = Content.Empty;
+            Console.WriteLine("{0} Move {1} Len = {2}", snake.Name, move, snake.Length);
         }
 
-        private void DetermDirection(Snake.Implementation.Snake snake, Matrix observableArea)
+        private void SnakeBiting(object sender, EventArgs e)
         {
-            List<Matrix> tmpObservAreas = CreateRotatedMatrix(observableArea);
-            foreach (Matrix brainModule in snake.BrainModules)
-            {
-
-            }
-            throw new NotImplementedException();
+            var snake = sender as ISnake;
+            if (snake.Length == 0) return;
+            var move = e as Move;
+            var head = snake.GetHeadPosition();
+            _battleField[move.X, move.Y].Content = Content.OwnHead;
+            _battleField[head.X, head.Y].Content = Content.OwnBody;
+            Console.WriteLine("{0} Bite {1} Len = {2}", snake.Name, move, snake.Length);
         }
 
-        private List<Matrix> CreateRotatedMatrix(Matrix area)
+        private void SnakeDead(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }
