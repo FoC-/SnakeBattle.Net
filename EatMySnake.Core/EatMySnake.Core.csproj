@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Battlemanager\Comparator.cs" />
+    <Compile Include="Battlefield\Row.cs" />
     <Compile Include="Snake\Implementation\BrainChip.cs" />
     <Compile Include="Battlefield\IBattleField.cs" />
     <Compile Include="Snake\IBrainChip.cs" />

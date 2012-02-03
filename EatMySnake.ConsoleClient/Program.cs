@@ -28,7 +28,7 @@ namespace EatMySnake.ConsoleClient
             battleManager.InitializeField();
 
 
-            for (int i = 0; i < 500000; i++)
+            for (int i = 0; i < 500; i++)
             {
                 battleManager.Act();
             }

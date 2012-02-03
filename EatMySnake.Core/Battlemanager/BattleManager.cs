@@ -4,6 +4,7 @@ using EatMySnake.Core.Battlefield;
 using EatMySnake.Core.Common;
 using EatMySnake.Core.Snake;
 using SnakeBattleNet.Utils.Extensions;
+using Row = EatMySnake.Core.Battlefield.Row;
 
 namespace EatMySnake.Core.Battlemanager
 {

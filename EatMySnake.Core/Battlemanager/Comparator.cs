@@ -59,7 +59,7 @@ namespace EatMySnake.Core.Battlemanager
             {
                 for (int y = minY; y < maxY; y++)
                 {
-                    tmpArea[tx, ty] = _battleField[x, y];
+                   // tmpArea[tx, ty] = _battleField[x, y];
                     ty++;
                 }
                 tx++;
