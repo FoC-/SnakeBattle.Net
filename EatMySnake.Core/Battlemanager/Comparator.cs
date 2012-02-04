@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using EatMySnake.Core.Battlefield;
-using EatMySnake.Core.Battlefield.Implementation;
 using EatMySnake.Core.Common;
 using EatMySnake.Core.Snake;
 using Row = EatMySnake.Core.Battlefield.Row;
@@ -11,82 +10,127 @@ namespace EatMySnake.Core.Battlemanager
     public class Comparator
     {
         private readonly IBattleField _battleField;
-        private readonly IList<IBrainChip> _chips;
         private ISnake _snake;
 
-        public Comparator(IBattleField battleField, ISnake snake, IList<IBrainChip> chips)
+        public Comparator(IBattleField battleField, ISnake snake)
         {
             _snake = snake;
             _battleField = battleField;
-            _chips = chips;
         }
 
         public Move MakeDecision()
         {
+            Move snakeHeadPositionOnBattleField = _snake.GetHeadPosition();
 
-            foreach (var brainChip in _chips)
+            foreach (var brainChip in _snake.BrainModules)
             {
-                int cx = brainChip.HeadPosition.X;
-                int cy = brainChip.HeadPosition.Y;
-
-                int fx = _snake.GetHeadPosition().X;
-                int fy = _snake.GetHeadPosition().Y;
-
                 int chipSizeDim = brainChip.SizeX;
 
-                List<Row> rows = new List<Row>();
+                switch (snakeHeadPositionOnBattleField.direction)
+                {
+                    case Direction.North:
+                        {
+                            GetView1(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            GetView2(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            GetView3(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                        }
+                        break;
+                    case Direction.West:
+                        {
+                            GetView2(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            GetView4(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            GetView1(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                        }
+                        break;
+                    case Direction.East:
+                        {
+                            GetView3(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            GetView1(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            GetView4(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                        }
+                        break;
+                    case Direction.South:
+                        {
+                            GetView4(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            GetView3(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            GetView2(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                        }
+                        break;
+                }
+            }
 
-                //view 1+
-                for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
-                    for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
-                        rows.Add(_battleField[x, y]);
-
-                //view 2+
-                for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
-                    for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
-                        rows.Add(_battleField[y, x]);
-
-                //view 3+
-                for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
-                    for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
-                        rows.Add(_battleField[y, x]);
-
-                //view 4+
-                for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
-                    for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
-                        rows.Add(_battleField[x, y]);
-
-                /*
+            /*
                  * hash map to store views
-                    get ranges for current head positions
-
-                    get camera view pov
 
                     if(_chips.andType) all sums of sequences should be accepted
 
                     if(_chips.orType) one of all sums of sequences should be accepted
                         */
-
-            }
             throw new NotImplementedException();
         }
 
-
-
-
-        private void DetermDirection(Snake.Implementation.Snake snake, Matrix observableArea)
+        private IEnumerable<Row> GetView1(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionInBrainChip, int chipSizeDim)
         {
-            List<Matrix> tmpObservAreas = CreateRotatedMatrix(observableArea);
-            foreach (Matrix brainModule in snake.BrainModules)
-            {
+            var rows = new List<Row>();
+            int fx = snakeHeadPositionOnBattleField.X;
+            int fy = snakeHeadPositionOnBattleField.Y;
 
-            }
-            throw new NotImplementedException();
+            int cx = snakeHeadPositionInBrainChip.X;
+            int cy = snakeHeadPositionInBrainChip.Y;
+
+            for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
+                for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
+                    rows.Add(_battleField[x, y]);
+
+            return rows;
         }
 
-        private List<Matrix> CreateRotatedMatrix(Matrix area)
+        private IEnumerable<Row> GetView2(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionInBrainChip, int chipSizeDim)
         {
-            throw new NotImplementedException();
+            var rows = new List<Row>();
+            int fx = snakeHeadPositionOnBattleField.X;
+            int fy = snakeHeadPositionOnBattleField.Y;
+
+            int cx = snakeHeadPositionInBrainChip.X;
+            int cy = snakeHeadPositionInBrainChip.Y;
+
+            for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
+                for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
+                    rows.Add(_battleField[y, x]);
+
+            return rows;
+        }
+
+        private IEnumerable<Row> GetView3(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionInBrainChip, int chipSizeDim)
+        {
+            var rows = new List<Row>();
+            int fx = snakeHeadPositionOnBattleField.X;
+            int fy = snakeHeadPositionOnBattleField.Y;
+
+            int cx = snakeHeadPositionInBrainChip.X;
+            int cy = snakeHeadPositionInBrainChip.Y;
+
+            for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
+                for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
+                    rows.Add(_battleField[y, x]);
+
+            return rows;
+        }
+
+        private IEnumerable<Row> GetView4(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionInBrainChip, int chipSizeDim)
+        {
+            var rows = new List<Row>();
+            int fx = snakeHeadPositionOnBattleField.X;
+            int fy = snakeHeadPositionOnBattleField.Y;
+
+            int cx = snakeHeadPositionInBrainChip.X;
+            int cy = snakeHeadPositionInBrainChip.Y;
+
+            for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
+                for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
+                    rows.Add(_battleField[x, y]);
+
+            return rows;
         }
     }
 }
