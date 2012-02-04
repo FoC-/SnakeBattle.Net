@@ -3,69 +3,76 @@ using System.Collections.Generic;
 using EatMySnake.Core.Battlefield;
 using EatMySnake.Core.Battlefield.Implementation;
 using EatMySnake.Core.Common;
+using EatMySnake.Core.Snake;
+using Row = EatMySnake.Core.Battlefield.Row;
 
 namespace EatMySnake.Core.Battlemanager
 {
     public class Comparator
     {
-        IBattleField _battleField = new BattleField();
-        private Matrix GetViewPort(Snake.Implementation.Snake snake)
+        private readonly IBattleField _battleField;
+        private readonly IList<IBrainChip> _chips;
+        private ISnake _snake;
+
+        public Comparator(IBattleField battleField, ISnake snake, IList<IBrainChip> chips)
         {
-            //todo: need to check if head near borders
-            Move headPosition = snake.GetHeadPosition();
-
-            int maxX, minX;
-            if (headPosition.X + snake.VisionRadius > _battleField.SizeX)
-            {
-                maxX = _battleField.SizeX - headPosition.X;
-            }
-            else
-            {
-                maxX = headPosition.X + snake.VisionRadius;
-            }
-
-            if (headPosition.X - snake.VisionRadius < 0)
-            {
-                minX = headPosition.X;
-            }
-            else
-            {
-                minX = headPosition.X - snake.VisionRadius;
-            }
-
-            int maxY, minY;
-            if (headPosition.Y + snake.VisionRadius > _battleField.SizeY)
-            {
-                maxY = _battleField.SizeY - headPosition.Y;
-            }
-            else
-            {
-                maxY = headPosition.Y + snake.VisionRadius;
-            }
-
-            if (headPosition.Y - snake.VisionRadius < 0)
-            {
-                minY = headPosition.Y;
-            }
-            else
-            {
-                minY = headPosition.Y - snake.VisionRadius;
-            }
-
-            //todo: error exist need to verify logic
-            Matrix tmpArea = new Matrix(maxX, maxY);
-            int tx = 0, ty = 0;
-            for (int x = minX; x < maxX; x++)
-            {
-                for (int y = minY; y < maxY; y++)
-                {
-                   // tmpArea[tx, ty] = _battleField[x, y];
-                    ty++;
-                }
-                tx++;
-            }
-            return tmpArea;
+            _snake = snake;
+            _battleField = battleField;
+            _chips = chips;
         }
+
+        public Move MakeDecision()
+        {
+
+            foreach (var brainChip in _chips)
+            {
+                int cx = brainChip.HeadPosition.X;
+                int cy = brainChip.HeadPosition.Y;
+
+                int fx = _snake.GetHeadPosition().X;
+                int fy = _snake.GetHeadPosition().Y;
+
+                int chipSizeDim = brainChip.SizeX;
+
+                List<Row> rows = new List<Row>();
+
+                //view 1+
+                for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
+                    for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
+                        rows.Add(_battleField[x, y]);
+
+                //view 2+
+                for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
+                    for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
+                        rows.Add(_battleField[y, x]);
+
+                //view 3+
+                for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
+                    for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
+                        rows.Add(_battleField[y, x]);
+
+                //view 4+
+                for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
+                    for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
+                        rows.Add(_battleField[x, y]);
+
+                /*
+                 * hash map to store views
+                    get ranges for current head positions
+
+                    get camera view pov
+
+                    if(_chips.andType) all sums of sequences should be accepted
+
+                    if(_chips.orType) one of all sums of sequences should be accepted
+                        */
+
+            }
+            throw new NotImplementedException();
+        }
+
+
+
 
         private void DetermDirection(Snake.Implementation.Snake snake, Matrix observableArea)
         {
