@@ -3,18 +3,18 @@ using System.Linq;
 
 namespace EatMySnake.Core.Common
 {
-    public class Row
+    public class ChipRow
     {
         public Content Content { get; private set; }
         public Guid Guid { get; private set; }
         public Except Except { get; private set; }
         public AndOrState AndOrState { get; private set; }
 
-        public Row() : this(Content.Empty) { }
+        public ChipRow() : this(Content.Empty) { }
 
-        public Row(Content content, Guid guid = default (Guid)) : this(content, guid, Except.No, AndOrState.AndGrey) { }
+        public ChipRow(Content content, Guid guid = default (Guid)) : this(content, guid, Except.No, AndOrState.AndGrey) { }
 
-        public Row(Content content, Guid guid, Except except, AndOrState andOrState)
+        public ChipRow(Content content, Guid guid, Except except, AndOrState andOrState)
         {
             Content = content;
             Guid = guid;
@@ -34,12 +34,12 @@ namespace EatMySnake.Core.Common
 
         public override bool Equals(object obj)
         {
-            Row row = (Row)obj;
+            ChipRow chipRow = (ChipRow)obj;
             if (Except == Except.No)
             {
-                return Content == row.Content;
+                return Content == chipRow.Content;
             }
-            return Content != row.Content;
+            return Content != chipRow.Content;
         }
 
         public override string ToString()

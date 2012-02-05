@@ -6,62 +6,136 @@ namespace EatMySnake.Core.Battlefield.Implementation
 {
     public class BattleField : IBattleField
     {
-        public int SizeX { get; private set; }
-        public int SizeY { get; private set; }
-        public IList<Move> Gateways { get; private set; }
-        private readonly Row[,] _rows;
+        private readonly FieldRow[,] _fieldRows;
 
-        public Row this[int x, int y]
+        public Size Size { get; private set; }
+        public IList<Move> Gateways { get; private set; }
+        public FieldRow this[int x, int y]
         {
             get
             {
-                if (x > -1 && x < SizeX && y > -1 && y < SizeY)
-                    return _rows[x, y];
+                if (x > -1 && x < Size.X && y > -1 && y < Size.Y)
+                    return _fieldRows[x, y];
                 return null;
             }
             set
             {
-                if (x > -1 && x < SizeX && y > -1 && y < SizeY)
-                    _rows[x, y] = value;
+                if (x > -1 && x < Size.X && y > -1 && y < Size.Y)
+                    _fieldRows[x, y] = value;
                 else
                     throw new IndexOutOfRangeException();
             }
         }
 
-        public BattleField() : this(27, 27, 1) { }
+        public BattleField() : this(new Size(27, 27), 1) { }
 
-        public BattleField(int sizeX, int sizeY, int numberGatewaysOnSide)
+        public BattleField(Size size, int numberGatewaysOnSide)
         {
-            SizeX = sizeX;
-            SizeY = sizeY;
-            _rows = new Row[sizeX, sizeY];
+            Size = size;
+            _fieldRows = new FieldRow[size.X, size.Y];
             SetWalls();
             CreateGateways(numberGatewaysOnSide);
+        }
+
+        /// <summary>
+        /// We are looking to north
+        /// </summary>
+        public IEnumerable<FieldRow> ViewToNorth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionInBrainChip, int chipSizeDim)
+        {
+            var rows = new List<FieldRow>();
+            int fx = snakeHeadPositionOnBattleField.X;
+            int fy = snakeHeadPositionOnBattleField.Y;
+
+            int cx = snakeHeadPositionInBrainChip.X;
+            int cy = snakeHeadPositionInBrainChip.Y;
+
+            for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
+                for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
+                    rows.Add(_fieldRows[x, y]);
+
+            return rows;
+        }
+
+        /// <summary>
+        /// We are looking to west
+        /// </summary>
+        public IEnumerable<FieldRow> ViewToWest(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionInBrainChip, int chipSizeDim)
+        {
+            var rows = new List<FieldRow>();
+            int fx = snakeHeadPositionOnBattleField.X;
+            int fy = snakeHeadPositionOnBattleField.Y;
+
+            int cx = snakeHeadPositionInBrainChip.X;
+            int cy = snakeHeadPositionInBrainChip.Y;
+
+            for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
+                for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
+                    rows.Add(_fieldRows[y, x]);
+
+            return rows;
+        }
+
+        /// <summary>
+        /// We are looking to east
+        /// </summary>
+        public IEnumerable<FieldRow> ViewToEast(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionInBrainChip, int chipSizeDim)
+        {
+            var rows = new List<FieldRow>();
+            int fx = snakeHeadPositionOnBattleField.X;
+            int fy = snakeHeadPositionOnBattleField.Y;
+
+            int cx = snakeHeadPositionInBrainChip.X;
+            int cy = snakeHeadPositionInBrainChip.Y;
+
+            for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
+                for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
+                    rows.Add(_fieldRows[y, x]);
+
+            return rows;
+        }
+
+        /// <summary>
+        /// We are looking to south
+        /// </summary>
+        public IEnumerable<FieldRow> ViewToSouth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionInBrainChip, int chipSizeDim)
+        {
+            var rows = new List<FieldRow>();
+            int fx = snakeHeadPositionOnBattleField.X;
+            int fy = snakeHeadPositionOnBattleField.Y;
+
+            int cx = snakeHeadPositionInBrainChip.X;
+            int cy = snakeHeadPositionInBrainChip.Y;
+
+            for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
+                for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
+                    rows.Add(_fieldRows[x, y]);
+
+            return rows;
         }
 
         private void CreateGateways(int numberGatewaysOnTheSide)
         {
             Gateways = new List<Move>();
-            int x = SizeX / (numberGatewaysOnTheSide + 1);
-            int y = SizeY / (numberGatewaysOnTheSide + 1);
+            int x = Size.X / (numberGatewaysOnTheSide + 1);
+            int y = Size.Y / (numberGatewaysOnTheSide + 1);
 
             for (int i = 1; i < numberGatewaysOnTheSide + 1; i++)
             {
                 Gateways.Add(new Move(0, i * y, Direction.East));
-                Gateways.Add(new Move(SizeX - 1, i * y, Direction.West));
+                Gateways.Add(new Move(Size.X - 1, i * y, Direction.West));
                 Gateways.Add(new Move(i * x, 0, Direction.North));
-                Gateways.Add(new Move(i * x, SizeY - 1, Direction.South));
+                Gateways.Add(new Move(i * x, Size.Y - 1, Direction.South));
             }
         }
 
         private void SetWalls()
         {
-            for (int x = 0; x < SizeX; x++)
-                for (int y = 0; y < SizeY; y++)
-                    if (x == 0 || y == 0 || x == SizeX - 1 || y == SizeY - 1)
-                        _rows[x, y] = new Row(Content.Wall);
+            for (int x = 0; x < Size.X; x++)
+                for (int y = 0; y < Size.Y; y++)
+                    if (x == 0 || y == 0 || x == Size.X - 1 || y == Size.Y - 1)
+                        _fieldRows[x, y] = new FieldRow(Content.Wall);
                     else
-                        _rows[x, y] = new Row();
+                        _fieldRows[x, y] = new FieldRow();
         }
     }
 }

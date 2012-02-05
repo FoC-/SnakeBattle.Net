@@ -3,14 +3,14 @@ using EatMySnake.Core.Common;
 
 namespace EatMySnake.Core.Battlefield
 {
-    public class Row
+    public class FieldRow
     {
         public Content Content { get; private set; }
         public Guid Guid { get; private set; }
 
-        public Row() : this(Content.Empty) { }
+        public FieldRow() : this(Content.Empty) { }
 
-        public Row(Content content, Guid guid = default (Guid))
+        public FieldRow(Content content, Guid guid = default (Guid))
         {
             Content = content;
             Guid = guid;

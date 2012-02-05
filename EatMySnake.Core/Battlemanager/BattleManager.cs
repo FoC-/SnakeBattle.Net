@@ -4,7 +4,6 @@ using EatMySnake.Core.Battlefield;
 using EatMySnake.Core.Common;
 using EatMySnake.Core.Snake;
 using SnakeBattleNet.Utils.Extensions;
-using Row = EatMySnake.Core.Battlefield.Row;
 
 namespace EatMySnake.Core.Battlemanager
 {
@@ -44,7 +43,7 @@ namespace EatMySnake.Core.Battlemanager
 
             //draw walls
             foreach (var gateway in _battleField.Gateways)
-                _battleField[gateway.X, gateway.Y] = new Row(Content.Wall);
+                _battleField[gateway.X, gateway.Y] = new FieldRow(Content.Wall);
         }
 
         /// <summary>
@@ -162,9 +161,9 @@ namespace EatMySnake.Core.Battlemanager
             var move = e as Move;
             var head = snake.GetHeadPosition();
             var tail = snake.GetTailPosition();
-            _battleField[move.X, move.Y] = new Row(Content.Head, snake.Guid);
-            _battleField[head.X, head.Y] = new Row(Content.Body, snake.Guid);
-            _battleField[tail.X, tail.Y] = new Row();
+            _battleField[move.X, move.Y] = new FieldRow(Content.Head, snake.Guid);
+            _battleField[head.X, head.Y] = new FieldRow(Content.Body, snake.Guid);
+            _battleField[tail.X, tail.Y] = new FieldRow();
             Console.WriteLine("{0} Move {1} Len = {2}", snake.Name, move, snake.Length);
         }
 
@@ -174,8 +173,8 @@ namespace EatMySnake.Core.Battlemanager
             if (snake.Length == 0) return;
             var move = e as Move;
             var head = snake.GetHeadPosition();
-            _battleField[move.X, move.Y] = new Row(Content.Head, snake.Guid);
-            _battleField[head.X, head.Y] = new Row(Content.Body, snake.Guid);
+            _battleField[move.X, move.Y] = new FieldRow(Content.Head, snake.Guid);
+            _battleField[head.X, head.Y] = new FieldRow(Content.Body, snake.Guid);
             Console.WriteLine("{0} Bite {1} Len = {2}", snake.Name, move, snake.Length);
         }
 

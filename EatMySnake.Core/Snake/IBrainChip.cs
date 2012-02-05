@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using EatMySnake.Core.Common;
 
 namespace EatMySnake.Core.Snake
 {
-    public interface IBrainChip {
+    public interface IBrainChip
+    {
         Move HeadPosition { get; set; }
-        int SizeX { get; }
-        int SizeY { get; }
-        Row this[int x, int y] { get; set; }
+        Size Size { get; }
+        ChipRow this[int x, int y] { get; set; }
+        IEnumerable<ChipRow> ToEnumeration();
     }
 }
