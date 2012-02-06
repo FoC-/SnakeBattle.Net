@@ -12,7 +12,7 @@ namespace EatMySnake.Core.Prototypes
     {
         private List<Snake> snakes; 
 
-        public VisibleArea GetVisibleAreaFor(BattleSnake snake)
+        internal VisibleArea GetVisibleAreaFor(BattleSnake snake)
         {
             throw new NotImplementedException();
             //return GetVisibleAreaInternal(snake.SizeOfVisibleArea, GetHeadPosition(snake));
