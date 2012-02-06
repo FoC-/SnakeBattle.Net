@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
+using EatMySnake.Core.Common;
 
-namespace EatMySnake.Core.Common
+namespace EatMySnake.Core.Snake
 {
     public class ChipRow
     {

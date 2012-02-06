@@ -51,9 +51,9 @@ namespace EatMySnake.Core.Snake.Implementation
 
         public void NextMove(Move newHeadPosition)
         {
+            FireMoveEvent(newHeadPosition);
             BodyParts.AddFirst(newHeadPosition);
             BodyParts.RemoveLast();
-            FireMoveEvent(newHeadPosition);
         }
 
         public void Bite(Move newHeadPosition)

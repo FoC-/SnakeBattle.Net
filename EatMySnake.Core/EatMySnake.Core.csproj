@@ -52,7 +52,7 @@
     <Compile Include="Battlemanager\BattleManager.cs" />
     <Compile Include="Common\Except.cs" />
     <Compile Include="Common\Move.cs" />
-    <Compile Include="Common\ChipRow.cs" />
+    <Compile Include="Snake\ChipRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Direction.cs" />
     <Compile Include="Prototypes\Battle.cs" />
