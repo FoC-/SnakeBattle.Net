@@ -48,51 +48,39 @@ namespace SnakeBattleNet.WinForms
 
         private void BoardGridCellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
+            var color = Color.Gray;
             switch (battleField[e.ColumnIndex, e.RowIndex].Content)
             {
                 case Content.Empty:
-                    {
-                        e.CellStyle.BackColor = Color.White;
-                        e.CellStyle.ForeColor = Color.White;
-                        e.CellStyle.SelectionBackColor = Color.White;
-                        e.CellStyle.SelectionForeColor = Color.White;
-                    }
+                    color = Color.White;
                     break;
                 case Content.Wall:
-                    {
-                        e.CellStyle.BackColor = Color.Orange;
-                        e.CellStyle.ForeColor = Color.Orange;
-                        e.CellStyle.SelectionBackColor = Color.Orange;
-                        e.CellStyle.SelectionForeColor = Color.Orange;
-                    }
+                    color = Color.Orange;
                     break;
                 case Content.Head:
-                    {
-                        e.CellStyle.BackColor = Color.Blue;
-                        e.CellStyle.ForeColor = Color.Blue;
-                        e.CellStyle.SelectionBackColor = Color.Blue;
-                        e.CellStyle.SelectionForeColor = Color.Blue;
-                    }
+                    color = Color.Blue;
                     break;
                 case Content.Body:
-                    {
-                        e.CellStyle.BackColor = Color.Red;
-                        e.CellStyle.ForeColor = Color.Red;
-                        e.CellStyle.SelectionBackColor = Color.Red;
-                        e.CellStyle.SelectionForeColor = Color.Red;
-                    }
+                    color = Color.Red;
                     break;
                 case Content.Tail:
-                    {
-                        e.CellStyle.BackColor = Color.Green;
-                        e.CellStyle.ForeColor = Color.Green;
-                        e.CellStyle.SelectionBackColor = Color.Green;
-                        e.CellStyle.SelectionForeColor = Color.Green;
-                    }
+                    color = Color.Green;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            var cellStyle = DataGridViewCellStyle(color);
+            (sender as DataGridView)[e.ColumnIndex, e.RowIndex].Style = cellStyle;
+        }
+
+        private DataGridViewCellStyle DataGridViewCellStyle(Color color)
+        {
+            var cellStyle = new DataGridViewCellStyle();
+            cellStyle.BackColor = color;
+            cellStyle.ForeColor = color;
+            cellStyle.SelectionBackColor = color;
+            cellStyle.SelectionForeColor = color;
+            return cellStyle;
         }
 
         private void btnStart_Click(object sender, System.EventArgs e)
