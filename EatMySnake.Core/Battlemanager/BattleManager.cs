@@ -120,7 +120,7 @@ namespace EatMySnake.Core.Battlemanager
         /// <returns>Next move or null, if no idea where to move</returns>
         private Move GetLogicalMove(IBattleField battleField, ISnake snake)
         {
-            #warning Kush: need to finish this
+#warning Kush: need to finish this
             return null;
         }
 
@@ -157,30 +157,33 @@ namespace EatMySnake.Core.Battlemanager
         private void SnakeMoving(object sender, EventArgs e)
         {
             var snake = sender as ISnake;
-            if (snake.Length == 0) return;
-            var move = e as Move;
-            var head = snake.GetHeadPosition();
-            var tail = snake.GetTailPosition();
-            _battleField[move.X, move.Y] = new FieldRow(Content.Head, snake.Guid);
-            _battleField[head.X, head.Y] = new FieldRow(Content.Body, snake.Guid);
-            _battleField[tail.X, tail.Y] = new FieldRow();
-            Console.WriteLine("{0} Move {1} Len = {2}", snake.Name, move, snake.Length);
+            var newHead = e as Move;
+            _battleField[newHead.X, newHead.Y] = new FieldRow(Content.Head, snake.Guid);
+            Console.WriteLine("{0} Move {1} Len = {2}", snake.Name, newHead, snake.Length);
+
+            var oldHead = snake.GetHeadPosition();
+            if (oldHead == null) return;
+            _battleField[oldHead.X, oldHead.Y] = new FieldRow(Content.Body, snake.Guid);
+
+            var oldTail = snake.GetTailPosition();
+            _battleField[oldTail.X, oldTail.Y] = new FieldRow();
         }
 
         private void SnakeBiting(object sender, EventArgs e)
         {
             var snake = sender as ISnake;
-            if (snake.Length == 0) return;
-            var move = e as Move;
-            var head = snake.GetHeadPosition();
-            _battleField[move.X, move.Y] = new FieldRow(Content.Head, snake.Guid);
-            _battleField[head.X, head.Y] = new FieldRow(Content.Body, snake.Guid);
-            Console.WriteLine("{0} Bite {1} Len = {2}", snake.Name, move, snake.Length);
+            var newHead = e as Move;
+            _battleField[newHead.X, newHead.Y] = new FieldRow(Content.Head, snake.Guid);
+            Console.WriteLine("{0} Bite {1} Len = {2}", snake.Name, newHead, snake.Length);
+
+            var oldHead = snake.GetHeadPosition();
+            if (oldHead == null) return;
+            _battleField[oldHead.X, oldHead.Y] = new FieldRow(Content.Body, snake.Guid);
         }
 
         private void SnakeDead(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
         #endregion
     }
