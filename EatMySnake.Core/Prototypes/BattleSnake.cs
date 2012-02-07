@@ -36,6 +36,20 @@ namespace EatMySnake.Core.Prototypes
             //var visibleArea = battleField.GetVisibleAreaFor(this);
             //var moveDirection = mind.GetMoveDirection(visibleArea);
 
+            /* var tailOwner = battleField.GetTailOwner(this, moveDirection);
+             * if (tailOwner != null)
+             * {
+             *     Bite(tailOwner);
+             * }
+             * 
+             * MoveTo(moveDirection);
+             */
+
+
+            //todo note: version 2
+
+
+
             //todo: decide what is more logical way of getting tail or tail owner from the battle field in order to bite a tail
             //var moveCoordinates = GetMoveCoordinates(moveDirection);
             //BodyPart tail = battleField.GetTail(moveCoordinates);
@@ -44,7 +58,6 @@ namespace EatMySnake.Core.Prototypes
             //{
             //    var tailOwner = battleField.GetTailOwner(tail);
             //    Bite(tailOwner);
-            //    
             //}
             //
             //
@@ -78,10 +91,10 @@ namespace EatMySnake.Core.Prototypes
         {
             //fire event: eventBus.Publish(new SnakeBittenEvent(this, snakeToBite))
             snakeToBite.Shorten();
-            this.Lengthen();
+            this.MakeLonger();
         }
 
-        private void Lengthen()
+        private void MakeLonger()
         {
             //Body.Add(new BodyPart());
         }

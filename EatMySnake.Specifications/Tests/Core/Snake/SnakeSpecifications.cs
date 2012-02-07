@@ -3,12 +3,7 @@ using Machine.Specifications;
 
 namespace EatMySnake.Specifications.Tests.Core.Snake
 {
-    class MyClass_bla
-    {
-         
-    }
-
-    [Subject(typeof (BattleSnake))]
+        [Subject(typeof (BattleSnake))]
     public class when_snake_does_something
     {
         It should_do = () =>

@@ -77,7 +77,7 @@
     <Compile Include="Prototypes\MindChip.cs" />
     <Compile Include="Prototypes\MoveDirection.cs" />
     <Compile Include="Prototypes\Passport.cs" />
-    <Compile Include="Prototypes\Coordinate.cs" />
+    <Compile Include="Prototypes\Coordinates.cs" />
     <Compile Include="Prototypes\Snake.cs" />
     <Compile Include="Battle\Snake.cs" />
     <Compile Include="Prototypes\VisibleArea.cs" />
