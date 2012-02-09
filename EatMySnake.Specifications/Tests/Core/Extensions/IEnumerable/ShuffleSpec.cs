@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using EatMySnake.Core.Extensions;
+using SnakeBattleNet.Utils.Extensions;
 
 namespace EatMySnake.Specifications.Tests.Core.Extensions
 {

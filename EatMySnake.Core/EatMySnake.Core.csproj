@@ -15,29 +15,16 @@
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\EatMySnake.Core.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Annotations">
@@ -52,17 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Battle\BrainChip.cs" />
-    <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Battlemanager\Comparator.cs" />
+    <Compile Include="Battlefield\FieldRow.cs" />
+    <Compile Include="Common\Size.cs" />
+    <Compile Include="Snake\Implementation\BrainChip.cs" />
+    <Compile Include="Battlefield\IBattleField.cs" />
+    <Compile Include="Snake\IBrainChip.cs" />
+    <Compile Include="Snake\ISnake.cs" />
     <Compile Include="Common\Content.cs" />
     <Compile Include="Common\AndOrState.cs" />
-    <Compile Include="Battle\BattleField.cs" />
-    <Compile Include="Battle\BattleManager.cs" />
+    <Compile Include="Battlefield\Implementation\BattleField.cs" />
+    <Compile Include="Battlemanager\BattleManager.cs" />
     <Compile Include="Common\Except.cs" />
-    <Compile Include="Common\Matrix.cs" />
     <Compile Include="Common\Move.cs" />
-    <Compile Include="Common\Row.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Snake\ChipRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Direction.cs" />
     <Compile Include="Prototypes\Battle.cs" />
@@ -79,11 +69,14 @@
     <Compile Include="Prototypes\Passport.cs" />
     <Compile Include="Prototypes\Coordinates.cs" />
     <Compile Include="Prototypes\Snake.cs" />
-    <Compile Include="Battle\Snake.cs" />
+    <Compile Include="Snake\Implementation\Snake.cs" />
     <Compile Include="Prototypes\VisibleArea.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj">
+      <Project>{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}</Project>
+      <Name>SnakeBattleNet.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Snake\" />
