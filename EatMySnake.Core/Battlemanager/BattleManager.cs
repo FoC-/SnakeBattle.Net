@@ -165,6 +165,7 @@ namespace EatMySnake.Core.Battlemanager
             if (oldHead == null) return;
             _battleField[oldHead.X, oldHead.Y] = new FieldRow(Content.Body, snake.Guid);
 
+#warning New tail is not appear on the battlefield
             var oldTail = snake.GetTailPosition();
             _battleField[oldTail.X, oldTail.Y] = new FieldRow();
         }
