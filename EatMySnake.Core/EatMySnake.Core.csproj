@@ -67,7 +67,7 @@
     <Compile Include="Prototypes\MindChip.cs" />
     <Compile Include="Prototypes\MoveDirection.cs" />
     <Compile Include="Prototypes\Passport.cs" />
-    <Compile Include="Prototypes\Coordinate.cs" />
+    <Compile Include="Prototypes\Coordinates.cs" />
     <Compile Include="Prototypes\Snake.cs" />
     <Compile Include="Snake\Implementation\Snake.cs" />
     <Compile Include="Prototypes\VisibleArea.cs" />
@@ -77,6 +77,9 @@
       <Project>{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}</Project>
       <Name>SnakeBattleNet.Utils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Snake\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,4 @@
-﻿1. We need to replay battles repetadly
+﻿1. We need to replay battles repetedly
 	a. battle should be fast
 	b. battle should have option to be recorded (or any battle should be recorded?)
 		1. this will give us possibility to replay any battle with any speed
@@ -11,5 +11,5 @@
 		i. //todo: determine exact amount of points
 	e. if two snakes with the same body length left at the end
 3. Battle replay
-	a. should containt information about every pattern that was applied on any step for target snake (or any snake)
+	a. should containt information about every pattern that was applied on every step for target snake (or any snake)
 	b. 

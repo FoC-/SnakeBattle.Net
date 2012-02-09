@@ -2,6 +2,6 @@ namespace EatMySnake.Core.Prototypes
 {
     public struct BodyPart
     {
-        public Coordinate Coordinate { get; set; }
+        public Coordinates Coordinates { get; set; }
     }
 }
