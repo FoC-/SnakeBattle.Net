@@ -34,7 +34,7 @@ namespace EatMySnake.Core.Prototypes
         public void Move()
         {
             //var visibleArea = battleField.GetVisibleAreaFor(this);
-            //var moveDirection = mind.GetMoveDirection(visibleArea); //todo: decide if it will return relate or absolute directioin
+            //var moveDirection = mind.GetMoveDirection(visibleArea); //todo: decide if it will return relative or absolute directioin
 
             /* var tailOwner = battleField.GetTailOwner(this, moveDirection);
              * if (tailOwner != null)
@@ -64,7 +64,7 @@ namespace EatMySnake.Core.Prototypes
             //MoveBodyTo(moveDirection);
             //
 
-            //todo note: version 3
+            //todo note: version 3 ( for now I consider this as an improvement, that is not required for now and can be easely refactored later
             /* maybe it will make sence when Battle calls "Move" on snake, so battl field will recieve an event like
              * "OnBeforeSnakeMove() so it will be able to mark one snake as "current", so this will simplify methods like
              * battleField.GetVisibleArea();
