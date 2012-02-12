@@ -14,7 +14,7 @@ namespace EatMySnake.Core.Prototypes
         {
             this.battleField = battleField;
 
-            battleSnakes = snakes.Select(snake => new BattleSnake(snake));
+            battleSnakes = snakes.Select(snake => new BattleSnake(snake, new DummyMind()));
             this.battleField.AddSnakes(battleSnakes.Shuffle());
 
             // battleSnakes.ForEach(snake => snake.Died += this.SnakeDiedHandler());

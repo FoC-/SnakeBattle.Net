@@ -3,7 +3,7 @@ using System;
 namespace EatMySnake.Core.Prototypes
 {
     /* var snakeSpecification = new SnakeSpecification()
-     * .UseMind<CommonMind>()
+     * .UseMind<ChipBasedMind>()
      * .UseBody<Body>()
      * .SetSizeOfVisibleAreaTo(6);
      * 
@@ -13,7 +13,7 @@ namespace EatMySnake.Core.Prototypes
     /// <summary>
     /// Represents a snake on a battle field.
     /// </summary>
-    public class BattleSnake
+    internal class BattleSnake
     {
         private readonly BattleField battleField;
         private readonly Snake snake;
@@ -25,9 +25,10 @@ namespace EatMySnake.Core.Prototypes
         /// <summary>
         /// Initializes a new instance of the <see cref="BattleSnake"/> class.
         /// </summary>
-        public BattleSnake(Snake snake)
+        public BattleSnake(Snake snake, IMind mind)
         {
             this.snake = snake;
+            this.mind = mind;
             SizeOfVisibleArea = 6;
         }
 
@@ -49,7 +50,7 @@ namespace EatMySnake.Core.Prototypes
             //todo note: version 2
 
             //var visibleArea = battleField.GetVisibleAreaFor(this);
-            //var moveDirection = mind.GetMoveDirection(visibleArea); //todo: decide if it will return relate or absolute directioin
+            //var moveDirection = mind.GetMoveDirection(visibleArea); //todo: decide if it will return relative or absolute directioin
             //todo: decide what is more logical way of getting tail or tail owner from the battle field in order to bite a tail
             //var moveCoordinates = GetMoveCoordinates(moveDirection);
             //BodyPart tail = battleField.GetTail(moveCoordinates);

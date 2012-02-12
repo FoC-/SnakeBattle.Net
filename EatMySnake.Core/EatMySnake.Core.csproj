@@ -42,6 +42,8 @@
     <Compile Include="Battlemanager\Comparator.cs" />
     <Compile Include="Battlefield\FieldRow.cs" />
     <Compile Include="Common\Size.cs" />
+    <Compile Include="Prototypes\Snake\DummyMind.cs" />
+    <Compile Include="Prototypes\Snake\IMind.cs" />
     <Compile Include="Snake\Implementation\BrainChip.cs" />
     <Compile Include="Battlefield\IBattleField.cs" />
     <Compile Include="Snake\IBrainChip.cs" />
@@ -59,16 +61,16 @@
     <Compile Include="Prototypes\BattleControllerPrototype.cs" />
     <Compile Include="Prototypes\BattleField.cs" />
     <Compile Include="Prototypes\BattleReplay.cs" />
-    <Compile Include="Prototypes\BattleSnake.cs" />
+    <Compile Include="Prototypes\Snake\BattleSnake.cs" />
     <Compile Include="Prototypes\Body.cs" />
     <Compile Include="Prototypes\BodyPart.cs" />
-    <Compile Include="Prototypes\CommonMind.cs" />
+    <Compile Include="Prototypes\Snake\ChipBasedMind.cs" />
     <Compile Include="Prototypes\IBattle.cs" />
-    <Compile Include="Prototypes\MindChip.cs" />
+    <Compile Include="Prototypes\Snake\MindChip.cs" />
     <Compile Include="Prototypes\MoveDirection.cs" />
     <Compile Include="Prototypes\Passport.cs" />
     <Compile Include="Prototypes\Coordinates.cs" />
-    <Compile Include="Prototypes\Snake.cs" />
+    <Compile Include="Prototypes\Snake\Snake.cs" />
     <Compile Include="Snake\Implementation\Snake.cs" />
     <Compile Include="Prototypes\VisibleArea.cs" />
   </ItemGroup>
@@ -78,9 +80,7 @@
       <Name>SnakeBattleNet.Utils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Snake\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
