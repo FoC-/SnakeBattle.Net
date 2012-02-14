@@ -46,10 +46,19 @@ namespace EatMySnake.Core.Prototypes
     /// <summary>
     /// Represents battle field where snakes are trying to eat each other.
     /// </summary>
-    public class BattleField
+    internal class BattleField
     {
-        private List<BattleSnake> snakes;
+        private IList<BattleSnake> snakes;
         private int[] field;
+
+        internal void AddSnakes(IList<BattleSnake> snakes)
+        {
+            this.snakes = snakes;
+            foreach (var battleSnake in snakes)
+            {
+                //battleSnake.PutOnBattleField(this);
+            }
+        }
 
         internal VisibleArea GetVisibleAreaFor(BattleSnake snake)
         {

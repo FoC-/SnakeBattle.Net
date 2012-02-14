@@ -62,8 +62,8 @@
     <Compile Include="Prototypes\BattleField.cs" />
     <Compile Include="Prototypes\BattleReplay.cs" />
     <Compile Include="Prototypes\Snake\BattleSnake.cs" />
-    <Compile Include="Prototypes\Body.cs" />
-    <Compile Include="Prototypes\BodyPart.cs" />
+    <Compile Include="Prototypes\Snake\Body.cs" />
+    <Compile Include="Prototypes\Snake\BodyPart.cs" />
     <Compile Include="Prototypes\Snake\ChipBasedMind.cs" />
     <Compile Include="Prototypes\IBattle.cs" />
     <Compile Include="Prototypes\Snake\MindChip.cs" />

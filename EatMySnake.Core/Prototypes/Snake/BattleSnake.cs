@@ -15,7 +15,7 @@ namespace EatMySnake.Core.Prototypes
     /// </summary>
     internal class BattleSnake
     {
-        private readonly BattleField battleField;
+        private  BattleField battleField;
         private readonly Snake snake;
         private IMind mind;
 
@@ -32,6 +32,11 @@ namespace EatMySnake.Core.Prototypes
             SizeOfVisibleArea = 6;
         }
 
+        internal void PutOnBattleField(BattleField battleField)
+        {
+            this.battleField = battleField;
+        }
+
         public void Move()
         {
             //var visibleArea = battleField.GetVisibleAreaFor(this);
@@ -46,49 +51,20 @@ namespace EatMySnake.Core.Prototypes
              * MoveBodyTo(moveDirection);
              */
 
-
             //todo note: version 2
 
             //var visibleArea = battleField.GetVisibleAreaFor(this);
             //var moveDirection = mind.GetMoveDirection(visibleArea); //todo: decide if it will return relative or absolute directioin
             //todo: decide what is more logical way of getting tail or tail owner from the battle field in order to bite a tail
-            //var moveCoordinates = GetMoveCoordinates(moveDirection);
-            //BodyPart tail = battleField.GetTail(moveCoordinates);
 
-            //if (tail != null) //EnemiesTailIsAtMoveDirection()
+            //if (EnemiesTailIsAtMoveDirection(moveDirection)) 
             //{
-            //    var tailOwner = battleField.GetTailOwner(tail);
+            //    var tailOwner = battleField.GetEnemy(this, moveDirection);
             //    Bite(tailOwner);
             //}
             //
-            //
             //MoveBodyTo(moveDirection);
             //
-
-            //todo note: version 3 ( for now I consider this as an improvement, that is not required for now and can be easely refactored later
-            /* maybe it will make sence when Battle calls "Move" on snake, so battl field will recieve an event like
-             * "OnBeforeSnakeMove() so it will be able to mark one snake as "current", so this will simplify methods like
-             * battleField.GetVisibleArea();
-             * battleField.EnemiesTailIsAtMoveDirection(moveDirection)
-             * battleFeild.GetSnakeToBite(moveDirection);
-             * 
-             * since battleField will know what snake is "current"
-             * todo list possible drawbacks of that solution
-             * /
-
-            /*
-             * var visibleArea = battleField.GetVisibleAreaFor(this);
-             * var moveDirection = mind.GetRelativeMoveDirection(visibleArea);
-             * 
-             * if (EnemiesTailIsAtMoveDirection())
-             * {
-             *      var tailOwner = battleField.TailOwner();
-             *      Bite(tailOwener);
-             * }
-             * 
-             * MoveBodyTo(moveDirection);
-             * 
-             */
 
         }
 

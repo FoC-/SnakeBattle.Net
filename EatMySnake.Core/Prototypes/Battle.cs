@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using EatMySnake.Core.Prototypes;
 
 namespace EatMySnake.Core.Prototypes
 {
@@ -9,12 +10,21 @@ namespace EatMySnake.Core.Prototypes
         private readonly dynamic battleField;
         private dynamic battleSnakes;
 
+        public int FieldSize { get; private set; }
+        public int MaxRounds { get; private set; }
+
+        public Battle()
+        {
+            FieldSize = 25;
+            MaxRounds = 500;
+        }
 
         public Battle(dynamic battleField, IEnumerable<Snake> snakes)
         {
             this.battleField = battleField;
 
             battleSnakes = snakes.Select(snake => new BattleSnake(snake, new DummyMind()));
+            //set snakes starting coordinates here
             this.battleField.AddSnakes(battleSnakes.Shuffle());
 
             // battleSnakes.ForEach(snake => snake.Died += this.SnakeDiedHandler());
