@@ -13,6 +13,12 @@ namespace EatMySnake.Core.Prototypes
         public int FieldSize { get; private set; }
         public int MaxRounds { get; private set; }
 
+        public Battle(int maxRounds, int fieldSize)
+        {
+            this.FieldSize = fieldSize;
+            this.MaxRounds = maxRounds;
+        }
+
         public Battle()
         {
             FieldSize = 25;
