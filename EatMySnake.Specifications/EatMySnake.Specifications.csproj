@@ -78,6 +78,7 @@
     <Compile Include="Tests\BattleScenarios\when_creating_BattleManager_and_number_of_gates_is_more_or_equal_then_snakes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\Core\Battle\BattleSpecifications.cs" />
+    <Compile Include="Tests\Core\Coordinates\CoordinatesSpecificatoins.cs" />
     <Compile Include="Tests\Core\Extensions\IEnumerable\ShuffleSpec.cs" />
     <Compile Include="Tests\Core\Snake\SnakeSpecifications.cs" />
   </ItemGroup>
