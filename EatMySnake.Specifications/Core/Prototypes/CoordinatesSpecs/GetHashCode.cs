@@ -2,7 +2,7 @@ using EatMySnake.Core.Prototypes;
 using Machine.Specifications;
 using NSubstitute;
 
-namespace EatMySnake.Specifications.Tests.Core
+namespace EatMySnake.Specifications.Core.Prototypes.CoordinatesSpecs
 {
     [Subject(typeof(Coordinates), "GetHashCode()")]
     public class when_called_on_two_different_instances_with_different_states

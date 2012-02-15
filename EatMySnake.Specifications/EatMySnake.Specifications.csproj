@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Prototypes\CoordinatesSpecs\Equals.cs" />
     <Compile Include="Features\BattleReplay.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -1,3 +1,5 @@
+using System;
+
 namespace EatMySnake.Core.Prototypes
 {
     public struct Coordinates
@@ -5,7 +7,8 @@ namespace EatMySnake.Core.Prototypes
         public int X { get; private set; }
         public int Y { get; private set; }
 
-        public Coordinates(int x, int y) : this()
+        public Coordinates(int x, int y)
+            : this()
         {
             X = x;
             Y = y;
@@ -21,6 +24,24 @@ namespace EatMySnake.Core.Prototypes
                 hash = hash * 23 + Y.GetHashCode();
                 return hash;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            //       
+            // See the full list of guidelines at
+            //   http://go.microsoft.com/fwlink/?LinkID=85237  
+            // and also the guidance for operator== at
+            //   http://go.microsoft.com/fwlink/?LinkId=85238
+            //
+
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return base.Equals(obj);
+
         }
     }
 }

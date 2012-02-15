@@ -1,7 +1,7 @@
 ﻿using EatMySnake.Core.Prototypes;
 using Machine.Specifications;
 
-namespace EatMySnake.Specifications.Tests.Core.CoordinatesSpecifications
+namespace EatMySnake.Specifications.Core.Prototypes.CoordinatesSpecs
 {
     [Subject(typeof (Coordinates))]
     public class when_created_with__x__and__y__
