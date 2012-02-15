@@ -1,4 +1,4 @@
-﻿@scenarios
+﻿@ignore @scenarios
 Feature: Battle replay
 	In order to analize snake's behaviour or simply review a battle
 	As a player

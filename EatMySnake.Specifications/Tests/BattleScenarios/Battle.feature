@@ -1,4 +1,4 @@
-﻿@scenarios
+﻿@ignore @scenarios
 	Feature: Battle
 	As a snake owner
 	I want to be able to run a battle with my snake involved

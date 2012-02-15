@@ -21,6 +21,7 @@ namespace EatMySnake.Specifications.Tests.BattleScenarios
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Battle")]
     [NUnit.Framework.CategoryAttribute("scenarios")]
+    [NUnit.Framework.IgnoreAttribute()]
     public partial class BattleFeature
     {
         
@@ -35,6 +36,7 @@ namespace EatMySnake.Specifications.Tests.BattleScenarios
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Battle", "As a snake owner\r\nI want to be able to run a battle with my snake involved\r\nSo I " +
                     "will be able to see how it performs comparing to other snakes", ProgrammingLanguage.CSharp, new string[] {
+                        "ignore",
                         "scenarios"});
             testRunner.OnFeatureStart(featureInfo);
         }

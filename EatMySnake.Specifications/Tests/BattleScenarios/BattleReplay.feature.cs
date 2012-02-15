@@ -21,6 +21,7 @@ namespace EatMySnake.Specifications.Tests.BattleScenarios
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Battle replay")]
     [NUnit.Framework.CategoryAttribute("scenarios")]
+    [NUnit.Framework.IgnoreAttribute()]
     public partial class BattleReplayFeature
     {
         
@@ -35,6 +36,7 @@ namespace EatMySnake.Specifications.Tests.BattleScenarios
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Battle replay", "In order to analize snake\'s behaviour or simply review a battle\r\nAs a player\r\nI w" +
                     "ant to be able to see battle replay", ProgrammingLanguage.CSharp, new string[] {
+                        "ignore",
                         "scenarios"});
             testRunner.OnFeatureStart(featureInfo);
         }
