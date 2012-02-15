@@ -58,8 +58,8 @@ namespace EatMySnake.Core.Snake.Implementation
 
         public void Bite(Move newHeadPosition)
         {
-            BodyParts.AddFirst(newHeadPosition);
             FireBiteEvent(newHeadPosition);
+            BodyParts.AddFirst(newHeadPosition);
         }
 
         public void Bitten()
