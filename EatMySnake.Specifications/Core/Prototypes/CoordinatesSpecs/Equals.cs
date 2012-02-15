@@ -54,6 +54,54 @@ namespace EatMySnake.Specifications.Core.Prototypes.CoordinatesSpecs
         private static bool resultB;
     }
 
+    [Subject(typeof(Coordinates), "Equals")]
+    public class when_called_on_object__a__to_compare_with__b__and_objects_are_different
+    {
+        private Establish context = () =>
+        {
+            a = new Coordinates(0, 0);
+            b = new Coordinates(1, 1);
+        };
+
+        private Because of = () =>
+        {
+            result = a.Equals(b);
+        };
+
+        It should_return_false = () =>
+        {
+            result.ShouldBeFalse();
+        };
+
+        private static Coordinates a;
+        private static Coordinates b;
+        private static bool result;
+    }
+
+    [Subject(typeof(Coordinates), "Equals")]
+    public class when_called_on_object__a__to_compare_with__b__and_objects_are_equal
+    {
+        private Establish context = () =>
+        {
+            a = new Coordinates(1, 2);
+            b = new Coordinates(1, 2);
+        };
+
+        private Because of = () =>
+        {
+            result = a.Equals(b);
+        };
+
+        It should_return_true = () =>
+        {
+            result.ShouldBeTrue();
+        };
+
+        private static Coordinates a;
+        private static Coordinates b;
+        private static bool result;
+    }
+
     [Subject(typeof (Coordinates), "Equals")]
     public class when_called_on_object__a__to_compare_with__null__
     {
