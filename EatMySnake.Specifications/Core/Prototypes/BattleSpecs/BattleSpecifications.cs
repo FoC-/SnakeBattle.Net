@@ -1,9 +1,7 @@
-﻿using System;
-using EatMySnake.Core.Prototypes;
+﻿using EatMySnake.Core.Prototypes;
 using Machine.Specifications;
-using NSubstitute;
 
-namespace EatMySnake.Specifications.Tests.Core
+namespace EatMySnake.Specifications.Core.Prototypes.BattleSpecs
 {
     [Subject(typeof (Battle))]
     public class when_created_without_arguments

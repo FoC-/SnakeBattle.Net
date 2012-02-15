@@ -11,7 +11,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace EatMySnake.Specifications.Tests.BattleScenarios
+namespace EatMySnake.Specifications.Features
 {
     using TechTalk.SpecFlow;
     
