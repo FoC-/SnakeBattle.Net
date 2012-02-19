@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using EatMySnake.Core;
 using EatMySnake.Core.Battlefield;
 using EatMySnake.Core.Battlemanager;
 using EatMySnake.Core.Snake;

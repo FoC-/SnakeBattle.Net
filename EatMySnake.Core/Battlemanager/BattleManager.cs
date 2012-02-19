@@ -30,20 +30,18 @@ namespace EatMySnake.Core.Battlemanager
             //bite: gateways
             int n = 0;
             foreach (var snake in _snakes)
-                snake.Bite(_battleField.Gateways[n++]);
+                SnakeIsGrowing(snake, _battleField.Gateways[n++]);
 
             //bite: 10 times empty space in front of head to grow
             foreach (var snake in _snakes)
                 for (int i = 0; i < 10; i++)
-                    snake.Bite(StraitMove(snake.GetHeadPosition()));
+                    SnakeIsGrowing(snake, StraitMove(snake.GetHeadPosition()));
 
-            //bitten: once to empty walls from tails
+            // remove tails
             foreach (var snake in _snakes)
-                snake.Bitten();
+                RemoveTail(snake);
 
-            //draw walls
-            foreach (var gateway in _battleField.Gateways)
-                _battleField[gateway.X, gateway.Y] = new FieldRow(Content.Wall);
+            ReplaceGatewaysWithWalls();
         }
 
         /// <summary>
@@ -135,56 +133,62 @@ namespace EatMySnake.Core.Battlemanager
             {
                 if (snakeBiter.GetHeadPosition().Equals(snake.GetTailPosition()))
                 {
-                    snakeBiter.Bite(newHeadPosition);
-                    snake.Bitten();
+                    if (snakeBiter.Id == snake.Id)
+                        SnakeIsMoving(snakeBiter, newHeadPosition);
+                    else
+                        SnakeIsbitting(snakeBiter, snake);
                     return;
                 }
             }
-            snakeBiter.NextMove(newHeadPosition);
+            SnakeIsMoving(snakeBiter, newHeadPosition);
         }
 
-        #region Events for displaying on battlefield
-        public void SetupHandlers()
+        #region Draw on field
+        private void SnakeIsMoving(ISnake snake, Move newHeadPosition)
         {
-            foreach (var snake in _snakes)
+            RemoveTail(snake);
+            MoveHead(snake, newHeadPosition);
+        }
+
+        private void SnakeIsbitting(ISnake snakeBitter, ISnake snakeBitten)
+        {
+            Move tMove = snakeBitten.GetTailPosition();
+            RemoveTail(snakeBitten);
+            MoveHead(snakeBitter, tMove);
+        }
+
+        private void SnakeIsGrowing(ISnake snake, Move newHeadPosition)
+        {
+            MoveHead(snake, newHeadPosition);
+        }
+
+        private void MoveHead(ISnake snake, Move newHeadPosition)
+        {
+            if (snake.Length != 0)
             {
-                snake.Moving += SnakeMoving;
-                snake.Biting += SnakeBiting;
-                snake.Dead += SnakeDead;
+                // replace old head with body
+                _battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(Content.Body, snake.Id);
             }
+            // add head to snake
+            snake.SetHead(newHeadPosition);
+            // put new head
+            _battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(Content.Head, snake.Id);
         }
 
-        private void SnakeMoving(object sender, EventArgs e)
+        private void RemoveTail(ISnake snake)
         {
-            var snake = sender as ISnake;
-            var newHead = e as Move;
-            _battleField[newHead.X, newHead.Y] = new FieldRow(Content.Head, snake.Guid);
-            Console.WriteLine("{0} Move {1} Len = {2}", snake.Name, newHead, snake.Length);
-
-            var oldHead = snake.GetHeadPosition();
-            if (oldHead == null) return;
-            _battleField[oldHead.X, oldHead.Y] = new FieldRow(Content.Body, snake.Guid);
-
-#warning New tail is not appear on the battlefield
-            var oldTail = snake.GetTailPosition();
-            _battleField[oldTail.X, oldTail.Y] = new FieldRow();
+            // replace old tail with empty row
+            _battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(Content.Empty);
+            // remove tail from snake
+            snake.RemoveTail();
+            // put new tail on field
+            _battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(Content.Tail, snake.Id);
         }
 
-        private void SnakeBiting(object sender, EventArgs e)
+        private void ReplaceGatewaysWithWalls()
         {
-            var snake = sender as ISnake;
-            var newHead = e as Move;
-            _battleField[newHead.X, newHead.Y] = new FieldRow(Content.Head, snake.Guid);
-            Console.WriteLine("{0} Bite {1} Len = {2}", snake.Name, newHead, snake.Length);
-
-            var oldHead = snake.GetHeadPosition();
-            if (oldHead == null) return;
-            _battleField[oldHead.X, oldHead.Y] = new FieldRow(Content.Body, snake.Guid);
-        }
-
-        private void SnakeDead(object sender, EventArgs e)
-        {
-            //throw new NotImplementedException();
+            foreach (var gateway in _battleField.Gateways)
+                _battleField[gateway.X, gateway.Y] = new FieldRow(Content.Wall);
         }
         #endregion
     }

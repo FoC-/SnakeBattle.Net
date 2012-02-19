@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using EatMySnake.Core.Common;
+using EatMySnake.Core.Snake;
 
-namespace EatMySnake.Core.Snake.Implementation
+namespace EatMySnake.Core.Implementation
 {
     public class Snake : ISnake
     {
-        public event EventHandler Moving;
-        public event EventHandler Biting;
-        public event EventHandler Dead;
-
-        public Guid Guid { get; private set; }
+        public Guid Id { get; private set; }
         public string Name { get; private set; }
         public Guid Owner { get; private set; }
 
@@ -19,19 +16,14 @@ namespace EatMySnake.Core.Snake.Implementation
         public int VisionRadius { get; private set; }
         public int Length
         {
-            get
-            {
-                if (BodyParts.Count == 0)
-                    FireDeadEvent();
-                return BodyParts.Count;
-            }
+            get { return BodyParts.Count; }
         }
 
-        private LinkedList<Move> BodyParts;
+        public LinkedList<Move> BodyParts { get; private set; }
 
-        public Snake(Guid guid, string name, Guid owner, IList<IBrainChip> brainModules, int visionRadius = 7)
+        public Snake(Guid id, Guid owner, string name, IList<IBrainChip> brainModules, int visionRadius = 7)
         {
-            Guid = guid;
+            Id = id;
             Name = name;
             Owner = owner;
             BrainModules = brainModules;
@@ -49,40 +41,14 @@ namespace EatMySnake.Core.Snake.Implementation
             return Length < 2 ? null : BodyParts.Last();
         }
 
-        public void NextMove(Move newHeadPosition)
+        public void SetHead(Move head)
         {
-            FireMoveEvent(newHeadPosition);
-            BodyParts.AddFirst(newHeadPosition);
+            BodyParts.AddFirst(head);
+        }
+
+        public void RemoveTail()
+        {
             BodyParts.RemoveLast();
-        }
-
-        public void Bite(Move newHeadPosition)
-        {
-            FireBiteEvent(newHeadPosition);
-            BodyParts.AddFirst(newHeadPosition);
-        }
-
-        public void Bitten()
-        {
-            if (Length != 0) BodyParts.RemoveLast();
-        }
-
-        private void FireDeadEvent()
-        {
-            if (Dead != null)
-                Dead(this, EventArgs.Empty);
-        }
-
-        private void FireMoveEvent(EventArgs move)
-        {
-            if (Moving != null)
-                Moving(this, move);
-        }
-
-        private void FireBiteEvent(EventArgs move)
-        {
-            if (Biting != null)
-                Biting(this, move);
         }
     }
 }
