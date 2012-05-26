@@ -1,67 +1,36 @@
-﻿function init() {
+﻿function init(battlefield) {
     var canvas = document.getElementById("canva");
-
-    var snake = {
-        segmentLength: 2,
-        numSegments: 11,
-        segments: [{
-            // tail
-            x: 50,
-            y: 50
-        }, {
-            // head
-            x: 50,
-            y: 50
-        }]
-    };
 
     var imageObject = new Image();
     imageObject.onload = function () {
-        animate(canvas, snake, imageObject);
+        animate(canvas, battlefield, imageObject);
     };
     imageObject.src = 'Content/snake.bmp';
 };
 
-function animate(canvas, snake, imageObject) {
+function animate(canvas, battlefield, imageObject) {
     var context = canvas.getContext("2d");
-
-    // update
-    updateSnake(canvas, snake);
-
+    
     // clear
     context.clearRect(0, 0, canvas.width, canvas.height);
-
+    // move
+    moveSnakes(battlefield);
     // draw
-    drawSnake(context, snake, imageObject);
+    drawBattlefield(context, battlefield, imageObject);
 
     // request new frame
-    requestAnimFrame(function () { animate(canvas, snake, imageObject); });
+    requestAnimFrame(function () { animate(canvas, battlefield, imageObject); });
 }
 
-function updateSnake(canvas, snake) {
-    var segments = snake.segments;
-    var head = segments[segments.length - 1];
-
-    var newHeadX = head.x + 1;
-    var newHeadY = head.y;
-
-    // add new segment
-    segments.push({
-        x: newHeadX,
-        y: newHeadY
-    });
-
-    if (segments.length > snake.numSegments) {
-        segments.shift();
-    }
+function moveSnakes(battlefield) {
+    battlefield.segments[0].x += 10;
 }
 
-function drawSnake(context, snake, imageObject) {
-    var segments = snake.segments;
-    var tail = segments[0];
-
-    var s = 10;
-    context.drawImage(imageObject, 0, 0, s, s, tail.x, tail.y, s, s);
+function drawBattlefield(context, battlefield, imageObject) {
+    var tail = battlefield.segments[0];
+    
+    var elem = 10;
+    context.drawImage(imageObject, 0, 0, elem, elem, tail.x, tail.y, elem, elem);
 }
 
 window.requestAnimFrame = (function (callback) {

@@ -1,11 +1,11 @@
-﻿@model dynamic
+﻿@model SnakeBattleNet.MVC.Models.BattleDto
 @{
-    ViewBag.Title = "Title";
+    ViewBag.Title = "Battle begin";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Header
 {
-        <script src="@Url.Content("~/Scripts/libs/animation.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/libs/animation.js")" type="text/javascript"></script>
 }
 <div class="clearfix">
     <h2>Great thanks to sites:</h2>
@@ -15,5 +15,5 @@
 
 <div>
     <canvas id="canva" width="1000" height="100" style="border: 1px solid #9C9898"></canvas>
-    <script type="text/javascript">init()</script>
+    <script type="text/javascript">init(@Model.BattleFieldJson)</script>
 </div>
