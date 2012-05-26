@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Utils", "Sna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.WinForms", "SnakeBattleNet.WinForms\SnakeBattleNet.WinForms.csproj", "{D174F030-29C8-4A12-B160-F93B41162645}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.MVC", "SnakeBattleNet.MVC\SnakeBattleNet.MVC.csproj", "{629DBB57-D81C-40A6-8C5E-F0935F34E492}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,16 @@ Global
 		{D174F030-29C8-4A12-B160-F93B41162645}.Release|Mixed Platforms.Build.0 = Release|x86
 		{D174F030-29C8-4A12-B160-F93B41162645}.Release|x86.ActiveCfg = Release|x86
 		{D174F030-29C8-4A12-B160-F93B41162645}.Release|x86.Build.0 = Release|x86
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{629DBB57-D81C-40A6-8C5E-F0935F34E492}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
