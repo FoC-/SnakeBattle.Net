@@ -4,6 +4,7 @@ using NSubstitute;
 
 namespace EatMySnake.Specifications.Tests.Core
 {
+    [Ignore("Restuta: please finish this test")]
     [Subject(typeof(BattleSnake))]
     public class when_moving_forward
     {
