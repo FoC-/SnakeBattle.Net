@@ -1,8 +1,11 @@
 ﻿@model dynamic
-
 @{
     ViewBag.Title = "Title";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Header
+{
+        <script src="@Url.Content("~/Scripts/libs/animation.js")" type="text/javascript"></script>
 }
 <div class="clearfix">
     <h2>Great thanks to sites:</h2>
@@ -11,141 +14,6 @@
 </div>
 
 <div>
-<canvas id="myCanvas" width="578" height="300" style="border: 1px solid #9C9898"></canvas>
+    <canvas id="canva" width="1000" height="100" style="border: 1px solid #9C9898"></canvas>
+    <script type="text/javascript">init()</script>
 </div>
-<script type="text/javascript">
-    window.requestAnimFrame = (function (callback) {
-        return window.requestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.oRequestAnimationFrame ||
-                window.msRequestAnimationFrame ||
-                function (callback) {
-                    window.setTimeout(callback, 1000 / 60);
-                };
-    })();
-
-    function getRandTheta() {
-        return Math.random() * 2 * Math.PI;
-    }
-
-    function updateSnake(canvas, snake) {
-        var maxVariance = 0.2;
-        var snakeSpeed = 200; //px / s
-        var segmentsPerSecond = snakeSpeed / snake.segmentLength;
-        var segments = snake.segments;
-        var date = new Date();
-        var time = date.getTime();
-        var timeDiff = (time - snake.lastUpdateTime);
-        if (timeDiff > 1000 / segmentsPerSecond) {
-            var head = segments[segments.length - 1];
-            var neck = segments[segments.length - 2];
-
-            var direction = snake.direction;
-            var newHeadX = head.x + direction.x * snake.segmentLength;
-            var newHeadY = head.y + direction.y * snake.segmentLength;
-
-            // change direction if collision occurs
-            if (newHeadX > canvas.width || newHeadX < 0) {
-                direction.x *= -1;
-            }
-            if (newHeadY > canvas.height || newHeadY < 0) {
-                direction.y *= -1;
-            }
-
-            // add new segment
-            segments.push({
-                x: newHeadX,
-                y: newHeadY
-            });
-
-            if (segments.length > snake.numSegments) {
-                segments.shift();
-            }
-
-            var variance = ((maxVariance / 2) - Math.random() * maxVariance);
-
-            direction.x += variance;
-            direction.y -= variance;
-
-            // update direction vector
-            if (direction.x > 1) {
-                direction.x = 1;
-            }
-            if (direction.x < -1) {
-                direction.x = -1;
-            }
-
-            // dampering - try to keep direction vectors around -0.5 and +0.5
-            direction.x *= Math.abs(direction.x) > 0.5 ? (1 - 0.01) : (1 + 0.01);
-            direction.y *= Math.abs(direction.y) > 0.5 ? (1 - 0.01) : (1 + 0.01);
-
-            snake.lastUpdateTime = time;
-        }
-    }
-
-    function animate(canvas, snake) {
-        var context = canvas.getContext("2d");
-
-        // update
-        updateSnake(canvas, snake);
-
-        // clear
-        context.clearRect(0, 0, canvas.width, canvas.height);
-
-        // draw
-        drawSnake(context, snake);
-
-        // request new frame
-        requestAnimFrame(function () {
-            animate(canvas, snake);
-        });
-    }
-
-    function drawSnake(context, snake) {
-        var segments = snake.segments;
-        var tail = segments[0];
-        context.beginPath();
-        context.moveTo(tail.x, tail.y);
-
-        for (var n = 1; n < segments.length; n++) {
-            var segment = segments[n];
-            context.lineTo(segment.x, segment.y);
-        }
-
-        context.lineWidth = 10;
-        context.lineCap = "round";
-        context.lineJoin = "round";
-        context.strokeStyle = "green";
-        context.stroke();
-    }
-
-    window.onload = function () {
-        var canvas = document.getElementById("myCanvas");
-        var segmentLength = 2; // px
-        var headX = canvas.width / 2;
-        var headY = canvas.height / 2;
-
-        snake = {
-            segmentLength: 2,
-            lastUpdateTime: 0,
-            numSegments: 50,
-            // moving to the right
-            direction: {
-                x: 1,
-                y: 0
-            },
-            segments: [{
-                // tail
-                x: headX + segmentLength,
-                y: headY
-            }, {
-                // head
-                x: headX,
-                y: headY
-            }]
-        };
-
-        animate(canvas, snake);
-    };
-</script>

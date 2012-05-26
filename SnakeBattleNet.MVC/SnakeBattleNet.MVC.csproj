@@ -64,8 +64,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\snake.bmp" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\libs\animation.js" />
     <Content Include="Scripts\libs\jquery-1.7.1.js" />
     <Content Include="Scripts\libs\jquery-1.7.1.min.js" />
     <Content Include="Scripts\libs\modernizr-2.5.3.min.js" />
@@ -98,6 +100,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
