@@ -49,6 +49,8 @@ namespace EatMySnake.Core.Battlemanager
         /// </summary>
         public void Act()
         {
+            // use something like builder 
+            //StartGatherEvents();
             foreach (var snake in snakes.Shuffle())
             {
                 //Check if movement is possible
@@ -59,6 +61,7 @@ namespace EatMySnake.Core.Battlemanager
                 Move move = GetLogicalMove(battleField, snake);
                 TryToBite(snake, move ?? possibleMoves[random.Next(possibleMoves.Count)]);
             }
+            //StopGatherEvents();
         }
 
         /// <summary>
