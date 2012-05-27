@@ -15,5 +15,5 @@
 
 <div>
     <canvas id="canva" width="1000" height="100" style="border: 1px solid #9C9898"></canvas>
-    <script type="text/javascript">init(@Model.BattleFieldJson)</script>
+    <script type="text/javascript"> init(@Model.BattleFieldJson, @Html.Raw(Model.TexturesForSnakesJson))</script>
 </div>
