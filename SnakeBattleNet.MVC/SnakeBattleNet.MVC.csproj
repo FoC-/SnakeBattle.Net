@@ -65,6 +65,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\field.bmp" />
     <Content Include="Content\snake.bmp" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
