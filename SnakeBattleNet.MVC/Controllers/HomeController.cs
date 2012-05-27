@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using SnakeBattleNet.MVC.Models;
 
 namespace SnakeBattleNet.MVC.Controllers
@@ -12,12 +8,17 @@ namespace SnakeBattleNet.MVC.Controllers
         public ActionResult Index()
         {
             var battleField = @"{
+                                    field: {
+                                        x: 27,
+                                        y: 27
+                                    },
                                     segments: [{
                                         x: 75,
                                         y: 75
                                     }]
                                 }";
-            var battle = new BattleDto() { BattleFieldJson = battleField };
+            string textures = "{field: 'Content/field.bmp',snakes: [\"Content/snake.bmp\",\"Content/snake.bmp\"]}";
+            var battle = new BattleDto() { BattleFieldJson = battleField, TexturesForSnakesJson = textures };
 
             return View(battle);
         }
