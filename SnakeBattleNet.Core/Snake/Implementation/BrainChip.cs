@@ -71,6 +71,10 @@ namespace SnakeBattleNet.Core.Snake.Implementation
 
         private void InitilaizeWithHead()
         {
+            for (int y = 0; y < Size.Y; y++)
+                for (int x = 0; x < Size.X; x++)
+                    chipRows[x, y] = new ChipRow();
+
             HeadPosition = new Move(Size.X / 2, Size.Y / 2, Direction.North);
             this.chipRows[this.headPosition.X, this.headPosition.Y] = new ChipRow(ChipRowContent.OwnHead);
         }

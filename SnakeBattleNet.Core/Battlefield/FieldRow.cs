@@ -5,20 +5,20 @@ namespace SnakeBattleNet.Core.Battlefield
 {
     public class FieldRow
     {
-        public Content Content { get; private set; }
+        public FieldRowContent FieldRowContent { get; private set; }
         public Guid Guid { get; private set; }
 
-        public FieldRow() : this(Content.Empty) { }
+        public FieldRow() : this(FieldRowContent.Empty) { }
 
-        public FieldRow(Content content, Guid guid = default (Guid))
+        public FieldRow(FieldRowContent fieldRowContent, Guid guid = default (Guid))
         {
-            Content = content;
+            this.FieldRowContent = fieldRowContent;
             Guid = guid;
         }
 
         public override string ToString()
         {
-            return Content.ToString();
+            return this.FieldRowContent.ToString();
         }
     }
 }
