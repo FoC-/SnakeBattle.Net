@@ -77,7 +77,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EatMySnake.Core\SnakeBattleNet.Core.csproj">
+    <ProjectReference Include="..\SnakeBattleNet.Core\SnakeBattleNet.Core.csproj">
       <Project>{D01054C3-B067-418C-9A67-11A55F4E5536}</Project>
       <Name>SnakeBattleNet.Core</Name>
     </ProjectReference>
