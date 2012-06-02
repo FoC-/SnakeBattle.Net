@@ -13,3 +13,6 @@ _ReSharper.*
 *.ipch
 *.ReSharper
 *.DotSettings
+*crunchsolution*
+*.DotSettings
+.merge_file_*
