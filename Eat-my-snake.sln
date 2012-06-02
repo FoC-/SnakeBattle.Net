@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.ConsoleClient", "EatMySnake.ConsoleClient\SnakeBattleNet.ConsoleClient.csproj", "{2A6D1EDD-4A30-4647-A13F-9CD036EF26B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EatMySnake.Specifications", "EatMySnake.Specifications\EatMySnake.Specifications.csproj", "{12DCDEE1-03B1-4286-8888-293B21D5787F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Specifications", "EatMySnake.Specifications\SnakeBattleNet.Specifications.csproj", "{12DCDEE1-03B1-4286-8888-293B21D5787F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EatMySnake.Core", "EatMySnake.Core\EatMySnake.Core.csproj", "{D01054C3-B067-418C-9A67-11A55F4E5536}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Core", "EatMySnake.Core\SnakeBattleNet.Core.csproj", "{D01054C3-B067-418C-9A67-11A55F4E5536}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Utils", "SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj", "{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}"
 EndProject

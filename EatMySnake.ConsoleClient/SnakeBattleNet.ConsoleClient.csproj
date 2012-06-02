@@ -36,9 +36,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EatMySnake.Core\EatMySnake.Core.csproj">
+    <ProjectReference Include="..\EatMySnake.Core\SnakeBattleNet.Core.csproj">
       <Project>{D01054C3-B067-418C-9A67-11A55F4E5536}</Project>
-      <Name>EatMySnake.Core</Name>
+      <Name>SnakeBattleNet.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
