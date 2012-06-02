@@ -6,26 +6,31 @@ namespace SnakeBattleNet.Core.Snake.Implementation
 {
     public class BrainChip : IBrainChip
     {
-        private readonly ChipRow[,] _chipRows;
-        private Move _headPosition;
-
-        public Size Size { get; private set; }
-        public Move HeadPosition
-        {
-            get { return _headPosition; }
-            set
-            {
-                _chipRows[_headPosition.X, _headPosition.Y] = null;
-                _chipRows[value.X, value.Y] = new ChipRow(Content.Head);
-                _headPosition = value;
-            }
-        }
+        private readonly ChipRow[,] chipRows;
+        private Move headPosition;
 
         public BrainChip(Size size)
         {
             Size = size;
-            _chipRows = new ChipRow[Size.X, Size.Y];
+            this.chipRows = new ChipRow[Size.X, Size.Y];
             InitilaizeWithHead();
+        }
+
+        #region Implement IBrainChip
+
+        public Size Size { get; private set; }
+
+        public Move HeadPosition
+        {
+            get { return this.headPosition; }
+            set
+            {
+                if (this.headPosition != null)
+                    this.chipRows[this.headPosition.X, this.headPosition.Y] = null;
+
+                this.chipRows[value.X, value.Y] = new ChipRow(Content.Head);
+                this.headPosition = value;
+            }
         }
 
         public ChipRow this[int x, int y]
@@ -34,7 +39,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
             {
                 if (x > -1 && x < Size.X && y > -1 && y < Size.Y)
                 {
-                    return _chipRows[x, y];
+                    return this.chipRows[x, y];
                 }
                 return null;
             }
@@ -42,7 +47,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
             {
                 if (x > -1 && x < Size.X && y > -1 && y < Size.Y)
                 {
-                    _chipRows[x, y] = value;
+                    this.chipRows[x, y] = value;
                 }
                 else
                 {
@@ -57,19 +62,17 @@ namespace SnakeBattleNet.Core.Snake.Implementation
 
             for (int y = 0; y < Size.Y; y++)
                 for (int x = 0; x < Size.X; x++)
-                    rows.Add(_chipRows[x, y]);
+                    rows.Add(this.chipRows[x, y]);
 
             return rows;
         }
 
+        #endregion Implement IBrainChip
+
         private void InitilaizeWithHead()
         {
-            for (int x = 0; x < Size.X; x++)
-                for (int y = 0; y < Size.Y; y++)
-                    _chipRows[x, y] = null;
-
             HeadPosition = new Move(Size.X / 2, Size.Y / 2, Direction.North);
-            _chipRows[_headPosition.X, _headPosition.Y] = new ChipRow(Content.Head);
+            this.chipRows[this.headPosition.X, this.headPosition.Y] = new ChipRow(Content.Head);
         }
     }
 }
