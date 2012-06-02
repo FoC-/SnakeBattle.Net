@@ -74,9 +74,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Tests\BattleScenarios\when_creating_BattleManager_and_number_of_snakes_is_more_then_gates.cs" />
-    <Compile Include="Tests\BattleScenarios\when_call_comparator_with_predifined_chip_antother_tail.cs" />
-    <Compile Include="Tests\BattleScenarios\when_creating_BattleManager_and_number_of_gates_is_more_or_equal_then_snakes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Prototypes\BattleSpecs\BattleSpecifications.cs" />
     <Compile Include="Core\Prototypes\CoordinatesSpecs\GetHashCode.cs" />
