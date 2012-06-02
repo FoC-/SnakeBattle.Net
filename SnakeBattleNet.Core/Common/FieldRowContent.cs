@@ -1,6 +1,6 @@
 namespace SnakeBattleNet.Core.Common
 {
-    public enum Content
+    public enum FieldRowContent
     {
         Empty = 0,
         Wall = 1,

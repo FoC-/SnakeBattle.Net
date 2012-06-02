@@ -133,7 +133,7 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
             for (int x = 0; x < Size.X; x++)
                 for (int y = 0; y < Size.Y; y++)
                     if (x == 0 || y == 0 || x == Size.X - 1 || y == Size.Y - 1)
-                        _fieldRows[x, y] = new FieldRow(Content.Wall);
+                        _fieldRows[x, y] = new FieldRow(FieldRowContent.Wall);
                     else
                         _fieldRows[x, y] = new FieldRow();
         }

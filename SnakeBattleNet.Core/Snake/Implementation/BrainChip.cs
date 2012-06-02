@@ -28,7 +28,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
                 if (this.headPosition != null)
                     this.chipRows[this.headPosition.X, this.headPosition.Y] = null;
 
-                this.chipRows[value.X, value.Y] = new ChipRow(Content.Head);
+                this.chipRows[value.X, value.Y] = new ChipRow(ChipRowContent.OwnHead);
                 this.headPosition = value;
             }
         }
@@ -72,7 +72,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
         private void InitilaizeWithHead()
         {
             HeadPosition = new Move(Size.X / 2, Size.Y / 2, Direction.North);
-            this.chipRows[this.headPosition.X, this.headPosition.Y] = new ChipRow(Content.Head);
+            this.chipRows[this.headPosition.X, this.headPosition.Y] = new ChipRow(ChipRowContent.OwnHead);
         }
     }
 }

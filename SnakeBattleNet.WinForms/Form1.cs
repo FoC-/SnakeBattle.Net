@@ -49,21 +49,21 @@ namespace SnakeBattleNet.WinForms
         private void BoardGridCellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             var color = Color.Gray;
-            switch (battleField[e.ColumnIndex, e.RowIndex].Content)
+            switch (battleField[e.ColumnIndex, e.RowIndex].FieldRowContent)
             {
-                case Content.Empty:
+                case FieldRowContent.Empty:
                     color = Color.White;
                     break;
-                case Content.Wall:
+                case FieldRowContent.Wall:
                     color = Color.Orange;
                     break;
-                case Content.Head:
+                case FieldRowContent.Head:
                     color = Color.Blue;
                     break;
-                case Content.Body:
+                case FieldRowContent.Body:
                     color = Color.Red;
                     break;
-                case Content.Tail:
+                case FieldRowContent.Tail:
                     color = Color.Green;
                     break;
                 default:

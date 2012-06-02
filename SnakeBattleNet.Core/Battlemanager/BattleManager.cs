@@ -77,13 +77,13 @@ namespace SnakeBattleNet.Core.Battlemanager
             int headX = snake.GetHeadPosition().X;
             int headY = snake.GetHeadPosition().Y;
 
-            if (battleField[headX, headY + 1].Content == Content.Empty || battleField[headX, headY + 1].Content == Content.Tail)
+            if (battleField[headX, headY + 1].FieldRowContent == FieldRowContent.Empty || battleField[headX, headY + 1].FieldRowContent == FieldRowContent.Tail)
                 possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
-            if (battleField[headX, headY - 1].Content == Content.Empty || battleField[headX, headY - 1].Content == Content.Tail)
+            if (battleField[headX, headY - 1].FieldRowContent == FieldRowContent.Empty || battleField[headX, headY - 1].FieldRowContent == FieldRowContent.Tail)
                 possibleMoves.Add(new Move(headX, headY - 1, Direction.South));
-            if (battleField[headX - 1, headY].Content == Content.Empty || battleField[headX - 1, headY].Content == Content.Tail)
+            if (battleField[headX - 1, headY].FieldRowContent == FieldRowContent.Empty || battleField[headX - 1, headY].FieldRowContent == FieldRowContent.Tail)
                 possibleMoves.Add(new Move(headX - 1, headY, Direction.West));
-            if (battleField[headX + 1, headY].Content == Content.Empty || battleField[headX + 1, headY].Content == Content.Tail)
+            if (battleField[headX + 1, headY].FieldRowContent == FieldRowContent.Empty || battleField[headX + 1, headY].FieldRowContent == FieldRowContent.Tail)
                 possibleMoves.Add(new Move(headX + 1, headY, Direction.East));
 
             return possibleMoves;
@@ -170,28 +170,28 @@ namespace SnakeBattleNet.Core.Battlemanager
             if (snake.Length != 0)
             {
                 // replace old head with body
-                battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(Content.Body, snake.Id);
+                battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(FieldRowContent.Body, snake.Id);
             }
             // add head to snake
             snake.SetHead(newHeadPosition);
             // put new head
-            battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(Content.Head, snake.Id);
+            battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(FieldRowContent.Head, snake.Id);
         }
 
         private void CutTail(ISnake snake)
         {
             // replace old tail with empty row
-            battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(Content.Empty);
+            battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(FieldRowContent.Empty);
             // remove tail from snake
             snake.RemoveTail();
             // put new tail on field
-            battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(Content.Tail, snake.Id);
+            battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(FieldRowContent.Tail, snake.Id);
         }
 
         private void PutWallsOnGateways()
         {
             foreach (var gateway in battleField.Gateways)
-                battleField[gateway.X, gateway.Y] = new FieldRow(Content.Wall);
+                battleField[gateway.X, gateway.Y] = new FieldRow(FieldRowContent.Wall);
         }
         #endregion
     }

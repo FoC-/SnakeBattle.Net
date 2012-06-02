@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Battlemanager\Comparator.cs" />
     <Compile Include="Battlefield\FieldRow.cs" />
+    <Compile Include="Common\ChipRowContent.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="Prototypes\Snake\DummyMind.cs" />
     <Compile Include="Prototypes\Snake\IMind.cs" />
@@ -48,7 +49,7 @@
     <Compile Include="Battlefield\IBattleField.cs" />
     <Compile Include="Snake\IBrainChip.cs" />
     <Compile Include="Snake\ISnake.cs" />
-    <Compile Include="Common\Content.cs" />
+    <Compile Include="Common\FieldRowContent.cs" />
     <Compile Include="Common\AndOrState.cs" />
     <Compile Include="Battlefield\Implementation\BattleField.cs" />
     <Compile Include="Battlemanager\BattleManager.cs" />
