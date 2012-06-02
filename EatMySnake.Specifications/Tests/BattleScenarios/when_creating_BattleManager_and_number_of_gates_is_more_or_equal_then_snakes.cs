@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using EatMySnake.Core;
-using EatMySnake.Core.Battlefield;
-using EatMySnake.Core.Battlemanager;
-using EatMySnake.Core.Snake;
+using SnakeBattleNet.Core.Snake;
 using Machine.Specifications;
 using Moq;
+using SnakeBattleNet.Core;
+using SnakeBattleNet.Core.Battlefield;
+using SnakeBattleNet.Core.Battlemanager;
 using It = Machine.Specifications.It;
 
-namespace EatMySnake.Specifications.Tests.BattleScenarios
+namespace SnakeBattleNet.Specifications.Tests.BattleScenarios
 {
     [Subject(typeof(BattleManager))]
     class when_creating_BattleManager_and_number_of_gates_is_more_or_equal_then_snakes

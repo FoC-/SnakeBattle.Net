@@ -1,6 +1,6 @@
 using System;
 
-namespace EatMySnake.Core.Prototypes
+namespace SnakeBattleNet.Core.Prototypes
 {
     /* var snakeSpecification = new SnakeSpecification()
      * .UseMind<ChipBasedMind>()

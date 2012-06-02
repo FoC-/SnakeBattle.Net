@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using EatMySnake.Core;
-using EatMySnake.Core.Battlefield;
-using EatMySnake.Core.Battlefield.Implementation;
-using EatMySnake.Core.Battlemanager;
-using EatMySnake.Core.Implementation;
-using EatMySnake.Core.Snake;
+using SnakeBattleNet.Core;
+using SnakeBattleNet.Core.Battlefield;
+using SnakeBattleNet.Core.Battlefield.Implementation;
+using SnakeBattleNet.Core.Battlemanager;
+using SnakeBattleNet.Core.Implementation;
+using SnakeBattleNet.Core.Snake;
 
-namespace EatMySnake.ConsoleClient
+namespace SnakeBattleNet.ConsoleClient
 {
     class Program
     {

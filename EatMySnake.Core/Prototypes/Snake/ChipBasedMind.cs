@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace EatMySnake.Core.Prototypes
+namespace SnakeBattleNet.Core.Prototypes
 {
     internal class ChipBasedMind : IMind
     {

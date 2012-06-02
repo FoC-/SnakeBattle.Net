@@ -1,7 +1,7 @@
-﻿using EatMySnake.Core.Prototypes;
-using Machine.Specifications;
+﻿using Machine.Specifications;
+using SnakeBattleNet.Core.Prototypes;
 
-namespace EatMySnake.Specifications.Core.Prototypes.BattleSpecs
+namespace SnakeBattleNet.Specifications.Core.Prototypes.BattleSpecs
 {
     [Subject(typeof (Battle))]
     public class when_created_without_arguments

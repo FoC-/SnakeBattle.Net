@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EatMySnake.Core.Prototypes
+namespace SnakeBattleNet.Core.Prototypes
 {
     public class Body
     {

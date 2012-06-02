@@ -1,7 +1,7 @@
-using EatMySnake.Core.Battlemanager;
 using Machine.Specifications;
+using SnakeBattleNet.Core.Battlemanager;
 
-namespace EatMySnake.Specifications.Tests.BattleScenarios
+namespace SnakeBattleNet.Specifications.Tests.BattleScenarios
 {
     [Subject(typeof(Comparator))]
     class when_call_comparator_with_predifined_chip_antother_tail

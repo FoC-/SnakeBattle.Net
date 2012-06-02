@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using EatMySnake.Core.Common;
+using SnakeBattleNet.Core.Common;
 
-namespace EatMySnake.Core.Snake.Implementation
+namespace SnakeBattleNet.Core.Snake.Implementation
 {
     public class BrainChip : IBrainChip
     {

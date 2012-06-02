@@ -1,4 +1,4 @@
-namespace EatMySnake.Core.Common
+namespace SnakeBattleNet.Core.Common
 {
     public enum Except
     {

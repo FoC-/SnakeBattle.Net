@@ -1,8 +1,8 @@
-using EatMySnake.Core.Prototypes;
 using Machine.Specifications;
 using NSubstitute;
+using SnakeBattleNet.Core.Prototypes;
 
-namespace EatMySnake.Specifications.Core.Prototypes.CoordinatesSpecs
+namespace SnakeBattleNet.Specifications.Core.Prototypes.CoordinatesSpecs
 {
     [Subject(typeof(Coordinates), "GetHashCode()")]
     public class when_called_on_two_different_instances_with_different_states

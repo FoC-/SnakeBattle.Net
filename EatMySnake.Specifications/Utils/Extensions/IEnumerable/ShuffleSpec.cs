@@ -3,7 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using SnakeBattleNet.Utils.Extensions;
 
-namespace EatMySnake.Specifications.Utils.Extensions.IEnumerable
+namespace SnakeBattleNet.Specifications.Utils.Extensions.IEnumerable
 {
     [Subject("Shuffle extension")]
     public class when_called

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using EatMySnake.Core.Battlefield;
-using EatMySnake.Core.Common;
-using EatMySnake.Core.Snake;
+using SnakeBattleNet.Core.Snake;
+using SnakeBattleNet.Core.Battlefield;
+using SnakeBattleNet.Core.Common;
 
-namespace EatMySnake.Core.Battlemanager
+namespace SnakeBattleNet.Core.Battlemanager
 {
     public class Comparator
     {

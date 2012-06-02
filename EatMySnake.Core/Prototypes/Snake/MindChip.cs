@@ -1,4 +1,4 @@
-namespace EatMySnake.Core.Prototypes
+namespace SnakeBattleNet.Core.Prototypes
 {
     public class MindChip
     {

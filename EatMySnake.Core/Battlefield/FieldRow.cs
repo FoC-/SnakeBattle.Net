@@ -1,7 +1,7 @@
 ﻿using System;
-using EatMySnake.Core.Common;
+using SnakeBattleNet.Core.Common;
 
-namespace EatMySnake.Core.Battlefield
+namespace SnakeBattleNet.Core.Battlefield
 {
     public class FieldRow
     {

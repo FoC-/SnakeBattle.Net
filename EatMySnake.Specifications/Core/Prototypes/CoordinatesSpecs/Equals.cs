@@ -1,9 +1,9 @@
 ﻿using System;
-using EatMySnake.Core.Prototypes;
 using Machine.Specifications;
 using NSubstitute;
+using SnakeBattleNet.Core.Prototypes;
 
-namespace EatMySnake.Specifications.Core.Prototypes.CoordinatesSpecs
+namespace SnakeBattleNet.Specifications.Core.Prototypes.CoordinatesSpecs
 {
     [Subject(typeof (Coordinates), "Equals")]
     public class when_called_on_self

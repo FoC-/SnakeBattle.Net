@@ -8,8 +8,8 @@
     <ProjectGuid>{2A6D1EDD-4A30-4647-A13F-9CD036EF26B1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EatMySnake.ConsoleClient</RootNamespace>
-    <AssemblyName>EatMySnake.ConsoleClient</AssemblyName>
+    <RootNamespace>SnakeBattleNet.ConsoleClient</RootNamespace>
+    <AssemblyName>SnakeBattleNet.ConsoleClient</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

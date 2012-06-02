@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EatMySnake.Core.Prototypes;
+using SnakeBattleNet.Core.Prototypes;
 
-namespace EatMySnake.Core.Prototypes
+namespace SnakeBattleNet.Core.Prototypes
 {
     internal class Battle : IBattle
     {

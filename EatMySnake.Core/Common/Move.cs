@@ -1,7 +1,7 @@
 ﻿using System;
 using SnakeBattleNet.Utils.Extensions;
 
-namespace EatMySnake.Core.Common
+namespace SnakeBattleNet.Core.Common
 {
     public class Move : EventArgs
     {

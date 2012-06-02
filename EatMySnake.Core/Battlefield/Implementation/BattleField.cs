@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using EatMySnake.Core.Common;
+using SnakeBattleNet.Core.Common;
 
-namespace EatMySnake.Core.Battlefield.Implementation
+namespace SnakeBattleNet.Core.Battlefield.Implementation
 {
     public class BattleField : IBattleField
     {

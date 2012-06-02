@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EatMySnake.Core.Common;
-using EatMySnake.Core.Snake;
+using SnakeBattleNet.Core.Common;
+using SnakeBattleNet.Core.Snake;
 
-namespace EatMySnake.Core.Implementation
+namespace SnakeBattleNet.Core.Implementation
 {
     public class Snake : ISnake
     {

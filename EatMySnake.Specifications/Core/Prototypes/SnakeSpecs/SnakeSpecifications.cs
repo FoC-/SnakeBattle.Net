@@ -1,8 +1,8 @@
-﻿using EatMySnake.Core.Prototypes;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using NSubstitute;
+using SnakeBattleNet.Core.Prototypes;
 
-namespace EatMySnake.Specifications.Tests.Core
+namespace SnakeBattleNet.Specifications.Tests.Core
 {
     [Ignore("Restuta: please finish this test")]
     [Subject(typeof(BattleSnake))]

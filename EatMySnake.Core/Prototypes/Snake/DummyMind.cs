@@ -1,4 +1,4 @@
-namespace EatMySnake.Core.Prototypes
+namespace SnakeBattleNet.Core.Prototypes
 {
     /// <summary>
     /// Super dummy mind, can only return random move directionis. (use with care, for really stupid snakes =)

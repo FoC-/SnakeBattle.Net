@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D01054C3-B067-418C-9A67-11A55F4E5536}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SnakeBattleNet.Core</RootNamespace>
+    <AssemblyName>SnakeBattleNet.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\libs\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Battlemanager\Comparator.cs" />
+    <Compile Include="Battlefield\FieldRow.cs" />
+    <Compile Include="Common\Size.cs" />
+    <Compile Include="Prototypes\Snake\DummyMind.cs" />
+    <Compile Include="Prototypes\Snake\IMind.cs" />
+    <Compile Include="Snake\Implementation\BrainChip.cs" />
+    <Compile Include="Battlefield\IBattleField.cs" />
+    <Compile Include="Snake\IBrainChip.cs" />
+    <Compile Include="Snake\ISnake.cs" />
+    <Compile Include="Common\Content.cs" />
+    <Compile Include="Common\AndOrState.cs" />
+    <Compile Include="Battlefield\Implementation\BattleField.cs" />
+    <Compile Include="Battlemanager\BattleManager.cs" />
+    <Compile Include="Common\Except.cs" />
+    <Compile Include="Common\Move.cs" />
+    <Compile Include="Snake\ChipRow.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\Direction.cs" />
+    <Compile Include="Prototypes\Battle.cs" />
+    <Compile Include="Prototypes\BattleControllerPrototype.cs" />
+    <Compile Include="Prototypes\BattleField.cs" />
+    <Compile Include="Prototypes\BattleReplay.cs" />
+    <Compile Include="Prototypes\Snake\BattleSnake.cs" />
+    <Compile Include="Prototypes\Snake\Body.cs" />
+    <Compile Include="Prototypes\Snake\BodyPart.cs" />
+    <Compile Include="Prototypes\Snake\ChipBasedMind.cs" />
+    <Compile Include="Prototypes\IBattle.cs" />
+    <Compile Include="Prototypes\Snake\MindChip.cs" />
+    <Compile Include="Prototypes\MoveDirection.cs" />
+    <Compile Include="Prototypes\Passport.cs" />
+    <Compile Include="Prototypes\Coordinates.cs" />
+    <Compile Include="Prototypes\Snake\Snake.cs" />
+    <Compile Include="Snake\Implementation\Snake.cs" />
+    <Compile Include="Prototypes\VisibleArea.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj">
+      <Project>{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}</Project>
+      <Name>SnakeBattleNet.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

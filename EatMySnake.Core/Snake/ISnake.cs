@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using EatMySnake.Core.Common;
-using EatMySnake.Core.Snake;
+using SnakeBattleNet.Core.Common;
+using SnakeBattleNet.Core.Snake;
 
-namespace EatMySnake.Core
+namespace SnakeBattleNet.Core
 {
     public interface ISnake
     {

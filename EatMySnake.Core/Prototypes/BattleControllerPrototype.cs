@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 
-namespace EatMySnake.Core.Prototypes
+namespace SnakeBattleNet.Core.Prototypes
 {
     public class BattleControllerPrototype
     {
