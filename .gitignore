@@ -16,3 +16,4 @@ _ReSharper.*
 *crunchsolution*
 *.DotSettings
 .merge_file_*
+*crunchproject*
