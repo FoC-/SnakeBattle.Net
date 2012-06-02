@@ -10,5 +10,6 @@ namespace SnakeBattleNet.Core.Common
         EnemyHead = 5,
         EnemyBody = 6,
         EnemyTail = 7,
+        Undefined = 8,
     }
 }
