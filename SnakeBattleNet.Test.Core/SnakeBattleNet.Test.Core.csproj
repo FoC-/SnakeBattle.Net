@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BattleManager\when_compare_with_FieldRow.cs" />
+    <Compile Include="stubForRealBattle.cs" />
     <Compile Include="BattleManager\when_call_comparator_with_predifined_chip_antother_tail.cs" />
     <Compile Include="BattleManager\when_creating_BattleManager_and_number_of_gates_is_more_or_equal_then_snakes.cs" />
     <Compile Include="BattleManager\when_creating_BattleManager_and_number_of_snakes_is_more_then_gates.cs" />
