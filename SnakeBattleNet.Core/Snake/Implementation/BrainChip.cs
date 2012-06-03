@@ -9,20 +9,21 @@ namespace SnakeBattleNet.Core.Snake.Implementation
         private readonly ChipRow[,] chipRows;
         private readonly Guid snakeId;
         private Move ownHead;
-        private AOColor headColor;
 
         public BrainChip(Size size, Guid snakeId)
         {
             this.snakeId = snakeId;
             Size = size;
             this.chipRows = new ChipRow[Size.X, Size.Y];
-            this.headColor = AOColor.AndGrey;
+            this.HeadColor = AOColor.AndGrey;
             InitilaizeWithHead();
         }
 
         #region Implement IBrainChip
 
         public Size Size { get; private set; }
+
+        public AOColor HeadColor { get; private set; }
 
         public ChipRow this[int x, int y]
         {
@@ -70,7 +71,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
 
         public void SetIndefinied(int x, int y)
         {
-            this.chipRows[x, y] = new ChipRow(this.headColor);
+            this.chipRows[x, y] = new ChipRow(this.HeadColor);
         }
 
         public void SetEnemyHead(int x, int y, Exclude exclude, AOColor aoColor)
@@ -98,9 +99,9 @@ namespace SnakeBattleNet.Core.Snake.Implementation
             if (this.ownHead != null)
                 this.chipRows[this.ownHead.X, this.ownHead.Y] = null;
 
-            if (headColor != aoColor)
+            if (this.HeadColor != aoColor)
             {
-                headColor = aoColor;
+                this.HeadColor = aoColor;
                 PlaceUndefined();
             }
 
@@ -125,7 +126,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
         {
             PlaceUndefined();
 
-            SetOwnHead(Size.X / 2, Size.Y / 2, this.headColor, Direction.North);
+            SetOwnHead(Size.X / 2, Size.Y / 2, this.HeadColor, Direction.North);
         }
 
         private void PlaceUndefined()

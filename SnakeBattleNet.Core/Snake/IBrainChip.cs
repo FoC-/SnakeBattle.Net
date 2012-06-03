@@ -6,6 +6,7 @@ namespace SnakeBattleNet.Core.Snake
     public interface IBrainChip
     {
         Size Size { get; }
+        AOColor HeadColor { get; }
         ChipRow this[int x, int y] { get; }
         IEnumerable<ChipRow> ToEnumeration();
 
