@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SnakeBattleNet.Core.Snake;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Common;
 using SnakeBattleNet.Utils.Extensions;
@@ -59,7 +58,10 @@ namespace SnakeBattleNet.Core.Battlemanager
 
                 //Try to move according brain chip
                 Move move = GetLogicalMove(battleField, snake);
-                TryToBite(snake, move ?? possibleMoves[random.Next(possibleMoves.Count)]);
+                if (possibleMoves.Contains(move))
+                    TryToBite(snake, move);
+
+                TryToBite(snake, possibleMoves[random.Next(possibleMoves.Count)]);
             }
             //StopGatherEvents();
         }
@@ -121,8 +123,8 @@ namespace SnakeBattleNet.Core.Battlemanager
         /// <returns>Next move or null, if no idea where to move</returns>
         private Move GetLogicalMove(IBattleField battleField, ISnake snake)
         {
-#warning Kush: need to finish this
-            return null;
+            var comparator = new Comparator(battleField, snake);
+            return comparator.MakeDecision();
         }
 
         /// <summary>
@@ -193,6 +195,6 @@ namespace SnakeBattleNet.Core.Battlemanager
             foreach (var gateway in battleField.Gateways)
                 battleField[gateway.X, gateway.Y] = new FieldRow(FieldRowContent.Wall);
         }
-        #endregion
+        #endregion Draw on field
     }
 }
