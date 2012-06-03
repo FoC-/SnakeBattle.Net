@@ -1,6 +1,6 @@
 ﻿namespace SnakeBattleNet.Core.Common
 {
-    public enum AndOrState
+    public enum AOColor
     {
         OrBlue,
         OrGreen,

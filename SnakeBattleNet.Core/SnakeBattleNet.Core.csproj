@@ -50,10 +50,10 @@
     <Compile Include="Snake\IBrainChip.cs" />
     <Compile Include="Snake\ISnake.cs" />
     <Compile Include="Common\FieldRowContent.cs" />
-    <Compile Include="Common\AndOrState.cs" />
+    <Compile Include="Common\AOColor.cs" />
     <Compile Include="Battlefield\Implementation\BattleField.cs" />
     <Compile Include="Battlemanager\BattleManager.cs" />
-    <Compile Include="Common\Except.cs" />
+    <Compile Include="Common\Exclude.cs" />
     <Compile Include="Common\Move.cs" />
     <Compile Include="Snake\ChipRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

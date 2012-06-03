@@ -1,6 +1,6 @@
 namespace SnakeBattleNet.Core.Common
 {
-    public enum Except
+    public enum Exclude
     {
         Yes,
         No
