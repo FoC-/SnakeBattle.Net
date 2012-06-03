@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Common;
 using SnakeBattleNet.Core.Snake;
@@ -22,9 +20,9 @@ namespace SnakeBattleNet.Core.Battlemanager
             Move headPositionOnBattleField = this.snake.GetHeadPosition();
 
             var moveToNorth = new Move(headPositionOnBattleField.X, headPositionOnBattleField.Y - 1, Direction.North);
-            var moveToSouth = new Move(headPositionOnBattleField.X, headPositionOnBattleField.Y - 1, Direction.North);
-            var moveToWest = new Move(headPositionOnBattleField.X, headPositionOnBattleField.Y - 1, Direction.North);
-            var moveToEast = new Move(headPositionOnBattleField.X, headPositionOnBattleField.Y - 1, Direction.North);
+            var moveToSouth = new Move(headPositionOnBattleField.X, headPositionOnBattleField.Y + 1, Direction.South);
+            var moveToWest = new Move(headPositionOnBattleField.X - 1, headPositionOnBattleField.Y, Direction.West);
+            var moveToEast = new Move(headPositionOnBattleField.X + 1, headPositionOnBattleField.Y, Direction.East);
 
             foreach (var brainChip in this.snake.BrainModules)
             {
@@ -32,47 +30,47 @@ namespace SnakeBattleNet.Core.Battlemanager
                 var headPositionOnBrainChip = brainChip.GetOwnHead();
                 var color = brainChip.HeadColor;
 
-                IEnumerable<FieldRow> fieldRows;
+                FieldRow[] fieldRows;
                 switch (headPositionOnBattleField.direction)
                 {
                     case Direction.North:
                         {
                             fieldRows = this.battleField.ViewToNorth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToNorth;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToNorth;
                             fieldRows = this.battleField.ViewToWest(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToWest;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToWest;
                             fieldRows = this.battleField.ViewToEast(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToEast;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToEast;
                         }
                         break;
                     case Direction.West:
                         {
                             fieldRows = this.battleField.ViewToWest(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToWest;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToWest;
                             fieldRows = this.battleField.ViewToSouth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToSouth;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToSouth;
                             fieldRows = this.battleField.ViewToNorth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToNorth;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToNorth;
                         }
                         break;
                     case Direction.East:
                         {
                             fieldRows = this.battleField.ViewToEast(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToEast;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToEast;
                             fieldRows = this.battleField.ViewToNorth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToNorth;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToNorth;
                             fieldRows = this.battleField.ViewToSouth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToSouth;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToSouth;
                         }
                         break;
                     case Direction.South:
                         {
                             fieldRows = this.battleField.ViewToSouth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToSouth;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToSouth;
                             fieldRows = this.battleField.ViewToEast(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToEast;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToEast;
                             fieldRows = this.battleField.ViewToWest(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows.ToArray(), brainChip.ToEnumeration().ToArray(), color)) return moveToWest;
+                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToWest;
                         }
                         break;
                 }
@@ -204,7 +202,6 @@ namespace SnakeBattleNet.Core.Battlemanager
                     (OrGreen && OrGreenCount > 0)
                    ) return true;
             }
-
             return false;
         }
     }

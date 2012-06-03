@@ -48,7 +48,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
             }
         }
 
-        public IEnumerable<ChipRow> ToEnumeration()
+        public ChipRow[] ToArray()
         {
             var rows = new List<ChipRow>();
 
@@ -56,7 +56,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
                 for (int x = 0; x < Size.X; x++)
                     rows.Add(this.chipRows[x, y]);
 
-            return rows;
+            return rows.ToArray();
         }
 
         public void SetWall(int x, int y, Exclude exclude, AOColor aoColor)

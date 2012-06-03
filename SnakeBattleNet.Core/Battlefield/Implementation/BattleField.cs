@@ -40,7 +40,7 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
         /// <summary>
         /// We are looking to north
         /// </summary>
-        public IEnumerable<FieldRow> ViewToNorth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
+        public FieldRow[] ViewToNorth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
         {
             var rows = new List<FieldRow>();
             int fx = snakeHeadPositionOnBattleField.X;
@@ -53,13 +53,13 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
                 for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
                     rows.Add(_fieldRows[x, y]);
 
-            return rows;
+            return rows.ToArray();
         }
 
         /// <summary>
         /// We are looking to west
         /// </summary>
-        public IEnumerable<FieldRow> ViewToWest(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
+        public FieldRow[] ViewToWest(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
         {
             var rows = new List<FieldRow>();
             int fx = snakeHeadPositionOnBattleField.X;
@@ -72,13 +72,13 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
                 for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
                     rows.Add(_fieldRows[y, x]);
 
-            return rows;
+            return rows.ToArray();
         }
 
         /// <summary>
         /// We are looking to east
         /// </summary>
-        public IEnumerable<FieldRow> ViewToEast(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
+        public FieldRow[] ViewToEast(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
         {
             var rows = new List<FieldRow>();
             int fx = snakeHeadPositionOnBattleField.X;
@@ -91,13 +91,13 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
                 for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
                     rows.Add(_fieldRows[y, x]);
 
-            return rows;
+            return rows.ToArray();
         }
 
         /// <summary>
         /// We are looking to south
         /// </summary>
-        public IEnumerable<FieldRow> ViewToSouth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
+        public FieldRow[] ViewToSouth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
         {
             var rows = new List<FieldRow>();
             int fx = snakeHeadPositionOnBattleField.X;
@@ -110,7 +110,7 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
                 for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
                     rows.Add(_fieldRows[x, y]);
 
-            return rows;
+            return rows.ToArray();
         }
 
         private void CreateGateways(int numberGatewaysOnTheSide)

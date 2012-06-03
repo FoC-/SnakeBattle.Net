@@ -8,7 +8,7 @@ namespace SnakeBattleNet.Core.Snake
         Size Size { get; }
         AOColor HeadColor { get; }
         ChipRow this[int x, int y] { get; }
-        IEnumerable<ChipRow> ToEnumeration();
+        ChipRow[] ToArray();
 
         void SetWall(int x, int y, Exclude exclude, AOColor aoColor);
         void SetEmpty(int x, int y, Exclude exclude, AOColor aoColor);
