@@ -12,7 +12,7 @@ namespace SnakeBattleNet.Test.Core
         private It should_be_equal_for_null_and_undefined = () =>
         {
             FieldRow fieldRow = null;
-            var chipRow = new ChipRow(ChipRowContent.Undefined);
+            var chipRow = new ChipRow(AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -20,7 +20,7 @@ namespace SnakeBattleNet.Test.Core
         private It should_not_be_equal_for_null_and_indefined = () =>
         {
             FieldRow fieldRow = null;
-            var chipRow = new ChipRow(ChipRowContent.Wall);
+            var chipRow = new ChipRow(ChipRowContent.Wall, Exclude.No, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
         };
@@ -29,7 +29,7 @@ namespace SnakeBattleNet.Test.Core
         private It should_be_equal_for_Empty = () =>
         {
             var fieldRow = new FieldRow(FieldRowContent.Empty);
-            var chipRow = new ChipRow(ChipRowContent.Empty);
+            var chipRow = new ChipRow(ChipRowContent.Empty, Exclude.No, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -37,7 +37,7 @@ namespace SnakeBattleNet.Test.Core
         private It should_be_equal_for_Empty_when_Except = () =>
         {
             var fieldRow = new FieldRow(FieldRowContent.Wall);
-            var chipRow = new ChipRow(ChipRowContent.Empty, Except.Yes);
+            var chipRow = new ChipRow(ChipRowContent.Empty, Exclude.Yes, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -45,7 +45,7 @@ namespace SnakeBattleNet.Test.Core
         private It should_not_be_equal_for_Empty_and_indefined = () =>
         {
             var fieldRow = new FieldRow(FieldRowContent.Head);
-            var chipRow = new ChipRow(ChipRowContent.Empty);
+            var chipRow = new ChipRow(ChipRowContent.Empty, Exclude.No, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
         };
@@ -54,7 +54,7 @@ namespace SnakeBattleNet.Test.Core
         private It should_be_equal_for_Wall = () =>
         {
             var fieldRow = new FieldRow(FieldRowContent.Wall);
-            var chipRow = new ChipRow(ChipRowContent.Wall);
+            var chipRow = new ChipRow(ChipRowContent.Wall, Exclude.No, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -62,7 +62,7 @@ namespace SnakeBattleNet.Test.Core
         private It should_be_equal_for_Wall_when_Except = () =>
         {
             var fieldRow = new FieldRow(FieldRowContent.Head);
-            var chipRow = new ChipRow(ChipRowContent.Wall, Except.Yes);
+            var chipRow = new ChipRow(ChipRowContent.Wall, Exclude.Yes, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -70,7 +70,7 @@ namespace SnakeBattleNet.Test.Core
         private It should_not_be_equal_for_Wall_and_indefined = () =>
         {
             var fieldRow = new FieldRow(FieldRowContent.Head);
-            var chipRow = new ChipRow(ChipRowContent.Wall);
+            var chipRow = new ChipRow(ChipRowContent.Wall, Exclude.No, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
         };
@@ -81,7 +81,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Head, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.OwnHead, Except.No, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.OwnHead, Exclude.No, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -93,7 +93,7 @@ namespace SnakeBattleNet.Test.Core
 
 
             var fieldRow = new FieldRow(FieldRowContent.Head, enemySnakeId);
-            var chipRow = new ChipRow(ChipRowContent.OwnHead, Except.No, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.OwnHead, Exclude.No, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
         };
@@ -104,7 +104,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.OwnBody, Except.No, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.OwnBody, Exclude.No, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -115,7 +115,7 @@ namespace SnakeBattleNet.Test.Core
             var enemySnakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, enemySnakeId);
-            var chipRow = new ChipRow(ChipRowContent.OwnBody, Except.No, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.OwnBody, Exclude.No, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
         };
@@ -126,7 +126,7 @@ namespace SnakeBattleNet.Test.Core
             var enemySnakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, enemySnakeId);
-            var chipRow = new ChipRow(ChipRowContent.OwnBody, Except.Yes, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.OwnBody, Exclude.Yes, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -137,7 +137,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Tail, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.OwnTail, Except.No, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.OwnTail, Exclude.No, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -148,7 +148,7 @@ namespace SnakeBattleNet.Test.Core
             var enemySnakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Tail, enemySnakeId);
-            var chipRow = new ChipRow(ChipRowContent.OwnTail, Except.No, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.OwnTail, Exclude.No, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
         };
@@ -159,7 +159,7 @@ namespace SnakeBattleNet.Test.Core
             var enemySnakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Tail, enemySnakeId);
-            var chipRow = new ChipRow(ChipRowContent.OwnTail, Except.Yes, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.OwnTail, Exclude.Yes, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -171,7 +171,7 @@ namespace SnakeBattleNet.Test.Core
             var enemySnakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Head, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.EnemyHead, Except.No, enemySnakeId);
+            var chipRow = new ChipRow(ChipRowContent.EnemyHead, Exclude.No, AOColor.AndGrey, enemySnakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -181,7 +181,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Head, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.EnemyHead, Except.No, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.EnemyHead, Exclude.No, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
         };
@@ -191,7 +191,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Head, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.EnemyHead, Except.Yes, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.EnemyHead, Exclude.Yes, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -203,7 +203,7 @@ namespace SnakeBattleNet.Test.Core
             var enemySnakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Except.No, enemySnakeId);
+            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Exclude.No, AOColor.AndGrey, enemySnakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -213,7 +213,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Except.No, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Exclude.No, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
         };
@@ -223,7 +223,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Except.Yes, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Exclude.Yes, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -235,7 +235,7 @@ namespace SnakeBattleNet.Test.Core
             var enemySnakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Except.No, enemySnakeId);
+            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Exclude.No, AOColor.AndGrey, enemySnakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -245,7 +245,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Except.No, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Exclude.No, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
         };
@@ -255,7 +255,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Except.Yes, snakeId);
+            var chipRow = new ChipRow(ChipRowContent.EnemyBody, Exclude.Yes, AOColor.AndGrey, snakeId);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
@@ -265,7 +265,7 @@ namespace SnakeBattleNet.Test.Core
             var snakeId = Guid.NewGuid();
 
             var fieldRow = new FieldRow(FieldRowContent.Body, snakeId);
-            var chipRow = new ChipRow(ChipRowContent.Undefined);
+            var chipRow = new ChipRow(AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
         };
