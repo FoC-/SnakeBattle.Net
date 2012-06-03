@@ -1,3 +1,4 @@
+using System;
 using Machine.Specifications;
 using SnakeBattleNet.Core.Common;
 using SnakeBattleNet.Core.Snake.Implementation;
@@ -9,15 +10,15 @@ namespace SnakeBattleNet.Test.Core
     {
         private Establish context = () =>
         {
-            brainChip = new BrainChip(new Size(3, 3));
-            currentHeadPosition = brainChip.HeadPosition;
+            brainChip = new BrainChip(new Size(3, 3), Guid.NewGuid());
+            currentHeadPosition = brainChip.GetOwnHead();
 
             newHeadPosition = new Move(0, 0, Direction.East);
         };
 
         private Because of = () =>
         {
-            brainChip.HeadPosition = newHeadPosition;
+            brainChip.SetOwnHead(newHeadPosition.X, newHeadPosition.Y, AOColor.AndGrey, newHeadPosition.direction);
         };
 
         private It should_remove_previous_head = () =>
@@ -27,7 +28,7 @@ namespace SnakeBattleNet.Test.Core
 
         private It should_change_head_position_to_new_head_position = () =>
         {
-            brainChip.HeadPosition.ShouldEqual(newHeadPosition);
+            brainChip.GetOwnHead().ShouldEqual(newHeadPosition);
         };
 
         private static BrainChip brainChip;

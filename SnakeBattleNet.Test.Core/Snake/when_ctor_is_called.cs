@@ -16,7 +16,7 @@ namespace SnakeBattleNet.Test.Core
 
         private Because of = () =>
         {
-            exception = Catch.Exception(() => brainChip = new BrainChip(new Size(3, 3)));
+            exception = Catch.Exception(() => brainChip = new BrainChip(new Size(3, 3), Guid.NewGuid()));
         };
 
         private It should_not_fail = () =>
@@ -26,7 +26,7 @@ namespace SnakeBattleNet.Test.Core
 
         private It should_contain_head_in_the_center_of_the_chip = () =>
         {
-            brainChip.HeadPosition.ShouldEqual(headInTheCenterOfTheChip);
+            brainChip.GetOwnHead().ShouldEqual(headInTheCenterOfTheChip);
         };
 
         private static Exception exception;

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using SnakeBattleNet.Core.Snake;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Common;
 
@@ -8,50 +5,50 @@ namespace SnakeBattleNet.Core.Battlemanager
 {
     public class Comparator
     {
-        private readonly IBattleField _battleField;
-        private ISnake _snake;
+        private readonly IBattleField battleField;
+        private readonly ISnake snake;
 
         public Comparator(IBattleField battleField, ISnake snake)
         {
-            _snake = snake;
-            _battleField = battleField;
+            this.snake = snake;
+            this.battleField = battleField;
         }
 
         public Move MakeDecision()
         {
-            Move snakeHeadPositionOnBattleField = _snake.GetHeadPosition();
+            Move snakeHeadPositionOnBattleField = this.snake.GetHeadPosition();
 
-            foreach (var brainChip in _snake.BrainModules)
+            foreach (var brainChip in this.snake.BrainModules)
             {
                 int chipSizeDim = brainChip.Size.X;
                 switch (snakeHeadPositionOnBattleField.direction)
                 {
                     case Direction.North:
                         {
-                            _battleField.ViewToNorth(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
-                            _battleField.ViewToWest(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
-                            _battleField.ViewToEast(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            this.battleField.ViewToNorth(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
+                            this.battleField.ViewToWest(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
+                            this.battleField.ViewToEast(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
                         }
                         break;
                     case Direction.West:
                         {
-                            _battleField.ViewToWest(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
-                            _battleField.ViewToSouth(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
-                            _battleField.ViewToNorth(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            this.battleField.ViewToWest(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
+                            this.battleField.ViewToSouth(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
+                            this.battleField.ViewToNorth(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
                         }
                         break;
                     case Direction.East:
                         {
-                            _battleField.ViewToEast(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
-                            _battleField.ViewToNorth(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
-                            _battleField.ViewToSouth(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            this.battleField.ViewToEast(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
+                            this.battleField.ViewToNorth(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
+                            this.battleField.ViewToSouth(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
                         }
                         break;
                     case Direction.South:
                         {
-                            _battleField.ViewToSouth(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
-                            _battleField.ViewToEast(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
-                            _battleField.ViewToWest(snakeHeadPositionOnBattleField, brainChip.HeadPosition, chipSizeDim);
+                            this.battleField.ViewToSouth(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
+                            this.battleField.ViewToEast(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
+                            this.battleField.ViewToWest(snakeHeadPositionOnBattleField, brainChip.GetOwnHead(), chipSizeDim);
                         }
                         break;
                 }
