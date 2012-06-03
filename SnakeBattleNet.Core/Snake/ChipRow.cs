@@ -8,26 +8,31 @@ namespace SnakeBattleNet.Core.Snake
     public class ChipRow
     {
         public ChipRowContent ChipRowContent { get; private set; }
+        public Exclude Exclude { get; private set; }
+        public AOColor AoColor { get; private set; }
         public Guid Guid { get; private set; }
-        public Except Except { get; private set; }
-        public AndOrState AndOrState { get; private set; }
 
-        public ChipRow() : this(ChipRowContent.Undefined) { }
+        public ChipRow(AOColor aoColor) : this(ChipRowContent.Undefined, Exclude.No, aoColor, default(Guid)) { }
 
-        public ChipRow(ChipRowContent chipRowContent, Except except = Except.No, Guid guid = default (Guid)) : this(chipRowContent, except, guid, AndOrState.AndGrey) { }
+        public ChipRow(ChipRowContent chipRowContent, Exclude exclude, AOColor aoColor) : this(chipRowContent, exclude, aoColor, default(Guid)) { }
 
-        public ChipRow(ChipRowContent chipRowContent, Except except, Guid guid, AndOrState andOrState)
+        public ChipRow(ChipRowContent chipRowContent, Exclude exclude, AOColor aoColor, Guid guid)
         {
-            this.ChipRowContent = chipRowContent;
+            ChipRowContent = chipRowContent;
+            Exclude = exclude;
+            AoColor = aoColor;
             Guid = guid;
-            Except = except;
-            AndOrState = andOrState;
+        }
+
+        public override string ToString()
+        {
+            return ChipRowContent.ToString();
         }
 
         public override int GetHashCode()
         {
             int a = (int)this.ChipRowContent;
-            if (Except == Except.No)
+            if (this.Exclude == Exclude.No)
                 return a;
 
             int hs = Enum.GetValues(typeof(ChipRowContent)).Cast<int>().Sum();
@@ -80,7 +85,7 @@ namespace SnakeBattleNet.Core.Snake
             if (o is ChipRow)
             {
                 var chipRow = o as ChipRow;
-                if (Except == Except.No)
+                if (this.Exclude == Exclude.No)
                 {
                     return this.ChipRowContent == chipRow.ChipRowContent;
                 }
@@ -92,11 +97,11 @@ namespace SnakeBattleNet.Core.Snake
 
         private bool FieldEquals(FieldRow fieldRow, FieldRowContent fieldRowContent)
         {
-            if ((this.Except == Except.No) && (fieldRow.FieldRowContent == fieldRowContent))
+            if ((this.Exclude == Exclude.No) && (fieldRow.FieldRowContent == fieldRowContent))
             {
                 return true;
             }
-            if ((this.Except == Except.Yes) && (fieldRow.FieldRowContent != fieldRowContent))
+            if ((this.Exclude == Exclude.Yes) && (fieldRow.FieldRowContent != fieldRowContent))
             {
                 return true;
             }
@@ -105,13 +110,13 @@ namespace SnakeBattleNet.Core.Snake
 
         private bool OwnEquals(FieldRow fieldRow, FieldRowContent fieldRowContent)
         {
-            if ((this.Except == Except.No)
+            if ((this.Exclude == Exclude.No)
                 && (fieldRow.FieldRowContent == fieldRowContent)
                 && (this.Guid == fieldRow.Guid))
             {
                 return true;
             }
-            if ((this.Except == Except.Yes)
+            if ((this.Exclude == Exclude.Yes)
                 && ((fieldRow.FieldRowContent != fieldRowContent)
                     || (this.Guid != fieldRow.Guid)))
             {
@@ -122,24 +127,19 @@ namespace SnakeBattleNet.Core.Snake
 
         private bool EnemyEquals(FieldRow fieldRow, FieldRowContent fieldRowContent)
         {
-            if ((Except == Except.No)
+            if ((this.Exclude == Exclude.No)
                 && (fieldRow.FieldRowContent == fieldRowContent)
                 && (this.Guid != fieldRow.Guid))
             {
                 return true;
             }
-            if ((this.Except == Except.Yes)
+            if ((this.Exclude == Exclude.Yes)
                 && ((fieldRow.FieldRowContent != fieldRowContent)
                     || (this.Guid == fieldRow.Guid)))
             {
                 return true;
             }
             return false;
-        }
-
-        public override string ToString()
-        {
-            return this.ChipRowContent.ToString();
         }
     }
 }
