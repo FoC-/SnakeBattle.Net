@@ -7,31 +7,22 @@ namespace SnakeBattleNet.Core.Snake.Implementation
     public class BrainChip : IBrainChip
     {
         private readonly ChipRow[,] chipRows;
-        private Move headPosition;
+        private readonly Guid snakeId;
+        private Move ownHead;
+        private AOColor headColor;
 
-        public BrainChip(Size size)
+        public BrainChip(Size size, Guid snakeId)
         {
+            this.snakeId = snakeId;
             Size = size;
             this.chipRows = new ChipRow[Size.X, Size.Y];
+            this.headColor = AOColor.AndGrey;
             InitilaizeWithHead();
         }
 
         #region Implement IBrainChip
 
         public Size Size { get; private set; }
-
-        public Move HeadPosition
-        {
-            get { return this.headPosition; }
-            set
-            {
-                if (this.headPosition != null)
-                    this.chipRows[this.headPosition.X, this.headPosition.Y] = null;
-
-                this.chipRows[value.X, value.Y] = new ChipRow(ChipRowContent.OwnHead);
-                this.headPosition = value;
-            }
-        }
 
         public ChipRow this[int x, int y]
         {
@@ -67,16 +58,82 @@ namespace SnakeBattleNet.Core.Snake.Implementation
             return rows;
         }
 
+        public void SetWall(int x, int y, Exclude exclude, AOColor aoColor)
+        {
+            this.chipRows[x, y] = new ChipRow(ChipRowContent.Wall, exclude, aoColor);
+        }
+
+        public void SetEmpty(int x, int y, Exclude exclude, AOColor aoColor)
+        {
+            this.chipRows[x, y] = new ChipRow(ChipRowContent.Empty, exclude, aoColor);
+        }
+
+        public void SetIndefinied(int x, int y)
+        {
+            this.chipRows[x, y] = new ChipRow(this.headColor);
+        }
+
+        public void SetEnemyHead(int x, int y, Exclude exclude, AOColor aoColor)
+        {
+            this.chipRows[x, y] = new ChipRow(ChipRowContent.EnemyHead, exclude, aoColor);
+        }
+
+        public void SetEnemyBody(int x, int y, Exclude exclude, AOColor aoColor)
+        {
+            this.chipRows[x, y] = new ChipRow(ChipRowContent.EnemyBody, exclude, aoColor);
+        }
+
+        public void SetEnemyTail(int x, int y, Exclude exclude, AOColor aoColor)
+        {
+            this.chipRows[x, y] = new ChipRow(ChipRowContent.EnemyTail, exclude, aoColor);
+        }
+
+        public Move GetOwnHead()
+        {
+            return ownHead;
+        }
+
+        public void SetOwnHead(int x, int y, AOColor aoColor, Direction direction)
+        {
+            if (this.ownHead != null)
+                this.chipRows[this.ownHead.X, this.ownHead.Y] = null;
+
+            if (headColor != aoColor)
+            {
+                headColor = aoColor;
+                PlaceUndefined();
+            }
+
+            this.chipRows[x, y] = new ChipRow(ChipRowContent.OwnHead, Exclude.No, aoColor, snakeId);
+            this.ownHead = new Move(x, y, direction);
+
+        }
+
+        public void SetOwnBody(int x, int y, Exclude exclude, AOColor aoColor)
+        {
+            this.chipRows[x, y] = new ChipRow(ChipRowContent.OwnBody, exclude, aoColor, snakeId);
+        }
+
+        public void SetOwnTail(int x, int y, Exclude exclude, AOColor aoColor)
+        {
+            this.chipRows[x, y] = new ChipRow(ChipRowContent.OwnTail, exclude, aoColor, snakeId);
+        }
+
         #endregion Implement IBrainChip
 
         private void InitilaizeWithHead()
         {
+            PlaceUndefined();
+
+            SetOwnHead(Size.X / 2, Size.Y / 2, this.headColor, Direction.North);
+        }
+
+        private void PlaceUndefined()
+        {
             for (int y = 0; y < Size.Y; y++)
                 for (int x = 0; x < Size.X; x++)
-                    chipRows[x, y] = new ChipRow();
-
-            HeadPosition = new Move(Size.X / 2, Size.Y / 2, Direction.North);
-            this.chipRows[this.headPosition.X, this.headPosition.Y] = new ChipRow(ChipRowContent.OwnHead);
+                    if (this.chipRows[x, y] == null || this.chipRows[x, y].ChipRowContent == ChipRowContent.Undefined)
+                        SetIndefinied(x, y);
         }
     }
 }
