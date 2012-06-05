@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Utils", "Sna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.WinForms", "SnakeBattleNet.WinForms\SnakeBattleNet.WinForms.csproj", "{D174F030-29C8-4A12-B160-F93B41162645}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.MVC", "SnakeBattleNet.MVC\SnakeBattleNet.MVC.csproj", "{629DBB57-D81C-40A6-8C5E-F0935F34E492}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Mvc", "SnakeBattleNet.MVC\SnakeBattleNet.Mvc.csproj", "{629DBB57-D81C-40A6-8C5E-F0935F34E492}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{E8462B8F-97E5-43DF-81EC-E4908618741A}"
 EndProject

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SnakeBattleNet.MVC.Models
+namespace SnakeBattleNet.Mvc.Models
 {
     public class BattleDto
     {

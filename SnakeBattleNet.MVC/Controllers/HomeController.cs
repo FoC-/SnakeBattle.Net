@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace SnakeBattleNet.MVC.Controllers
+namespace SnakeBattleNet.Mvc.Controllers
 {
     public class HomeController : Controller
     {

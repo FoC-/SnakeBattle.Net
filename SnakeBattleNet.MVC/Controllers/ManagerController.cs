@@ -3,7 +3,7 @@ using System.IO;
 using System.Web;
 using System.Web.Mvc;
 
-namespace SnakeBattleNet.MVC.Controllers
+namespace SnakeBattleNet.Mvc.Controllers
 {
     public class ManagerController : Controller
     {

@@ -96,7 +96,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SnakeBattleNet.Core\SnakeBattleNet.Core.csproj">
       <Project>{D01054C3-B067-418C-9A67-11A55F4E5536}</Project>
-      <Name>EatMySnake.Core</Name>
+      <Name>SnakeBattleNet.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj">
       <Project>{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}</Project>
