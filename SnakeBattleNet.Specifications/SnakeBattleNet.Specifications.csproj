@@ -8,8 +8,8 @@
     <ProjectGuid>{12DCDEE1-03B1-4286-8888-293B21D5787F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EatMySnake.Specifications</RootNamespace>
-    <AssemblyName>EatMySnake.Specifications</AssemblyName>
+    <RootNamespace>SnakeBattleNet.Specifications</RootNamespace>
+    <AssemblyName>SnakeBattleNet.Specifications</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
