@@ -46,7 +46,6 @@ namespace SnakeBattleNet.Specifications.Core.Prototypes.CoordinatesSpecs
             hashCode1.ShouldEqual(hashCode2);
 
         private static Coordinates coordinates;
-        private static Coordinates coordinates2;
         private static int hashCode1;
         private static int hashCode2;
     }
