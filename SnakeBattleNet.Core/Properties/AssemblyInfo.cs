@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: InternalsVisibleTo("EatMySnake.Specifications")]
+[assembly: InternalsVisibleTo("SnakeBattleNet.Specifications")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 // General Information about an assembly is controlled through the following 
