@@ -1,7 +1,5 @@
 ﻿function startReplay(battleReplay, imageObjects) {
     var canvas = document.getElementById("canva");
-    canvas.width = battleReplay.fieldSize.Width * 10;
-    canvas.height = battleReplay.fieldSize.Height * 10;
 
     animate(canvas, battleReplay, imageObjects);
 };
@@ -56,30 +54,51 @@ function animate(canvas, battlefield, imageObject) {
     // clear
     context.clearRect(0, 0, canvas.width, canvas.height);
     // move
-    moveSnakes(battlefield);
     // draw
-    drawBattlefield(context, battlefield, imageObject);
+    drawBattlefield(canvas, battlefield.fieldSize, battlefield.field, imageObject);
 
     // request new frame
     requestAnimFrame(function () { animate(canvas, battlefield, imageObject); });
 }
 
-function moveSnakes(battlefield) {
-    battlefield.segments.X += 1;
-}
+function drawBattlefield(canvas, size, field, imageObject) {
+    canvas.width = size.X * 10;
+    canvas.height = size.Y * 10;
 
-function drawBattlefield(context, battlefield, imageObject) {
+    var context = canvas.getContext("2d");
     var elem = 10;
 
-    for (var x = 0; x < battlefield.fieldSize.Width; x++) {
-        for (var y = 0; y < battlefield.fieldSize.Height; y++) {
-            context.drawImage(imageObject[0], 10, 0, elem, elem, x * 10, y * 10, elem, elem);
+    for (var y = 0; y < size.Y; y++) {
+        for (var x = 0; x < size.X; x++) {
+            var currentElement = determElement(field[y * size.X + x]);
+            context.drawImage(imageObject[0], currentElement, 0, elem, elem, x * elem, y * elem, elem, elem);
         }
     }
+}
 
-    var tail = battlefield.segments;
-
-    context.drawImage(imageObject[2], 0, 0, elem, elem, tail.X, tail.Y, elem, elem);
+function determElement(name) {
+    var e = 0;
+    switch (name) {
+        case "W":
+            e = 0;
+            break;
+        case "E":
+            e = 10;
+            break;
+        case "G":
+            e = 20;
+            break;
+        case "H":
+            e = 0;
+            break;
+        case "B":
+            e = 10;
+            break;
+        case "T":
+            e = 20;
+            break;
+    }
+    return e;
 }
 
 window.requestAnimFrame = (function (callback) {
