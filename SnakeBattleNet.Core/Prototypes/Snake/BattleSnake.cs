@@ -15,7 +15,7 @@ namespace SnakeBattleNet.Core.Prototypes
     /// </summary>
     internal class BattleSnake
     {
-        private  BattleField battleField;
+        private BattleField battleField;
         private readonly Snake snake;
         private IMind mind;
 
@@ -80,7 +80,7 @@ namespace SnakeBattleNet.Core.Prototypes
              * body.Move(moveDirection);
              * 
              * note: it's also an interesting question who should check for incorrect moves, e.g. when mind tells
-             * "move forward" and there is a wall or a snake body over there
+             * "move forward" and there is a wall or a snake body is over there
              * 1) battle field on something like "OnBeforeMove"
              * 2) battle field should actually move snake, so it will controll this
              * 3) it should be implemented inside snake mind (this could be done in a base class for instanse)

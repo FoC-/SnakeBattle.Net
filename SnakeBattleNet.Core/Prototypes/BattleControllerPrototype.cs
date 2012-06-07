@@ -9,18 +9,19 @@ namespace SnakeBattleNet.Core.Prototypes
         {
             dynamic repository = new ExpandoObject();
 
-            BattleField battleField = new BattleField();
+            IBattleField battleField = new BattleField();
             List<Snake> snakes = GetSnakes();
 
             dynamic battle = new Battle(battleField, snakes); //battle.Create(battleField, snakes);
-            battle.PlayToEnd();
+            dynamic battleReplay = battle.PlayToEnd();
 
             repository.Save(battle);
-            repository.Save(battle.Replay);
+            repository.Save(battleReplay);
 
-            return battle.Replay.ToJson();
+            return battleReplay.ToJson();
         }
-
+        
+        //note restuta: that would be version 2 of the core
         public dynamic PlayBattle2()
         {
             dynamic repository = new ExpandoObject();

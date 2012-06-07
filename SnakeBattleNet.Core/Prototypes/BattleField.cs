@@ -46,12 +46,19 @@ namespace SnakeBattleNet.Core.Prototypes
     /// <summary>
     /// Represents battle field where snakes are trying to eat each other.
     /// </summary>
-    internal class BattleField
+    internal class BattleField : IBattleField
     {
         private IList<BattleSnake> snakes;
         private int[] field;
 
-        internal void AddSnakes(IList<BattleSnake> snakes)
+        public int Size { get; private set; }
+
+        public BattleField()
+        {
+            Size = 25;
+        }
+
+        public void AddSnakes(IList<BattleSnake> snakes)
         {
             this.snakes = snakes;
             foreach (var battleSnake in snakes)

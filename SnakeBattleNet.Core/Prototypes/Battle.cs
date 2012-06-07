@@ -15,17 +15,17 @@ namespace SnakeBattleNet.Core.Prototypes
 
         public Battle(int maxRounds, int fieldSize)
         {
-            this.FieldSize = fieldSize;
-            this.MaxRounds = maxRounds;
+            FieldSize = fieldSize;
+            MaxRounds = maxRounds;
         }
 
         public Battle()
         {
-            FieldSize = 25;
-            MaxRounds = 500;
+            MaxRounds = 550; //equals to original game rounds number
         }
 
-        public Battle(dynamic battleField, IEnumerable<Snake> snakes)
+        public Battle(IBattleField battleField, IEnumerable<Snake> snakes) 
+            : this()
         {
             this.battleField = battleField;
 
@@ -36,9 +36,10 @@ namespace SnakeBattleNet.Core.Prototypes
             // battleSnakes.ForEach(snake => snake.Died += this.SnakeDiedHandler());
         }
 
-        public void PlayToEnd()
+        public BattleReplay PlayToEnd()
         {
             Start();
+            throw new NotImplementedException();
         }
 
         private void Start()
@@ -62,11 +63,6 @@ namespace SnakeBattleNet.Core.Prototypes
         private void Finish()
         {
             throw new NotImplementedException();
-        }
-
-        public BattleReplay Replay
-        {
-            get { throw new NotImplementedException(); }
         }
     }
 }

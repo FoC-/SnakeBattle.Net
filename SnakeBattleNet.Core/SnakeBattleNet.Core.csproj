@@ -46,6 +46,7 @@
     <Compile Include="BattleReplay\ReplayRecorder.cs" />
     <Compile Include="Common\ChipRowContent.cs" />
     <Compile Include="Common\Size.cs" />
+    <Compile Include="Prototypes\IBattleField.cs" />
     <Compile Include="Prototypes\Snake\DummyMind.cs" />
     <Compile Include="Prototypes\Snake\IMind.cs" />
     <Compile Include="Snake\Implementation\BrainChip.cs" />
