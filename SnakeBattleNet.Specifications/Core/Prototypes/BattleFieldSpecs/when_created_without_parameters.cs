@@ -13,7 +13,7 @@ namespace SnakeBattleNet.Specifications.Core.Prototypes.BattleFieldSpecs
             battleField = new BattleField();
         };
 
-        It should_have__Size__set_to__25__ = () =>
+        It should_have__Size__set_to_default_value_which_is__25__ = () =>
         {
             battleField.Size.ShouldEqual(25);
         };

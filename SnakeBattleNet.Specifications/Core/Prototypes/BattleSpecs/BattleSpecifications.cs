@@ -10,7 +10,7 @@ namespace SnakeBattleNet.Specifications.Core.Prototypes.BattleSpecs
             battle = new Battle();
 
         It should_have__MaxRounds__set_to_default_value_which_is__500__ = () =>
-            battle.MaxRounds.ShouldEqual(500);
+            battle.MaxRounds.ShouldEqual(550);
 
         private static Battle battle;
     }
