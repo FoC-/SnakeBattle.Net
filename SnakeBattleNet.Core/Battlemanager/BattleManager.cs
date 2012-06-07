@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SnakeBattleNet.Core.BattleReplay;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Common;
 using SnakeBattleNet.Utils.Extensions;
@@ -8,17 +9,31 @@ namespace SnakeBattleNet.Core.Battlemanager
 {
     public class BattleManager
     {
-        readonly Random random = new Random();
+        private Random random;
         private readonly IBattleField battleField;
         private readonly IList<ISnake> snakes;
+        private readonly IReplayRecorder recorder;
 
-        public BattleManager(IBattleField battleField, IList<ISnake> snakes)
+        public BattleManager(IBattleField battleField, IList<ISnake> snakes, IReplayRecorder recorder)
         {
             if (snakes.Count > battleField.Gateways.Count)
                 throw new Exception("Number of snakes is more then gateways");
 
             this.battleField = battleField;
             this.snakes = snakes;
+            this.recorder = recorder;
+
+            InitalizeRandom();
+            recorder.InitSnakes(snakes);
+            recorder.InitBattleField(battleField);
+        }
+
+        private void InitalizeRandom()
+        {
+            int randomSeed = Environment.TickCount;
+
+            this.random = new Random(randomSeed);
+            recorder.InitSeed(randomSeed);
         }
 
         /// <summary>
@@ -173,27 +188,36 @@ namespace SnakeBattleNet.Core.Battlemanager
             {
                 // replace old head with body
                 battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(FieldRowContent.Body, snake.Id);
+                recorder.AddEvent(snake.Id, snake.GetHeadPosition().X, snake.GetHeadPosition().Y, Command.PutBody);
             }
             // add head to snake
             snake.SetHead(newHeadPosition);
             // put new head
             battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(FieldRowContent.Head, snake.Id);
+            recorder.AddEvent(snake.Id, snake.GetHeadPosition().X, snake.GetHeadPosition().Y, Command.PutHead);
         }
 
         private void CutTail(ISnake snake)
         {
             // replace old tail with empty row
             battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(FieldRowContent.Empty);
+            recorder.AddEvent(null, snake.GetTailPosition().X, snake.GetTailPosition().Y, Command.PutEmpty);
+
             // remove tail from snake
             snake.RemoveTail();
+
             // put new tail on field
             battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(FieldRowContent.Tail, snake.Id);
+            recorder.AddEvent(snake.Id, snake.GetTailPosition().X, snake.GetTailPosition().Y, Command.PutTail);
         }
 
         private void PutWallsOnGateways()
         {
             foreach (var gateway in battleField.Gateways)
+            {
                 battleField[gateway.X, gateway.Y] = new FieldRow(FieldRowContent.Wall);
+                recorder.AddEvent(null, gateway.X, gateway.Y, Command.PutGateway);
+            }
         }
         #endregion Draw on field
     }
