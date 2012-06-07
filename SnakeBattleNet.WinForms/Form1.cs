@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using SnakeBattleNet.Core;
+using SnakeBattleNet.Core.BattleReplay;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Battlefield.Implementation;
 using SnakeBattleNet.Core.Battlemanager;
@@ -31,11 +32,12 @@ namespace SnakeBattleNet.WinForms
             var id = Guid.NewGuid();
             var brainChips = new List<IBrainChip>();
             var snakes = new List<ISnake>();
+            var replayRecorder = new ReplayRecorder();
             snakes.Add(new Snake(id, id, "Snake number 1", brainChips));
             snakes.Add(new Snake(id, id, "Snake number 2", brainChips));
             snakes.Add(new Snake(id, id, "Snake number 3", brainChips));
             snakes.Add(new Snake(id, id, "Snake number 4", brainChips));
-            battleManager = new BattleManager(battleField, snakes);
+            battleManager = new BattleManager(battleField, snakes, replayRecorder);
             battleManager.InitializeField();
         }
 

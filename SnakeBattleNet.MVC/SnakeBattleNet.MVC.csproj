@@ -107,7 +107,12 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SnakeBattleNet.Core\SnakeBattleNet.Core.csproj">
+      <Project>{D01054C3-B067-418C-9A67-11A55F4E5536}</Project>
+      <Name>SnakeBattleNet.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
