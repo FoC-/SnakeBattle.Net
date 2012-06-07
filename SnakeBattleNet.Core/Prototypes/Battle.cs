@@ -15,8 +15,8 @@ namespace SnakeBattleNet.Core.Prototypes
 
         public Battle(int maxRounds, int fieldSize)
         {
-            this.FieldSize = fieldSize;
-            this.MaxRounds = maxRounds;
+            FieldSize = fieldSize;
+            MaxRounds = maxRounds;
         }
 
         public Battle()
@@ -25,7 +25,8 @@ namespace SnakeBattleNet.Core.Prototypes
             MaxRounds = 500;
         }
 
-        public Battle(dynamic battleField, IEnumerable<Snake> snakes)
+        public Battle(IBattleField battleField, IEnumerable<Snake> snakes) 
+            : this()
         {
             this.battleField = battleField;
 

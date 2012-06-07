@@ -9,7 +9,7 @@ namespace SnakeBattleNet.Core.Prototypes
         {
             dynamic repository = new ExpandoObject();
 
-            BattleField battleField = new BattleField();
+            IBattleField battleField = new BattleField();
             List<Snake> snakes = GetSnakes();
 
             dynamic battle = new Battle(battleField, snakes); //battle.Create(battleField, snakes);
