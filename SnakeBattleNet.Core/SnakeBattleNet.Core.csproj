@@ -41,6 +41,9 @@
   <ItemGroup>
     <Compile Include="Battlemanager\Comparator.cs" />
     <Compile Include="Battlefield\FieldRow.cs" />
+    <Compile Include="BattleReplay\Command.cs" />
+    <Compile Include="BattleReplay\IReplayRecorder.cs" />
+    <Compile Include="BattleReplay\ReplayRecorder.cs" />
     <Compile Include="Common\ChipRowContent.cs" />
     <Compile Include="Common\Size.cs" />
     <Compile Include="Prototypes\Snake\DummyMind.cs" />
