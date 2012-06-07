@@ -10,8 +10,8 @@ namespace SnakeBattleNet.Core.BattleReplay
     {
         private string[,] field;
         private Size fieldSize;
-        private Dictionary<string, int> snakes;
-        private int RandomSeed;
+        private int randomSeed;
+        private Dictionary<string, int> snakes = new Dictionary<string, int>();
         private List<string> events = new List<string>();
 
 
@@ -48,7 +48,7 @@ namespace SnakeBattleNet.Core.BattleReplay
 
         public void InitSeed(int randomSeed)
         {
-            RandomSeed = randomSeed;
+            this.randomSeed = randomSeed;
         }
 
         public void InitSnakes(IEnumerable<ISnake> snakes)
@@ -82,18 +82,16 @@ namespace SnakeBattleNet.Core.BattleReplay
         public Dictionary<string, object> GetReplay()
         {
             var objects = new Dictionary<string, object>();
+            objects.Add("snakes", snakes);
             objects.Add("field", field);
             objects.Add("fieldSize", fieldSize);
-            objects.Add("snakes", snakes);
+            objects.Add("randomSeed", randomSeed);
             objects.Add("events", events);
             return objects;
         }
 
         private int GetSnake(Guid id)
         {
-            if (snakes == null)
-                snakes = new Dictionary<string, int>();
-
             var key = id.ToString();
 
             if (snakes.ContainsKey(key))
