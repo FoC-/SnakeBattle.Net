@@ -21,7 +21,7 @@ namespace SnakeBattleNet.Core.Prototypes
 
         public Battle()
         {
-            MaxRounds = 550;
+            MaxRounds = 550; //equals to original game rounds number
         }
 
         public Battle(IBattleField battleField, IEnumerable<Snake> snakes) 

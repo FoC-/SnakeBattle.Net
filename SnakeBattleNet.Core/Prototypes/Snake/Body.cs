@@ -8,6 +8,7 @@ namespace SnakeBattleNet.Core.Prototypes
         private LinkedList<BodyPart> bodyParts;
 
         public int Length { get; set; }
+
         public BodyPart Head
         {
             get

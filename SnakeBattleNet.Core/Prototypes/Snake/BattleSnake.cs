@@ -15,7 +15,7 @@ namespace SnakeBattleNet.Core.Prototypes
     /// </summary>
     internal class BattleSnake
     {
-        private  BattleField battleField;
+        private BattleField battleField;
         private readonly Snake snake;
         private IMind mind;
 
