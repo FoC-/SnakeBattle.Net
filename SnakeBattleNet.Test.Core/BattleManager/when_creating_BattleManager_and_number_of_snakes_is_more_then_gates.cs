@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using SnakeBattleNet.Core;
+using SnakeBattleNet.Core.BattleReplay;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Battlemanager;
 using It = Machine.Specifications.It;
@@ -19,11 +20,12 @@ namespace SnakeBattleNet.Test.Core
 
             snakes = Mock.Of<IList<ISnake>>(_ => _.Count == numberOfSnakes);
             battleField = Mock.Of<IBattleField>(_ => _.Gateways.Count == numberOfGateways);
+            replayRecorder = Mock.Of<IReplayRecorder>();
         };
 
         Because of = () =>
         {
-            exception = Catch.Exception(() => new BattleManager(battleField, snakes));
+            exception = Catch.Exception(() => new BattleManager(battleField, snakes, replayRecorder));
         };
 
         It should_fail = () =>
@@ -34,5 +36,6 @@ namespace SnakeBattleNet.Test.Core
         private static Exception exception;
         private static IList<ISnake> snakes;
         private static IBattleField battleField;
+        private static IReplayRecorder replayRecorder;
     }
 }
