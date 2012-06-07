@@ -51,6 +51,13 @@ namespace SnakeBattleNet.Core.Prototypes
         private IList<BattleSnake> snakes;
         private int[] field;
 
+        public int Size { get; private set; }
+
+        public BattleField()
+        {
+            Size = 25;
+        }
+
         public void AddSnakes(IList<BattleSnake> snakes)
         {
             this.snakes = snakes;

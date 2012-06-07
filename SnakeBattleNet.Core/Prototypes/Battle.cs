@@ -21,7 +21,6 @@ namespace SnakeBattleNet.Core.Prototypes
 
         public Battle()
         {
-            FieldSize = 25;
             MaxRounds = 500;
         }
 
@@ -37,9 +36,10 @@ namespace SnakeBattleNet.Core.Prototypes
             // battleSnakes.ForEach(snake => snake.Died += this.SnakeDiedHandler());
         }
 
-        public void PlayToEnd()
+        public BattleReplay PlayToEnd()
         {
             Start();
+            throw new NotImplementedException();
         }
 
         private void Start()
@@ -63,11 +63,6 @@ namespace SnakeBattleNet.Core.Prototypes
         private void Finish()
         {
             throw new NotImplementedException();
-        }
-
-        public BattleReplay Replay
-        {
-            get { throw new NotImplementedException(); }
         }
     }
 }
