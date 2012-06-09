@@ -72,19 +72,29 @@ function ApplyEvent() {
 function DrawBattlefield() {
     for (var y = 0; y < battleReplay.fieldSize.Y; y++) {
         for (var x = 0; x < battleReplay.fieldSize.X; x++) {
-            var textureNum = determElement(battleReplay.field[y * battleReplay.fieldSize.X + x]);
-            drawElement(0, textureNum, x, y);
+            var fieldCell = battleReplay.field[y * battleReplay.fieldSize.X + x];
+            var textureNum = determTexture(fieldCell);
+            var texturePos = determElement(fieldCell);
+            drawElement(textureNum, texturePos, x, y);
         }
     }
 }
 
-function drawElement(textures, textureNumber, x, y) {
-    context.drawImage(imageObjects[textures], textureNumber, 0, 10, 10, x * scale, y * scale, scale, scale);
+function drawElement(textureNum, texturePos, x, y) {
+    context.drawImage(imageObjects[textureNum], texturePos, 0, 10, 10, x * scale, y * scale, scale, scale);
 }
 
-function determElement(name) {
+function determTexture(cell) {
+    if (cell.length > 1) {
+        var c = cell[1];
+        return c;
+    }
+    return 0;
+}
+
+function determElement(cell) {
     var e = 0;
-    switch (name) {
+    switch (cell[0]) {
         case "W":
             e = 0;
             break;

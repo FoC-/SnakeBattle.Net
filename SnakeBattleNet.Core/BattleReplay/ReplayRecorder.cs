@@ -96,7 +96,7 @@ namespace SnakeBattleNet.Core.BattleReplay
             if (snakes.ContainsKey(key))
                 return snakes[key];
 
-            int c = snakes.Count;
+            int c = snakes.Count + 1;
             snakes.Add(key, c);
 
             return c;
