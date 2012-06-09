@@ -1,30 +1,11 @@
 ﻿//Global variables
 var imageObjects = new Array();
+var scale = 10;
 var canvas;
 var context;
 var battleReplay;
 
-function PreloadResources(replayLink, texturesLink) {
-    canvas = document.getElementById("canva");
-    context = canvas.getContext("2d");
-
-    loadTextures(texturesLink);
-    loadBattleReplay(replayLink);
-}
-
-function loadTextures(texturesLink) {
-    $.ajax({
-        url: texturesLink,
-        type: 'POST',
-        dataType: 'json',
-        data: '{id: "ID-javascript" }',
-        contentType: 'application/json',
-        success: function (data) { preloadImages(data); },
-        async: false
-    });
-}
-
-function loadBattleReplay(replayLink) {
+function LoadBattleReplay(replayLink, texturesLink) {
     $.ajax({
         url: replayLink,
         type: 'POST',
@@ -32,6 +13,24 @@ function loadBattleReplay(replayLink) {
         data: '{id: "ID-javascript" }',
         contentType: 'application/json',
         success: function (data) { battleReplay = data; },
+        complete: function () { InitResources(texturesLink); },
+        async: false
+    });
+}
+
+function InitResources(texturesLink) {
+    canvas = document.getElementById("canva");
+    canvas.width = battleReplay.fieldSize.X * scale;
+    canvas.height = battleReplay.fieldSize.Y * scale;
+    context = canvas.getContext("2d");
+
+    $.ajax({
+        url: texturesLink,
+        type: 'POST',
+        dataType: 'json',
+        data: '{id: "ID-javascript" }',
+        contentType: 'application/json',
+        success: function (data) { preloadImages(data); },
         complete: function () { animate(); },
         async: false
     });
@@ -61,9 +60,6 @@ function animate() {
 }
 
 function drawBattlefield() {
-    canvas.width = battleReplay.fieldSize.X * 10;
-    canvas.height = battleReplay.fieldSize.Y * 10;
-
     for (var y = 0; y < battleReplay.fieldSize.Y; y++) {
         for (var x = 0; x < battleReplay.fieldSize.X; x++) {
             var textureNum = determElement(battleReplay.field[y * battleReplay.fieldSize.X + x]);
@@ -73,8 +69,7 @@ function drawBattlefield() {
 }
 
 function drawElement(textures, textureNumber, x, y) {
-    var elem = 10;
-    context.drawImage(imageObjects[textures], textureNumber, 0, elem, elem, x * elem, y * elem, elem, elem);
+    context.drawImage(imageObjects[textures], textureNumber, 0, 10, 10, x * scale, y * scale, scale, scale);
 }
 
 function determElement(name) {
