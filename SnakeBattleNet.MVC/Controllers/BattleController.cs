@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Web.Mvc;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.BattleReplay;
@@ -14,19 +13,6 @@ namespace SnakeBattleNet.Mvc.Controllers
 {
     public class BattleController : Controller
     {
-        [HttpPost]
-        public ActionResult GetBattle(string id)
-        {
-            var battleField = new Dictionary<string, Size>
-                                  {
-                                      {"fieldSize", new Size(27, 27)},
-                                      {"segments", new Size(5,5)}
-                                  };
-
-            return Json(battleField);
-        }
-
-
         [HttpPost]
         public ActionResult TestJson(string id)
         {
@@ -44,7 +30,7 @@ namespace SnakeBattleNet.Mvc.Controllers
             BattleManager battleManager = new BattleManager(battleField, snakes, replayRecorder);
             battleManager.InitializeField();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 500; i++)
                 battleManager.Act();
 
             var replay = Json(replayRecorder.GetReplay());
