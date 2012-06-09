@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Common;
-using SnakeBattleNet.Utils.Extensions;
 
 namespace SnakeBattleNet.Core.BattleReplay
 {
@@ -12,7 +11,7 @@ namespace SnakeBattleNet.Core.BattleReplay
         private Size fieldSize;
         private int randomSeed;
         private Dictionary<string, int> snakes = new Dictionary<string, int>();
-        private List<string> events = new List<string>();
+        private List<FieldEvent> events = new List<FieldEvent>();
 
 
         public void InitBattleField(IBattleField battleField)
@@ -62,19 +61,19 @@ namespace SnakeBattleNet.Core.BattleReplay
             switch (command)
             {
                 case Command.PutHead:
-                    events.Add("[x:{0},y:{1},t:'H{2}']".F(x, y, GetSnake(id.Value)));
+                    events.Add(new FieldEvent(x, y, "H" + GetSnake(id.Value)));
                     break;
                 case Command.PutBody:
-                    events.Add("[x:{0},y:{1},t:'B{2}']".F(x, y, GetSnake(id.Value)));
+                    events.Add(new FieldEvent(x, y, "B" + GetSnake(id.Value)));
                     break;
                 case Command.PutTail:
-                    events.Add("[x:{0},y:{1},t:'T{2}']".F(x, y, GetSnake(id.Value)));
+                    events.Add(new FieldEvent(x, y, "T" + GetSnake(id.Value)));
                     break;
                 case Command.PutEmpty:
-                    events.Add("[x:{0},y:{1},t:'E']".F(x, y));
+                    events.Add(new FieldEvent(x, y, "E"));
                     break;
                 case Command.PutGateway:
-                    events.Add("[x:{0},y:{1},t:'G']".F(x, y));
+                    events.Add(new FieldEvent(x, y, "G"));
                     break;
             }
         }
@@ -101,6 +100,19 @@ namespace SnakeBattleNet.Core.BattleReplay
             snakes.Add(key, c);
 
             return c;
+        }
+    }
+
+    class FieldEvent
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public string T { get; set; }
+        public FieldEvent(int x, int y, string t)
+        {
+            X = x;
+            Y = y;
+            T = t;
         }
     }
 }

@@ -4,6 +4,7 @@ var scale = 10;
 var canvas;
 var context;
 var battleReplay;
+var currentStep = 0;
 
 function LoadBattleReplay(replayLink, texturesLink) {
     $.ajax({
@@ -52,14 +53,23 @@ function animate() {
     // clear
     context.clearRect(0, 0, canvas.width, canvas.height);
     // move
+    ApplyEvent();
     // draw
-    drawBattlefield();
+    DrawBattlefield();
 
     // request new frame
     requestAnimFrame(function () { animate(); });
 }
 
-function drawBattlefield() {
+function ApplyEvent() {
+    if (currentStep < battleReplay.events.length) {
+        var e = battleReplay.events[currentStep];
+        battleReplay.field[e.Y * battleReplay.fieldSize.X + e.X] = e.T;
+    }
+    currentStep++;
+}
+
+function DrawBattlefield() {
     for (var y = 0; y < battleReplay.fieldSize.Y; y++) {
         for (var x = 0; x < battleReplay.fieldSize.X; x++) {
             var textureNum = determElement(battleReplay.field[y * battleReplay.fieldSize.X + x]);
