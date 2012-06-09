@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BattleController.cs" />
+    <Compile Include="Controllers\EditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Global.asax.cs">
@@ -69,7 +70,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\field.bmp" />
-    <Content Include="Content\snake.bmp" />
+    <Content Include="Content\snake1.bmp" />
+    <Content Include="Content\snake2.bmp" />
+    <Content Include="Content\snake3.bmp" />
+    <Content Include="Content\snake4.bmp" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\libs\animation.js" />
