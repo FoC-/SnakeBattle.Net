@@ -1,79 +1,80 @@
-﻿function startReplay(battleReplay, imageObjects) {
-    var canvas = document.getElementById("canva");
+﻿//Global variables
+var imageObjects = new Array();
+var canvas;
+var context;
+var battleReplay;
 
-    animate(canvas, battleReplay, imageObjects);
-};
+function PreloadResources(replayLink, texturesLink) {
+    canvas = document.getElementById("canva");
+    context = canvas.getContext("2d");
 
-function PreloadResources(battleLink, texturesLink) {
-    var imageObjects = new Array();
-    loadTextures(texturesLink, imageObjects);
-    loadBattle(battleLink, imageObjects);
+    loadTextures(texturesLink);
+    loadBattleReplay(replayLink);
 }
 
-function loadTextures(texturesLink, imageObjects) {
+function loadTextures(texturesLink) {
     $.ajax({
         url: texturesLink,
         type: 'POST',
         dataType: 'json',
         data: '{id: "ID-javascript" }',
         contentType: 'application/json',
-        success: function (data) { preloadImages(imageObjects, data); },
+        success: function (data) { preloadImages(data); },
         async: false
     });
 }
 
-function loadBattle(battleLink, imageObjects) {
-    var battle;
+function loadBattleReplay(replayLink) {
     $.ajax({
-        url: battleLink,
+        url: replayLink,
         type: 'POST',
         dataType: 'json',
         data: '{id: "ID-javascript" }',
         contentType: 'application/json',
-        success: function (data) { battle = data; },
-        complete: function () { startReplay(battle, imageObjects); },
+        success: function (data) { battleReplay = data; },
+        complete: function () { animate(); },
         async: false
     });
 }
 
-function preloadImages(o, images) {
+function preloadImages(images) {
     //Preload field textures
-    o[0] = new Image();
-    o[0].src = images.field;
+    imageObjects[0] = new Image();
+    imageObjects[0].src = images.field;
 
     //Preload snakes textures
     for (var i = 0; i < images.snakes.length; i++) {
-        o[i + 1] = new Image();
-        o[i + 1].src = images.snakes[i];
+        imageObjects[i + 1] = new Image();
+        imageObjects[i + 1].src = images.snakes[i];
     }
 }
 
-function animate(canvas, battlefield, imageObject) {
-    var context = canvas.getContext("2d");
-
+function animate() {
     // clear
     context.clearRect(0, 0, canvas.width, canvas.height);
     // move
     // draw
-    drawBattlefield(canvas, battlefield.fieldSize, battlefield.field, imageObject);
+    drawBattlefield();
 
     // request new frame
-    requestAnimFrame(function () { animate(canvas, battlefield, imageObject); });
+    requestAnimFrame(function () { animate(); });
 }
 
-function drawBattlefield(canvas, size, field, imageObject) {
-    canvas.width = size.X * 10;
-    canvas.height = size.Y * 10;
+function drawBattlefield() {
+    canvas.width = battleReplay.fieldSize.X * 10;
+    canvas.height = battleReplay.fieldSize.Y * 10;
 
-    var context = canvas.getContext("2d");
-    var elem = 10;
-
-    for (var y = 0; y < size.Y; y++) {
-        for (var x = 0; x < size.X; x++) {
-            var currentElement = determElement(field[y * size.X + x]);
-            context.drawImage(imageObject[0], currentElement, 0, elem, elem, x * elem, y * elem, elem, elem);
+    for (var y = 0; y < battleReplay.fieldSize.Y; y++) {
+        for (var x = 0; x < battleReplay.fieldSize.X; x++) {
+            var textureNum = determElement(battleReplay.field[y * battleReplay.fieldSize.X + x]);
+            drawElement(0, textureNum, x, y);
         }
     }
+}
+
+function drawElement(textures, textureNumber, x, y) {
+    var elem = 10;
+    context.drawImage(imageObjects[textures], textureNumber, 0, elem, elem, x * elem, y * elem, elem, elem);
 }
 
 function determElement(name) {
