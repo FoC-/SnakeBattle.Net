@@ -12,18 +12,19 @@ namespace SnakeBattleNet.Test.Core
 {
     public class stubForRealBattle
     {
-        protected static ISnake CreateSnakeStub(IList<IBrainChip> brainChips, Guid idForOwnSnake)
+        protected static ISnake CreateSnakeStub(IList<IBrainModule> brainChips, string idForOwnSnake)
         {
-            var snakeStub = new Snake(id: idForOwnSnake, owner: Guid.NewGuid(), name: "name", brainModules: brainChips);
+            var snakeStub = new Snake(id: idForOwnSnake, owner: Guid.NewGuid().ToString());
             snakeStub.SetHead(new Move(5, 4, Direction.South));
             snakeStub.SetHead(new Move(5, 5, Direction.West));
             snakeStub.SetHead(new Move(4, 5, Direction.North));
             snakeStub.SetHead(new Move(4, 4, Direction.North));
-
+            snakeStub.SetModulesMax(1);
+            snakeStub.InsertModule(0, CreateChipWithAndColoredHead(idForOwnSnake));
             return snakeStub;
         }
 
-        protected static BattleField CreateBattleField(Guid idForOwnSnake)
+        protected static BattleField CreateBattleField(string idForOwnSnake)
         {
             var battleField = new BattleField(new Size(9, 9), 1);
 
@@ -34,14 +35,14 @@ namespace SnakeBattleNet.Test.Core
             battleField[5, 4] = new FieldRow(FieldRowContent.Tail, idForOwnSnake);
 
             // Snake 1
-            var idForSnake1 = Guid.NewGuid();
+            var idForSnake1 = Guid.NewGuid().ToString();
             battleField[4, 3] = new FieldRow(FieldRowContent.Head, idForSnake1);
             battleField[4, 2] = new FieldRow(FieldRowContent.Body, idForSnake1);
             battleField[5, 2] = new FieldRow(FieldRowContent.Body, idForSnake1);
             battleField[5, 3] = new FieldRow(FieldRowContent.Tail, idForSnake1);
 
             // Snake 2
-            var idForSnake2 = Guid.NewGuid();
+            var idForSnake2 = Guid.NewGuid().ToString();
             battleField[2, 2] = new FieldRow(FieldRowContent.Head, idForSnake2);
             battleField[3, 2] = new FieldRow(FieldRowContent.Body, idForSnake2);
             battleField[3, 3] = new FieldRow(FieldRowContent.Body, idForSnake2);
@@ -49,7 +50,7 @@ namespace SnakeBattleNet.Test.Core
             battleField[2, 4] = new FieldRow(FieldRowContent.Tail, idForSnake2);
 
             // Snake 3
-            var idForSnake3 = Guid.NewGuid();
+            var idForSnake3 = Guid.NewGuid().ToString();
             battleField[2, 5] = new FieldRow(FieldRowContent.Head, idForSnake3);
             battleField[2, 6] = new FieldRow(FieldRowContent.Body, idForSnake3);
             battleField[2, 7] = new FieldRow(FieldRowContent.Tail, idForSnake3);
@@ -57,9 +58,9 @@ namespace SnakeBattleNet.Test.Core
             return battleField;
         }
 
-        protected static BrainChip CreateChipWithAndColoredHead(Guid snakeId)
+        protected static BrainModule CreateChipWithAndColoredHead(string snakeId)
         {
-            var chipWithAndColoredHead = new BrainChip(new Size(5, 5), snakeId);
+            var chipWithAndColoredHead = new BrainModule("Module-Id", new Size(5, 5), snakeId);
 
             // Own snake
             chipWithAndColoredHead.SetOwnHead(2, 2, AOColor.AndGrey, Direction.North);

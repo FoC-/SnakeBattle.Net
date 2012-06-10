@@ -6,7 +6,7 @@ using It = Machine.Specifications.It;
 
 namespace SnakeBattleNet.Test.Core
 {
-    [Subject(typeof(BrainChip))]
+    [Subject(typeof(BrainModule))]
     class when_ctor_is_called
     {
         private Establish context = () =>
@@ -16,7 +16,7 @@ namespace SnakeBattleNet.Test.Core
 
         private Because of = () =>
         {
-            exception = Catch.Exception(() => brainChip = new BrainChip(new Size(3, 3), Guid.NewGuid()));
+            exception = Catch.Exception(() => _brainModule = new BrainModule("Module-Id", new Size(3, 3), "Snake-Id"));
         };
 
         private It should_not_fail = () =>
@@ -26,11 +26,11 @@ namespace SnakeBattleNet.Test.Core
 
         private It should_contain_head_in_the_center_of_the_chip = () =>
         {
-            brainChip.GetOwnHead().ShouldEqual(headInTheCenterOfTheChip);
+            _brainModule.GetOwnHead().ShouldEqual(headInTheCenterOfTheChip);
         };
 
         private static Exception exception;
-        private static BrainChip brainChip;
+        private static BrainModule _brainModule;
         private static Move headInTheCenterOfTheChip;
     }
 }
