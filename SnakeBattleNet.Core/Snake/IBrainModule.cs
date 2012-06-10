@@ -1,14 +1,16 @@
-using System.Collections.Generic;
 using SnakeBattleNet.Core.Common;
 
 namespace SnakeBattleNet.Core.Snake
 {
-    public interface IBrainChip
+    public interface IBrainModule
     {
+        string Id { get; }
         Size Size { get; }
         AOColor HeadColor { get; }
-        ChipRow this[int x, int y] { get; }
-        ChipRow[] ToArray();
+
+        ModuleRow[,] ModuleRows { get; }
+        ModuleRow this[int x, int y] { get; }
+        ModuleRow[] ToArray();
 
         void SetWall(int x, int y, Exclude exclude, AOColor aoColor);
         void SetEmpty(int x, int y, Exclude exclude, AOColor aoColor);

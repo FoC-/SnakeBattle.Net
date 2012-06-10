@@ -1,6 +1,6 @@
 namespace SnakeBattleNet.Core.Common
 {
-    public enum ChipRowContent
+    public enum ModuleRowContent
     {
         Empty = 0,
         Wall = 1,

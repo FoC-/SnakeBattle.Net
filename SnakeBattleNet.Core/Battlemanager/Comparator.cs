@@ -78,7 +78,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             return null;
         }
 
-        private bool Compare(FieldRow[] fieldRows, ChipRow[] chipRows, AOColor color)
+        private bool Compare(FieldRow[] fieldRows, ModuleRow[] moduleRows, AOColor color)
         {
             bool OrBlue = false;
             int OrBlueCount = 0;
@@ -96,8 +96,8 @@ namespace SnakeBattleNet.Core.Battlemanager
 
             for (int i = 0; i < fieldRows.Length; i++)
             {
-                var equal = chipRows[i].Equals(fieldRows[i]);
-                var colorOfRow = chipRows[i].AoColor;
+                var equal = moduleRows[i].Equals(fieldRows[i]);
+                var colorOfRow = moduleRows[i].AoColor;
                 #region Switch of logic depended on row color
 
                 switch (colorOfRow)

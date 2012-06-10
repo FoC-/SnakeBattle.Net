@@ -5,37 +5,37 @@ using SnakeBattleNet.Core.Common;
 
 namespace SnakeBattleNet.Core.Snake
 {
-    public class ChipRow
+    public class ModuleRow
     {
-        public ChipRowContent ChipRowContent { get; private set; }
+        public ModuleRowContent ModuleRowContent { get; private set; }
         public Exclude Exclude { get; private set; }
         public AOColor AoColor { get; private set; }
-        public Guid Guid { get; private set; }
+        public string Id { get; private set; }
 
-        public ChipRow(AOColor aoColor) : this(ChipRowContent.Undefined, Exclude.No, aoColor, default(Guid)) { }
+        public ModuleRow(AOColor aoColor) : this(ModuleRowContent.Undefined, Exclude.No, aoColor, null) { }
 
-        public ChipRow(ChipRowContent chipRowContent, Exclude exclude, AOColor aoColor) : this(chipRowContent, exclude, aoColor, default(Guid)) { }
+        public ModuleRow(ModuleRowContent moduleRowContent, Exclude exclude, AOColor aoColor) : this(moduleRowContent, exclude, aoColor, null) { }
 
-        public ChipRow(ChipRowContent chipRowContent, Exclude exclude, AOColor aoColor, Guid guid)
+        public ModuleRow(ModuleRowContent moduleRowContent, Exclude exclude, AOColor aoColor, string id)
         {
-            ChipRowContent = chipRowContent;
+            this.ModuleRowContent = moduleRowContent;
             Exclude = exclude;
             AoColor = aoColor;
-            Guid = guid;
+            Id = id;
         }
 
         public override string ToString()
         {
-            return ChipRowContent.ToString();
+            return this.ModuleRowContent.ToString();
         }
 
         public override int GetHashCode()
         {
-            int a = (int)this.ChipRowContent;
+            int a = (int)this.ModuleRowContent;
             if (this.Exclude == Exclude.No)
                 return a;
 
-            int hs = Enum.GetValues(typeof(ChipRowContent)).Cast<int>().Sum();
+            int hs = Enum.GetValues(typeof(ModuleRowContent)).Cast<int>().Sum();
             return hs - a;
         }
 
@@ -43,53 +43,53 @@ namespace SnakeBattleNet.Core.Snake
         {
             if (o == null)
             {
-                return this.ChipRowContent == ChipRowContent.Undefined;
+                return this.ModuleRowContent == ModuleRowContent.Undefined;
             }
 
             if (o is FieldRow)
             {
                 var fieldRow = o as FieldRow;
 
-                switch (this.ChipRowContent)
+                switch (this.ModuleRowContent)
                 {
-                    case ChipRowContent.Empty:
+                    case ModuleRowContent.Empty:
                         return FieldEquals(fieldRow, FieldRowContent.Empty);
-                    case ChipRowContent.Wall:
+                    case ModuleRowContent.Wall:
                         return FieldEquals(fieldRow, FieldRowContent.Wall);
-                    case ChipRowContent.OwnHead:
+                    case ModuleRowContent.OwnHead:
                         {
                             if ((fieldRow.FieldRowContent == FieldRowContent.Head)
-                                && (this.Guid == fieldRow.Guid))
+                                && (this.Id == fieldRow.Id))
                             {
                                 return true;
                             }
                             return false;
                         }
-                    case ChipRowContent.OwnBody:
+                    case ModuleRowContent.OwnBody:
                         return OwnEquals(fieldRow, FieldRowContent.Body);
-                    case ChipRowContent.OwnTail:
+                    case ModuleRowContent.OwnTail:
                         return OwnEquals(fieldRow, FieldRowContent.Tail);
-                    case ChipRowContent.EnemyHead:
+                    case ModuleRowContent.EnemyHead:
                         return EnemyEquals(fieldRow, FieldRowContent.Head);
-                    case ChipRowContent.EnemyBody:
+                    case ModuleRowContent.EnemyBody:
                         return EnemyEquals(fieldRow, FieldRowContent.Body);
-                    case ChipRowContent.EnemyTail:
+                    case ModuleRowContent.EnemyTail:
                         return EnemyEquals(fieldRow, FieldRowContent.Tail);
-                    case ChipRowContent.Undefined:
+                    case ModuleRowContent.Undefined:
                         return true;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
 
-            if (o is ChipRow)
+            if (o is ModuleRow)
             {
-                var chipRow = o as ChipRow;
+                var chipRow = o as ModuleRow;
                 if (this.Exclude == Exclude.No)
                 {
-                    return this.ChipRowContent == chipRow.ChipRowContent;
+                    return this.ModuleRowContent == chipRow.ModuleRowContent;
                 }
-                return this.ChipRowContent != chipRow.ChipRowContent;
+                return this.ModuleRowContent != chipRow.ModuleRowContent;
             }
 
             throw new ArgumentOutOfRangeException();
@@ -112,13 +112,13 @@ namespace SnakeBattleNet.Core.Snake
         {
             if ((this.Exclude == Exclude.No)
                 && (fieldRow.FieldRowContent == fieldRowContent)
-                && (this.Guid == fieldRow.Guid))
+                && (this.Id == fieldRow.Id))
             {
                 return true;
             }
             if ((this.Exclude == Exclude.Yes)
                 && ((fieldRow.FieldRowContent != fieldRowContent)
-                    || (this.Guid != fieldRow.Guid)))
+                    || (this.Id != fieldRow.Id)))
             {
                 return true;
             }
@@ -129,13 +129,13 @@ namespace SnakeBattleNet.Core.Snake
         {
             if ((this.Exclude == Exclude.No)
                 && (fieldRow.FieldRowContent == fieldRowContent)
-                && (this.Guid != fieldRow.Guid))
+                && (this.Id != fieldRow.Id))
             {
                 return true;
             }
             if ((this.Exclude == Exclude.Yes)
                 && ((fieldRow.FieldRowContent != fieldRowContent)
-                    || (this.Guid == fieldRow.Guid)))
+                    || (this.Id == fieldRow.Id)))
             {
                 return true;
             }

@@ -33,9 +33,9 @@ namespace SnakeBattleNet.Persistance
 
         private static void RegisterClassMapping()
         {
-            BsonClassMap.RegisterClassMap<Snake>(cm =>     { cm.AutoMap(); cm.SetDiscriminator("Snake");     cm.SetIgnoreExtraElements(true); cm.UnmapProperty(c => c.BodyParts); });
-            BsonClassMap.RegisterClassMap<BrainChip>(cm => { cm.AutoMap(); cm.SetDiscriminator("BrainChip"); cm.SetIgnoreExtraElements(true); });
-            BsonClassMap.RegisterClassMap<ChipRow>(cm =>   { cm.AutoMap(); cm.SetDiscriminator("ChipRow");   cm.SetIgnoreExtraElements(true); });
+            BsonClassMap.RegisterClassMap<Snake>(cm =>       { cm.AutoMap(); cm.SetDiscriminator("Snake");       cm.SetIgnoreExtraElements(true); cm.UnmapProperty(c => c.BodyParts); });
+            BsonClassMap.RegisterClassMap<BrainModule>(cm => { cm.AutoMap(); cm.SetDiscriminator("BrainModule"); cm.SetIgnoreExtraElements(true); });
+            BsonClassMap.RegisterClassMap<ModuleRow>(cm =>   { cm.AutoMap(); cm.SetDiscriminator("ModuleRow");   cm.SetIgnoreExtraElements(true); });
         }
 
         public T Get(string id)

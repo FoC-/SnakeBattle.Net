@@ -8,9 +8,9 @@ namespace SnakeBattleNet.Core.Battlefield
         IList<Move> Gateways { get; }
         Size Size { get; }
         FieldRow this[int x, int y] { get; set; }
-        FieldRow[] ViewToNorth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim);
-        FieldRow[] ViewToWest(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim);
-        FieldRow[] ViewToEast(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim);
-        FieldRow[] ViewToSouth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim);
+        FieldRow[] ViewToNorth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnModule, int chipSizeDim);
+        FieldRow[] ViewToWest(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnModule, int chipSizeDim);
+        FieldRow[] ViewToEast(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnModule, int chipSizeDim);
+        FieldRow[] ViewToSouth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnModule, int chipSizeDim);
     }
 }

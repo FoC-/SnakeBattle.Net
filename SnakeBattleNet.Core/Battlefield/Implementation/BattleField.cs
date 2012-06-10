@@ -40,14 +40,14 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
         /// <summary>
         /// We are looking to north
         /// </summary>
-        public FieldRow[] ViewToNorth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
+        public FieldRow[] ViewToNorth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnModule, int chipSizeDim)
         {
             var rows = new List<FieldRow>();
             int fx = snakeHeadPositionOnBattleField.X;
             int fy = snakeHeadPositionOnBattleField.Y;
 
-            int cx = snakeHeadPositionOnBrainChip.X;
-            int cy = snakeHeadPositionOnBrainChip.Y;
+            int cx = snakeHeadPositionOnModule.X;
+            int cy = snakeHeadPositionOnModule.Y;
 
             for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
                 for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
@@ -59,14 +59,14 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
         /// <summary>
         /// We are looking to west
         /// </summary>
-        public FieldRow[] ViewToWest(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
+        public FieldRow[] ViewToWest(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnModule, int chipSizeDim)
         {
             var rows = new List<FieldRow>();
             int fx = snakeHeadPositionOnBattleField.X;
             int fy = snakeHeadPositionOnBattleField.Y;
 
-            int cx = snakeHeadPositionOnBrainChip.X;
-            int cy = snakeHeadPositionOnBrainChip.Y;
+            int cx = snakeHeadPositionOnModule.X;
+            int cy = snakeHeadPositionOnModule.Y;
 
             for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
                 for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
@@ -78,14 +78,14 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
         /// <summary>
         /// We are looking to east
         /// </summary>
-        public FieldRow[] ViewToEast(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
+        public FieldRow[] ViewToEast(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnModule, int chipSizeDim)
         {
             var rows = new List<FieldRow>();
             int fx = snakeHeadPositionOnBattleField.X;
             int fy = snakeHeadPositionOnBattleField.Y;
 
-            int cx = snakeHeadPositionOnBrainChip.X;
-            int cy = snakeHeadPositionOnBrainChip.Y;
+            int cx = snakeHeadPositionOnModule.X;
+            int cy = snakeHeadPositionOnModule.Y;
 
             for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
                 for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
@@ -97,14 +97,14 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
         /// <summary>
         /// We are looking to south
         /// </summary>
-        public FieldRow[] ViewToSouth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnBrainChip, int chipSizeDim)
+        public FieldRow[] ViewToSouth(Move snakeHeadPositionOnBattleField, Move snakeHeadPositionOnModule, int chipSizeDim)
         {
             var rows = new List<FieldRow>();
             int fx = snakeHeadPositionOnBattleField.X;
             int fy = snakeHeadPositionOnBattleField.Y;
 
-            int cx = snakeHeadPositionOnBrainChip.X;
-            int cy = snakeHeadPositionOnBrainChip.Y;
+            int cx = snakeHeadPositionOnModule.X;
+            int cy = snakeHeadPositionOnModule.Y;
 
             for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
                 for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)

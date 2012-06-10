@@ -29,14 +29,14 @@ namespace SnakeBattleNet.WinForms
             boardGrid.ColumnCount = 27;
             boardGrid.RowCount = 27;
 
-            var id = Guid.NewGuid();
-            var brainChips = new List<IBrainChip>();
+            var id = Guid.NewGuid().ToString();
+            var brainChips = new List<IBrainModule>();
             var snakes = new List<ISnake>();
             var replayRecorder = new ReplayRecorder();
-            snakes.Add(new Snake(id, id, "Snake number 1", brainChips));
-            snakes.Add(new Snake(id, id, "Snake number 2", brainChips));
-            snakes.Add(new Snake(id, id, "Snake number 3", brainChips));
-            snakes.Add(new Snake(id, id, "Snake number 4", brainChips));
+            snakes.Add(new Snake(id, "Snake number 1"));
+            snakes.Add(new Snake(id, "Snake number 2"));
+            snakes.Add(new Snake(id, "Snake number 3"));
+            snakes.Add(new Snake(id, "Snake number 4"));
             battleManager = new BattleManager(battleField, snakes, replayRecorder);
             battleManager.InitializeField();
         }

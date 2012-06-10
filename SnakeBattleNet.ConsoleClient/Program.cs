@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.BattleReplay;
-using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Battlefield.Implementation;
 using SnakeBattleNet.Core.Battlemanager;
 using SnakeBattleNet.Core.Implementation;
-using SnakeBattleNet.Core.Snake;
 
 namespace SnakeBattleNet.ConsoleClient
 {
@@ -14,19 +12,16 @@ namespace SnakeBattleNet.ConsoleClient
     {
         static void Main(string[] args)
         {
-
-            IBattleField battleField = new BattleField();
-
-            var id = Guid.NewGuid();
-            var brainChips = new List<IBrainChip>();
+            var battleField = new BattleField();
+            var id = Guid.NewGuid().ToString();
             var snakes = new List<ISnake>();
-            snakes.Add(new Snake(Guid.NewGuid(), id, "Snake number 0", brainChips));
-            snakes.Add(new Snake(Guid.NewGuid(), id, "Snake number 1", brainChips));
-            snakes.Add(new Snake(Guid.NewGuid(), id, "Snake number 2", brainChips));
-            snakes.Add(new Snake(Guid.NewGuid(), id, "Snake number 3", brainChips));
+            snakes.Add(new Snake(id, "Snake number 0"));
+            snakes.Add(new Snake(id, "Snake number 1"));
+            snakes.Add(new Snake(id, "Snake number 2"));
+            snakes.Add(new Snake(id, "Snake number 3"));
 
-            IReplayRecorder replayRecorder = new ReplayRecorder();
-            BattleManager battleManager = new BattleManager(battleField, snakes, replayRecorder);
+            var replayRecorder = new ReplayRecorder();
+            var battleManager = new BattleManager(battleField, snakes, replayRecorder);
             battleManager.InitializeField();
 
 
@@ -34,8 +29,6 @@ namespace SnakeBattleNet.ConsoleClient
             {
                 battleManager.Act();
             }
-            var replay = replayRecorder.GetReplay();
-            //Console.Write(replay.Length);
             Console.Read();
         }
     }

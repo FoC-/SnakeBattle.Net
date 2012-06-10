@@ -117,6 +117,10 @@
       <Project>{D01054C3-B067-418C-9A67-11A55F4E5536}</Project>
       <Name>SnakeBattleNet.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SnakeBattleNet.Persistance\SnakeBattleNet.Persistance.csproj">
+      <Project>{7DB984B4-11FE-4FBF-88BC-18D8EBD22A00}</Project>
+      <Name>SnakeBattleNet.Persistance</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />

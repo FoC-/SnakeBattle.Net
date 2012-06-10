@@ -10,8 +10,8 @@ namespace SnakeBattleNet.Core.BattleReplay
         void InitSeed(int randomSeed);
         void InitSnakes(IEnumerable<ISnake> snakes);
 
-        void AddEvent(Guid? id, int x, int y, Command command);
+        void AddEvent(string id, int x, int y, Command command);
 
-       Dictionary<string, object> GetReplay();
+        Dictionary<string, object> GetReplay();
     }
 }

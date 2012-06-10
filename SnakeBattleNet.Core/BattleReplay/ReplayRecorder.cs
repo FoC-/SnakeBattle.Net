@@ -33,13 +33,13 @@ namespace SnakeBattleNet.Core.BattleReplay
                             field[x, y] = "W";
                             break;
                         case FieldRowContent.Head:
-                            field[x, y] = "H" + GetSnake(fieldRow.Guid);
+                            field[x, y] = "H" + GetSnake(fieldRow.Id);
                             break;
                         case FieldRowContent.Body:
-                            field[x, y] = "B" + GetSnake(fieldRow.Guid);
+                            field[x, y] = "B" + GetSnake(fieldRow.Id);
                             break;
                         case FieldRowContent.Tail:
-                            field[x, y] = "T" + GetSnake(fieldRow.Guid);
+                            field[x, y] = "T" + GetSnake(fieldRow.Id);
                             break;
                     }
                 }
@@ -57,18 +57,18 @@ namespace SnakeBattleNet.Core.BattleReplay
                 GetSnake(snake.Id);
         }
 
-        public void AddEvent(Guid? id, int x, int y, Command command)
+        public void AddEvent(string id, int x, int y, Command command)
         {
             switch (command)
             {
                 case Command.PutHead:
-                    events.Add(new FieldEvent(x, y, "H" + GetSnake(id.Value)));
+                    events.Add(new FieldEvent(x, y, "H" + GetSnake(id)));
                     break;
                 case Command.PutBody:
-                    events.Add(new FieldEvent(x, y, "B" + GetSnake(id.Value)));
+                    events.Add(new FieldEvent(x, y, "B" + GetSnake(id)));
                     break;
                 case Command.PutTail:
-                    events.Add(new FieldEvent(x, y, "T" + GetSnake(id.Value)));
+                    events.Add(new FieldEvent(x, y, "T" + GetSnake(id)));
                     break;
                 case Command.PutEmpty:
                     events.Add(new FieldEvent(x, y, "E"));
@@ -90,15 +90,13 @@ namespace SnakeBattleNet.Core.BattleReplay
             return objects;
         }
 
-        private int GetSnake(Guid id)
+        private int GetSnake(string id)
         {
-            var key = id.ToString();
-
-            foreach (var snakeShort in this.snakes.Where(snake => snake.LongId == key))
+            foreach (var snakeShort in this.snakes.Where(snake => snake.LongId == id))
                 return snakeShort.ShortId;
 
             int c = snakes.Count + 1;
-            snakes.Add(new SnakeShort(key, c));
+            this.snakes.Add(new SnakeShort(id, c));
             return c;
         }
     }

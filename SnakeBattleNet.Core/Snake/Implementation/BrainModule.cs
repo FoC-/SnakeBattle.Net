@@ -1,92 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SnakeBattleNet.Core.Common;
 
 namespace SnakeBattleNet.Core.Snake.Implementation
 {
-    public class BrainChip : IBrainChip
+    public class BrainModule : IBrainModule
     {
-        private readonly ChipRow[,] chipRows;
-        private readonly Guid snakeId;
+        private readonly string snakeId;
         private Move ownHead;
 
-        public BrainChip(Size size, Guid snakeId)
+        public BrainModule(string id, Size size, string snakeId)
         {
-            this.snakeId = snakeId;
+            Id = id;
             Size = size;
-            this.chipRows = new ChipRow[Size.X, Size.Y];
-            this.HeadColor = AOColor.AndGrey;
+            this.snakeId = snakeId;
+            ModuleRows = new ModuleRow[Size.X, Size.Y];
+            HeadColor = AOColor.AndGrey;
             InitilaizeWithHead();
         }
 
-        #region Implement IBrainChip
+        #region Implement IBrainModule
 
+        public string Id { get; private set; }
         public Size Size { get; private set; }
-
         public AOColor HeadColor { get; private set; }
 
-        public ChipRow this[int x, int y]
+        public ModuleRow[,] ModuleRows { get; private set; }
+        public ModuleRow this[int x, int y]
         {
             get
             {
                 if (x > -1 && x < Size.X && y > -1 && y < Size.Y)
                 {
-                    return this.chipRows[x, y];
+                    return ModuleRows[x, y];
                 }
                 return null;
             }
-            set
-            {
-                if (x > -1 && x < Size.X && y > -1 && y < Size.Y)
-                {
-                    this.chipRows[x, y] = value;
-                }
-                else
-                {
-                    throw new IndexOutOfRangeException();
-                }
-            }
         }
-
-        public ChipRow[] ToArray()
+        public ModuleRow[] ToArray()
         {
-            var rows = new List<ChipRow>();
+            var rows = new List<ModuleRow>();
 
             for (int y = 0; y < Size.Y; y++)
                 for (int x = 0; x < Size.X; x++)
-                    rows.Add(this.chipRows[x, y]);
+                    rows.Add(this.ModuleRows[x, y]);
 
             return rows.ToArray();
         }
 
         public void SetWall(int x, int y, Exclude exclude, AOColor aoColor)
         {
-            this.chipRows[x, y] = new ChipRow(ChipRowContent.Wall, exclude, aoColor);
+            this.ModuleRows[x, y] = new ModuleRow(ModuleRowContent.Wall, exclude, aoColor);
         }
 
         public void SetEmpty(int x, int y, Exclude exclude, AOColor aoColor)
         {
-            this.chipRows[x, y] = new ChipRow(ChipRowContent.Empty, exclude, aoColor);
+            this.ModuleRows[x, y] = new ModuleRow(ModuleRowContent.Empty, exclude, aoColor);
         }
 
         public void SetIndefinied(int x, int y)
         {
-            this.chipRows[x, y] = new ChipRow(this.HeadColor);
+            this.ModuleRows[x, y] = new ModuleRow(this.HeadColor);
         }
 
         public void SetEnemyHead(int x, int y, Exclude exclude, AOColor aoColor)
         {
-            this.chipRows[x, y] = new ChipRow(ChipRowContent.EnemyHead, exclude, aoColor);
+            this.ModuleRows[x, y] = new ModuleRow(ModuleRowContent.EnemyHead, exclude, aoColor);
         }
 
         public void SetEnemyBody(int x, int y, Exclude exclude, AOColor aoColor)
         {
-            this.chipRows[x, y] = new ChipRow(ChipRowContent.EnemyBody, exclude, aoColor);
+            this.ModuleRows[x, y] = new ModuleRow(ModuleRowContent.EnemyBody, exclude, aoColor);
         }
 
         public void SetEnemyTail(int x, int y, Exclude exclude, AOColor aoColor)
         {
-            this.chipRows[x, y] = new ChipRow(ChipRowContent.EnemyTail, exclude, aoColor);
+            this.ModuleRows[x, y] = new ModuleRow(ModuleRowContent.EnemyTail, exclude, aoColor);
         }
 
         public Move GetOwnHead()
@@ -97,7 +85,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
         public void SetOwnHead(int x, int y, AOColor aoColor, Direction direction)
         {
             if (this.ownHead != null)
-                this.chipRows[this.ownHead.X, this.ownHead.Y] = null;
+                this.ModuleRows[this.ownHead.X, this.ownHead.Y] = null;
 
             if (this.HeadColor != aoColor)
             {
@@ -105,22 +93,22 @@ namespace SnakeBattleNet.Core.Snake.Implementation
                 PlaceUndefined();
             }
 
-            this.chipRows[x, y] = new ChipRow(ChipRowContent.OwnHead, Exclude.No, aoColor, snakeId);
+            this.ModuleRows[x, y] = new ModuleRow(ModuleRowContent.OwnHead, Exclude.No, aoColor, snakeId);
             this.ownHead = new Move(x, y, direction);
 
         }
 
         public void SetOwnBody(int x, int y, Exclude exclude, AOColor aoColor)
         {
-            this.chipRows[x, y] = new ChipRow(ChipRowContent.OwnBody, exclude, aoColor, snakeId);
+            this.ModuleRows[x, y] = new ModuleRow(ModuleRowContent.OwnBody, exclude, aoColor, snakeId);
         }
 
         public void SetOwnTail(int x, int y, Exclude exclude, AOColor aoColor)
         {
-            this.chipRows[x, y] = new ChipRow(ChipRowContent.OwnTail, exclude, aoColor, snakeId);
+            this.ModuleRows[x, y] = new ModuleRow(ModuleRowContent.OwnTail, exclude, aoColor, snakeId);
         }
 
-        #endregion Implement IBrainChip
+        #endregion Implement IBrainModule
 
         private void InitilaizeWithHead()
         {
@@ -133,7 +121,7 @@ namespace SnakeBattleNet.Core.Snake.Implementation
         {
             for (int y = 0; y < Size.Y; y++)
                 for (int x = 0; x < Size.X; x++)
-                    if (this.chipRows[x, y] == null || this.chipRows[x, y].ChipRowContent == ChipRowContent.Undefined)
+                    if (this.ModuleRows[x, y] == null || this.ModuleRows[x, y].ModuleRowContent == ModuleRowContent.Undefined)
                         SetIndefinied(x, y);
         }
     }
