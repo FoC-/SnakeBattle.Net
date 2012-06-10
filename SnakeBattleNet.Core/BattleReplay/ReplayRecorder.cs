@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Common;
 
@@ -10,7 +11,7 @@ namespace SnakeBattleNet.Core.BattleReplay
         private string[,] field;
         private Size fieldSize;
         private int randomSeed;
-        private Dictionary<string, int> snakes = new Dictionary<string, int>();
+        private List<SnakeShort> snakes = new List<SnakeShort>();
         private List<FieldEvent> events = new List<FieldEvent>();
 
 
@@ -93,12 +94,11 @@ namespace SnakeBattleNet.Core.BattleReplay
         {
             var key = id.ToString();
 
-            if (snakes.ContainsKey(key))
-                return snakes[key];
+            foreach (var snakeShort in this.snakes.Where(snake => snake.LongId == key))
+                return snakeShort.ShortId;
 
             int c = snakes.Count + 1;
-            snakes.Add(key, c);
-
+            snakes.Add(new SnakeShort(key, c));
             return c;
         }
     }
@@ -113,6 +113,18 @@ namespace SnakeBattleNet.Core.BattleReplay
             X = x;
             Y = y;
             T = t;
+        }
+    }
+
+    class SnakeShort
+    {
+        public string LongId { get; set; }
+        public int ShortId { get; set; }
+
+        public SnakeShort(string longId, int shortId)
+        {
+            LongId = longId;
+            ShortId = shortId;
         }
     }
 }
