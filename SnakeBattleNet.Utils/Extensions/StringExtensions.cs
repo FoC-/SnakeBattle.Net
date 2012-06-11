@@ -15,5 +15,13 @@ namespace SnakeBattleNet.Utils.Extensions
         {
             return string.Format(format, args);
         }
+
+        ///<summary>
+        /// Indicates whether String object is <c>null</c> or an Empty string.
+        ///</summary>
+        public static bool IsNullOrEmpty(this string source)
+        {
+            return string.IsNullOrEmpty(source);
+        }
     }
 }
