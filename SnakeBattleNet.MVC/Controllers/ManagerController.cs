@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Web;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using SnakeBattleNet.Persistance;
 
 namespace SnakeBattleNet.Mvc.Controllers
 {
     public class ManagerController : Controller
     {
-        [HttpPost]
-        public ActionResult UploadTexture(HttpPostedFileBase file, string ownerId)
+        public ActionResult GetTexture(string id)
         {
-            return new EmptyResult();
+            var file = MongoFileStorage<string>.GetFile(id);
+            return new FileStreamResult(file, "image/bmp");
         }
 
+        [Obsolete]
         [HttpPost]
         public ActionResult GetSnakeTexture(string textureId)
         {

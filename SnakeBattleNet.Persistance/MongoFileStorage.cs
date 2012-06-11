@@ -6,35 +6,21 @@ namespace SnakeBattleNet.Persistance
 {
     public class MongoFileStorage<T> : MongoGatewayBase<T>
     {
-        public byte[] GetFile(string id)
+        public static Stream GetFile(string id)
         {
             if (id.IsNullOrEmpty())
                 return null;
 
-            byte[] bytes = null;
             MongoGridFSFileInfo file = GridFS.FindOneById(id);
-
-            if (file != null)
-            {
-                using (var stream = file.OpenRead())
-                {
-                    bytes = new byte[stream.Length];
-                    stream.Read(bytes, 0, (int)stream.Length);
-                }
-            }
-
-            return bytes;
+            return file == null ? null : file.OpenRead();
         }
 
-        public void PutFile(string id, string fileName, byte[] content)
+        public static void PutFile(string id, string fileName, Stream content, string contentType)
         {
-            using (var imageStream = new MemoryStream(content))
-            {
-                GridFS.Upload(imageStream, fileName, new MongoGridFSCreateOptions { Id = id });
-            }
+            GridFS.Upload(content, fileName, new MongoGridFSCreateOptions { Id = id, ContentType = contentType });
         }
 
-        public void DeleteFile(string id)
+        public static void DeleteFile(string id)
         {
             GridFS.DeleteById(id);
         }

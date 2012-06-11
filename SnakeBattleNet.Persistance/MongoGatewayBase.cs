@@ -25,7 +25,7 @@ namespace SnakeBattleNet.Persistance
         {
             get { return DataBase.GetCollection<T>(typeof(T).Name); }
         }
-        public MongoGridFS GridFS
+        public static MongoGridFS GridFS
         {
             get { return DataBase.GridFS; }
         }
