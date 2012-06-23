@@ -41,8 +41,9 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\packages\mongocsharpdriver.1.4.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="MongoMembership">
-      <HintPath>..\packages\MongoMembership.0.0.7\lib\MongoMembership.dll</HintPath>
+    <Reference Include="MongoMembership, Version=0.0.0.8, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MongoMembership.0.0.8\lib\MongoMembership.dll</HintPath>
     </Reference>
     <Reference Include="SquishIt.Framework, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
