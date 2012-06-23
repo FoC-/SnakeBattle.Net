@@ -1,0 +1,48 @@
+﻿@model string[]
+
+@{
+    ViewBag.Title = "Manage Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Manage Roles</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Role</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var role in Model) {
+            <tr>
+                <td>@role</td>
+                <td>
+                    @using (Html.BeginForm("DeleteRole", "Admin", new { roleName = @role }, FormMethod.Post)) {
+                        <a href="#" onclick="if (confirm('Are you sure?')) { $(this).parents('form').submit(); } return false;">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@using (Html.BeginForm()) {
+     <div>
+        <fieldset>
+            <legend>Add new role</legend>
+
+            <div class="editor-label">
+                Role
+            </div>
+            <div class="editor-field">
+                @Html.TextBox("roleName")
+                @Html.ValidationMessage("roleName")
+            </div>
+
+            <p>
+                <input type="submit" value="Create" />
+            </p>
+        </fieldset>
+    </div>
+}
