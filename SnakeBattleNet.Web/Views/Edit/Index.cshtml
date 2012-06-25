@@ -1,0 +1,19 @@
+﻿@model SnakeBattleNet.Core.Implementation.Snake
+@{
+    ViewBag.Title = Model.SnakeName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <div class="span8">
+        <div class="label">
+            @Model.SnakeName
+            @Html.ActionLink("Edit", "EditName")
+        </div>
+        <div class="span1">
+            <img src="@Url.Action("GetTexture", "Manager", new { id = Model.Id })"/>
+            <div class="btn-mini left">
+                @Html.ActionLink("Upload", "UploadTexture", new { snakeId = Model.Id })
+            </div>
+        </div>
+    </div>
+</div>

@@ -169,6 +169,10 @@
     <Content Include="Views\Shared\_NavigationBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SnakeBattleNet.Core\SnakeBattleNet.Core.csproj">
+      <Project>{D01054C3-B067-418C-9A67-11A55F4E5536}</Project>
+      <Name>SnakeBattleNet.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SnakeBattleNet.Persistance\SnakeBattleNet.Persistance.csproj">
       <Project>{7DB984B4-11FE-4FBF-88BC-18D8EBD22A00}</Project>
       <Name>SnakeBattleNet.Persistance</Name>
@@ -186,6 +190,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\ManageRoles.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Edit\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
