@@ -1,6 +1,7 @@
-﻿using System;
+﻿using System.Linq;
 using System.Web.Mvc;
-using System.Web.Routing;
+using System.Web.Security;
+using SnakeBattleNet.Utils.Extensions;
 using SnakeBattleNet.Web.Models;
 
 namespace SnakeBattleNet.Web.Controllers
@@ -8,48 +9,37 @@ namespace SnakeBattleNet.Web.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        public IMembershipService MembershipService { get; set; }
-        public IFormsAuthenticationService FormsService { get; set; }
-
-        protected override void Initialize(RequestContext requestContext)
-        {
-            if (this.FormsService == null) { this.FormsService = new FormsAuthenticationService(); }
-            if (this.MembershipService == null) { this.MembershipService = new AccountMembershipService(); }
-
-            base.Initialize(requestContext);
-        }
-
         public ActionResult ManageUsers()
         {
-            var users = MembershipService.GetAllUsers();
+            var users = Membership.GetAllUsers();
             return View(users);
         }
 
         public ActionResult ManageRoles()
         {
-            var roles = this.MembershipService.GetAllRoles();
+            var roles = Roles.GetAllRoles();
             return View(roles);
         }
 
         [HttpPost]
         public ActionResult ManageRoles(string roleName)
         {
-            if (String.IsNullOrEmpty(roleName))
+            if (roleName.IsNullOrEmpty())
             {
                 ModelState.AddModelError("roleName", "Name is required");
             }
             else
             {
-                this.MembershipService.AddRole(roleName);
+                Roles.CreateRole(roleName);
             }
             return RedirectToAction("ManageRoles");
         }
 
         public ActionResult EditUser(string username)
         {
-            var user = this.MembershipService.GetUser(username);
-            var roles = this.MembershipService.GetAllRoles();
-            var userRoles = this.MembershipService.GetRolesForUser(user.UserName);
+            var user = Membership.GetUser(username);
+            var roles = Roles.GetAllRoles();
+            var userRoles = Roles.GetRolesForUser(user.UserName);
 
             return View(new EditUserModel(user.UserName, user.Email, roles, userRoles));
         }
@@ -57,17 +47,34 @@ namespace SnakeBattleNet.Web.Controllers
         [HttpPost]
         public ActionResult EditUser(EditUserModel model)
         {
-            var user = this.MembershipService.GetUser(model.Username);
-            this.MembershipService.UpdateUser(user, model.UserRoles);
+            var user = Membership.GetUser(model.Username);
+            user.Email = model.Email;
+            Membership.UpdateUser(user);
+
+            var roles = model.UserRoles;
+            if (roles != null && roles.Length > 0)
+            {
+                var rolesToBeAdded = roles.Except(Roles.GetRolesForUser(user.UserName)).ToArray();
+                if (rolesToBeAdded.Length != 0)
+                    Roles.AddUsersToRoles(new[] { user.UserName }, rolesToBeAdded);
+            }
+            if (Roles.GetRolesForUser(user.UserName).Length > 0)
+            {
+                var rolesForUser = Roles.GetRolesForUser(user.UserName);
+                var rolesToBeDeleted = roles == null ? rolesForUser : rolesForUser.Except(roles).ToArray();
+
+                if (rolesToBeDeleted.Length != 0)
+                    Roles.RemoveUsersFromRoles(new[] { user.UserName }, rolesToBeDeleted);
+            }
+
             return RedirectToAction("ManageUsers");
         }
 
         [HttpPost]
         public ActionResult DeleteRole(string roleName)
         {
-            this.MembershipService.DeleteRole(roleName);
+            Roles.DeleteRole(roleName);
             return RedirectToAction("ManageRoles");
         }
-
     }
 }
