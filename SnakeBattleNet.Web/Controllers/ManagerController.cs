@@ -7,7 +7,8 @@ namespace SnakeBattleNet.Web.Controllers
     {
         public ActionResult GetTexture(string id)
         {
-            var file = MongoFileStorage<string>.GetFile(id);
+            var mongo = new MongoGateway();
+            var file = mongo.ReadFile(id);
             return new FileStreamResult(file, "image/bmp");
         }
     }
