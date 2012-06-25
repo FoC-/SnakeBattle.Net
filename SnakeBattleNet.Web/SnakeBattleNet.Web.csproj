@@ -71,7 +71,14 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\EditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManagerController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\TrainingController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -108,6 +115,9 @@
     <Content Include="Lib\SquishIt\SquishIt.Mvc.dll" />
     <Content Include="Lib\SquishIt\Yahoo.Yui.Compressor.dll" />
     <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Training\Index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +167,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_NavigationBar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SnakeBattleNet.Persistance\SnakeBattleNet.Persistance.csproj">
+      <Project>{7DB984B4-11FE-4FBF-88BC-18D8EBD22A00}</Project>
+      <Name>SnakeBattleNet.Persistance</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj">
+      <Project>{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}</Project>
+      <Name>SnakeBattleNet.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\EditUser.cshtml" />
