@@ -6,6 +6,7 @@ namespace SnakeBattleNet.Persistance
 {
     public interface IMongoGateway
     {
+        Snake GetById(string snakeId);
         IEnumerable<Snake> GetByOwnerId(string ownerId, out int total);
         IEnumerable<Snake> GetAll(out int total);
         void AddSnake(Snake snake);

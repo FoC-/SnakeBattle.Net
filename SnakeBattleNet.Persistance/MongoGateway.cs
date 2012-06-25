@@ -40,9 +40,30 @@ namespace SnakeBattleNet.Persistance
 
         private static void RegisterClassMapping()
         {
-            BsonClassMap.RegisterClassMap<Snake>(cm => { cm.AutoMap(); cm.SetDiscriminator("Snake"); cm.SetIgnoreExtraElements(true); cm.UnmapProperty(c => c.BodyParts); });
-            BsonClassMap.RegisterClassMap<BrainModule>(cm => { cm.AutoMap(); cm.SetDiscriminator("BrainModule"); cm.SetIgnoreExtraElements(true); });
-            BsonClassMap.RegisterClassMap<ModuleRow>(cm => { cm.AutoMap(); cm.SetDiscriminator("ModuleRow"); cm.SetIgnoreExtraElements(true); });
+            if (!BsonClassMap.IsClassMapRegistered(typeof(Snake)))
+            {
+                BsonClassMap.RegisterClassMap<Snake>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetIsRootClass(true);
+                    cm.SetDiscriminator("Snake");
+                    cm.SetIgnoreExtraElements(true);
+                    cm.MapIdField(c => c.Id);
+                    cm.UnmapProperty(c => c.BodyParts);
+                });
+                BsonClassMap.RegisterClassMap<BrainModule>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetDiscriminator("BrainModule");
+                    cm.SetIgnoreExtraElements(true);
+                });
+                BsonClassMap.RegisterClassMap<ModuleRow>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetDiscriminator("ModuleRow");
+                    cm.SetIgnoreExtraElements(true);
+                });
+            }
         }
         private static void CreateIndex()
         {
@@ -51,6 +72,11 @@ namespace SnakeBattleNet.Persistance
         }
 
         #region Snakes
+        public Snake GetById(string snakeId)
+        {
+            return SnakesCollection.FindOneById(snakeId);
+        }
+
         public IEnumerable<Snake> GetByOwnerId(string ownerId, out int total)
         {
             var snakes = SnakesCollection.AsQueryable().Where(_ => _.OwnerId == ownerId);
@@ -83,7 +109,7 @@ namespace SnakeBattleNet.Persistance
             {
                 new Dictionary<string, object>
                 {
-                    {Util.GetElementNameFor<Snake>(_ => _.Id), snakeId}
+                    {"_id", snakeId}
                 }
             };
 
