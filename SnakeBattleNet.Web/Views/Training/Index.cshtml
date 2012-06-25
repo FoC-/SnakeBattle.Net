@@ -1,6 +1,31 @@
-﻿@{
+﻿@model IEnumerable<SnakeBattleNet.Core.Implementation.Snake>
+@{
     ViewBag.Title = "title";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h2>Battle starting here</h2>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="btn">
+            <i class="icon-heart"></i>
+            @Html.ActionLink("Add warrior", "AddSnake")
+        </div>
+    </div>
+    @if (Model != null)
+    {
+        foreach (var snake in Model)
+        {
+        <div class="row">
+            @snake.SnakeName
+            <div class="btn">
+                <i class="icon-cog"></i>
+                @Html.ActionLink("Train", "EditSnake", new { id = snake.Id })
+            </div>
+            <div class="btn">
+                <i class="icon-fire"></i>
+                @Html.ActionLink("Kill", "RemoveSnake", new { snakeId = snake.Id })
+            </div>
+        </div>
+        }
+    }
+</div>
