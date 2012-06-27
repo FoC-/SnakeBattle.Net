@@ -30,7 +30,6 @@ h5, h6 { font-size: 1em; }
 .spacer { float: left; height: 1px; line-height: 1px; font-size: 1px; width: 6px; }
 .loader { visibility: hidden; }
 .tooltip { padding: 2px 5px 2px 5px; background: #FFC; border: 1px solid #000000; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; }
-.box { display: inline; display: inline-block; position: relative; padding: 10px 12px 12px 12px; border: 1px solid #ABB4CB; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; background: #EBEDF2 url('/img/box.png') repeat-x; behavior: url(/css/pie.htc); }
 
 /* Styles for validation helpers
 -----------------------------------------------------------*/
