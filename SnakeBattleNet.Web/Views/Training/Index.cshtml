@@ -3,9 +3,11 @@
     ViewBag.Title = "title";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Battle starting here</h2>
-<div class="container-fluid">
-    <div class="row-fluid">
+<div class="page-header">
+    <h2>Battle starting here</h2>
+</div>
+<div class="row">
+    <div class="span12">
         <div class="btn">
             <i class="icon-heart"></i>
             @Html.ActionLink("Add warrior", "AddSnake")
@@ -15,13 +17,13 @@
     {
         foreach (var snake in Model)
         {
-        <div class="row">
+        <div class="span6">
             @snake.SnakeName
-            <div class="btn">
+            <div class="btn pull-right">
                 <i class="icon-cog"></i>
                 @Html.ActionLink("Train", "EditSnake", new { id = snake.Id })
             </div>
-            <div class="btn">
+            <div class="btn pull-right">
                 <i class="icon-fire"></i>
                 @Html.ActionLink("Kill", "RemoveSnake", new { snakeId = snake.Id })
             </div>
