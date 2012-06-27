@@ -28,20 +28,17 @@
 </head>
 
 <body>
-    <div id="container">
-        <header id="header">
-            @Html.Partial("_NavigationBar")
-        </header>
+    @Html.Partial("_NavigationBar")
     
-        <div id="content">
-            <section id="main" role="main">
-                @RenderBody()            
-            </section>
-            <hr />
-            <footer id="footer">
-                @Html.Partial("_Footer")
-            </footer>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                @RenderBody()
+            </div>
         </div>
+        <footer class="modal-footer">
+            @Html.Partial("_Footer")
+        </footer>
     </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
