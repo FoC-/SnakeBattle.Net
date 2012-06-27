@@ -7,7 +7,7 @@
     <div class="span8">
         <div class="label">
             @Model.SnakeName
-            @Html.ActionLink("Edit", "EditName")
+            @Html.ActionLink("Edit", "EditName", new { snakeId = Model.Id })
         </div>
         <div class="span1">
             <img src="@Url.Action("GetTexture", "Manager", new { id = Model.Id })"/>

@@ -83,6 +83,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\SnakeViewModelBase.cs" />
+    <Compile Include="Models\SnakeNameViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="css\bootstrap-responsive.css" />
     <Content Include="css\bootstrap-responsive.min.css" />
@@ -193,6 +195,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Edit\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Edit\EditName.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

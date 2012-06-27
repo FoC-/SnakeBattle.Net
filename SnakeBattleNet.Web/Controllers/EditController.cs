@@ -1,8 +1,10 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Implementation;
 using SnakeBattleNet.Persistance;
+using SnakeBattleNet.Web.Models;
 
 namespace SnakeBattleNet.Web.Controllers
 {
@@ -10,6 +12,14 @@ namespace SnakeBattleNet.Web.Controllers
     public class EditController : Controller
     {
         private IMongoGateway mongoGateway;
+        private string CurrentUserId
+        {
+            get
+            {
+                MembershipUser currentUser = Membership.GetUser(User.Identity.Name, userIsOnline: true);
+                return currentUser == null ? null : currentUser.ProviderUserKey.ToString();
+            }
+        }
 
         protected override void Initialize(RequestContext requestContext)
         {
@@ -21,54 +31,73 @@ namespace SnakeBattleNet.Web.Controllers
         {
             var snake = mongoGateway.GetById(snakeId);
 
-            CheckOwner(snake);
+            IsOwner(snake);
 
             return View(snake);
         }
 
         public ActionResult EditName(string snakeId)
         {
-            var snake = mongoGateway.GetById(snakeId);
-            return View();
+            Snake snake = mongoGateway.GetById(snakeId);
+            var nameViewModel = new SnakeNameViewModel(snake.Id, snake.SnakeName);
+
+            return View("EditName", nameViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult EditName(SnakeNameViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            Snake snake = mongoGateway.GetById(model.Id);
+
+            if (!IsOwner(snake))
+                return RedirectToAction("Index", "Training");
+
+            snake.SetName(model.Name);
+            mongoGateway.UpdateSnake(snake);
+
+            return RedirectToAction("Index", new { snakeId = model.Id });
         }
 
         public ActionResult UploadTexture(string snakeId)
         {
-            var id = GetUserId();
+            var snake = GetSnakeById(snakeId);
             return View();
         }
 
         public ActionResult AddChip(string snakeId)
         {
-            var snake = mongoGateway.GetById(snakeId);
+            var snake = GetSnakeById(snakeId);
             return View();
         }
 
         public ActionResult EditChip(string snakeId)
         {
-            var snake = mongoGateway.GetById(snakeId);
+            var snake = GetSnakeById(snakeId);
             return View();
         }
 
         public ActionResult RemoveChip(string snakeId)
         {
-            var snake = mongoGateway.GetById(snakeId);
+            var snake = GetSnakeById(snakeId);
             return View();
         }
 
-        private string GetUserId()
+        private bool IsOwner(ISnake snake)
         {
-            MembershipUser currentUser = Membership.GetUser(User.Identity.Name, userIsOnline: true);
-            return currentUser == null ? null : currentUser.ProviderUserKey.ToString();
-        }
-
-        private void CheckOwner(Snake snake)
-        {
-            var userId = GetUserId();
-            if (snake == null || snake.OwnerId != userId)
+            if (snake == null || snake.OwnerId != CurrentUserId)
             {
                 ModelState.AddModelError("", "This warrior is not belong to you");
+                return false;
             }
+            return true;
+        }
+
+        private ISnake GetSnakeById(string snakeId)
+        {
+            return this.mongoGateway.GetById(snakeId);
         }
     }
 }

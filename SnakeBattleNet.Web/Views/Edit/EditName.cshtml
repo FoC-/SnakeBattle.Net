@@ -1,0 +1,19 @@
+﻿@model SnakeBattleNet.Web.Models.SnakeNameViewModel
+@using (Html.BeginForm("EditName", "Edit", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <fieldset>
+        @Html.HiddenFor(_ => _.Id)
+        <div class="control-group">
+            <div class="control-label">
+                @Html.LabelFor(m => m.Name)
+            </div>
+            <div class="controls">
+                @Html.TextBoxFor(m => m.Name)
+                @Html.ValidationMessageFor(m => m.Name)
+            </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Change name" class="btn btn-primary" />
+        </div>
+    </fieldset>
+}
