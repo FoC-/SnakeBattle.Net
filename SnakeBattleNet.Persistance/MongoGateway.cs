@@ -74,7 +74,7 @@ namespace SnakeBattleNet.Persistance
         #region Snakes
         public Snake GetById(string snakeId)
         {
-            return SnakesCollection.FindOneById(snakeId);
+            return snakeId.IsNullOrEmpty() ? null : SnakesCollection.FindOneById(snakeId);
         }
 
         public IEnumerable<Snake> GetByOwnerId(string ownerId, out int total)
