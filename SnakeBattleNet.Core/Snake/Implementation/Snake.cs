@@ -14,6 +14,7 @@ namespace SnakeBattleNet.Core.Implementation
         public int Score { get; private set; }
         public int Wins { get; private set; }
         public int Loses { get; private set; }
+        public int Matches { get; private set; }
         public int VisionRadius { get; private set; }
         public int ModulesMax { get; private set; }
         public IList<IBrainModule> BrainModules { get; private set; }
@@ -48,6 +49,11 @@ namespace SnakeBattleNet.Core.Implementation
         public void SetLoses(int loses)
         {
             Loses = loses;
+        }
+
+        public void SetMatches(int matches)
+        {
+            Matches = matches;
         }
 
         public void SetVisionRadius(int radius)

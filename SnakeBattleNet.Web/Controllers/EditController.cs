@@ -2,7 +2,6 @@
 using System.Web.Routing;
 using System.Web.Security;
 using SnakeBattleNet.Core;
-using SnakeBattleNet.Core.Implementation;
 using SnakeBattleNet.Persistance;
 using SnakeBattleNet.Web.Models;
 
@@ -38,19 +37,19 @@ namespace SnakeBattleNet.Web.Controllers
 
         public ActionResult EditName(string snakeId)
         {
-            Snake snake = mongoGateway.GetById(snakeId);
-            var nameViewModel = new SnakeNameViewModel(snake.Id, snake.SnakeName);
+            ISnake snake = mongoGateway.GetById(snakeId);
+            var nameViewModel = new SnakeViewModelBase(snake.Id, snake.SnakeName);
 
             return View("EditName", nameViewModel);
         }
 
         [HttpPost]
-        public ActionResult EditName(SnakeNameViewModel model)
+        public ActionResult EditName(SnakeViewModelBase model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            Snake snake = mongoGateway.GetById(model.Id);
+            ISnake snake = mongoGateway.GetById(model.Id);
 
             if (!IsOwner(snake))
                 return RedirectToAction("Index", "Training");
