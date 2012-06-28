@@ -4,9 +4,6 @@
     ViewBag.Title = "Edit User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Edit User</h2>
-
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true, "Updating user was unsuccessful. Please correct the errors and try again.")
     <div>
@@ -23,16 +20,16 @@
             <div class="editor-field">
                 @Html.TextBoxFor(m => m.Email)
             </div>
-			<div class="editor-label">
+            <div class="editor-label">
                 Roles:
             </div>
-			<div class="editor-field">
-				<ul>
-					@foreach (var role in Model.Roles) {
-						<li><input type="checkbox" name="UserRoles" value="@role" @if (Model.UserRoles.Contains(role)) { <text> checked="checked"</text> } /> @role</li>
-					}
-				</ul>
-			</div>
+            <div class="editor-field">
+                <ul>
+                    @foreach (var role in Model.Roles) {
+                        <li><input type="checkbox" name="UserRoles" value="@role" @if (Model.UserRoles.Contains(role)) { <text> checked="checked"</text> } /> @role</li>
+                    }
+                </ul>
+            </div>
             <p>
                 <input type="submit" value="Update" />
             </p>
