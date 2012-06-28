@@ -130,6 +130,10 @@ namespace SnakeBattleNet.Persistance
 
         public void SaveFile(string id, string fileName, Stream content, string contentType)
         {
+            MongoGridFSFileInfo file = GridFS.FindOneById(id);
+            if (file != null)
+                DeleteFile(id);
+
             GridFS.Upload(content, fileName, new MongoGridFSCreateOptions { Id = id, ContentType = contentType });
         }
 
