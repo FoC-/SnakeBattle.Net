@@ -1,33 +1,55 @@
-﻿@model IEnumerable<SnakeBattleNet.Core.Implementation.Snake>
+﻿@model SnakeBattleNet.Web.Models.TrainingViewModel
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Battle starting here";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="page-header">
-    <h2>Battle starting here</h2>
-</div>
 <div class="row">
-    <div class="span12">
-        <div class="btn">
-            <i class="icon-heart"></i>
-            @Html.ActionLink("Add warrior", "AddSnake")
-        </div>
-    </div>
     @if (Model != null)
     {
-        foreach (var snake in Model)
+        foreach (var snake in Model.SnakeStats)
         {
-        <div class="span6">
-            @snake.SnakeName
-            <div class="btn pull-right">
+        <div class="span4">
+            <h4>@snake.Name</h4>
+            <div class="btn btn-mini pull-right">
                 <i class="icon-cog"></i>
-                @Html.ActionLink("Train", "EditSnake", new { id = snake.Id })
+                @Html.ActionLink("Edit", "EditSnake", new { id = snake.Id })
             </div>
-            <div class="btn pull-right">
+            <div class="btn btn-mini pull-right">
                 <i class="icon-fire"></i>
                 @Html.ActionLink("Kill", "RemoveSnake", new { snakeId = snake.Id })
             </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Matches</th>
+                        <th>Wins</th>
+                        <th>Loses</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@snake.Matches</td>
+                        <td>@snake.Wins</td>
+                        <td>@snake.Loses</td>
+                        <td>@snake.Score</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         }
+    }
+    @if (Model == null || Model.CanAdd)
+    {
+        <div class="span4">
+            <h3>
+                You could add one more warrior.</h3>
+            <div class="span2 offset1">
+                <div class="btn">
+                    <i class="icon-heart"></i>
+                    @Html.ActionLink("Add warrior", "AddSnake")
+                </div>
+            </div>
+        </div>
     }
 </div>

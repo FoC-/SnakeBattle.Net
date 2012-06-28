@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Implementation;
 using SnakeBattleNet.Persistance;
+using SnakeBattleNet.Web.Models;
 
 namespace SnakeBattleNet.Web.Controllers
 {
     [Authorize]
     public class TrainingController : Controller
     {
+        private const int Max_Number_Per_User = 4;
         private IMongoGateway mongoGateway;
+        private string CurrentUserId
+        {
+            get
+            {
+                MembershipUser currentUser = Membership.GetUser(User.Identity.Name, userIsOnline: true);
+                return currentUser == null ? null : currentUser.ProviderUserKey.ToString();
+            }
+        }
 
         protected override void Initialize(RequestContext requestContext)
         {
@@ -21,18 +33,24 @@ namespace SnakeBattleNet.Web.Controllers
 
         public ActionResult Index()
         {
-            string id = GetUserId();
             int number;
-            IEnumerable<Snake> snakes = mongoGateway.GetByOwnerId(id, out number);
+            IEnumerable<ISnake> snakes = this.mongoGateway.GetByOwnerId(CurrentUserId, out number);
+            bool canAdd = number < Max_Number_Per_User;
 
-            return number == 0 ? View() : View(snakes);
+            var stats = snakes.Select(snake => new SnakeStatsViewModel(snake.Id, snake.SnakeName, snake.Wins, snake.Loses, snake.Matches, snake.Score)).ToList();
+
+            var trainingViewModel = new TrainingViewModel
+            {
+                CanAdd = canAdd,
+                SnakeStats = stats
+            };
+
+            return number == 0 ? View() : View(trainingViewModel);
         }
 
         public ActionResult AddSnake()
         {
-            var userId = GetUserId();
-
-            var snake = new Snake(Guid.NewGuid().ToString(), userId);
+            var snake = new Snake(Guid.NewGuid().ToString(), CurrentUserId);
             snake.SetLoses(0);
             snake.SetWins(0);
             snake.SetModulesMax(9);
@@ -52,24 +70,26 @@ namespace SnakeBattleNet.Web.Controllers
 
         public ActionResult RemoveSnake(string snakeId)
         {
-            var userId = GetUserId();
             var snake = mongoGateway.GetById(snakeId);
 
-            if (snake != null && snake.OwnerId == userId)
-            {
-                mongoGateway.RemoveSnake(snakeId);
-            }
-            else
-            {
-                ModelState.AddModelError("", "This warrior is not belong to you");
-            }
-            return RedirectToAction("Index");
+            var snakeViewModel = new SnakeViewModelBase(snake.Id, snake.SnakeName);
+            return View(snakeViewModel);
         }
 
-        private string GetUserId()
+        [HttpPost]
+        public ActionResult RemoveSnake(SnakeViewModelBase model)
         {
-            MembershipUser currentUser = Membership.GetUser(User.Identity.Name, userIsOnline: true);
-            return currentUser == null ? null : currentUser.ProviderUserKey.ToString();
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var userId = CurrentUserId;
+            var snake = mongoGateway.GetById(model.Id);
+
+            if (snake.OwnerId == userId)
+            {
+                mongoGateway.RemoveSnake(model.Id);
+            }
+            return RedirectToAction("Index");
         }
     }
 }
