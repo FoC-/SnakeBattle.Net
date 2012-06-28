@@ -1,0 +1,17 @@
+﻿@model SnakeBattleNet.Web.Models.SnakeViewModelBase
+@using (Html.BeginForm("UploadTexture", "Edit", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    <fieldset>
+        @Html.HiddenFor(x => x.Id)
+        <div class="control-group">
+            <div class="controls">
+                <div class="control-label">
+                </div>
+                <input type="file" name="file" />
+            </div>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Upload" class="btn btn-primary" />
+        </div>
+    </fieldset>
+}

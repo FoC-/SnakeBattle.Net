@@ -201,6 +201,9 @@
   <ItemGroup>
     <Content Include="Views\Training\RemoveSnake.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Edit\UploadTexture.cshtml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <Target Name="AfterBuild">

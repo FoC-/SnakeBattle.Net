@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using SnakeBattleNet.Core;
@@ -29,10 +30,11 @@ namespace SnakeBattleNet.Web.Controllers
         public ActionResult Index(string snakeId)
         {
             var snake = mongoGateway.GetById(snakeId);
-
             IsOwner(snake);
 
-            return View(snake);
+            var snakeBrainModules = new SnakeBrainModulesVieModel(snake.Id, snake.SnakeName) { modules = snake.BrainModules };
+
+            return View(snakeBrainModules);
         }
 
         public ActionResult EditName(string snakeId)
@@ -63,7 +65,18 @@ namespace SnakeBattleNet.Web.Controllers
         public ActionResult UploadTexture(string snakeId)
         {
             var snake = GetSnakeById(snakeId);
-            return View();
+            var snakeViewModelBase = new SnakeViewModelBase(snake.Id, snake.SnakeName);
+            return View(snakeViewModelBase);
+        }
+
+        [HttpPost]
+        public ActionResult UploadTexture(string id, HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0 && file.ContentLength < 4 * 1024)
+            {
+                mongoGateway.SaveFile(id, file.FileName, file.InputStream, file.ContentType);
+            }
+            return RedirectToAction("Index", new { snakeId = id });
         }
 
         public ActionResult AddChip(string snakeId)
