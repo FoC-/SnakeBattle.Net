@@ -14,7 +14,7 @@ namespace SnakeBattleNet.Web.Controllers
     [Authorize]
     public class TrainingController : Controller
     {
-        private const int Max_Number_Per_User = 4;
+        private const int Max_Number_Per_User = 2;
         private IMongoGateway mongoGateway;
         private string CurrentUserId
         {
