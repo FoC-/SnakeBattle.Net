@@ -6,6 +6,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using MongoDB.Driver.Linq;
+using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Implementation;
 using SnakeBattleNet.Core.Snake;
 using SnakeBattleNet.Utils.Extensions;
@@ -72,12 +73,12 @@ namespace SnakeBattleNet.Persistance
         }
 
         #region Snakes
-        public Snake GetById(string snakeId)
+        public ISnake GetById(string snakeId)
         {
             return snakeId.IsNullOrEmpty() ? null : SnakesCollection.FindOneById(snakeId);
         }
 
-        public IEnumerable<Snake> GetByOwnerId(string ownerId, out int total)
+        public IEnumerable<ISnake> GetByOwnerId(string ownerId, out int total)
         {
             var snakes = SnakesCollection.AsQueryable().Where(_ => _.OwnerId == ownerId);
             total = snakes.Count();
@@ -85,7 +86,7 @@ namespace SnakeBattleNet.Persistance
             return snakes;
         }
 
-        public IEnumerable<Snake> GetAll(out int total)
+        public IEnumerable<ISnake> GetAll(out int total)
         {
             var snakes = SnakesCollection.AsQueryable().ToList();
             total = snakes.Count;
@@ -93,12 +94,12 @@ namespace SnakeBattleNet.Persistance
             return snakes;
         }
 
-        public void AddSnake(Snake snake)
+        public void AddSnake(ISnake snake)
         {
             SnakesCollection.Insert(snake);
         }
 
-        public void UpdateSnake(Snake snake)
+        public void UpdateSnake(ISnake snake)
         {
             SnakesCollection.Save(snake);
         }
