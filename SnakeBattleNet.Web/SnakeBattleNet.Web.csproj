@@ -83,8 +83,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\SnakeStatsViewModel.cs" />
     <Compile Include="Models\SnakeViewModelBase.cs" />
-    <Compile Include="Models\SnakeNameViewModel.cs" />
+    <Compile Include="Models\TrainingViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="css\bootstrap-responsive.css" />
     <Content Include="css\bootstrap-responsive.min.css" />
