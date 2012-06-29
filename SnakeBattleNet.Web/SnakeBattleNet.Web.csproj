@@ -96,6 +96,7 @@
     <Content Include="css\site.css" />
     <Content Include="GenericErrorPage.html" />
     <Content Include="humans.txt" />
+    <Content Include="img\empty-pixel.png" />
     <Content Include="img\glyphicons-halflings-white.png" />
     <Content Include="img\glyphicons-halflings.png" />
     <Content Include="js\bootstrap.js" />
