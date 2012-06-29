@@ -3,7 +3,7 @@
         <div class="container">
             <a class="brand" href="@Url.Content("~/")">SnakeBattle .Net</a>
             <ul class="nav">
-                <li><a href="@Url.Action("Index","Home")">Battles</a></li>
+                <li><a href="@Url.Action("Index","Battle")">Battles</a></li>
                 @if(Request.IsAuthenticated) {
                     <li><a href="@Url.Action("Index", "Home")">Challenge</a></li>
                     <li><a href="@Url.Action("Index", "Training")">Training</a></li>

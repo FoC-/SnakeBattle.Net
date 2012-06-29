@@ -1,0 +1,18 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Let the battle begin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="span4 offset4">
+        <canvas id="canva" width="100" height="100" class="table-bordered"></canvas>
+    </div>
+</div>
+@section ScriptSection
+{
+    <script type="text/javascript">
+    $(function() {
+        LoadBattleReplay("@Url.Action("TestBattle", "Battle")");
+    });
+    </script>
+}
