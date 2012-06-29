@@ -127,9 +127,11 @@ namespace SnakeBattleNet.Persistance
                 return null;
 
             MongoGridFSFileInfo file = GridFS.FindOneById(id);
-            contentType = file.ContentType;
+            if (file == null)
+                return null;
 
-            return file == null ? null : file.OpenRead();
+            contentType = file.ContentType;
+            return file.OpenRead();
         }
 
         public void SaveFile(string id, string fileName, Stream content, string contentType)
