@@ -31,7 +31,9 @@ namespace SnakeBattleNet.Web.Controllers
         public ActionResult Index(string snakeId)
         {
             var snake = mongoGateway.GetById(snakeId);
-            IsOwner(snake);
+
+            if (snake == null || !IsOwner(snake))
+                return RedirectToAction("Index", "Training");
 
             var snakeBrainModules = new SnakeBrainModulesVieModel(snake.Id, snake.SnakeName) { modules = snake.BrainModules };
 

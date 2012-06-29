@@ -6,7 +6,6 @@
 {
     @Html.ValidationSummary(true, "Uploading image was unsuccessful. Please correct the errors and try again.", new { @class = "alert alert-error" })
     <fieldset>
-        @Html.HiddenFor(x => x.Id)
         <div class="control-group">
             <div class="control-label">
                 Current textures
@@ -15,6 +14,21 @@
                 <img src='@Url.Action("GetTexture", "Manager", new { id = Model.Id })' alt=""/>
             </div>
         </div>
+        @if (!User.IsInRole("Admin"))
+        {
+            @Html.HiddenFor(x => x.Id);
+        }
+        else
+        {
+            <div class="control-group">
+                <div class="control-label">
+                    Input Id
+                </div>
+                <div class="controls">
+                    @Html.TextBoxFor(m => m.Id)
+                </div>
+            </div>    
+        }
         <div class="control-group">
             <div class="control-label" for="fileInput">
                 Select textures
