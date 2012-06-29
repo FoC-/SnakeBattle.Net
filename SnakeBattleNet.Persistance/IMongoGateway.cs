@@ -13,7 +13,7 @@ namespace SnakeBattleNet.Persistance
         void UpdateSnake(ISnake snake);
         void RemoveSnake(string snakeId);
 
-        Stream ReadFile(string id);
+        Stream ReadFile(string id, out string contentType);
         void SaveFile(string id, string fileName, Stream content, string contentType);
         void DeleteFile(string id);
     }

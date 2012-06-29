@@ -119,12 +119,16 @@ namespace SnakeBattleNet.Persistance
         #endregion
 
         #region Textures
-        public Stream ReadFile(string id)
+        public Stream ReadFile(string id, out string contentType)
         {
+            contentType = string.Empty;
+
             if (id.IsNullOrEmpty())
                 return null;
 
             MongoGridFSFileInfo file = GridFS.FindOneById(id);
+            contentType = file.ContentType;
+
             return file == null ? null : file.OpenRead();
         }
 
