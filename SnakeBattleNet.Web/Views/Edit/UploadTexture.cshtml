@@ -1,17 +1,31 @@
 ﻿@model SnakeBattleNet.Web.Models.SnakeViewModelBase
+@{
+    ViewBag.Title = Model.Name;
+}
 @using (Html.BeginForm("UploadTexture", "Edit", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
 {
+    @Html.ValidationSummary(true, "Uploading image was unsuccessful. Please correct the errors and try again.", new { @class = "alert alert-error" })
     <fieldset>
         @Html.HiddenFor(x => x.Id)
         <div class="control-group">
+            <div class="control-label">
+                Current textures
+            </div>
             <div class="controls">
-                <div class="control-label">
-                </div>
-                <input type="file" name="file" />
+                <img src='@Url.Action("GetTexture", "Manager", new { id = Model.Id })' alt=""/>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="control-label" for="fileInput">
+                Select textures
+            </div>
+            <div class="controls">
+                <input class="input-append" type="file" id="fileInput" name="file" />
             </div>
         </div>
         <div class="form-actions">
             <input type="submit" value="Upload" class="btn btn-primary" />
+            @Html.ActionLink("Cancel", "Index", new { snakeId = Model.Id }, new { @class = "btn btn-primary" })
         </div>
     </fieldset>
 }

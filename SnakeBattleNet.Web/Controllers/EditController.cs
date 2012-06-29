@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Drawing;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
@@ -72,9 +73,39 @@ namespace SnakeBattleNet.Web.Controllers
         [HttpPost]
         public ActionResult UploadTexture(string id, HttpPostedFileBase file)
         {
-            if (file != null && file.ContentLength > 0 && file.ContentLength < 4 * 1024)
+            if (file != null)
             {
-                mongoGateway.SaveFile(id, file.FileName, file.InputStream, file.ContentType);
+                Image image = null;
+                try
+                {
+                    image = Image.FromStream(file.InputStream);
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Content file data is not image");
+                }
+                if (image != null && image.Height != 10)
+                {
+                    ModelState.AddModelError("", "ImageHeight should be 10 px");
+                }
+                if (image != null && image.Width != 30)
+                {
+                    ModelState.AddModelError("", "Image Width should be 30 px");
+                }
+                if (file.ContentLength > 4 * 1024)
+                {
+                    ModelState.AddModelError("", "File Size should be less then 4 kb");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    var snake = GetSnakeById(id);
+                    var snakeViewModelBase = new SnakeViewModelBase(snake.Id, snake.SnakeName);
+                    return View(snakeViewModelBase);
+                }
+
+                file.InputStream.Position = 0;
+                this.mongoGateway.SaveFile(id, file.FileName, file.InputStream, file.ContentType);
             }
             return RedirectToAction("Index", new { snakeId = id });
         }

@@ -14,6 +14,7 @@
         </div>
         <div class="form-actions">
             <input type="submit" value="Change name" class="btn btn-primary" />
+            @Html.ActionLink("Cancel", "Index", new { snakeId = Model.Id }, new { @class = "btn btn-primary" })
         </div>
     </fieldset>
 }
