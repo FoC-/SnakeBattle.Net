@@ -114,6 +114,7 @@
     <Content Include="js\libs\respond.min.js" />
     <Content Include="js\libs\modernizr-2.0.min.js" />
     <Content Include="js\script.js" />
+    <Content Include="js\chip_edit.js" />
     <Content Include="Views\Training\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
