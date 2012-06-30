@@ -1,11 +1,17 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using SnakeBattleNet.Core;
+using SnakeBattleNet.Core.Snake;
+using SnakeBattleNet.Core.Snake.Implementation;
 using SnakeBattleNet.Persistance;
 using SnakeBattleNet.Web.Models;
+using Size = SnakeBattleNet.Core.Common.Size;
 
 namespace SnakeBattleNet.Web.Controllers
 {
@@ -35,7 +41,11 @@ namespace SnakeBattleNet.Web.Controllers
             if (snake == null || !IsOwner(snake))
                 return RedirectToAction("Index", "Training");
 
-            var snakeBrainModules = new SnakeBrainModulesVieModel(snake.Id, snake.SnakeName) { modules = snake.BrainModules };
+            var snakeBrainModules = new SnakeBrainModulesVieModel(snake.Id, snake.SnakeName)
+            {
+                Ids = snake.BrainModules.Select(module => module.Id),
+                Maximum = snake.ModulesMax
+            };
 
             return View(snakeBrainModules);
         }
@@ -112,23 +122,77 @@ namespace SnakeBattleNet.Web.Controllers
             return RedirectToAction("Index", new { snakeId = id });
         }
 
-        public ActionResult AddChip(string snakeId)
+        [HttpPost]
+        public ActionResult InsertModule(string snakeId, string moduleId, int position)
+        {
+            var objects = new Dictionary<string, object> { { "Status", "OK" } };
+
+            var size = new Size(7, 7);
+            var module = new BrainModule(moduleId, size, snakeId);
+
+            try
+            {
+                var snake = GetSnakeById(snakeId);
+                snake.InsertModule(position, module);
+                mongoGateway.UpdateSnake(snake);
+            }
+            catch (Exception exception)
+            {
+                objects["Status"] = "Error";
+                objects.Add("Error", exception.Message);
+            }
+            objects.Add("Module", module);
+
+            return Json(objects);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteModule(string snakeId, string moduleId)
+        {
+            var objects = new Dictionary<string, object> { { "Status", "OK" } };
+
+            try
+            {
+                var snake = GetSnakeById(snakeId);
+                snake.DeleteModule(moduleId);
+                mongoGateway.UpdateSnake(snake);
+            }
+            catch (Exception exception)
+            {
+                objects["Status"] = "Error";
+                objects.Add("Error", exception.Message);
+            }
+
+            return Json(objects);
+        }
+
+        [HttpPost]
+        public ActionResult GetModule(string snakeId, string moduleId)
+        {
+            var objects = new Dictionary<string, object> { { "Status", "OK" } };
+
+            IBrainModule module = null;
+            try
+            {
+                var snake = GetSnakeById(snakeId);
+                module = snake.BrainModules.Single(m => m.Id == moduleId);
+            }
+            catch (Exception exception)
+            {
+                objects["Status"] = "Error";
+                objects.Add("Error", exception.Message);
+            }
+
+            objects.Add("Module", module);
+            return Json(objects);
+        }
+
+        public ActionResult EditModule(string snakeId)
         {
             var snake = GetSnakeById(snakeId);
             return View();
         }
 
-        public ActionResult EditChip(string snakeId)
-        {
-            var snake = GetSnakeById(snakeId);
-            return View();
-        }
-
-        public ActionResult RemoveChip(string snakeId)
-        {
-            var snake = GetSnakeById(snakeId);
-            return View();
-        }
 
         private bool IsOwner(ISnake snake)
         {
