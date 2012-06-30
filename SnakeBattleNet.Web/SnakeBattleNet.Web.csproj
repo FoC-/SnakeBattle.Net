@@ -86,7 +86,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\SnakeChipsVieModel.cs" />
+    <Compile Include="Models\SnakeBrainModulesVieModel.cs" />
     <Compile Include="Models\SnakeStatsViewModel.cs" />
     <Compile Include="Models\SnakeViewModelBase.cs" />
     <Compile Include="Models\TrainingViewModel.cs" />
