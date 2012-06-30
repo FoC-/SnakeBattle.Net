@@ -13,14 +13,13 @@
   <meta name="description" content="SnakeBattle Net is a game based on traning snakes by giving thems patterns of combat field" />
   <meta name="author" content="Restuta&amp;FoC&amp;Gamos" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="stylesheet" type="text/css" href="../../css/normalize.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/site.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/media.css"/>
 
-  @Html.Raw(Bundle.Css()
-                    .Add("~/css/normalize.css")
-                    .Add("~/css/bootstrap.css")
-                    .Add("~/css/site.css")
-                    .Add("~/css/media.css")
-                    .Render("~/css/style_#.css"))
-  @RenderSection("HeadContent", false)
+    @RenderSection("HeadContent", false)
  
   <!-- More ideas for your <head> here: h5bp.com/docs/#head-Tips -->
   <script src="@Url.Content("~/js/libs/modernizr-2.0.min.js")"></script>
