@@ -1,17 +1,30 @@
-﻿var chip;
-var numberOfModules = 0;
+﻿var numberOfModules = 0;
 
 function AddModule(snakeId) {
     var position = $("#Modules div.span4").index($("#AddNew"));
-    SetModule(snakeId, guidGenerator(), position);
+    var newModuleId = guidGenerator();
+    if (SetModuleSuccess(snakeId, newModuleId, position)) {
+    var html = '<div class="span4" id="' + newModuleId + '">' +
+            '<div class="span2"></div>' +
+            '<div class="span1">' +
+            '<div class="btn btn-mini" onclick="DeleteModule(' + snakeId + ', ' + newModuleId + ');"><span>Delete</span></div>' +
+            '<div class="btn btn-mini" onclick="InsertModule(' + snakeId + ', ' + newModuleId + ');"><span>Insert</span></div>' +
+            '</div>' +
+            '<script type="text/javascript">DrawModule(' + snakeId + ', ' + newModuleId + ');</script>' +
+        '</div>';
+    //add html before AddNew
+    };
 }
 
 function InsertModule(snakeId, moduleId) {
     var position = $("#Modules div.span4").index($("#" + moduleId));
-    SetModule(snakeId, guidGenerator(), position);
+    var newModuleId = guidGenerator();
+    if (SetModuleSuccess(snakeId, newModuleId, position)) {
+        //add html before moduleid
+    };
 }
 
-function SetModule(snakeId, moduleId, position) {
+function SetModuleSuccess(snakeId, moduleId, position) {
     var response;
 
     $.ajax({
@@ -27,9 +40,10 @@ function SetModule(snakeId, moduleId, position) {
     });
 
     if (response.Status === "OK") {
-
         numberOfModules++;
+        return true;
     }
+    return false;
 }
 
 function DeleteModule(snakeId, moduleId) {
@@ -46,15 +60,12 @@ function DeleteModule(snakeId, moduleId) {
 
     if (response.Status === "OK") {
         numberOfModules--;
+        $("#" + moduleId).remove();
     }
 }
 
 
 function DrawModule(snakeId, moduleId) {
-    var o = '<canvas height="70" width="70" class="table-bordered" onclick="CanvaClick(this)"></canvas>';
-    $("#" + moduleId + " .span2").prepend(o);
-//    $("#" + moduleId + " .span2").html(o);
-
     var response;
     $.ajax({
         url: 'Edit/GetModule',
@@ -67,12 +78,12 @@ function DrawModule(snakeId, moduleId) {
     });
 
     if (response.Status === "OK") {
-        numberOfModules--;
+        numberOfModules++;
+        var o = '<canvas height="70" width="70" class="table-bordered" onclick="CanvaClick(this)"></canvas>';
+        $("#" + moduleId + " .span2").prepend(o);
+        //    $("#" + moduleId + " .span2").html(o);
+
     }
-
-
-
-    numberOfModules++;
 }
 
 function CanvaClick(element) {
