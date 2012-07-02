@@ -1,26 +1,16 @@
 ﻿var numberOfModules = 0;
 
 function AddModule(snakeId) {
-    var position = $("#Modules div.span4").index($("#AddNew"));
-    var newModuleId = guidGenerator();
-    if (SetModuleSuccess(snakeId, newModuleId, position)) {
-    var html = '<div class="span4" id="' + newModuleId + '">' +
-            '<div class="span2"></div>' +
-            '<div class="span1">' +
-            '<div class="btn btn-mini" onclick="DeleteModule(' + snakeId + ', ' + newModuleId + ');"><span>Delete</span></div>' +
-            '<div class="btn btn-mini" onclick="InsertModule(' + snakeId + ', ' + newModuleId + ');"><span>Insert</span></div>' +
-            '</div>' +
-            '<script type="text/javascript">DrawModule(' + snakeId + ', ' + newModuleId + ');</script>' +
-        '</div>';
-    //add html before AddNew
-    };
+    InsertModule(snakeId, 'AddNew');
 }
 
 function InsertModule(snakeId, moduleId) {
     var position = $("#Modules div.span4").index($("#" + moduleId));
     var newModuleId = guidGenerator();
+
     if (SetModuleSuccess(snakeId, newModuleId, position)) {
-        //add html before moduleid
+        CreateChipElement(snakeId, newModuleId, moduleId);
+        DrawModule(snakeId, newModuleId);
     };
 }
 
@@ -44,6 +34,17 @@ function SetModuleSuccess(snakeId, moduleId, position) {
         return true;
     }
     return false;
+}
+
+function CreateChipElement(snakeId, newModuleId, moduleId) {
+    var html = '<div class="span4" id="' + newModuleId + '">' +
+            '<div class="span2"></div>' +
+            '<div class="span1">' +
+                '<div class="btn btn-mini" onclick="DeleteModule(\'' + snakeId + '\', \'' + newModuleId + '\');"><span>Delete</span></div>' +
+                '<div class="btn btn-mini" onclick="InsertModule(\'' + snakeId + '\', \'' + newModuleId + '\');"><span>Insert</span></div>' +
+            '</div>' +
+           '</div>';
+    $('#Modules #' + moduleId).before(html);
 }
 
 function DeleteModule(snakeId, moduleId) {
@@ -79,10 +80,8 @@ function DrawModule(snakeId, moduleId) {
 
     if (response.Status === "OK") {
         numberOfModules++;
-        var o = '<canvas height="70" width="70" class="table-bordered" onclick="CanvaClick(this)"></canvas>';
-        $("#" + moduleId + " .span2").prepend(o);
-        //    $("#" + moduleId + " .span2").html(o);
-
+        var html = '<canvas height="70" width="70" class="table-bordered" onclick="CanvaClick(this)"></canvas>';
+        $("#" + moduleId + " .span2").prepend(html);
     }
 }
 
