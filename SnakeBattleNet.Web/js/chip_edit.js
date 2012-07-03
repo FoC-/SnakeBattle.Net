@@ -1,4 +1,5 @@
 ﻿var numberOfModules = 0;
+var pieceWidth = 20, pieceHeight = 20;
 
 function AddModule(snakeId) {
     InsertModule(snakeId, 'AddNew');
@@ -9,7 +10,7 @@ function InsertModule(snakeId, moduleId) {
     var newModuleId = guidGenerator();
 
     if (SetModuleSuccess(snakeId, newModuleId, position)) {
-        CreateChipElement(snakeId, newModuleId, moduleId);
+        CreateModuleElement(snakeId, newModuleId, moduleId);
         DrawModule(snakeId, newModuleId);
     };
 }
@@ -36,7 +37,7 @@ function SetModuleSuccess(snakeId, moduleId, position) {
     return false;
 }
 
-function CreateChipElement(snakeId, newModuleId, moduleId) {
+function CreateModuleElement(snakeId, newModuleId, moduleId) {
     var html = '<div class="span4" id="' + newModuleId + '">' +
             '<div class="span2"></div>' +
             '<div class="span1">' +
@@ -80,16 +81,63 @@ function DrawModule(snakeId, moduleId) {
 
     if (response.Status === "OK") {
         numberOfModules++;
-        var html = '<canvas height="70" width="70" class="table-bordered" onclick="CanvaClick(this)"></canvas>';
-        $("#" + moduleId + " .span2").prepend(html);
+
+        var canvas = CreateCanvas(moduleId, CanvaClick);
+        FillModule(canvas, response.Module);
     }
 }
 
-function CanvaClick(element) {
-
+function CreateCanvas(moduleId, canvaClick) {
+    var elementId = "canva_" + moduleId;
+    var html = '<canvas height="140" width="140" class="table-bordered" id="' + elementId + '" ></canvas>';
+    $("#" + moduleId + " .span2").prepend(html);
+    var canvas = document.getElementById(elementId);
+    canvas.onclick = canvaClick;
+    canvas.onselectstart = function () { return false; };
+    return canvas;
 }
 
 
+function CanvaClick(e) {
+    var cell = getCellUnderClick(e);
+
+    var id = e.currentTarget.id;
+    var canvas = document.getElementById(id);
+    var context = canvas.getContext("2d");
+
+    context.fillStyle = "rgb(200,153,255)";
+    context.fillRect(cell.x * pieceWidth, cell.y * pieceHeight, pieceWidth, pieceHeight);
+}
+
+function FillModule(canvas, module) {
+    var context = canvas.getContext("2d");
+    for (var i = 0; i < 7; i++) {
+        for (var j = 0; j < 7; j++) {
+            context.fillStyle = "rgb(0,170,0)";
+            context.fillRect(i * pieceWidth, j * pieceHeight, pieceWidth, pieceHeight);
+        }
+    }
+}
+
+
+
+function getCellUnderClick(e) {
+    var id = e.currentTarget.id;
+    var element = document.getElementById(id);
+    var offsetX = 0, offsetY = 0;
+
+    if (element.offsetParent) {
+        do {
+            offsetX += element.offsetLeft;
+            offsetY += element.offsetTop;
+        } while ((element = element.offsetParent));
+    }
+
+    var mx, my; // mouse coordinates
+    mx = e.pageX - offsetX;
+    my = e.pageY - offsetY;
+    return { x: Math.floor(mx / pieceWidth), y: Math.floor(my / pieceHeight) };
+}
 
 function guidGenerator() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
