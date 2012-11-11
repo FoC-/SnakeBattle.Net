@@ -1,0 +1,61 @@
+﻿@model SnakeBattleNet.Web.Models.SnakeBrainModulesVieModel
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section HeadContent{
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write("<script src='@Url.Content("~/js/libs/jquery-1.7.2.min.js")'>\x3C/script>")</script>
+    <script src="@Url.Content("~/js/chip_edit.js")"></script>
+}
+<div class="row">
+    <div class="span12">
+        <div class="span3">
+            <img src='@Url.Action("GetTexture", "Manager", new { id = Model.Id })'/>
+            @Html.ActionLink("Upload texture", "UploadTexture", new { snakeId = Model.Id }, new { @class = "btn btn-mini" })
+        </div>
+        <div class="span3">
+            @Html.ActionLink("Edit Name", "EditName", new { snakeId = Model.Id }, new { @class = "btn btn-mini" })
+        </div>
+    </div>
+<div class="control-group">
+    <div class="controls">
+        <input type="radio" name="Element" value="OH" />
+        <input type="radio" name="Element" value="OB" />
+        <input type="radio" name="Element" value="OT" />
+        <input type="radio" name="Element" value="EH" />
+        <input type="radio" name="Element" value="EB" />
+        <input type="radio" name="Element" value="ET" />
+        <input type="radio" name="Element" value="E" />
+        <input type="radio" name="Element" value="W" />
+    </div>
+    <div class="controls">
+        <input type="checkbox" name="None" value="None" class="checkbox" />
+        <input type="radio" name="Color" value="Red" />
+        <input type="radio" name="Color" value="Black" />
+        <input type="radio" name="Color" value="Grey" />
+        <input type="radio" name="Color" value="Blue" />
+        <input type="radio" name="Color" value="Green" />
+    </div>
+</div>
+</div>
+
+<div class="row" id="Modules">
+    @if (Model.Ids != null)
+    {
+        foreach (var id in Model.Ids)
+        {
+            <div class="span4" id="@id">
+                <div class="span2"></div>
+                <div class="span1">
+                    <div class="btn btn-mini" onclick="DeleteModule('@Model.Id', '@id');"><span>Delete</span></div>
+                    <div class="btn btn-mini" onclick="InsertModule('@Model.Id', '@id');"><span>Insert</span></div>
+                </div>
+                <script type="text/javascript">DrawModule('@Model.Id', '@id');</script>
+            </div>
+        }
+        <div class="span4" id="AddNew">
+            <div class="btn" onclick="AddModule('@Model.Id');"><span>Add Module</span></div>
+        </div>
+    }
+</div>
