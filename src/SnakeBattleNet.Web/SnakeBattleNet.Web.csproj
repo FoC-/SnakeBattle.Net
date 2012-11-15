@@ -176,6 +176,10 @@
       <Project>{7DB984B4-11FE-4FBF-88BC-18D8EBD22A00}</Project>
       <Name>SnakeBattleNet.Persistance</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SnakeBattleNet.ReplayRecorder\SnakeBattleNet.ReplayRecorder.csproj">
+      <Project>{B99CEF26-B083-4DE2-9E70-EB195657150B}</Project>
+      <Name>SnakeBattleNet.ReplayRecorder</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj">
       <Project>{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}</Project>
       <Name>SnakeBattleNet.Utils</Name>

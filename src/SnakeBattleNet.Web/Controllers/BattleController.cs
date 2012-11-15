@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using SnakeBattleNet.Core;
-using SnakeBattleNet.Core.BattleReplay;
 using SnakeBattleNet.Core.Battlefield.Implementation;
 using SnakeBattleNet.Core.Battlemanager;
 using SnakeBattleNet.Core.Implementation;
@@ -28,13 +27,10 @@ namespace SnakeBattleNet.Web.Controllers
             };
 
             var battleField = new BattleField();
-            var replayRecorder = new ReplayRecorder();
+            var replayRecorder = new ReplayRecorder.ReplayRecorder();
 
-            var battleManager = new BattleManager(battleField, snakes, replayRecorder);
-            battleManager.InitializeField();
-
-            for (int i = 0; i < 500; i++)
-                battleManager.Act();
+            var battleManager = new BattleManager(replayRecorder);
+            battleManager.Fight(battleField, snakes, 500);
 
             return Json(replayRecorder.GetReplay());
         }
