@@ -6,33 +6,35 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
 {
     public class BattleField : IBattleField
     {
-        private readonly FieldRow[,] _fieldRows;
+        private readonly FieldRow[,] fieldRows;
 
         public Size Size { get; private set; }
+        public string Id { get; private set; }
         public IList<Move> Gateways { get; private set; }
         public FieldRow this[int x, int y]
         {
             get
             {
                 if (x > -1 && x < Size.X && y > -1 && y < Size.Y)
-                    return _fieldRows[x, y];
+                    return fieldRows[x, y];
                 return null;
             }
             set
             {
                 if (x > -1 && x < Size.X && y > -1 && y < Size.Y)
-                    _fieldRows[x, y] = value;
+                    fieldRows[x, y] = value;
                 else
                     throw new IndexOutOfRangeException();
             }
         }
 
-        public BattleField() : this(new Size(27, 27), 1) { }
+        public BattleField() : this(new Size(27, 27), 1, "field") { }
 
-        public BattleField(Size size, int numberGatewaysOnSide)
+        public BattleField(Size size, int numberGatewaysOnSide, string id)
         {
             Size = size;
-            _fieldRows = new FieldRow[size.X, size.Y];
+            Id = id;
+            fieldRows = new FieldRow[size.X, size.Y];
             SetWalls();
             CreateGateways(numberGatewaysOnSide);
         }
@@ -51,7 +53,7 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
 
             for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
                 for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
-                    rows.Add(_fieldRows[x, y]);
+                    rows.Add(fieldRows[x, y]);
 
             return rows.ToArray();
         }
@@ -70,7 +72,7 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
 
             for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
                 for (int x = fx - cx; x < fx - cx + chipSizeDim; x++)
-                    rows.Add(_fieldRows[y, x]);
+                    rows.Add(fieldRows[y, x]);
 
             return rows.ToArray();
         }
@@ -89,7 +91,7 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
 
             for (int y = fy - cy; y < fy - cy + chipSizeDim; y++)
                 for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
-                    rows.Add(_fieldRows[y, x]);
+                    rows.Add(fieldRows[y, x]);
 
             return rows.ToArray();
         }
@@ -108,7 +110,7 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
 
             for (int y = fy + cy; y > fy + cy - chipSizeDim; y--)
                 for (int x = fx + cx; x > fx + cx - chipSizeDim; x--)
-                    rows.Add(_fieldRows[x, y]);
+                    rows.Add(fieldRows[x, y]);
 
             return rows.ToArray();
         }
@@ -133,9 +135,9 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
             for (int x = 0; x < Size.X; x++)
                 for (int y = 0; y < Size.Y; y++)
                     if (x == 0 || y == 0 || x == Size.X - 1 || y == Size.Y - 1)
-                        _fieldRows[x, y] = new FieldRow(FieldRowContent.Wall);
+                        fieldRows[x, y] = new FieldRow(FieldRowContent.Wall, Id);
                     else
-                        _fieldRows[x, y] = new FieldRow();
+                        fieldRows[x, y] = new FieldRow(FieldRowContent.Empty, Id);
         }
     }
 }

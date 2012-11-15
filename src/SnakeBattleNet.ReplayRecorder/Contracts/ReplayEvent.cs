@@ -10,13 +10,18 @@ namespace SnakeBattleNet.ReplayRecorder.Contracts
 
         //for serialization
         private ReplayEvent() { }
-        internal ReplayEvent(int x, int y, Directed direction, Element element, int shortId)
+        internal ReplayEvent(int x, int y, Directed directed, Element element, int shortId)
         {
             X = x;
             Y = y;
-            D = direction;
+            D = directed;
             E = element;
             I = shortId;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("ID:[{0}];Position:[{1}:{2}];Looking:[{3}]", I, X, Y, D);
         }
     }
 }

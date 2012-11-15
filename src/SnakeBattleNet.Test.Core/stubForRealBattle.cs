@@ -26,7 +26,7 @@ namespace SnakeBattleNet.Test.Core
 
         protected static BattleField CreateBattleField(string idForOwnSnake)
         {
-            var battleField = new BattleField(new Size(9, 9), 1);
+            var battleField = new BattleField(new Size(9, 9), 1, "field-id");
 
             // Snake 0
             battleField[4, 4] = new FieldRow(FieldRowContent.Head, idForOwnSnake);

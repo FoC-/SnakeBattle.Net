@@ -1,5 +1,4 @@
-﻿using System;
-using SnakeBattleNet.Core.Common;
+﻿using SnakeBattleNet.Core.Common;
 
 namespace SnakeBattleNet.Core.Battlefield
 {
@@ -8,17 +7,15 @@ namespace SnakeBattleNet.Core.Battlefield
         public FieldRowContent FieldRowContent { get; private set; }
         public string Id { get; private set; }
 
-        public FieldRow() : this(FieldRowContent.Empty) { }
-
-        public FieldRow(FieldRowContent fieldRowContent, string id = null)
+        public FieldRow(FieldRowContent fieldRowContent, string id)
         {
-            this.FieldRowContent = fieldRowContent;
+            FieldRowContent = fieldRowContent;
             Id = id;
         }
 
         public override string ToString()
         {
-            return this.FieldRowContent.ToString();
+            return FieldRowContent.ToString();
         }
     }
 }

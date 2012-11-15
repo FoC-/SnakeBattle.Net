@@ -1,4 +1,3 @@
-using System;
 using Machine.Specifications;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Common;
@@ -28,7 +27,7 @@ namespace SnakeBattleNet.Test.Core
 
         private It should_be_equal_for_Empty = () =>
         {
-            var fieldRow = new FieldRow(FieldRowContent.Empty);
+            var fieldRow = new FieldRow(FieldRowContent.Empty, "");
             var chipRow = new ModuleRow(ModuleRowContent.Empty, Exclude.No, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
@@ -36,7 +35,7 @@ namespace SnakeBattleNet.Test.Core
 
         private It should_be_equal_for_Empty_when_Except = () =>
         {
-            var fieldRow = new FieldRow(FieldRowContent.Wall);
+            var fieldRow = new FieldRow(FieldRowContent.Wall, "");
             var chipRow = new ModuleRow(ModuleRowContent.Empty, Exclude.Yes, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
@@ -44,7 +43,7 @@ namespace SnakeBattleNet.Test.Core
 
         private It should_not_be_equal_for_Empty_and_indefined = () =>
         {
-            var fieldRow = new FieldRow(FieldRowContent.Head);
+            var fieldRow = new FieldRow(FieldRowContent.Head, "");
             var chipRow = new ModuleRow(ModuleRowContent.Empty, Exclude.No, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();
@@ -53,7 +52,7 @@ namespace SnakeBattleNet.Test.Core
 
         private It should_be_equal_for_Wall = () =>
         {
-            var fieldRow = new FieldRow(FieldRowContent.Wall);
+            var fieldRow = new FieldRow(FieldRowContent.Wall, "");
             var chipRow = new ModuleRow(ModuleRowContent.Wall, Exclude.No, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
@@ -61,7 +60,7 @@ namespace SnakeBattleNet.Test.Core
 
         private It should_be_equal_for_Wall_when_Except = () =>
         {
-            var fieldRow = new FieldRow(FieldRowContent.Head);
+            var fieldRow = new FieldRow(FieldRowContent.Head, "");
             var chipRow = new ModuleRow(ModuleRowContent.Wall, Exclude.Yes, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeTrue();
@@ -69,7 +68,7 @@ namespace SnakeBattleNet.Test.Core
 
         private It should_not_be_equal_for_Wall_and_indefined = () =>
         {
-            var fieldRow = new FieldRow(FieldRowContent.Head);
+            var fieldRow = new FieldRow(FieldRowContent.Head, "");
             var chipRow = new ModuleRow(ModuleRowContent.Wall, Exclude.No, AOColor.AndGrey);
 
             chipRow.Equals(fieldRow).ShouldBeFalse();

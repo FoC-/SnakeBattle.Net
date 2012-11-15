@@ -5,6 +5,7 @@ namespace SnakeBattleNet.Core.Battlefield
 {
     public interface IBattleField
     {
+        string Id { get; }
         IList<Move> Gateways { get; }
         Size Size { get; }
         FieldRow this[int x, int y] { get; set; }
