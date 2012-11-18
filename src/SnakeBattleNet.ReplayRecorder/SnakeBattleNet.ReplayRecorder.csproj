@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Contracts\Directed.cs" />
     <Compile Include="Contracts\Element.cs" />
+    <Compile Include="Contracts\LongShortIdPair.cs" />
     <Compile Include="Contracts\Replay.cs" />
     <Compile Include="Contracts\ReplayEvent.cs" />
     <Compile Include="IReplayRecorder.cs" />

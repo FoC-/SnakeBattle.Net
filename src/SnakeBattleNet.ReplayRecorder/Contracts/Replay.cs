@@ -10,7 +10,7 @@ namespace SnakeBattleNet.ReplayRecorder.Contracts
         public int FieldWidth { get; private set; }
         public int FieldHeight { get; private set; }
         public int RandomSeed { get; private set; }
-        public Dictionary<string, int> UniqueToShortIdMap { get; private set; }
+        public List<LongShortIdPair> UniqueToShortIdMap { get; private set; }
         public LinkedList<ReplayEvent> events { get; private set; }
 
         internal Replay()
@@ -38,7 +38,12 @@ namespace SnakeBattleNet.ReplayRecorder.Contracts
         {
             var uids = new HashSet<string>(ids);
             int counter = 1;
-            UniqueToShortIdMap = uids.ToDictionary(key => key, value => counter++);
+            UniqueToShortIdMap = uids.Select(_ => new LongShortIdPair(_, counter++)).ToList();
+        }
+
+        internal int GetShortFromUniqueId(string uniqueId)
+        {
+            return UniqueToShortIdMap.Single(_ => _.L == uniqueId).S;
         }
 
         internal void AddEvent(ReplayEvent replayEvent)

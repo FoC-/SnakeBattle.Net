@@ -5,6 +5,7 @@ namespace SnakeBattleNet.ReplayRecorder.Contracts
         Head,
         Body,
         Tail,
+        Wall,
         Empty,
         Gateway
     }

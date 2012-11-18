@@ -25,7 +25,7 @@ namespace SnakeBattleNet.ReplayRecorder
         public void AddEvent(string objectId, int x, int y, Directed directed, Element element)
         {
             if (!initialized) throw new InvalidOperationException("Replay recorder should been initialized first");
-            replay.AddEvent(new ReplayEvent(x, y, directed, element, replay.UniqueToShortIdMap[objectId]));
+            replay.AddEvent(new ReplayEvent(x, y, directed, element, replay.GetShortFromUniqueId(objectId)));
         }
 
         public Replay GetReplay()
