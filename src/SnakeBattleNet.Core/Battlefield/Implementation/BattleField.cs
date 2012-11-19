@@ -35,7 +35,6 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
             Size = size;
             Id = id;
             fieldRows = new FieldRow[size.X, size.Y];
-            SetWalls();
             CreateGateways(numberGatewaysOnSide);
         }
 
@@ -128,16 +127,6 @@ namespace SnakeBattleNet.Core.Battlefield.Implementation
                 Gateways.Add(new Move(i * x, 0, Direction.North));
                 Gateways.Add(new Move(i * x, Size.Y - 1, Direction.South));
             }
-        }
-
-        private void SetWalls()
-        {
-            for (int x = 0; x < Size.X; x++)
-                for (int y = 0; y < Size.Y; y++)
-                    if (x == 0 || y == 0 || x == Size.X - 1 || y == Size.Y - 1)
-                        fieldRows[x, y] = new FieldRow(FieldRowContent.Wall, Id);
-                    else
-                        fieldRows[x, y] = new FieldRow(FieldRowContent.Empty, Id);
         }
     }
 }
