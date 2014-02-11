@@ -1,0 +1,17 @@
+﻿@model SnakeBattleNet.Web.Models.SnakeViewModelBase
+@{
+    ViewBag.Title = "Kill snake?";
+}
+@using (Html.BeginForm("RemoveSnake", "Training", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <fieldset>
+        @Html.HiddenFor(_ => _.Id)
+        <div class="control-group">
+            @Model.Name
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="Kill snake" class="btn btn-danger" />
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    </fieldset>
+}

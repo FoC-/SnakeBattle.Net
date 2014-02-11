@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Test.Core", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Persistance", "SnakeBattleNet.Persistance\SnakeBattleNet.Persistance.csproj", "{7DB984B4-11FE-4FBF-88BC-18D8EBD22A00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Web", "SnakeBattleNet.Web\SnakeBattleNet.Web.csproj", "{E89D5B5C-ECE7-42FD-9732-0687B4B489D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Web_old", "SnakeBattleNet.Web_old\SnakeBattleNet.Web_old.csproj", "{E89D5B5C-ECE7-42FD-9732-0687B4B489D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.ReplayRecorder", "SnakeBattleNet.ReplayRecorder\SnakeBattleNet.ReplayRecorder.csproj", "{B99CEF26-B083-4DE2-9E70-EB195657150B}"
 EndProject

@@ -1,0 +1,32 @@
+﻿@model MembershipUserCollection
+
+@{
+    ViewBag.Title = "Manage Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Last login date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(MembershipUser user in Model) {
+            <tr>
+                <td>@user.ProviderUserKey</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.LastLoginDate</td>
+                <td>@Html.ActionLink("Edit", "EditUser", new { username = user.UserName })</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    @Html.ActionLink("Add user", "Register", "Account")
+    @Html.ActionLink("Manage roles", "ManageRoles")
+</p>
