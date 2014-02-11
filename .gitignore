@@ -1,19 +1,25 @@
-obj
-bin
-_ReSharper.*
+# User-specific files
 *.suo
 *.user
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+x64/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# ReSharper is a .NET coding add-in
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# NuGet Packages Directory
+packages/*
+
 *.bak
 *.orig
-*.sln.docstates
-*.sdf
-*/setup/Debug/*.*
-*/Release
-*/Debug
-*.ipch
-*.ReSharper
-*.DotSettings
-*crunchsolution*
-*.DotSettings
-.merge_file_*
-*crunchproject*
