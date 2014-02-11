@@ -1,8 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Specifications", "SnakeBattleNet.Specifications\SnakeBattleNet.Specifications.csproj", "{12DCDEE1-03B1-4286-8888-293B21D5787F}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Core", "SnakeBattleNet.Core\SnakeBattleNet.Core.csproj", "{D01054C3-B067-418C-9A67-11A55F4E5536}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Utils", "SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj", "{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}"
@@ -29,10 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{12DCDEE1-03B1-4286-8888-293B21D5787F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12DCDEE1-03B1-4286-8888-293B21D5787F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12DCDEE1-03B1-4286-8888-293B21D5787F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12DCDEE1-03B1-4286-8888-293B21D5787F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D01054C3-B067-418C-9A67-11A55F4E5536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D01054C3-B067-418C-9A67-11A55F4E5536}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D01054C3-B067-418C-9A67-11A55F4E5536}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,7 +58,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{12DCDEE1-03B1-4286-8888-293B21D5787F} = {FF400DBC-F7F6-4383-AB0B-D8BAAC82CB65}
 		{64C225FF-59EB-4C16-9519-DC93A8CB95FC} = {FF400DBC-F7F6-4383-AB0B-D8BAAC82CB65}
 		{D01054C3-B067-418C-9A67-11A55F4E5536} = {A28ECF35-4229-4BBB-BA9F-0330DCC720D3}
 		{7DB984B4-11FE-4FBF-88BC-18D8EBD22A00} = {A28ECF35-4229-4BBB-BA9F-0330DCC720D3}
