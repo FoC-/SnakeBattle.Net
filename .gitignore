@@ -19,7 +19,7 @@ _ReSharper*/
 *.DotSettings.user
 
 # NuGet Packages Directory
-packages/*
+*/packages/*
 
 *.bak
 *.orig
