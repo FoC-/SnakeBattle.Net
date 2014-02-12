@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using SnakeBattleNet.Web.Core;
+using SnakeBattleNet.Web.Core.Auth;
 
 namespace SnakeBattleNet.Web.Providers
 {

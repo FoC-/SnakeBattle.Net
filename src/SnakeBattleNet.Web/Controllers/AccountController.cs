@@ -10,7 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using SnakeBattleNet.Web.Core;
+using SnakeBattleNet.Web.Core.Auth;
 using SnakeBattleNet.Web.Models;
 using SnakeBattleNet.Web.Providers;
 using SnakeBattleNet.Web.Results;

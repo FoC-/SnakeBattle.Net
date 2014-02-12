@@ -4,7 +4,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using SnakeBattleNet.Web.Core;
+using SnakeBattleNet.Web.Core.Auth;
 using SnakeBattleNet.Web.Providers;
 
 namespace SnakeBattleNet.Web

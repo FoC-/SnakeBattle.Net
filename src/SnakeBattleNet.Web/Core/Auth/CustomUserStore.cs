@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
-namespace SnakeBattleNet.Web.Core
+namespace SnakeBattleNet.Web.Core.Auth
 {
     public class IdentityUserLogin
     {
