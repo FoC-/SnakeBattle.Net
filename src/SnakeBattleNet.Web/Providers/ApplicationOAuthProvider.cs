@@ -13,9 +13,9 @@ namespace SnakeBattleNet.Web.Providers
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
-        private readonly Func<UserManager<CustomIdentityUser>> _userManagerFactory;
+        private readonly Func<UserManager<UserIdentity>> _userManagerFactory;
 
-        public ApplicationOAuthProvider(string publicClientId, Func<UserManager<CustomIdentityUser>> userManagerFactory)
+        public ApplicationOAuthProvider(string publicClientId, Func<UserManager<UserIdentity>> userManagerFactory)
         {
             if (publicClientId == null)
             {
@@ -33,9 +33,9 @@ namespace SnakeBattleNet.Web.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            using (UserManager<CustomIdentityUser> userManager = _userManagerFactory())
+            using (UserManager<UserIdentity> userManager = _userManagerFactory())
             {
-                CustomIdentityUser user = await userManager.FindAsync(context.UserName, context.Password);
+                UserIdentity user = await userManager.FindAsync(context.UserName, context.Password);
 
                 if (user == null)
                 {

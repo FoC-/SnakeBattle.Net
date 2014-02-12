@@ -12,14 +12,14 @@ namespace SnakeBattleNet.Web
     public partial class Startup
     {
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
-        public static Func<UserManager<CustomIdentityUser>> UserManagerFactory { get; set; }
+        public static Func<UserManager<UserIdentity>> UserManagerFactory { get; set; }
         public static string PublicClientId { get; private set; }
 
         static Startup()
         {
             PublicClientId = "self";
 
-            UserManagerFactory = () => new UserManager<CustomIdentityUser>(new CustomUserStore<CustomIdentityUser>());
+            UserManagerFactory = () => new UserManager<UserIdentity>(new CustomUserStore<UserIdentity>());
 
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
