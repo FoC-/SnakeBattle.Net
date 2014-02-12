@@ -5,48 +5,8 @@ using Microsoft.AspNet.Identity;
 
 namespace SnakeBattleNet.Web.Core.Auth
 {
-    public class UserRole : IRole
+    public class CustomUserStore<TUser> : IUserPasswordStore<TUser>, IUserRoleStore<TUser> where TUser : UserIdentity
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public UserRole()
-            : this("")
-        {
-        }
-
-        public UserRole(string roleName)
-        {
-            Id = Guid.NewGuid().ToString();
-            Name = roleName;
-        }
-    }
-    public class UserIdentity : IUser
-    {
-        public string Id { get; set; }
-        public string UserName { get; set; }
-        public string PasswordHash { get; set; }
-
-        public ICollection<UserRole> Roles { get; private set; }
-
-        public UserIdentity()
-        {
-            Id = Guid.NewGuid().ToString();
-            Roles = new List<UserRole>();
-        }
-
-        public UserIdentity(string userName)
-            : this()
-        {
-            UserName = userName;
-        }
-    }
-
-    public class CustomUserStore<TUser> : IUserRoleStore<TUser> where TUser : UserIdentity
-    {
-        public void Dispose()
-        {
-        }
-
         public Task CreateAsync(TUser user)
         {
             throw new NotImplementedException();
@@ -72,6 +32,21 @@ namespace SnakeBattleNet.Web.Core.Auth
             throw new NotImplementedException();
         }
 
+        public Task SetPasswordHashAsync(TUser user, string passwordHash)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetPasswordHashAsync(TUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> HasPasswordAsync(TUser user)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task AddToRoleAsync(TUser user, string role)
         {
             throw new NotImplementedException();
@@ -90,6 +65,10 @@ namespace SnakeBattleNet.Web.Core.Auth
         public Task<bool> IsInRoleAsync(TUser user, string role)
         {
             throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
         }
     }
 }
