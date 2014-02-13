@@ -42,7 +42,6 @@ namespace SnakeBattleNet.Web.Core.Auth
 
         public CustomUserStore()
         {
-            // FACTORY!?!?!?
             var mongoUrl = new MongoUrl(ConnectionString);
             var server = new MongoClient(mongoUrl).GetServer();
             _database = server.GetDatabase(mongoUrl.DatabaseName);

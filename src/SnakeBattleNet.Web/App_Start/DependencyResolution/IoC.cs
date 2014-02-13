@@ -33,7 +33,7 @@ namespace SnakeBattleNet.Web.DependencyResolution
                                         scan.WithDefaultConventions();
                                     });
                             x.For<UserManager<UserIdentity>>().Use<UserManager<UserIdentity>>();
-                            x.For<IUserStore<UserIdentity>>().Use<CustomUserStore<UserIdentity>>();
+                            x.For<IUserStore<UserIdentity>>().Singleton().Use<CustomUserStore<UserIdentity>>();
                             //                x.For<IExample>().Use<Example>();
                         });
             return ObjectFactory.Container;
