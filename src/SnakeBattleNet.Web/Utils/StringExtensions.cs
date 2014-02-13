@@ -18,5 +18,10 @@ namespace SnakeBattleNet.Web.Utils
         {
             return String.IsNullOrEmpty(str);
         }
+
+        public static bool IsNotNullOrEmpty(this string str)
+        {
+            return !String.IsNullOrEmpty(str);
+        }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using SnakeBattleNet.Web.Utils;
 
 namespace SnakeBattleNet.Web.Core.Auth
@@ -50,66 +52,91 @@ namespace SnakeBattleNet.Web.Core.Auth
 
         public Task CreateAsync(TUser user)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => UsersCollection.Insert(user));
         }
 
         public Task UpdateAsync(TUser user)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => UsersCollection.Save(user));
         }
 
         public Task DeleteAsync(TUser user)
         {
-            throw new NotImplementedException();
+            var query = new QueryDocument();
+            query.AddRange(new Dictionary<string, object>
+            {
+                {"_id", user.Id}
+            });
+            return Task.Run(() => UsersCollection.Remove(query));
         }
 
         public Task<TUser> FindByIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => UsersCollection.FindOneByIdAs<TUser>(userId));
         }
 
         public Task<TUser> FindByNameAsync(string userName)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => UsersCollection.AsQueryable<TUser>().SingleOrDefault(x => x.UserName == userName));
         }
 
         public Task SetPasswordHashAsync(TUser user, string passwordHash)
         {
-            throw new NotImplementedException();
+            user.PasswordHash = passwordHash;
+            return UpdateAsync(user);
         }
 
         public Task<string> GetPasswordHashAsync(TUser user)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                var identity = UsersCollection.FindOneById(user.Id);
+                return identity == null ? null : identity.PasswordHash;
+            });
         }
 
         public Task<bool> HasPasswordAsync(TUser user)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                var identity = UsersCollection.FindOneById(user.Id);
+                return identity != null && identity.PasswordHash.IsNotNullOrEmpty();
+            });
         }
 
         public Task AddToRoleAsync(TUser user, string role)
         {
-            throw new NotImplementedException();
+            user.Roles.Add(role);
+            return UpdateAsync(user);
         }
 
         public Task RemoveFromRoleAsync(TUser user, string role)
         {
-            throw new NotImplementedException();
+            user.Roles.Remove(role);
+            return UpdateAsync(user);
         }
 
         public Task<IList<string>> GetRolesAsync(TUser user)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                var identity = UsersCollection.FindOneById(user.Id);
+                return identity == null ? new List<string>() : identity.Roles as IList<string>;
+            });
         }
 
         public Task<bool> IsInRoleAsync(TUser user, string role)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                var identity = UsersCollection.FindOneById(user.Id);
+                return identity != null && identity.Roles.Contains(role);
+            });
         }
 
         public void Dispose()
         {
+            _database.Server.Disconnect();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace SnakeBattleNet.Web.Core.Auth
         public UserIdentity()
         {
             Roles = new List<string>();
-            Id = Guid.NewGuid().ToString();
+            Id = Guid.NewGuid().ToString().ToLower().Replace("-", "");
         }
 
         public UserIdentity(string userName)
