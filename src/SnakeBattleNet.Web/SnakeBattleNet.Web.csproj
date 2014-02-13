@@ -74,6 +74,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -91,6 +94,10 @@
     <Reference Include="Owin">
       <Private>True</Private>
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -158,6 +165,9 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Web.Services" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -167,18 +177,20 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\DependencyResolution\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Core\Auth\CustomUserStore.cs" />
     <Compile Include="Core\Auth\UserIdentity.cs" />
+    <Compile Include="App_Start\DependencyResolution\IoC.cs" />
+    <Compile Include="App_Start\DependencyResolution\StructureMapDependencyResolver.cs" />
+    <Compile Include="App_Start\DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="Utils\Util.cs" />
@@ -202,27 +214,10 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
-    <Content Include="Scripts\knockout-3.0.0.debug.js" />
-    <Content Include="Scripts\knockout-3.0.0.js" />
-    <Content Include="Scripts\knockout.validation.debug.js" />
-    <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Scripts\app\_run.js" />
-    <Content Include="Scripts\app\ajaxPrefilters.js" />
-    <Content Include="Scripts\app\app.datamodel.js" />
-    <Content Include="Scripts\app\app.viewmodel.js" />
-    <Content Include="Scripts\app\home.viewmodel.js" />
-    <Content Include="Scripts\app\login.viewmodel.js" />
-    <Content Include="Scripts\app\manage.viewmodel.js" />
-    <Content Include="Scripts\app\register.viewmodel.js" />
-    <Content Include="Scripts\app\registerExternal.viewmodel.js" />
-    <Content Include="Scripts\app\userInfo.viewmodel.js" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\_Home.cshtml" />
-    <Content Include="Views\Home\_Login.cshtml" />
-    <Content Include="Views\Home\_Manage.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\_Register.cshtml" />
-    <Content Include="Views\Home\_RegisterExternal.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -239,6 +234,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-2.1.0.min.map" />
+    <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

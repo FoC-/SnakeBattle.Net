@@ -17,14 +17,8 @@ namespace SnakeBattleNet.Web.Controllers
         {
             get { return Request.GetOwinContext().Authentication; }
         }
-        
+
         public UserManager<UserIdentity> UserManager { get; private set; }
-
-        public AccountController()
-            : this(Startup.UserManagerFactory())
-        {
-        }
-
         public AccountController(UserManager<UserIdentity> userManager)
         {
             UserManager = userManager;
@@ -49,6 +43,33 @@ namespace SnakeBattleNet.Web.Controllers
             var errorResult = GetErrorResult(identityResult);
 
             return errorResult ?? Ok();
+        }
+
+        // POST api/Account/Login
+        [AllowAnonymous]
+        [Route("Login")]
+        public async Task<IHttpActionResult> Login(LoginBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await UserManager.FindAsync(model.UserName, model.Password);
+            if (user == null)
+            {
+                ModelState.AddModelError("Error", "Invalid username or password.");
+                return BadRequest(ModelState);
+            }
+            await SignInAsync(user, model.RememberMe);
+            return Ok();
+        }
+
+        private async Task SignInAsync(UserIdentity user, bool isPersistent)
+        {
+            Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            Authentication.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, identity);
         }
 
         // POST api/Account/Logout
