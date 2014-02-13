@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using SnakeBattleNet.Web.Utils;
@@ -13,50 +10,22 @@ namespace SnakeBattleNet.Web.Core.Auth
 {
     public class CustomUserStore<TUser> : IUserPasswordStore<TUser>, IUserRoleStore<TUser> where TUser : UserIdentity
     {
-        private readonly MongoDatabase _database;
-        private static string ConnectionString
-        {
-            get { return ConfigurationManager.AppSettings.Get("MONGOLAB_URI") ?? "mongodb://localhost/SnakeBattle"; }
-        }
-        private MongoCollection<UserIdentity> UsersCollection
-        {
-            get { return _database.GetCollection<UserIdentity>(typeof(UserIdentity).Name); }
-        }
+        private readonly MongoCollection<UserIdentity> _usersCollection;
 
-        static CustomUserStore()
+        public CustomUserStore(MongoCollection<UserIdentity> usersCollection)
         {
-            if (!BsonClassMap.IsClassMapRegistered(typeof(UserIdentity)))
-            {
-                BsonClassMap.RegisterClassMap<UserIdentity>(cm =>
-                {
-                    cm.AutoMap();
-                    cm.SetIgnoreExtraElements(true);
-                    cm.SetIsRootClass(true);
-                    cm.MapIdField(c => c.Id);
-                    cm.MapProperty(c => c.UserName).SetElementName("Username");
-                    cm.MapProperty(c => c.PasswordHash).SetElementName("PasswordHash");
-                    cm.MapProperty(c => c.Roles).SetElementName("Roles").SetIgnoreIfNull(true);
-                });
-            }
-        }
-
-        public CustomUserStore()
-        {
-            var mongoUrl = new MongoUrl(ConnectionString);
-            var server = new MongoClient(mongoUrl).GetServer();
-            _database = server.GetDatabase(mongoUrl.DatabaseName);
-
-            UsersCollection.EnsureIndex(Util.GetElementNameFor<UserIdentity>(_ => _.UserName));
+            _usersCollection = usersCollection;
+            _usersCollection.EnsureIndex(Util.GetElementNameFor<UserIdentity>(_ => _.UserName));
         }
 
         public Task CreateAsync(TUser user)
         {
-            return Task.Run(() => UsersCollection.Insert(user));
+            return Task.Run(() => _usersCollection.Insert(user));
         }
 
         public Task UpdateAsync(TUser user)
         {
-            return Task.Run(() => UsersCollection.Save(user));
+            return Task.Run(() => _usersCollection.Save(user));
         }
 
         public Task DeleteAsync(TUser user)
@@ -66,17 +35,17 @@ namespace SnakeBattleNet.Web.Core.Auth
             {
                 {"_id", user.Id}
             });
-            return Task.Run(() => UsersCollection.Remove(query));
+            return Task.Run(() => _usersCollection.Remove(query));
         }
 
         public Task<TUser> FindByIdAsync(string userId)
         {
-            return Task.Run(() => UsersCollection.FindOneByIdAs<TUser>(userId));
+            return Task.Run(() => _usersCollection.FindOneByIdAs<TUser>(userId));
         }
 
         public Task<TUser> FindByNameAsync(string userName)
         {
-            return Task.Run(() => UsersCollection.AsQueryable<TUser>().SingleOrDefault(x => x.UserName == userName));
+            return Task.Run(() => _usersCollection.AsQueryable<TUser>().SingleOrDefault(x => x.UserName == userName));
         }
 
         public Task SetPasswordHashAsync(TUser user, string passwordHash)
@@ -89,7 +58,7 @@ namespace SnakeBattleNet.Web.Core.Auth
         {
             return Task.Run(() =>
             {
-                var identity = UsersCollection.FindOneById(user.Id);
+                var identity = _usersCollection.FindOneById(user.Id);
                 return identity == null ? null : identity.PasswordHash;
             });
         }
@@ -98,7 +67,7 @@ namespace SnakeBattleNet.Web.Core.Auth
         {
             return Task.Run(() =>
             {
-                var identity = UsersCollection.FindOneById(user.Id);
+                var identity = _usersCollection.FindOneById(user.Id);
                 return identity != null && identity.PasswordHash.IsNotNullOrEmpty();
             });
         }
@@ -119,7 +88,7 @@ namespace SnakeBattleNet.Web.Core.Auth
         {
             return Task.Run(() =>
             {
-                var identity = UsersCollection.FindOneById(user.Id);
+                var identity = _usersCollection.FindOneById(user.Id);
                 return identity == null ? new List<string>() : identity.Roles as IList<string>;
             });
         }
@@ -128,14 +97,14 @@ namespace SnakeBattleNet.Web.Core.Auth
         {
             return Task.Run(() =>
             {
-                var identity = UsersCollection.FindOneById(user.Id);
+                var identity = _usersCollection.FindOneById(user.Id);
                 return identity != null && identity.Roles.Contains(role);
             });
         }
 
         public void Dispose()
         {
-            _database.Server.Disconnect();
+            //_database.Server.Disconnect();
         }
     }
 }
