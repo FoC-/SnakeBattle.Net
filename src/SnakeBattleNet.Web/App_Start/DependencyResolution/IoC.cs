@@ -16,7 +16,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System.Net.Cache;
+using System.Web;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 using SnakeBattleNet.Web.Core.Auth;
 using StructureMap;
 namespace SnakeBattleNet.Web.DependencyResolution
@@ -34,7 +37,7 @@ namespace SnakeBattleNet.Web.DependencyResolution
                                     });
                             x.For<UserManager<UserIdentity>>().Use<UserManager<UserIdentity>>();
                             x.For<IUserStore<UserIdentity>>().Singleton().Use<CustomUserStore<UserIdentity>>();
-                            //                x.For<IExample>().Use<Example>();
+                            x.For<IAuthenticationManager>().Use(() => HttpContext.Current.Request.GetOwinContext().Authentication);
                         });
             return ObjectFactory.Container;
         }

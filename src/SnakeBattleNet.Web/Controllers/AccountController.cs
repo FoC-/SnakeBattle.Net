@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -13,15 +12,13 @@ namespace SnakeBattleNet.Web.Controllers
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        private IAuthenticationManager Authentication
-        {
-            get { return Request.GetOwinContext().Authentication; }
-        }
+        private readonly UserManager<UserIdentity> _userManager;
+        private readonly IAuthenticationManager _authenticationManager;
 
-        public UserManager<UserIdentity> UserManager { get; private set; }
-        public AccountController(UserManager<UserIdentity> userManager)
+        public AccountController(UserManager<UserIdentity> userManager, IAuthenticationManager authenticationManager)
         {
-            UserManager = userManager;
+            _userManager = userManager;
+            _authenticationManager = authenticationManager;
         }
 
         // POST api/Account/Register
@@ -39,7 +36,7 @@ namespace SnakeBattleNet.Web.Controllers
                 UserName = model.UserName
             };
 
-            var identityResult = await UserManager.CreateAsync(user, model.Password);
+            var identityResult = await _userManager.CreateAsync(user, model.Password);
             var errorResult = GetErrorResult(identityResult);
 
             return errorResult ?? Ok();
@@ -55,7 +52,7 @@ namespace SnakeBattleNet.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await UserManager.FindAsync(model.UserName, model.Password);
+            var user = await _userManager.FindAsync(model.UserName, model.Password);
             if (user == null)
             {
                 ModelState.AddModelError("Error", "Invalid username or password.");
@@ -65,18 +62,11 @@ namespace SnakeBattleNet.Web.Controllers
             return Ok();
         }
 
-        private async Task SignInAsync(UserIdentity user, bool isPersistent)
-        {
-            Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            Authentication.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, identity);
-        }
-
         // POST api/Account/Logout
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
-            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            _authenticationManager.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
 
@@ -89,20 +79,18 @@ namespace SnakeBattleNet.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var identityResult = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            var identityResult = await _userManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             var errorResult = GetErrorResult(identityResult);
 
             return errorResult ?? Ok();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                UserManager.Dispose();
-            }
 
-            base.Dispose(disposing);
+        private async Task SignInAsync(UserIdentity user, bool isPersistent)
+        {
+            _authenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            var identity = await _userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            _authenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, identity);
         }
 
         private IHttpActionResult GetErrorResult(IdentityResult result)
