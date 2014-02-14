@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -18,13 +19,15 @@ namespace SnakeBattleNet.Web.DependencyResolution
                                         scan.TheCallingAssembly();
                                         scan.WithDefaultConventions();
                                     });
-                            x.For<UserManager<UserIdentity>>().Use<UserManager<UserIdentity>>();
                             x.For<IUserStore<UserIdentity>>().Singleton().Use<CustomUserStore<UserIdentity>>();
-                            x.For<IAuthenticationManager>().Use(() => HttpContext.Current.Request.GetOwinContext().Authentication);
-                            
+                            x.For<IAuthenticationManager>().HttpContextScoped().Use(() => HttpContext.Current.Request.GetOwinContext().Authentication);
+
                             // Mongo
-                            x.For<MongoDatabase>().Singleton().Use(MongoProviders.ProvideDatabase);
-                            x.For(typeof(MongoCollection<>)).Use(MongoProviders.ProvideCollection);
+                            x.For<MongoDatabaseProvider>().Use<MongoDatabaseProvider>()
+                                .Ctor<string>().Is(ConfigurationManager.AppSettings.Get("MONGOLAB_URI") ?? "mongodb://localhost/SnakeBattle");
+
+                            x.For<MongoDatabase>().Singleton().Use(c => c.GetInstance<MongoDatabaseProvider>().ProvideDatabase());
+                            x.For(typeof(MongoCollection<>)).Use(c => c.GetInstance<MongoCollectionProvider>().ProvideCollection(c));
                         });
             return ObjectFactory.Container;
         }
