@@ -15,7 +15,6 @@ namespace SnakeBattleNet.Web.Core.Auth
         public CustomUserStore(MongoCollection<UserIdentity> usersCollection)
         {
             _usersCollection = usersCollection;
-            _usersCollection.EnsureIndex(Util.GetElementNameFor<UserIdentity>(_ => _.UserName));
         }
 
         public Task CreateAsync(TUser user)
