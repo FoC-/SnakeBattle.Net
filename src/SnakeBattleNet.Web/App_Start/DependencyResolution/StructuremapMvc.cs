@@ -28,7 +28,7 @@ namespace SnakeBattleNet.Web.DependencyResolution
     {
         public static void Start()
         {
-            IContainer container = IoC.Initialize();
+            IContainer container = Bootstrap.RegisterDependencies();
             DependencyResolver.SetResolver(new StructureMapDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new StructureMapDependencyResolver(container);
         }

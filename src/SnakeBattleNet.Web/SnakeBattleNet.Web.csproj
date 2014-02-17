@@ -174,18 +174,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\DependencyResolution\Providers\MongoCollectionProvider.cs" />
     <Compile Include="App_Start\DependencyResolution\Providers\MongoDatabaseProvider.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Bootstrap.cs" />
     <Compile Include="App_Start\DependencyResolution\StructuremapMvc.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Api\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Core\Auth\CustomUserStore.cs" />
     <Compile Include="Core\Auth\UserIdentity.cs" />
-    <Compile Include="App_Start\DependencyResolution\IoC.cs" />
     <Compile Include="App_Start\DependencyResolution\StructureMapDependencyResolver.cs" />
     <Compile Include="App_Start\DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="Global.asax.cs">
