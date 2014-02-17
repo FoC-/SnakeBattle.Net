@@ -19,6 +19,12 @@ namespace SnakeBattleNet.Web.Controllers
             _authenticationManager = authenticationManager;
         }
 
+        public async Task<ActionResult> Index()
+        {
+            var user = await _userManager.FindByIdAsync(User.Identity.GetUserId());
+            return View(user);
+        }
+
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {

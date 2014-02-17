@@ -1,0 +1,11 @@
+﻿@model SnakeBattleNet.Web.Core.Auth.UserIdentity
+
+@{
+    ViewBag.Title = "Me";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h4>@Model.UserName</h4>@Html.ActionLink("Edit", "Edit", "Account", new { @class = "btn" })
+    </div>
+</div>
