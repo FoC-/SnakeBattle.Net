@@ -184,6 +184,10 @@
     <Compile Include="Core\Auth\UserIdentity.cs" />
     <Compile Include="App_Start\DependencyResolution\StructureMapDependencyResolver.cs" />
     <Compile Include="App_Start\DependencyResolution\StructureMapDependencyScope.cs" />
+    <Compile Include="Core\IFileStore.cs" />
+    <Compile Include="Core\FileStore.cs" />
+    <Compile Include="Core\ISnakeStore.cs" />
+    <Compile Include="Core\SnakeStore.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -234,7 +238,12 @@
     <Content Include="Scripts\jquery-2.1.0.min.map" />
     <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SnakeBattleNet.Core\SnakeBattleNet.Core.csproj">
+      <Project>{D01054C3-B067-418C-9A67-11A55F4E5536}</Project>
+      <Name>SnakeBattleNet.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
