@@ -2,7 +2,7 @@
 
 namespace SnakeBattleNet.Web.Models
 {
-    public class ChangePasswordBindingModel
+    public class ChangePasswordViewModel
     {
         [Required]
         [DataType(DataType.Password)]
@@ -21,7 +21,7 @@ namespace SnakeBattleNet.Web.Models
         public string ConfirmPassword { get; set; }
     }
 
-    public class RegisterBindingModel
+    public class RegisterViewModel
     {
         [Required]
         [Display(Name = "User name")]
@@ -39,7 +39,7 @@ namespace SnakeBattleNet.Web.Models
         public string ConfirmPassword { get; set; }
     }
 
-    public class LoginBindingModel
+    public class LoginViewModel
     {
         [Required]
         [Display(Name = "User name")]

@@ -14,8 +14,8 @@ namespace SnakeBattleNet.Web
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Home/Login"),
-                LogoutPath = new PathString("/Home/Logout"),
+                LoginPath = new PathString("/Account/Login"),
+                LogoutPath = new PathString("/Account/Logout"),
                 Provider = new CookieAuthenticationProvider()
             });
         }
