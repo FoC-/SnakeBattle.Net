@@ -1,5 +1,4 @@
 using System.IO;
-using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using SnakeBattleNet.Web.Utils;
 
@@ -7,16 +6,11 @@ namespace SnakeBattleNet.Web.Core
 {
     public class FileStore : IFileStore
     {
-        private readonly MongoDatabase _dataBase;
+        private readonly MongoGridFS _gridFs;
 
-        private MongoGridFS GridFS
+        public FileStore(MongoGridFS mongoGridFs)
         {
-            get { return _dataBase.GridFS; }
-        }
-
-        public FileStore(MongoDatabase dataBase)
-        {
-            _dataBase = dataBase;
+            _gridFs = mongoGridFs;
         }
 
         public Stream ReadFile(string id, out string contentType)
@@ -26,7 +20,7 @@ namespace SnakeBattleNet.Web.Core
             if (id.IsNullOrEmpty())
                 return null;
 
-            MongoGridFSFileInfo file = GridFS.FindOneById(id);
+            MongoGridFSFileInfo file = _gridFs.FindOneById(id);
             if (file == null)
                 return null;
 
@@ -36,16 +30,16 @@ namespace SnakeBattleNet.Web.Core
 
         public void SaveFile(string id, string fileName, Stream content, string contentType)
         {
-            MongoGridFSFileInfo file = GridFS.FindOneById(id);
+            MongoGridFSFileInfo file = _gridFs.FindOneById(id);
             if (file != null)
                 DeleteFile(id);
 
-            GridFS.Upload(content, fileName, new MongoGridFSCreateOptions { Id = id, ContentType = contentType });
+            _gridFs.Upload(content, fileName, new MongoGridFSCreateOptions { Id = id, ContentType = contentType });
         }
 
         public void DeleteFile(string id)
         {
-            GridFS.DeleteById(id);
+            _gridFs.DeleteById(id);
         }
     }
 }
