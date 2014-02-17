@@ -1,4 +1,7 @@
-﻿<h2>Log in</h2>
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Log in</h2>
 <div class="row">
     <section class="col-md-8">
         <form class="form-horizontal" role="form">
@@ -34,8 +37,8 @@
     </section>
 </div>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#submitIt').click(function() {
+    $(document).ready(function () {
+        $('#submitIt').click(function () {
             var userName = $('#UserName').val();
             var password = $('#Password').val();
             var rememberMe = $('#RememberMe:checked').length;
@@ -45,10 +48,10 @@
                 url: '/api/Account/Login',
                 dataType: "JSON",
                 data: { 'UserName': userName, 'Password': password, 'RememberMe': !!rememberMe },
-                success: function(result) {
+                success: function (result) {
                     window.location = "/";
                 },
-                error: function(request, status, error) {
+                error: function (request, status, error) {
                     //Do Something on Failure
                 }
             });

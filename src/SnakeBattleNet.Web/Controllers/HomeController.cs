@@ -17,7 +17,11 @@ namespace SnakeBattleNet.Web.Controllers
 
         public ActionResult Login()
         {
-            return View();
+            return PartialView("_Login");
+        }
+        public ActionResult Register()
+        {
+            return PartialView("_Register");
         }
 
         public ActionResult Logout()

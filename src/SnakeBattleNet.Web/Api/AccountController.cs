@@ -6,7 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using SnakeBattleNet.Web.Core.Auth;
 using SnakeBattleNet.Web.Models;
 
-namespace SnakeBattleNet.Web.Controllers
+namespace SnakeBattleNet.Web.Api
 {
     [Authorize]
     [RoutePrefix("api/Account")]
