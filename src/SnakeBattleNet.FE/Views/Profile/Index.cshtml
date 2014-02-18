@@ -1,0 +1,10 @@
+﻿@model SnakeBattleNet.FE.Models.ProfileViewModel
+
+<div class="span6 offset3">
+    <h2>Profile @Html.ActionLink("Edit", "Edit", null, new { @class = "btn btn-mini" })</h2>
+    <p>First name: <span>@Model.FirstName</span></p>
+    <p>Last name: <span>@Model.LastName</span></p>
+    <p>Birthday: <span>@Model.Birthday</span></p>
+    <p>Country: <span>@Model.Country</span></p>
+    <p>City: <span>@Model.City</span></p>
+</div>

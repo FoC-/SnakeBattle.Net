@@ -1,0 +1,94 @@
+﻿@model SnakeBattleNet.FE.Models.Account.LoginRegisterModel
+
+@{
+    ViewBag.Title = "Welcome master";
+}
+<div class="row">
+    <div class="span12">
+        @Html.ValidationSummary(true, "Please correct the errors and try again.", new { @class = "alert alert-block alert-error" })
+    </div>
+    <div class="span6">
+        <div class="well">
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                <fieldset>
+                    <legend>Login</legend>
+                    <div class="control-group">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.Email)
+                        </div>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "required" })
+                            @Html.ValidationMessageFor(m => m.Email)
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.Password)
+                        </div>
+                        <div class="controls">
+                            @Html.PasswordFor(m => m.Password, new { @class = "required" })
+                            @Html.ValidationMessageFor(m => m.Password)
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                        <div class="controls">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <input type="submit" value="Login" class="btn btn-primary" />
+                    </div>
+                </fieldset>
+            }
+        </div>
+    </div>
+    <div class="span6">
+        <div class="well">
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                <fieldset>
+                    <legend>Register</legend>
+                    <div class="control-group">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.Email)
+                        </div>
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "required email" })
+                            @Html.ValidationMessageFor(m => m.Email)
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.Password)
+                        </div>
+                        <div class="controls">
+                            @Html.PasswordFor(m => m.Password, new { @class = "required" })
+                            @Html.ValidationMessageFor(m => m.Password)
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="control-label">
+                            @Html.LabelFor(m => m.ConfirmPassword)
+                        </div>
+                        <div class="controls">
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "required" })
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <input type="submit" value="Register" class="btn btn-primary" />
+                    </div>
+                </fieldset>
+            }
+        </div>
+    </div>
+</div>
+@section ScriptSection
+{
+    <script src="@Url.Content("~/Scripts/lib/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/lib/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+}

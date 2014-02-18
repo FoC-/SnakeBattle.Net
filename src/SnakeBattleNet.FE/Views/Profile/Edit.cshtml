@@ -1,0 +1,56 @@
+﻿@model SnakeBattleNet.FE.Models.ProfileViewModel
+
+<div class="span6 offset3">
+    <div class="well">
+        @using (Html.BeginForm("Edit", "Profile", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            <fieldset>
+                <legend>Profile</legend>
+                <div class="control-group">
+                    <div class="control-label">
+                        <label>First name:</label>
+                    </div>
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.FirstName)
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">
+                        <label>Last name:</label>
+                    </div>
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.LastName)
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">
+                        <label>Birthday:</label>
+                    </div>
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.Birthday)
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">
+                        <label>Country:</label>
+                    </div>
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.Country)
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">
+                        <label>City:</label>
+                    </div>
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.City)
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </fieldset>
+        }
+    </div>
+</div>

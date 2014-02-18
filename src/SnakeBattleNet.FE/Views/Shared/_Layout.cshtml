@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>@ViewBag.Title</title>
+    <meta name="description" content="SnakeBattle Net is a game based on traning snakes by giving thems patterns of combat field" />
+    <meta name="author" content="Restuta&amp;FoC&amp;Gamos" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/site.css" />
+
+    @RenderSection("HeadContent", false)
+
+</head>
+<body>
+    @Html.Partial("_NavigationBar")
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="row">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="@Url.Content("~/Scripts/lib/jquery-1.9.1.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/lib/jquery-ui-1.10.3.custom.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/lib/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/lib/kinetic-v4.5.4.js")"></script>
+    <script src="@Url.Content("~/Scripts/lib/angular.js")"></script>
+    <script src="@Url.Content("~/Scripts/lib/angular-resource.js")"></script>
+    <script src="@Url.Content("~/Scripts/lib/sortable.js")"></script>
+    <script src="@Url.Content("~/Scripts/base.js")"></script>
+
+    @Html.Partial("_GoogleAnalytics", "UA-32101944-1")
+    @RenderSection("ScriptSection", false)
+</body>
+</html>
+
+
+
