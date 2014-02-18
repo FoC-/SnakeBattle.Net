@@ -8,7 +8,7 @@ using SnakeBattleNet.Web.Utils;
 
 namespace SnakeBattleNet.Web.Core.Auth
 {
-    public class CustomUserStore<TUser> : IUserPasswordStore<TUser>, IUserRoleStore<TUser> where TUser : UserIdentity
+    public class CustomUserStore<TUser> : IUserPasswordStore<TUser>, IUserRoleStore<TUser>, IUserSearch<TUser> where TUser : UserIdentity
     {
         private readonly MongoCollection<UserIdentity> _usersCollection;
 
@@ -104,6 +104,15 @@ namespace SnakeBattleNet.Web.Core.Auth
         public void Dispose()
         {
             //_database.Server.Disconnect();
+        }
+
+        public Task<IEnumerable<TUser>> FindUsersAsync(string userNamePart, int skip, int take)
+        {
+            return Task.Run(() => _usersCollection.AsQueryable<TUser>()
+                .Where(x => x.UserName.ToLower().Contains(userNamePart.ToLower()))
+                .Skip(skip)
+                .Take(take)
+                .AsEnumerable());
         }
     }
 }

@@ -179,14 +179,17 @@
     <Compile Include="App_Start\Bootstrap.cs" />
     <Compile Include="App_Start\DependencyResolution\StructuremapMvc.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Core\Auth\CustomUserStore.cs" />
+    <Compile Include="Core\Auth\RolesProvider.cs" />
     <Compile Include="Core\Auth\UserIdentity.cs" />
     <Compile Include="App_Start\DependencyResolution\StructureMapDependencyResolver.cs" />
     <Compile Include="App_Start\DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="Core\IFileStore.cs" />
     <Compile Include="Core\FileStore.cs" />
     <Compile Include="Core\ISnakeStore.cs" />
+    <Compile Include="Core\IUserSearch.cs" />
     <Compile Include="Core\SnakeStore.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -239,6 +242,9 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\ListUsers.cshtml" />
+    <Content Include="Views\Admin\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SnakeBattleNet.Core\SnakeBattleNet.Core.csproj">

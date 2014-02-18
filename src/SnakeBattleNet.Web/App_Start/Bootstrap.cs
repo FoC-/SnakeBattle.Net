@@ -78,7 +78,9 @@ namespace SnakeBattleNet.Web
                     scan.TheCallingAssembly();
                     scan.WithDefaultConventions();
                 });
-                x.For<IUserStore<UserIdentity>>().Singleton().Use<CustomUserStore<UserIdentity>>();
+                x.For<IUserStore<UserIdentity>>().Use<CustomUserStore<UserIdentity>>();
+                x.For<IUserRoleStore<UserIdentity>>().Use<CustomUserStore<UserIdentity>>();
+                x.For<IUserSearch<UserIdentity>>().Use<CustomUserStore<UserIdentity>>();
                 x.For<IAuthenticationManager>().HttpContextScoped().Use(() => HttpContext.Current.Request.GetOwinContext().Authentication);
 
                 // Mongo

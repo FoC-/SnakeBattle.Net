@@ -1,0 +1,13 @@
+﻿@using SnakeBattleNet.Web.Core.Auth
+@model IEnumerable<UserIdentity>
+
+<div class="row">
+    <div class="col-md-8">
+        <ul class="list-unstyled">
+            @foreach (var user in Model)
+            {
+                <li>@user.UserName @Html.ActionLink("Manage", "Manage", new { id = user.Id }) </li>
+            }
+        </ul>
+    </div>
+</div>
