@@ -10,7 +10,7 @@ namespace SnakeBattleNet.Test.Core
     {
         private Establish context = () =>
         {
-            _brainModule = new BrainModule("Module-Id", new Size(3, 3), "Snake-Id");
+            _brainModule = new BrainModule(new Size(3, 3), "Snake-Id");
             currentHeadPosition = _brainModule.GetOwnHead();
 
             newHeadPosition = new Move(0, 0, Direction.East);

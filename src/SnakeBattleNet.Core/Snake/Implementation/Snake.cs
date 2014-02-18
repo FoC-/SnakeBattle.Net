@@ -10,99 +10,66 @@ namespace SnakeBattleNet.Core.Implementation
     {
         public string Id { get; private set; }
         public string OwnerId { get; private set; }
-        public string SnakeName { get; private set; }
+        public string SnakeName { get; set; }
+        public DateTime Created { get; private set; }
         public int Score { get; private set; }
         public int Wins { get; private set; }
         public int Loses { get; private set; }
         public int Matches { get; private set; }
-        public int VisionRadius { get; private set; }
-        public int ModulesMax { get; private set; }
-        public IList<IBrainModule> BrainModules { get; private set; }
+        public int VisionRadius { get; set; }
+        public int ModulesMax { get; set; }
+        public ICollection<IBrainModule> BrainModules { get; set; }
 
         public int Length { get { return BodyParts.Count; } }
         public LinkedList<Move> BodyParts { get; private set; }
 
-        public Snake(string id, string owner)
+        private Snake()
         {
-            Id = id;
-            OwnerId = owner;
-
             BrainModules = new List<IBrainModule>();
             BodyParts = new LinkedList<Move>();
         }
 
-        public void SetName(string name)
+        public Snake(string id, string ownerId)
+            : this()
         {
-            SnakeName = name;
+            Id = id;
+            OwnerId = ownerId;
+            Created = DateTime.Now;
+
+            Score = 1500;
+            Wins = 0;
+            Loses = 0;
+            Matches = 0;
+            VisionRadius = 7;
+            ModulesMax = 9;
         }
 
-        public void SetScore(int score)
+        public void Win()
         {
-            Score = score;
+            Wins++;
+            Score += 5;
+            Matches++;
         }
 
-        public void SetWins(int wins)
+        public void Lose()
         {
-            Wins = wins;
+            Loses++;
+            Score -= 5;
+            Matches++;
         }
 
-        public void SetLoses(int loses)
+        public Move Head
         {
-            Loses = loses;
+            get { return Length == 0 ? null : BodyParts.First(); }
+            set { BodyParts.AddFirst(value); }
         }
 
-        public void SetMatches(int matches)
+        public Move Tail
         {
-            Matches = matches;
+            get { return Length == 0 ? null : BodyParts.Last(); }
         }
 
-        public void SetVisionRadius(int radius)
-        {
-            VisionRadius = radius;
-        }
-
-        public void SetModulesMax(int modulesMax)
-        {
-            ModulesMax = modulesMax;
-        }
-
-        public void InsertModule(int position, IBrainModule brainModule)
-        {
-            if (BrainModules.Count < ModulesMax)
-                BrainModules.Insert(position, brainModule);
-            else
-                throw new ArgumentOutOfRangeException("Maximum of modules is reached.");
-        }
-
-        public void UpdateModule(IBrainModule brainModule)
-        {
-            var tModule = BrainModules.Single(module => module.Id == brainModule.Id);
-            var pos = BrainModules.IndexOf(tModule);
-            BrainModules.RemoveAt(pos);
-            BrainModules.Insert(pos, brainModule);
-        }
-
-        public void DeleteModule(string id)
-        {
-            BrainModules.Remove(BrainModules.Single(module => module.Id == id));
-        }
-
-        public Move GetHeadPosition()
-        {
-            return Length == 0 ? null : BodyParts.First();
-        }
-
-        public Move GetTailPosition()
-        {
-            return Length < 2 ? null : BodyParts.Last();
-        }
-
-        public void SetHead(Move head)
-        {
-            BodyParts.AddFirst(head);
-        }
-
-        public void RemoveTail()
+        public void CutTail()
         {
             BodyParts.RemoveLast();
         }

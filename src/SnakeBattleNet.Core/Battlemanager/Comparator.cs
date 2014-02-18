@@ -17,7 +17,7 @@ namespace SnakeBattleNet.Core.Battlemanager
 
         public Move MakeDecision()
         {
-            Move headPositionOnBattleField = this.snake.GetHeadPosition();
+            Move headPositionOnBattleField = snake.Head;
 
             var moveToNorth = new Move(headPositionOnBattleField.X, headPositionOnBattleField.Y - 1, Direction.North);
             var moveToSouth = new Move(headPositionOnBattleField.X, headPositionOnBattleField.Y + 1, Direction.South);

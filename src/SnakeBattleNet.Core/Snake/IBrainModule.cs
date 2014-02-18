@@ -4,7 +4,6 @@ namespace SnakeBattleNet.Core.Snake
 {
     public interface IBrainModule
     {
-        string Id { get; }
         Size Size { get; }
         AOColor HeadColor { get; }
 
@@ -14,7 +13,7 @@ namespace SnakeBattleNet.Core.Snake
 
         void SetWall(int x, int y, Exclude exclude, AOColor aoColor);
         void SetEmpty(int x, int y, Exclude exclude, AOColor aoColor);
-        void SetIndefinied(int x, int y);
+        void SetUndefinied(int x, int y);
 
         void SetEnemyHead(int x, int y, Exclude exclude, AOColor aoColor);
         void SetEnemyBody(int x, int y, Exclude exclude, AOColor aoColor);

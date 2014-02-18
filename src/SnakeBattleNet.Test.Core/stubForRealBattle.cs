@@ -14,13 +14,13 @@ namespace SnakeBattleNet.Test.Core
     {
         protected static ISnake CreateSnakeStub(IList<IBrainModule> brainChips, string idForOwnSnake)
         {
-            var snakeStub = new Snake(id: idForOwnSnake, owner: Guid.NewGuid().ToString());
-            snakeStub.SetHead(new Move(5, 4, Direction.South));
-            snakeStub.SetHead(new Move(5, 5, Direction.West));
-            snakeStub.SetHead(new Move(4, 5, Direction.North));
-            snakeStub.SetHead(new Move(4, 4, Direction.North));
-            snakeStub.SetModulesMax(1);
-            snakeStub.InsertModule(0, CreateChipWithAndColoredHead(idForOwnSnake));
+            var snakeStub = new Snake(idForOwnSnake, Guid.NewGuid().ToString());
+            snakeStub.Head = new Move(5, 4, Direction.South);
+            snakeStub.Head = new Move(5, 5, Direction.West);
+            snakeStub.Head = new Move(4, 5, Direction.North);
+            snakeStub.Head = new Move(4, 4, Direction.North);
+            snakeStub.ModulesMax = 1;
+            snakeStub.BrainModules.Add(CreateChipWithAndColoredHead(idForOwnSnake));
             return snakeStub;
         }
 
@@ -60,7 +60,7 @@ namespace SnakeBattleNet.Test.Core
 
         protected static BrainModule CreateChipWithAndColoredHead(string snakeId)
         {
-            var chipWithAndColoredHead = new BrainModule("Module-Id", new Size(5, 5), snakeId);
+            var chipWithAndColoredHead = new BrainModule(new Size(5, 5), snakeId);
 
             // Own snake
             chipWithAndColoredHead.SetOwnHead(2, 2, AOColor.AndGrey, Direction.North);

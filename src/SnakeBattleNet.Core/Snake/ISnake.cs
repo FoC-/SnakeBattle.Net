@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SnakeBattleNet.Core.Common;
 using SnakeBattleNet.Core.Snake;
@@ -8,32 +9,23 @@ namespace SnakeBattleNet.Core
     {
         string Id { get; }
         string OwnerId { get; }
-        string SnakeName { get; }
+        string SnakeName { get; set; }
+        DateTime Created { get; }
         int Score { get; }
         int Wins { get; }
         int Loses { get; }
         int Matches { get; }
-        int VisionRadius { get; }
-        int ModulesMax { get; }
-        IList<IBrainModule> BrainModules { get; }
+        int VisionRadius { get; set; }
+        int ModulesMax { get; set; }
+        ICollection<IBrainModule> BrainModules { get; set; }
+
+        void Win();
+        void Lose();
 
         int Length { get; }
         LinkedList<Move> BodyParts { get; }
-
-        void SetName(string name);
-        void SetScore(int score);
-        void SetWins(int wins);
-        void SetLoses(int loses);
-        void SetMatches(int matches);
-        void SetVisionRadius(int radius);
-        void SetModulesMax(int modulesMax);
-        void InsertModule(int position, IBrainModule brainModule);
-        void UpdateModule(IBrainModule brainModule);
-        void DeleteModule(string id);
-
-        Move GetHeadPosition();
-        Move GetTailPosition();
-        void SetHead(Move head);
-        void RemoveTail();
+        Move Head { get; set; }
+        Move Tail { get; }
+        void CutTail();
     }
 }

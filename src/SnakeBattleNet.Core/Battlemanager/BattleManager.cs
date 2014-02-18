@@ -49,7 +49,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             //bite: 10 times empty space in front of head to grow
             foreach (var snake in snakes)
                 for (int i = 0; i < 10; i++)
-                    SnakeIsGrowing(battleField, snake, StraitMove(snake.GetHeadPosition()));
+                    SnakeIsGrowing(battleField, snake, StraitMove(snake.Head));
 
             // remove tails
             foreach (var snake in snakes)
@@ -89,8 +89,8 @@ namespace SnakeBattleNet.Core.Battlemanager
         {
             var possibleMoves = new List<Move>();
 
-            int headX = snake.GetHeadPosition().X;
-            int headY = snake.GetHeadPosition().Y;
+            int headX = snake.Head.X;
+            int headY = snake.Head.Y;
 
             if (battleField[headX, headY + 1].FieldRowContent == FieldRowContent.Empty || battleField[headX, headY + 1].FieldRowContent == FieldRowContent.Tail)
                 possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
@@ -150,7 +150,7 @@ namespace SnakeBattleNet.Core.Battlemanager
         {
             foreach (var snake in snakes)
             {
-                if (snakeBiter.GetHeadPosition().Equals(snake.GetTailPosition()))
+                if (snakeBiter.Head.Equals(snake.Tail))
                 {
                     if (snakeBiter.Id == snake.Id)
                         SnakeIsMoving(battleField, snakeBiter, newHeadPosition);
@@ -187,7 +187,7 @@ namespace SnakeBattleNet.Core.Battlemanager
 
         private void SnakeIsbitting(IBattleField battleField, ISnake snakeBitter, ISnake snakeBitten)
         {
-            Move tailPosition = snakeBitten.GetTailPosition();
+            Move tailPosition = snakeBitten.Tail;
             CutTail(battleField, snakeBitten);
             MoveHead(battleField, snakeBitter, tailPosition);
         }
@@ -202,28 +202,28 @@ namespace SnakeBattleNet.Core.Battlemanager
             if (snake.Length != 0)
             {
                 // replace old head with body
-                battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(FieldRowContent.Body, snake.Id);
-                recorder.AddEvent(snake.Id, snake.GetHeadPosition().X, snake.GetHeadPosition().Y, LookinkgTo(snake.GetHeadPosition().direction), Element.Body);
+                battleField[snake.Head.X, snake.Head.Y] = new FieldRow(FieldRowContent.Body, snake.Id);
+                recorder.AddEvent(snake.Id, snake.Head.X, snake.Head.Y, LookinkgTo(snake.Head.direction), Element.Body);
             }
             // add head to snake
-            snake.SetHead(newHeadPosition);
+            snake.Head = newHeadPosition;
             // put new head
-            battleField[snake.GetHeadPosition().X, snake.GetHeadPosition().Y] = new FieldRow(FieldRowContent.Head, snake.Id);
-            recorder.AddEvent(snake.Id, snake.GetHeadPosition().X, snake.GetHeadPosition().Y, LookinkgTo(snake.GetHeadPosition().direction), Element.Head);
+            battleField[snake.Head.X, snake.Head.Y] = new FieldRow(FieldRowContent.Head, snake.Id);
+            recorder.AddEvent(snake.Id, snake.Head.X, snake.Head.Y, LookinkgTo(snake.Head.direction), Element.Head);
         }
 
         private void CutTail(IBattleField battleField, ISnake snake)
         {
             // replace old tail with empty row
-            battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(FieldRowContent.Empty, battleField.Id);
-            recorder.AddEvent(battleField.Id, snake.GetTailPosition().X, snake.GetTailPosition().Y, LookinkgTo(snake.GetTailPosition().direction), Element.Empty);
+            battleField[snake.Tail.X, snake.Tail.Y] = new FieldRow(FieldRowContent.Empty, battleField.Id);
+            recorder.AddEvent(battleField.Id, snake.Tail.X, snake.Tail.Y, LookinkgTo(snake.Tail.direction), Element.Empty);
 
             // remove tail from snake
-            snake.RemoveTail();
+            snake.CutTail();
 
             // put new tail on field
-            battleField[snake.GetTailPosition().X, snake.GetTailPosition().Y] = new FieldRow(FieldRowContent.Tail, snake.Id);
-            recorder.AddEvent(snake.Id, snake.GetTailPosition().X, snake.GetTailPosition().Y, LookinkgTo(snake.GetTailPosition().direction), Element.Tail);
+            battleField[snake.Tail.X, snake.Tail.Y] = new FieldRow(FieldRowContent.Tail, snake.Id);
+            recorder.AddEvent(snake.Id, snake.Tail.X, snake.Tail.Y, LookinkgTo(snake.Tail.direction), Element.Tail);
         }
 
         private void PutWallsOnGateways(IBattleField battleField)

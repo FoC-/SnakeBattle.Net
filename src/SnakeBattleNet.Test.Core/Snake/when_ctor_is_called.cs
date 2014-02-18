@@ -16,7 +16,7 @@ namespace SnakeBattleNet.Test.Core
 
         private Because of = () =>
         {
-            exception = Catch.Exception(() => _brainModule = new BrainModule("Module-Id", new Size(3, 3), "Snake-Id"));
+            exception = Catch.Exception(() => _brainModule = new BrainModule(new Size(3, 3), "Snake-Id"));
         };
 
         private It should_not_fail = () =>
