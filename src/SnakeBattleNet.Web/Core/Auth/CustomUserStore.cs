@@ -19,7 +19,7 @@ namespace SnakeBattleNet.Web.Core.Auth
 
         public Task CreateAsync(TUser user)
         {
-            return Task.Run(() => _usersCollection.Insert(user));
+            return Task.Run(() => _usersCollection.Save(user));
         }
 
         public Task UpdateAsync(TUser user)
