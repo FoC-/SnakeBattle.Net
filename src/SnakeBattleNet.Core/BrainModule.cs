@@ -17,12 +17,10 @@ namespace SnakeBattleNet.Core
             InitilaizeWithHead();
         }
 
-        #region Implement IBrainModule
-
         public Size Size { get; private set; }
         public AOColor HeadColor { get; private set; }
 
-        public ModuleRow[,] ModuleRows { get; private set; }
+        public ModuleRow[,] ModuleRows { get; set; }
         public ModuleRow this[int x, int y]
         {
             get
@@ -45,34 +43,9 @@ namespace SnakeBattleNet.Core
             return rows.ToArray();
         }
 
-        public void SetWall(int x, int y, Exclude exclude, AOColor aoColor)
-        {
-            ModuleRows[x, y] = new ModuleRow(ModuleRowContent.Wall, exclude, aoColor);
-        }
-
-        public void SetEmpty(int x, int y, Exclude exclude, AOColor aoColor)
-        {
-            ModuleRows[x, y] = new ModuleRow(ModuleRowContent.Empty, exclude, aoColor);
-        }
-
         public void SetUndefinied(int x, int y)
         {
             ModuleRows[x, y] = new ModuleRow(HeadColor);
-        }
-
-        public void SetEnemyHead(int x, int y, Exclude exclude, AOColor aoColor)
-        {
-            ModuleRows[x, y] = new ModuleRow(ModuleRowContent.EnemyHead, exclude, aoColor);
-        }
-
-        public void SetEnemyBody(int x, int y, Exclude exclude, AOColor aoColor)
-        {
-            ModuleRows[x, y] = new ModuleRow(ModuleRowContent.EnemyBody, exclude, aoColor);
-        }
-
-        public void SetEnemyTail(int x, int y, Exclude exclude, AOColor aoColor)
-        {
-            ModuleRows[x, y] = new ModuleRow(ModuleRowContent.EnemyTail, exclude, aoColor);
         }
 
         public Move GetOwnHead()
@@ -105,8 +78,6 @@ namespace SnakeBattleNet.Core
         {
             ModuleRows[x, y] = new ModuleRow(ModuleRowContent.OwnTail, exclude, aoColor, _snakeId);
         }
-
-        #endregion Implement IBrainModule
 
         private void InitilaizeWithHead()
         {

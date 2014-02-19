@@ -63,21 +63,21 @@ namespace SnakeBattleNet.Test.Core
             chipWithAndColoredHead.SetOwnTail(3, 2, Exclude.No, AOColor.OrGreen);
 
             // Snake 1
-            chipWithAndColoredHead.SetEnemyHead(2, 1, Exclude.No, AOColor.AndBlack);
-            chipWithAndColoredHead.SetEnemyBody(2, 0, Exclude.No, AOColor.AndBlack);
-            chipWithAndColoredHead.SetEnemyBody(3, 0, Exclude.No, AOColor.AndBlack);
-            chipWithAndColoredHead.SetEnemyTail(3, 1, Exclude.No, AOColor.AndBlack);
+            chipWithAndColoredHead.ModuleRows[2, 1] = new ModuleRow(ModuleRowContent.EnemyHead, Exclude.No, AOColor.AndBlack);
+            chipWithAndColoredHead.ModuleRows[2, 0] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndBlack);
+            chipWithAndColoredHead.ModuleRows[3, 0] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndBlack);
+            chipWithAndColoredHead.ModuleRows[3, 1] = new ModuleRow(ModuleRowContent.EnemyTail, Exclude.No, AOColor.AndBlack);
 
             // Snake 2
-            chipWithAndColoredHead.SetEnemyHead(0, 0, Exclude.No, AOColor.AndGrey);
-            chipWithAndColoredHead.SetEnemyBody(1, 0, Exclude.No, AOColor.AndGrey);
-            chipWithAndColoredHead.SetEnemyBody(1, 1, Exclude.No, AOColor.AndGrey);
-            chipWithAndColoredHead.SetEnemyBody(0, 1, Exclude.No, AOColor.AndGrey);
-            chipWithAndColoredHead.SetEnemyTail(0, 2, Exclude.No, AOColor.AndGrey);
+            chipWithAndColoredHead.ModuleRows[0, 0] = new ModuleRow(ModuleRowContent.EnemyHead, Exclude.No, AOColor.AndGrey);
+            chipWithAndColoredHead.ModuleRows[1, 0] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndGrey);
+            chipWithAndColoredHead.ModuleRows[1, 1] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndGrey);
+            chipWithAndColoredHead.ModuleRows[0, 1] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndGrey);
+            chipWithAndColoredHead.ModuleRows[0, 2] = new ModuleRow(ModuleRowContent.EnemyTail, Exclude.No, AOColor.AndGrey);
 
             // Snake 3
-            chipWithAndColoredHead.SetEnemyHead(0, 3, Exclude.No, AOColor.OrBlue);
-            chipWithAndColoredHead.SetEnemyBody(0, 4, Exclude.No, AOColor.OrBlue);
+            chipWithAndColoredHead.ModuleRows[0, 3] = new ModuleRow(ModuleRowContent.EnemyHead, Exclude.No, AOColor.OrBlue);
+            chipWithAndColoredHead.ModuleRows[0, 4] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.OrBlue);
 
             return chipWithAndColoredHead;
         }
