@@ -1,8 +1,7 @@
 using System;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Battlefield;
-using SnakeBattleNet.Core.Battlefield.Implementation;
-using SnakeBattleNet.Core.Common;
+using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Test.Core
 {
@@ -23,31 +22,31 @@ namespace SnakeBattleNet.Test.Core
             var battleField = new BattleField(new Size(9, 9), 1, "field-id");
 
             // Snake 0
-            battleField[4, 4] = new FieldRow(FieldRowContent.Head, idForOwnSnake);
-            battleField[4, 5] = new FieldRow(FieldRowContent.Body, idForOwnSnake);
-            battleField[5, 5] = new FieldRow(FieldRowContent.Body, idForOwnSnake);
-            battleField[5, 4] = new FieldRow(FieldRowContent.Tail, idForOwnSnake);
+            battleField[4, 4] = new FieldRow(FieldContent.Head, idForOwnSnake);
+            battleField[4, 5] = new FieldRow(FieldContent.Body, idForOwnSnake);
+            battleField[5, 5] = new FieldRow(FieldContent.Body, idForOwnSnake);
+            battleField[5, 4] = new FieldRow(FieldContent.Tail, idForOwnSnake);
 
             // Snake 1
             var idForSnake1 = Guid.NewGuid().ToString();
-            battleField[4, 3] = new FieldRow(FieldRowContent.Head, idForSnake1);
-            battleField[4, 2] = new FieldRow(FieldRowContent.Body, idForSnake1);
-            battleField[5, 2] = new FieldRow(FieldRowContent.Body, idForSnake1);
-            battleField[5, 3] = new FieldRow(FieldRowContent.Tail, idForSnake1);
+            battleField[4, 3] = new FieldRow(FieldContent.Head, idForSnake1);
+            battleField[4, 2] = new FieldRow(FieldContent.Body, idForSnake1);
+            battleField[5, 2] = new FieldRow(FieldContent.Body, idForSnake1);
+            battleField[5, 3] = new FieldRow(FieldContent.Tail, idForSnake1);
 
             // Snake 2
             var idForSnake2 = Guid.NewGuid().ToString();
-            battleField[2, 2] = new FieldRow(FieldRowContent.Head, idForSnake2);
-            battleField[3, 2] = new FieldRow(FieldRowContent.Body, idForSnake2);
-            battleField[3, 3] = new FieldRow(FieldRowContent.Body, idForSnake2);
-            battleField[2, 3] = new FieldRow(FieldRowContent.Body, idForSnake2);
-            battleField[2, 4] = new FieldRow(FieldRowContent.Tail, idForSnake2);
+            battleField[2, 2] = new FieldRow(FieldContent.Head, idForSnake2);
+            battleField[3, 2] = new FieldRow(FieldContent.Body, idForSnake2);
+            battleField[3, 3] = new FieldRow(FieldContent.Body, idForSnake2);
+            battleField[2, 3] = new FieldRow(FieldContent.Body, idForSnake2);
+            battleField[2, 4] = new FieldRow(FieldContent.Tail, idForSnake2);
 
             // Snake 3
             var idForSnake3 = Guid.NewGuid().ToString();
-            battleField[2, 5] = new FieldRow(FieldRowContent.Head, idForSnake3);
-            battleField[2, 6] = new FieldRow(FieldRowContent.Body, idForSnake3);
-            battleField[2, 7] = new FieldRow(FieldRowContent.Tail, idForSnake3);
+            battleField[2, 5] = new FieldRow(FieldContent.Head, idForSnake3);
+            battleField[2, 6] = new FieldRow(FieldContent.Body, idForSnake3);
+            battleField[2, 7] = new FieldRow(FieldContent.Tail, idForSnake3);
 
             return battleField;
         }

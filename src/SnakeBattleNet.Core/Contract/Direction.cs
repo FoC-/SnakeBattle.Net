@@ -1,4 +1,4 @@
-﻿namespace SnakeBattleNet.Core.Common
+﻿namespace SnakeBattleNet.Core.Contract
 {
     public enum Direction
     {

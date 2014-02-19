@@ -2,7 +2,7 @@ using Machine.Specifications;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Battlemanager;
-using SnakeBattleNet.Core.Common;
+using SnakeBattleNet.Core.Contract;
 using It = Machine.Specifications.It;
 
 namespace SnakeBattleNet.Test.Core
@@ -16,7 +16,7 @@ namespace SnakeBattleNet.Test.Core
 
             Snake snake = CreateSnakeStub();
             var module = CreateChipWithAndColoredHead(snake.Id);
-            snake.BrainModules.Add(module);
+            snake.Chips.Add(module);
 
             IBattleField battleField = CreateBattleField(snake.Id);
             comparator = new Comparator(battleField, snake);

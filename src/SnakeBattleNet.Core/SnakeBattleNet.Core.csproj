@@ -37,23 +37,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Battlemanager\Comparator.cs" />
-    <Compile Include="Battlefield\FieldRow.cs" />
-    <Compile Include="Common\ModuleRowContent.cs" />
-    <Compile Include="Common\Size.cs" />
+    <Compile Include="Contract\ChipCell.cs" />
+    <Compile Include="Contract\Content.cs" />
+    <Compile Include="Contract\FieldCell.cs" />
+    <Compile Include="Contract\Position.cs" />
     <Compile Include="Prototypes\IBattleField.cs" />
     <Compile Include="Prototypes\Snake\DummyMind.cs" />
     <Compile Include="Prototypes\Snake\IMind.cs" />
-    <Compile Include="BrainModule.cs" />
-    <Compile Include="Battlefield\IBattleField.cs" />
-    <Compile Include="Common\FieldRowContent.cs" />
-    <Compile Include="Common\AOColor.cs" />
-    <Compile Include="Battlefield\Implementation\BattleField.cs" />
+    <Compile Include="Contract\Color.cs" />
+    <Compile Include="BattleField.cs" />
     <Compile Include="Battlemanager\BattleManager.cs" />
-    <Compile Include="Common\Exclude.cs" />
-    <Compile Include="Common\Move.cs" />
-    <Compile Include="ModuleRow.cs" />
+    <Compile Include="Contract\Move.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common\Direction.cs" />
+    <Compile Include="Contract\Direction.cs" />
     <Compile Include="Prototypes\Battle.cs" />
     <Compile Include="Prototypes\BattleControllerPrototype.cs" />
     <Compile Include="Prototypes\BattleField.cs" />

@@ -1,75 +1,79 @@
-using SnakeBattleNet.Core.Battlefield;
-using SnakeBattleNet.Core.Common;
+using System.Collections.Generic;
+using System.Linq;
+using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Core.Battlemanager
 {
     public class Comparator
     {
-        private readonly IBattleField battleField;
-        private readonly Snake snake;
+        private readonly BattleField _battleField;
+        private readonly Snake _snake;
 
-        public Comparator(IBattleField battleField, Snake snake)
+        public Comparator(BattleField battleField, Snake snake)
         {
-            this.snake = snake;
-            this.battleField = battleField;
+            _snake = snake;
+            _battleField = battleField;
         }
 
         public Move MakeDecision()
         {
-            Move headPositionOnBattleField = snake.Head;
+            const int chipSizeDim = 7;
+            var positionOnField = _snake.Head.Position;
 
-            var moveToNorth = new Move(headPositionOnBattleField.X, headPositionOnBattleField.Y - 1, Direction.North);
-            var moveToSouth = new Move(headPositionOnBattleField.X, headPositionOnBattleField.Y + 1, Direction.South);
-            var moveToWest = new Move(headPositionOnBattleField.X - 1, headPositionOnBattleField.Y, Direction.West);
-            var moveToEast = new Move(headPositionOnBattleField.X + 1, headPositionOnBattleField.Y, Direction.East);
+            var moveToNorth = new Move(positionOnField.X, positionOnField.Y - 1, Direction.North);
+            var moveToSouth = new Move(positionOnField.X, positionOnField.Y + 1, Direction.South);
+            var moveToWest = new Move(positionOnField.X - 1, positionOnField.Y, Direction.West);
+            var moveToEast = new Move(positionOnField.X + 1, positionOnField.Y, Direction.East);
 
-            foreach (var brainChip in this.snake.BrainModules)
+            foreach (var cells in _snake.Chips)
             {
-                int chipSizeDim = brainChip.Size.X;
-                var headPositionOnBrainChip = brainChip.GetOwnHead();
-                var color = brainChip.HeadColor;
+                var chip = cells.ToList();
+                var head = chip.SingleOrDefault(c => c.Content == Content.Head && c.IsSelf);
+                if (head == null) return null;
+                var positionOnChip = head.Position;
+                var color = head.Color;
 
-                FieldRow[] fieldRows;
-                switch (headPositionOnBattleField.direction)
+                IEnumerable<FieldCell> fieldRows;
+                switch (_snake.Head.Direction)
                 {
                     case Direction.North:
                         {
-                            fieldRows = this.battleField.ViewToNorth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToNorth;
-                            fieldRows = this.battleField.ViewToWest(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToWest;
-                            fieldRows = this.battleField.ViewToEast(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToEast;
+                            fieldRows = _battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToNorth;
+                            fieldRows = _battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToWest;
+                            fieldRows = _battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToEast;
                         }
                         break;
                     case Direction.West:
                         {
-                            fieldRows = this.battleField.ViewToWest(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToWest;
-                            fieldRows = this.battleField.ViewToSouth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToSouth;
-                            fieldRows = this.battleField.ViewToNorth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToNorth;
+                            fieldRows = _battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToWest;
+                            fieldRows = _battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToSouth;
+                            fieldRows = _battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToNorth;
                         }
                         break;
                     case Direction.East:
                         {
-                            fieldRows = this.battleField.ViewToEast(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToEast;
-                            fieldRows = this.battleField.ViewToNorth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToNorth;
-                            fieldRows = this.battleField.ViewToSouth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToSouth;
+                            fieldRows = _battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToEast;
+                            fieldRows = _battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToNorth;
+                            fieldRows = _battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToSouth;
                         }
                         break;
                     case Direction.South:
                         {
-                            fieldRows = this.battleField.ViewToSouth(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToSouth;
-                            fieldRows = this.battleField.ViewToEast(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToEast;
-                            fieldRows = this.battleField.ViewToWest(headPositionOnBattleField, headPositionOnBrainChip, chipSizeDim);
-                            if (Compare(fieldRows, brainChip.ToArray(), color)) return moveToWest;
+                            fieldRows = _battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToSouth;
+                            fieldRows = _battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToEast;
+                            fieldRows = _battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
+                            if (Compare(fieldRows, chip, color)) return moveToWest;
                         }
                         break;
                 }
@@ -77,61 +81,60 @@ namespace SnakeBattleNet.Core.Battlemanager
             return null;
         }
 
-        private bool Compare(FieldRow[] fieldRows, ModuleRow[] moduleRows, AOColor color)
+        private bool Compare(IEnumerable<FieldCell> fieldCells, IEnumerable<ChipCell> chipCells, Color color)
         {
-            bool OrBlue = false;
-            int OrBlueCount = 0;
-            bool OrGreen = false;
-            int OrGreenCount = 0;
+            var orBlue = false;
+            var orBlueCount = 0;
+            var orGreen = false;
+            var orGreenCount = 0;
 
-            bool AndGrey = true;
-            int AndGreyCount = 0;
-            bool AndRed = true;
-            int AndRedCount = 0;
-            bool AndBlack = true;
-            int AndBlackCount = 0;
+            var andGrey = true;
+            var andGreyCount = 0;
+            var andRed = true;
+            var andRedCount = 0;
+            var andBlack = true;
+            var andBlackCount = 0;
 
-            bool andType = color == AOColor.AndBlack || color == AOColor.AndGrey || color == AOColor.AndRed;
-
-            for (int i = 0; i < fieldRows.Length; i++)
+            bool andType = color == Color.AndBlack || color == Color.AndGrey || color == Color.AndRed;
+            for (int i = 0; i < fieldCells.Count(); i++)
             {
-                var equal = moduleRows[i].Equals(fieldRows[i]);
-                var colorOfRow = moduleRows[i].AoColor;
+                var equal = chipCells[i].Equals(fieldCells[i]);
+                var colorOfRow = chipCells[i].Color;
                 #region Switch of logic depended on row color
 
                 switch (colorOfRow)
                 {
-                    case AOColor.OrBlue:
+                    case Color.OrBlue:
                         {
                             if (andType)
                             {
                                 if (equal)
-                                    OrBlue = true;
-                            }
-                            else
-                            {
-                                if (equal)
-                                    return true;
-                            }
-                            OrBlueCount++;
-                        }
-                        break;
-                    case AOColor.OrGreen:
-                        {
-                            if (andType)
-                            {
-                                if (equal)
-                                    OrGreen = true;
+                                    orBlue = true;
                             }
                             else
                             {
                                 if (equal)
                                     return true;
                             }
-                            OrGreenCount++;
+                            orBlueCount++;
                         }
                         break;
-                    case AOColor.AndGrey:
+                    case Color.OrGreen:
+                        {
+                            if (andType)
+                            {
+                                if (equal)
+                                    orGreen = true;
+                            }
+                            else
+                            {
+                                if (equal)
+                                    return true;
+                            }
+                            orGreenCount++;
+                        }
+                        break;
+                    case Color.AndGrey:
                         {
                             if (andType)
                             {
@@ -141,12 +144,12 @@ namespace SnakeBattleNet.Core.Battlemanager
                             else
                             {
                                 if (!equal)
-                                    AndGrey = false;
+                                    andGrey = false;
                             }
-                            AndGreyCount++;
+                            andGreyCount++;
                         }
                         break;
-                    case AOColor.AndRed:
+                    case Color.AndRed:
                         {
                             if (andType)
                             {
@@ -156,12 +159,12 @@ namespace SnakeBattleNet.Core.Battlemanager
                             else
                             {
                                 if (!equal)
-                                    AndRed = false;
+                                    andRed = false;
                             }
-                            AndRedCount++;
+                            andRedCount++;
                         }
                         break;
-                    case AOColor.AndBlack:
+                    case Color.AndBlack:
                         {
                             if (andType)
                             {
@@ -171,9 +174,9 @@ namespace SnakeBattleNet.Core.Battlemanager
                             else
                             {
                                 if (!equal)
-                                    AndBlack = false;
+                                    andBlack = false;
                             }
-                            AndBlackCount++;
+                            andBlackCount++;
                         }
                         break;
                 }
@@ -184,21 +187,21 @@ namespace SnakeBattleNet.Core.Battlemanager
             if (andType)
             {
                 if (
-                    (AndGrey || AndGreyCount == 0) &&
-                    (AndRed || AndRedCount == 0) &&
-                    (AndBlack || AndBlackCount == 0) &&
-                    (OrBlue || OrBlueCount == 0) &&
-                    (OrGreen || OrGreenCount == 0)
+                    (andGrey || andGreyCount == 0) &&
+                    (andRed || andRedCount == 0) &&
+                    (andBlack || andBlackCount == 0) &&
+                    (orBlue || orBlueCount == 0) &&
+                    (orGreen || orGreenCount == 0)
                    ) return true;
             }
             else
             {
                 if (
-                    (AndGrey && AndGreyCount > 0) ||
-                    (AndRed && AndRedCount > 0) ||
-                    (AndBlack && AndBlackCount > 0) ||
-                    (OrBlue && OrBlueCount > 0) ||
-                    (OrGreen && OrGreenCount > 0)
+                    (andGrey && andGreyCount > 0) ||
+                    (andRed && andRedCount > 0) ||
+                    (andBlack && andBlackCount > 0) ||
+                    (orBlue && orBlueCount > 0) ||
+                    (orGreen && orGreenCount > 0)
                    ) return true;
             }
             return false;

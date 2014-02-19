@@ -105,7 +105,7 @@ namespace SnakeBattleNet.Web
             Mapper.CreateMap<Snake, SnakeViewModel>();
             Mapper.CreateMap<Tuple<Snake, SnakeViewModel>, Snake>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Item2.Name))
-                .ForMember(d => d.BrainModules, o => o.MapFrom(s => s.Item2.BrainModules))
+                .ForMember(d => d.Chips, o => o.MapFrom(s => s.Item2.BrainModules))
 
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Item1.Id))
                 .ForMember(d => d.OwnerId, o => o.MapFrom(s => s.Item1.OwnerId))

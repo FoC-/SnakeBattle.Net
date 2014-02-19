@@ -1,6 +1,6 @@
 using Machine.Specifications;
 using SnakeBattleNet.Core;
-using SnakeBattleNet.Core.Common;
+using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Test.Core
 {
@@ -17,7 +17,7 @@ namespace SnakeBattleNet.Test.Core
 
         private Because of = () =>
         {
-            _brainModule.SetOwnHead(newHeadPosition.X, newHeadPosition.Y, AOColor.AndGrey, newHeadPosition.direction);
+            _brainModule.SetOwnHead(newHeadPosition.X, newHeadPosition.Y, AOColor.AndGrey, newHeadPosition.Direction);
         };
 
         private It should_remove_previous_head = () =>
