@@ -1,15 +1,14 @@
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Common;
-using SnakeBattleNet.Core.Snake;
 
 namespace SnakeBattleNet.Core.Battlemanager
 {
     public class Comparator
     {
         private readonly IBattleField battleField;
-        private readonly ISnake snake;
+        private readonly Snake snake;
 
-        public Comparator(IBattleField battleField, ISnake snake)
+        public Comparator(IBattleField battleField, Snake snake)
         {
             this.snake = snake;
             this.battleField = battleField;

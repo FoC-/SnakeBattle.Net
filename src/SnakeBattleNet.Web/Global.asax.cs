@@ -15,6 +15,7 @@ namespace SnakeBattleNet.Web
             Bootstrap.RegisterGlobalFilters(GlobalFilters.Filters);
             Bootstrap.RegisterRoutes(RouteTable.Routes);
             Bootstrap.RegisterBundles(BundleTable.Bundles);
+            Bootstrap.RegisterMappings();
         }
     }
 }

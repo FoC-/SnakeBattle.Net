@@ -1,7 +1,7 @@
 using Machine.Specifications;
+using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Common;
-using SnakeBattleNet.Core.Snake;
 
 namespace SnakeBattleNet.Test.Core
 {

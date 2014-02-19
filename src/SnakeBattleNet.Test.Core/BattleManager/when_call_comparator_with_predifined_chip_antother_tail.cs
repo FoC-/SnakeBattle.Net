@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Battlemanager;
 using SnakeBattleNet.Core.Common;
-using SnakeBattleNet.Core.Snake;
 using It = Machine.Specifications.It;
 
 namespace SnakeBattleNet.Test.Core
@@ -17,7 +14,7 @@ namespace SnakeBattleNet.Test.Core
         {
             expectedMove = new Move(4, 3, Direction.North);
 
-            ISnake snake = CreateSnakeStub();
+            Snake snake = CreateSnakeStub();
             IBrainModule module = CreateChipWithAndColoredHead(snake.Id);
             snake.BrainModules.Add(module);
 

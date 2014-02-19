@@ -3,7 +3,6 @@ using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using SnakeBattleNet.Core;
-using SnakeBattleNet.Core.Implementation;
 using SnakeBattleNet.Web.Utils;
 
 namespace SnakeBattleNet.Web.Core
@@ -17,22 +16,22 @@ namespace SnakeBattleNet.Web.Core
             _snakesCollection = snakesCollection;
         }
 
-        public ISnake GetById(string snakeId)
+        public Snake GetById(string snakeId)
         {
             return snakeId.IsNullOrEmpty() ? null : _snakesCollection.FindOneById(snakeId);
         }
 
-        public IEnumerable<ISnake> GetByOwnerId(string ownerId)
+        public IEnumerable<Snake> GetByOwnerId(string ownerId)
         {
             return _snakesCollection.AsQueryable().Where(_ => _.OwnerId == ownerId);
         }
 
-        public IEnumerable<ISnake> GetAll()
+        public IEnumerable<Snake> GetAll()
         {
-            return _snakesCollection.AsQueryable().ToList();
+            return _snakesCollection.AsQueryable();
         }
 
-        public void SaveSnake(ISnake snake)
+        public void SaveSnake(Snake snake)
         {
             _snakesCollection.Save(snake);
         }

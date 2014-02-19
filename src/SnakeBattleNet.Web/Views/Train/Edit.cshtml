@@ -1,4 +1,4 @@
-﻿@model SnakeBattleNet.Core.Implementation.Snake
+﻿@model SnakeBattleNet.Web.Models.Snake.SnakeViewModel
 
 <div class="row">
     <div class="col-md-8">
@@ -14,5 +14,26 @@
             <dt>Looses</dt>
             <dd>@Model.Loses</dd>
         </dl>
+        <hr />
+        @using (Html.BeginForm("Edit", "Train", FormMethod.Post, new { @class = "form-inline", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+
+            @Html.ValidationSummary(true)
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Name)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        }
     </div>
 </div>

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using SnakeBattleNet.Core;
-using SnakeBattleNet.Core.Implementation;
 using SnakeBattleNet.Web.Core;
+using SnakeBattleNet.Web.Models.Snake;
 using SnakeBattleNet.Web.Utils;
 
 namespace SnakeBattleNet.Web.Controllers
@@ -21,7 +23,8 @@ namespace SnakeBattleNet.Web.Controllers
         public ActionResult Index()
         {
             var snakes = _snakeStore.GetByOwnerId(User.Identity.GetUserId());
-            return View(snakes);
+            var model = Mapper.Map<IEnumerable<Snake>, IEnumerable<SnakeViewModel>>(snakes);
+            return View(model);
         }
 
         public ActionResult Add()
@@ -42,7 +45,33 @@ namespace SnakeBattleNet.Web.Controllers
                 return RedirectToAction("Index");
             }
             var snake = _snakeStore.GetById(id);
-            return View(snake);
+            var model = Mapper.Map<Snake, SnakeViewModel>(snake);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(SnakeViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var snakeStored = _snakeStore.GetById(model.Id);
+                if (IsCurrentUserOwner(snakeStored))
+                {
+                    var snakemapped = Mapper.Map<Tuple<Snake, SnakeViewModel>, Snake>(new Tuple<Snake, SnakeViewModel>(snakeStored, model));
+                    _snakeStore.SaveSnake(snakemapped);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "You are not owner for this snake");
+                }
+            }
+            return View(model);
+        }
+
+        private bool IsCurrentUserOwner(Snake snakeStored)
+        {
+            return snakeStored.OwnerId == User.Identity.GetUserId();
         }
     }
 }

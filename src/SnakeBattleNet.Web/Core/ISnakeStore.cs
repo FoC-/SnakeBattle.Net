@@ -5,10 +5,10 @@ namespace SnakeBattleNet.Web.Core
 {
     public interface ISnakeStore
     {
-        ISnake GetById(string snakeId);
-        IEnumerable<ISnake> GetAll();
-        IEnumerable<ISnake> GetByOwnerId(string ownerId);
-        void SaveSnake(ISnake snake);
+        Snake GetById(string snakeId);
+        IEnumerable<Snake> GetAll();
+        IEnumerable<Snake> GetByOwnerId(string ownerId);
+        void SaveSnake(Snake snake);
         void RemoveSnake(string snakeId);
     }
 }

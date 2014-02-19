@@ -1,8 +1,6 @@
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using SnakeBattleNet.Core.Implementation;
-using SnakeBattleNet.Core.Snake;
-using SnakeBattleNet.Core.Snake.Implementation;
+using SnakeBattleNet.Core;
 using SnakeBattleNet.Web.Core.Auth;
 
 namespace SnakeBattleNet.Web.DependencyResolution.Providers

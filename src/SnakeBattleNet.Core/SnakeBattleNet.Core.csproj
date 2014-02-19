@@ -43,17 +43,16 @@
     <Compile Include="Prototypes\IBattleField.cs" />
     <Compile Include="Prototypes\Snake\DummyMind.cs" />
     <Compile Include="Prototypes\Snake\IMind.cs" />
-    <Compile Include="Snake\Implementation\BrainModule.cs" />
+    <Compile Include="BrainModule.cs" />
     <Compile Include="Battlefield\IBattleField.cs" />
-    <Compile Include="Snake\IBrainModule.cs" />
-    <Compile Include="Snake\ISnake.cs" />
+    <Compile Include="IBrainModule.cs" />
     <Compile Include="Common\FieldRowContent.cs" />
     <Compile Include="Common\AOColor.cs" />
     <Compile Include="Battlefield\Implementation\BattleField.cs" />
     <Compile Include="Battlemanager\BattleManager.cs" />
     <Compile Include="Common\Exclude.cs" />
     <Compile Include="Common\Move.cs" />
-    <Compile Include="Snake\ModuleRow.cs" />
+    <Compile Include="ModuleRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Direction.cs" />
     <Compile Include="Prototypes\Battle.cs" />
@@ -70,7 +69,7 @@
     <Compile Include="Prototypes\Passport.cs" />
     <Compile Include="Prototypes\Coordinates.cs" />
     <Compile Include="Prototypes\Snake\Snake.cs" />
-    <Compile Include="Snake\Implementation\Snake.cs" />
+    <Compile Include="Snake.cs" />
     <Compile Include="Prototypes\VisibleArea.cs" />
   </ItemGroup>
   <ItemGroup>

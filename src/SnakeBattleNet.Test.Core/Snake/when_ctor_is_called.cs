@@ -1,7 +1,7 @@
 using System;
 using Machine.Specifications;
+using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Common;
-using SnakeBattleNet.Core.Snake.Implementation;
 using It = Machine.Specifications.It;
 
 namespace SnakeBattleNet.Test.Core

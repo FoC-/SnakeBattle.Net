@@ -3,14 +3,12 @@ using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Battlefield.Implementation;
 using SnakeBattleNet.Core.Common;
-using SnakeBattleNet.Core.Implementation;
-using SnakeBattleNet.Core.Snake.Implementation;
 
 namespace SnakeBattleNet.Test.Core
 {
     public class stubForRealBattle
     {
-        protected static ISnake CreateSnakeStub()
+        protected static Snake CreateSnakeStub()
         {
             var snakeStub = new Snake(Guid.NewGuid().ToString());
             snakeStub.Head = new Move(5, 4, Direction.South);

@@ -1,18 +1,22 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using Newtonsoft.Json.Serialization;
+using SnakeBattleNet.Core;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Core.Auth;
 using SnakeBattleNet.Web.DependencyResolution.Providers;
+using SnakeBattleNet.Web.Models.Snake;
 using StructureMap;
 
 namespace SnakeBattleNet.Web
@@ -94,6 +98,29 @@ namespace SnakeBattleNet.Web
                     .Ctor<MongoGridFS>().Is(c => c.GetInstance<MongoDatabase>().GridFS);
             });
             return ObjectFactory.Container;
+        }
+
+        public static void RegisterMappings()
+        {
+            Mapper.CreateMap<Snake, SnakeViewModel>();
+            Mapper.CreateMap<Tuple<Snake, SnakeViewModel>, Snake>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Item2.Name))
+                .ForMember(d => d.BrainModules, o => o.MapFrom(s => s.Item2.BrainModules))
+
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Item1.Id))
+                .ForMember(d => d.OwnerId, o => o.MapFrom(s => s.Item1.OwnerId))
+                .ForMember(d => d.Created, o => o.MapFrom(s => s.Item1.Created))
+                .ForMember(d => d.Score, o => o.MapFrom(s => s.Item1.Score))
+                .ForMember(d => d.Wins, o => o.MapFrom(s => s.Item1.Wins))
+                .ForMember(d => d.Loses, o => o.MapFrom(s => s.Item1.Loses))
+                .ForMember(d => d.Matches, o => o.MapFrom(s => s.Item1.Matches))
+                .ForMember(d => d.VisionRadius, o => o.MapFrom(s => s.Item1.VisionRadius))
+                .ForMember(d => d.ModulesMax, o => o.MapFrom(s => s.Item1.ModulesMax))
+
+                .ForMember(d => d.Length, o => o.Ignore())
+                .ForMember(d => d.BodyParts, o => o.Ignore())
+                .ForMember(d => d.Head, o => o.Ignore())
+                .ForMember(d => d.Tail, o => o.Ignore());
         }
     }
 }

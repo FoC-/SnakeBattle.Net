@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MongoDB.Driver;
-using SnakeBattleNet.Core.Implementation;
+using SnakeBattleNet.Core;
 using SnakeBattleNet.Web.Core.Auth;
 using SnakeBattleNet.Web.Utils;
 using StructureMap;
