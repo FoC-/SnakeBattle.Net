@@ -9,7 +9,7 @@ namespace SnakeBattleNet.Core
     {
         string Id { get; }
         string OwnerId { get; }
-        string SnakeName { get; set; }
+        string Name { get; set; }
         DateTime Created { get; }
         int Score { get; }
         int Wins { get; }

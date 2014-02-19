@@ -1,0 +1,14 @@
+﻿@model IEnumerable<SnakeBattleNet.Core.ISnake>
+
+<div class="row">
+    @foreach (var snake in Model)
+    {
+        <div class="col-md-4">
+            <h6>@snake.Name</h6>
+            @Html.ActionLink("Edit", "Edit", new { id = snake.Id }, new { @class = "btn btn-general" })
+        </div>
+    }
+    <div class="col-md-4">
+        @Html.ActionLink("Add new", "Add", null, new { @class = "btn btn-general" })
+    </div>
+</div>

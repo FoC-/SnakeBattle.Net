@@ -181,6 +181,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TrainController.cs" />
     <Compile Include="Core\Auth\CustomUserStore.cs" />
     <Compile Include="Core\Auth\RolesProvider.cs" />
     <Compile Include="Core\Auth\UserIdentity.cs" />
@@ -219,6 +220,11 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -245,6 +251,8 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\ListUsers.cshtml" />
     <Content Include="Views\Admin\Manage.cshtml" />
+    <Content Include="Views\Train\Index.cshtml" />
+    <Content Include="Views\Train\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SnakeBattleNet.Core\SnakeBattleNet.Core.csproj">

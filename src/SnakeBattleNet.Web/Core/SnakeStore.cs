@@ -22,28 +22,17 @@ namespace SnakeBattleNet.Web.Core
             return snakeId.IsNullOrEmpty() ? null : _snakesCollection.FindOneById(snakeId);
         }
 
-        public IEnumerable<ISnake> GetByOwnerId(string ownerId, out int total)
+        public IEnumerable<ISnake> GetByOwnerId(string ownerId)
         {
-            var snakes = _snakesCollection.AsQueryable().Where(_ => _.OwnerId == ownerId);
-            total = snakes.Count();
-
-            return snakes;
+            return _snakesCollection.AsQueryable().Where(_ => _.OwnerId == ownerId);
         }
 
-        public IEnumerable<ISnake> GetAll(out int total)
+        public IEnumerable<ISnake> GetAll()
         {
-            var snakes = _snakesCollection.AsQueryable().ToList();
-            total = snakes.Count;
-
-            return snakes;
+            return _snakesCollection.AsQueryable().ToList();
         }
 
-        public void AddSnake(ISnake snake)
-        {
-            _snakesCollection.Insert(snake);
-        }
-
-        public void UpdateSnake(ISnake snake)
+        public void SaveSnake(ISnake snake)
         {
             _snakesCollection.Save(snake);
         }
@@ -57,6 +46,6 @@ namespace SnakeBattleNet.Web.Core
             });
 
             _snakesCollection.Remove(query);
-        } 
+        }
     }
 }

@@ -1,26 +1,22 @@
 using System;
-using System.Collections.Generic;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Battlefield.Implementation;
 using SnakeBattleNet.Core.Common;
 using SnakeBattleNet.Core.Implementation;
-using SnakeBattleNet.Core.Snake;
 using SnakeBattleNet.Core.Snake.Implementation;
 
 namespace SnakeBattleNet.Test.Core
 {
     public class stubForRealBattle
     {
-        protected static ISnake CreateSnakeStub(IList<IBrainModule> brainChips, string idForOwnSnake)
+        protected static ISnake CreateSnakeStub()
         {
-            var snakeStub = new Snake(idForOwnSnake, Guid.NewGuid().ToString());
+            var snakeStub = new Snake(Guid.NewGuid().ToString());
             snakeStub.Head = new Move(5, 4, Direction.South);
             snakeStub.Head = new Move(5, 5, Direction.West);
             snakeStub.Head = new Move(4, 5, Direction.North);
             snakeStub.Head = new Move(4, 4, Direction.North);
-            snakeStub.ModulesMax = 1;
-            snakeStub.BrainModules.Add(CreateChipWithAndColoredHead(idForOwnSnake));
             return snakeStub;
         }
 

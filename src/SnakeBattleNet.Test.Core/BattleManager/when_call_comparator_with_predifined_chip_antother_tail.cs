@@ -17,14 +17,11 @@ namespace SnakeBattleNet.Test.Core
         {
             expectedMove = new Move(4, 3, Direction.North);
 
-            var ownSnake = "Snake-Id";
+            ISnake snake = CreateSnakeStub();
+            IBrainModule module = CreateChipWithAndColoredHead(snake.Id);
+            snake.BrainModules.Add(module);
 
-            IBrainModule module = CreateChipWithAndColoredHead(ownSnake);
-            var brainModules = new List<IBrainModule> { module };
-
-            ISnake snake = CreateSnakeStub(brainModules, ownSnake);
-            IBattleField battleField = CreateBattleField(ownSnake);
-
+            IBattleField battleField = CreateBattleField(snake.Id);
             comparator = new Comparator(battleField, snake);
         };
 

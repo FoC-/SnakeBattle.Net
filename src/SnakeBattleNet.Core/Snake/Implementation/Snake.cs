@@ -10,7 +10,7 @@ namespace SnakeBattleNet.Core.Implementation
     {
         public string Id { get; private set; }
         public string OwnerId { get; private set; }
-        public string SnakeName { get; set; }
+        public string Name { get; set; }
         public DateTime Created { get; private set; }
         public int Score { get; private set; }
         public int Wins { get; private set; }
@@ -27,21 +27,20 @@ namespace SnakeBattleNet.Core.Implementation
         {
             BrainModules = new List<IBrainModule>();
             BodyParts = new LinkedList<Move>();
-        }
-
-        public Snake(string id, string ownerId)
-            : this()
-        {
-            Id = id;
-            OwnerId = ownerId;
+            Id = Guid.NewGuid().ToString().ToLower().Replace("-", "");
             Created = DateTime.Now;
-
             Score = 1500;
             Wins = 0;
             Loses = 0;
             Matches = 0;
             VisionRadius = 7;
             ModulesMax = 9;
+        }
+
+        public Snake(string ownerId)
+            : this()
+        {
+            OwnerId = ownerId;
         }
 
         public void Win()

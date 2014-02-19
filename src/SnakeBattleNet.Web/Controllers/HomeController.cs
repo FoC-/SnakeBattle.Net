@@ -9,7 +9,6 @@ namespace SnakeBattleNet.Web.Controllers
             return View();
         }
 
-        [Authorize]
         public ActionResult About()
         {
             return View();
