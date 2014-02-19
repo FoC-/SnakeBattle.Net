@@ -45,7 +45,6 @@
     <Compile Include="Prototypes\Snake\IMind.cs" />
     <Compile Include="BrainModule.cs" />
     <Compile Include="Battlefield\IBattleField.cs" />
-    <Compile Include="IBrainModule.cs" />
     <Compile Include="Common\FieldRowContent.cs" />
     <Compile Include="Common\AOColor.cs" />
     <Compile Include="Battlefield\Implementation\BattleField.cs" />

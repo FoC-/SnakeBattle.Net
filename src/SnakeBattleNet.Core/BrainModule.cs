@@ -3,7 +3,7 @@ using SnakeBattleNet.Core.Common;
 
 namespace SnakeBattleNet.Core
 {
-    public class BrainModule : IBrainModule
+    public class BrainModule
     {
         private readonly string _snakeId;
         private Move _ownHead;
