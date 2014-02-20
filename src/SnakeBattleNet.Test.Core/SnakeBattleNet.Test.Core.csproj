@@ -60,12 +60,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BattleManager\when_compare_with_FieldRow.cs" />
     <Compile Include="stubForRealBattle.cs" />
     <Compile Include="BattleManager\when_call_comparator_with_predifined_chip_antother_tail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Snake\when_ctor_is_called.cs" />
-    <Compile Include="Snake\when_head_position_is_set.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

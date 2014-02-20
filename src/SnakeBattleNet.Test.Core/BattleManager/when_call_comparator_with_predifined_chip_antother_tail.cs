@@ -1,6 +1,5 @@
 using Machine.Specifications;
 using SnakeBattleNet.Core;
-using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Battlemanager;
 using SnakeBattleNet.Core.Contract;
 using It = Machine.Specifications.It;
@@ -18,7 +17,7 @@ namespace SnakeBattleNet.Test.Core
             var module = CreateChipWithAndColoredHead(snake.Id);
             snake.Chips.Add(module);
 
-            IBattleField battleField = CreateBattleField(snake.Id);
+            BattleField battleField = CreateBattleField(snake.Id);
             comparator = new Comparator(battleField, snake);
         };
 

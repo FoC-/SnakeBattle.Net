@@ -11,6 +11,23 @@ namespace SnakeBattleNet.Core
         public IEnumerable<FieldCell> Cells { get; private set; }
         public IList<Move> Gateways { get; private set; }
 
+        public FieldCell this[int x, int y]
+        {
+            get { return Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y); }
+
+        }
+
+        public Content this[Position position]
+        {
+            set
+            {
+                var tempCells = Cells.ToList();
+                tempCells.RemoveAll(c => c.Position.X == position.X && c.Position.Y == position.Y);
+                tempCells.Add(new FieldCell { Content = value, Position = position });
+                Cells = tempCells;
+            }
+        }
+
         public BattleField()
         {
             SideLength = 27;
@@ -34,7 +51,7 @@ namespace SnakeBattleNet.Core
                 for (int x = fx - cx; x < fx - cx + chipSideLength; x++, i++)
                 {
                     var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
-                    cell = cell ?? new FieldCell { FieldContent = Content.Empty };
+                    cell = cell ?? new FieldCell { Content = Content.Empty };
                     cell.Position = new Position { X = i, Y = j };
                     rows.Add(cell);
                 }
@@ -55,7 +72,7 @@ namespace SnakeBattleNet.Core
                 for (int x = fx - cx; x < fx - cx + chipSideLength; x++, i++)
                 {
                     var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
-                    cell = cell ?? new FieldCell { FieldContent = Content.Empty };
+                    cell = cell ?? new FieldCell { Content = Content.Empty };
                     cell.Position = new Position { X = i, Y = j };
                     rows.Add(cell);
                 }
@@ -76,7 +93,7 @@ namespace SnakeBattleNet.Core
                 for (int x = fx + cx; x > fx + cx - chipSideLength; x--, i++)
                 {
                     var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
-                    cell = cell ?? new FieldCell { FieldContent = Content.Empty };
+                    cell = cell ?? new FieldCell { Content = Content.Empty };
                     cell.Position = new Position { X = i, Y = j };
                     rows.Add(cell);
                 }
@@ -97,7 +114,7 @@ namespace SnakeBattleNet.Core
                 for (int x = fx + cx; x > fx + cx - chipSideLength; x--, i++)
                 {
                     var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
-                    cell = cell ?? new FieldCell { FieldContent = Content.Empty };
+                    cell = cell ?? new FieldCell { Content = Content.Empty };
                     cell.Position = new Position { X = i, Y = j };
                     rows.Add(cell);
                 }

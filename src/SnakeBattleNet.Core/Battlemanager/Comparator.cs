@@ -95,25 +95,26 @@ namespace SnakeBattleNet.Core.Battlemanager
             var andBlack = true;
             var andBlackCount = 0;
 
-            bool andType = color == Color.AndBlack || color == Color.AndGrey || color == Color.AndRed;
-            for (int i = 0; i < fieldCells.Count(); i++)
+            var andType = color == Color.AndBlack || color == Color.AndGrey || color == Color.AndRed;
+            foreach (var chipCell in chipCells)
             {
-                var equal = chipCells[i].Equals(fieldCells[i]);
-                var colorOfRow = chipCells[i].Color;
+                var fieldCell = GetFieldCell(fieldCells, chipCell.Position);
+                var isEqual = IsEqual(chipCell, fieldCell);
+                var cellColor = chipCell.Color;
                 #region Switch of logic depended on row color
 
-                switch (colorOfRow)
+                switch (cellColor)
                 {
                     case Color.OrBlue:
                         {
                             if (andType)
                             {
-                                if (equal)
+                                if (isEqual)
                                     orBlue = true;
                             }
                             else
                             {
-                                if (equal)
+                                if (isEqual)
                                     return true;
                             }
                             orBlueCount++;
@@ -123,12 +124,12 @@ namespace SnakeBattleNet.Core.Battlemanager
                         {
                             if (andType)
                             {
-                                if (equal)
+                                if (isEqual)
                                     orGreen = true;
                             }
                             else
                             {
-                                if (equal)
+                                if (isEqual)
                                     return true;
                             }
                             orGreenCount++;
@@ -138,12 +139,12 @@ namespace SnakeBattleNet.Core.Battlemanager
                         {
                             if (andType)
                             {
-                                if (!equal)
+                                if (!isEqual)
                                     return false;
                             }
                             else
                             {
-                                if (!equal)
+                                if (!isEqual)
                                     andGrey = false;
                             }
                             andGreyCount++;
@@ -153,12 +154,12 @@ namespace SnakeBattleNet.Core.Battlemanager
                         {
                             if (andType)
                             {
-                                if (!equal)
+                                if (!isEqual)
                                     return false;
                             }
                             else
                             {
-                                if (!equal)
+                                if (!isEqual)
                                     andRed = false;
                             }
                             andRedCount++;
@@ -168,12 +169,12 @@ namespace SnakeBattleNet.Core.Battlemanager
                         {
                             if (andType)
                             {
-                                if (!equal)
+                                if (!isEqual)
                                     return false;
                             }
                             else
                             {
-                                if (!equal)
+                                if (!isEqual)
                                     andBlack = false;
                             }
                             andBlackCount++;
@@ -205,6 +206,18 @@ namespace SnakeBattleNet.Core.Battlemanager
                    ) return true;
             }
             return false;
+        }
+
+        private FieldCell GetFieldCell(IEnumerable<FieldCell> fieldCells, Position position)
+        {
+            return fieldCells.FirstOrDefault(c => c.Position.X == position.X && c.Position.Y == position.Y);
+        }
+
+        private bool IsEqual(ChipCell chipCell, FieldCell fieldCell)
+        {
+            return chipCell.Exclude
+                ? chipCell.Content != fieldCell.Content
+                : chipCell.Content == fieldCell.Content;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             int randomSeed = Environment.TickCount;
             random = new Random(randomSeed);
 
-            recorder.Initialize(battleField.SideLength, battleField.SideLength, randomSeed, snakes.Select(_ => _.Id).Concat(new[] { battleField.Id }));
+            recorder.Initialize(battleField.SideLength, battleField.SideLength, randomSeed, snakes.Select(_ => _.Id).Concat(new[] { "battleField.Id" }));
 
             InitializeField(battleField, snakes);
             for (int i = 0; i < rounds; i++)
@@ -91,13 +91,13 @@ namespace SnakeBattleNet.Core.Battlemanager
             int headX = snake.Head.Position.X;
             int headY = snake.Head.Position.Y;
 
-            if (battleField[headX, headY + 1].FieldRowContent == Content.Empty || battleField[headX, headY + 1].FieldRowContent == Content.Tail)
+            if (battleField[headX, headY + 1].Content == Content.Empty || battleField[headX, headY + 1].Content == Content.Tail)
                 possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
-            if (battleField[headX, headY - 1].FieldRowContent == Content.Empty || battleField[headX, headY - 1].FieldRowContent == Content.Tail)
+            if (battleField[headX, headY - 1].Content == Content.Empty || battleField[headX, headY - 1].Content == Content.Tail)
                 possibleMoves.Add(new Move(headX, headY - 1, Direction.South));
-            if (battleField[headX - 1, headY].FieldRowContent == Content.Empty || battleField[headX - 1, headY].FieldRowContent == Content.Tail)
+            if (battleField[headX - 1, headY].Content == Content.Empty || battleField[headX - 1, headY].Content == Content.Tail)
                 possibleMoves.Add(new Move(headX - 1, headY, Direction.West));
-            if (battleField[headX + 1, headY].FieldRowContent == Content.Empty || battleField[headX + 1, headY].FieldRowContent == Content.Tail)
+            if (battleField[headX + 1, headY].Content == Content.Empty || battleField[headX + 1, headY].Content == Content.Tail)
                 possibleMoves.Add(new Move(headX + 1, headY, Direction.East));
 
             return possibleMoves;
@@ -168,13 +168,13 @@ namespace SnakeBattleNet.Core.Battlemanager
                 for (int y = 0; y < battleField.SideLength; y++)
                     if (x == 0 || y == 0 || x == battleField.SideLength - 1 || y == battleField.SideLength - 1)
                     {
-                        battleField[x, y] = new FieldRow(Content.Wall, battleField.Id);
-                        recorder.AddEvent(battleField.Id, x, y, LookinkgTo(Direction.NoWay), Element.Wall);
+                        battleField[new Position { X = x, Y = y }] = Content.Wall;
+                        recorder.AddEvent("battleField.Id", x, y, LookinkgTo(Direction.NoWay), Element.Wall);
                     }
                     else
                     {
-                        battleField[x, y] = new FieldRow(Content.Empty, battleField.Id);
-                        recorder.AddEvent(battleField.Id, x, y, LookinkgTo(Direction.NoWay), Element.Empty);
+                        battleField[new Position { X = x, Y = y }] = Content.Empty;
+                        recorder.AddEvent("battleField.Id", x, y, LookinkgTo(Direction.NoWay), Element.Empty);
                     }
         }
 
@@ -201,27 +201,27 @@ namespace SnakeBattleNet.Core.Battlemanager
             if (snake.Length != 0)
             {
                 // replace old head with body
-                battleField[snake.Head.Position.X, snake.Head.Position.Y] = new FieldRow(Content.Body, snake.Id);
+                battleField[new Position { X = snake.Head.Position.X, Y = snake.Head.Position.Y }] = Content.Body;
                 recorder.AddEvent(snake.Id, snake.Head.Position.X, snake.Head.Position.Y, LookinkgTo(snake.Head.Direction), Element.Body);
             }
             // add head to snake
             snake.Head = newHeadPosition;
             // put new head
-            battleField[snake.Head.Position.X, snake.Head.Position.Y] = new FieldRow(Content.Head, snake.Id);
+            battleField[new Position { X = snake.Head.Position.X, Y = snake.Head.Position.Y }] = Content.Head;
             recorder.AddEvent(snake.Id, snake.Head.Position.X, snake.Head.Position.Y, LookinkgTo(snake.Head.Direction), Element.Head);
         }
 
         private void CutTail(BattleField battleField, Snake snake)
         {
             // replace old tail with empty row
-            battleField[snake.Tail.Position.X, snake.Tail.Position.Y] = new FieldRow(Content.Empty, battleField.Id);
-            recorder.AddEvent(battleField.Id, snake.Tail.Position.X, snake.Tail.Position.Y, LookinkgTo(snake.Tail.Direction), Element.Empty);
+            battleField[new Position { X = snake.Tail.Position.X, Y = snake.Tail.Position.Y }] = Content.Empty;
+            recorder.AddEvent("battleField.Id", snake.Tail.Position.X, snake.Tail.Position.Y, LookinkgTo(snake.Tail.Direction), Element.Empty);
 
             // remove tail from snake
             snake.CutTail();
 
             // put new tail on field
-            battleField[snake.Tail.Position.X, snake.Tail.Position.Y] = new FieldRow(Content.Tail, snake.Id);
+            battleField[new Position { X = snake.Tail.Position.X, Y = snake.Tail.Position.Y }] = Content.Tail;
             recorder.AddEvent(snake.Id, snake.Tail.Position.X, snake.Tail.Position.Y, LookinkgTo(snake.Tail.Direction), Element.Tail);
         }
 
@@ -229,8 +229,8 @@ namespace SnakeBattleNet.Core.Battlemanager
         {
             foreach (var gateway in battleField.Gateways)
             {
-                battleField[gateway.Position.X, gateway.Position.Y] = new FieldRow(Content.Wall, battleField.Id);
-                recorder.AddEvent(battleField.Id, gateway.Position.X, gateway.Position.Y, LookinkgTo(gateway.Direction), Element.Gateway);
+                battleField[new Position { X = gateway.Position.X, Y = gateway.Position.Y }] = Content.Wall;
+                recorder.AddEvent("battleField.Id", gateway.Position.X, gateway.Position.Y, LookinkgTo(gateway.Direction), Element.Gateway);
             }
         }
 

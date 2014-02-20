@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using SnakeBattleNet.Core;
-using SnakeBattleNet.Core.Battlefield;
 using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Test.Core
@@ -19,66 +19,63 @@ namespace SnakeBattleNet.Test.Core
 
         protected static BattleField CreateBattleField(string idForOwnSnake)
         {
-            var battleField = new BattleField(new Size(9, 9), 1, "field-id");
+            var battleField = new BattleField();
 
             // Snake 0
-            battleField[4, 4] = new FieldRow(FieldContent.Head, idForOwnSnake);
-            battleField[4, 5] = new FieldRow(FieldContent.Body, idForOwnSnake);
-            battleField[5, 5] = new FieldRow(FieldContent.Body, idForOwnSnake);
-            battleField[5, 4] = new FieldRow(FieldContent.Tail, idForOwnSnake);
+            battleField[new Position { X = 4, Y = 4 }] = Content.Head;
+            battleField[new Position { X = 4, Y = 5 }] = Content.Body;
+            battleField[new Position { X = 5, Y = 5 }] = Content.Body;
+            battleField[new Position { X = 5, Y = 4 }] = Content.Tail;
 
             // Snake 1
-            var idForSnake1 = Guid.NewGuid().ToString();
-            battleField[4, 3] = new FieldRow(FieldContent.Head, idForSnake1);
-            battleField[4, 2] = new FieldRow(FieldContent.Body, idForSnake1);
-            battleField[5, 2] = new FieldRow(FieldContent.Body, idForSnake1);
-            battleField[5, 3] = new FieldRow(FieldContent.Tail, idForSnake1);
+            battleField[new Position { X = 4, Y = 3 }] = Content.Head;
+            battleField[new Position { X = 4, Y = 2 }] = Content.Body;
+            battleField[new Position { X = 5, Y = 2 }] = Content.Body;
+            battleField[new Position { X = 5, Y = 3 }] = Content.Tail;
 
             // Snake 2
-            var idForSnake2 = Guid.NewGuid().ToString();
-            battleField[2, 2] = new FieldRow(FieldContent.Head, idForSnake2);
-            battleField[3, 2] = new FieldRow(FieldContent.Body, idForSnake2);
-            battleField[3, 3] = new FieldRow(FieldContent.Body, idForSnake2);
-            battleField[2, 3] = new FieldRow(FieldContent.Body, idForSnake2);
-            battleField[2, 4] = new FieldRow(FieldContent.Tail, idForSnake2);
+            battleField[new Position { X = 2, Y = 2 }] = Content.Head;
+            battleField[new Position { X = 3, Y = 2 }] = Content.Body;
+            battleField[new Position { X = 3, Y = 3 }] = Content.Body;
+            battleField[new Position { X = 2, Y = 3 }] = Content.Body;
+            battleField[new Position { X = 2, Y = 4 }] = Content.Tail;
 
             // Snake 3
-            var idForSnake3 = Guid.NewGuid().ToString();
-            battleField[2, 5] = new FieldRow(FieldContent.Head, idForSnake3);
-            battleField[2, 6] = new FieldRow(FieldContent.Body, idForSnake3);
-            battleField[2, 7] = new FieldRow(FieldContent.Tail, idForSnake3);
+            battleField[new Position { X = 2, Y = 5 }] = Content.Head;
+            battleField[new Position { X = 2, Y = 6 }] = Content.Body;
+            battleField[new Position { X = 2, Y = 7 }] = Content.Tail;
 
             return battleField;
         }
 
-        protected static BrainModule CreateChipWithAndColoredHead(string snakeId)
+        protected static IEnumerable<ChipCell> CreateChipWithAndColoredHead(string snakeId)
         {
-            var chipWithAndColoredHead = new BrainModule(new Size(5, 5), snakeId);
+            var chip = new List<ChipCell>();
 
             // Own snake
-            chipWithAndColoredHead.SetOwnHead(2, 2, AOColor.AndGrey, Direction.North);
-            chipWithAndColoredHead.SetOwnBody(2, 3, Exclude.No, AOColor.OrGreen);
-            chipWithAndColoredHead.SetOwnBody(3, 3, Exclude.No, AOColor.OrGreen);
-            chipWithAndColoredHead.SetOwnTail(3, 2, Exclude.No, AOColor.OrGreen);
+            chip.Add(new ChipCell { Position = new Position { X = 2, Y = 2 }, Content = Content.Head, Color = Color.AndGrey, IsSelf = true });
+            chip.Add(new ChipCell { Position = new Position { X = 2, Y = 3 }, Content = Content.Body, Color = Color.OrGreen, IsSelf = true });
+            chip.Add(new ChipCell { Position = new Position { X = 3, Y = 3 }, Content = Content.Body, Color = Color.OrGreen, IsSelf = true });
+            chip.Add(new ChipCell { Position = new Position { X = 3, Y = 2 }, Content = Content.Tail, Color = Color.OrGreen, IsSelf = true });
 
             // Snake 1
-            chipWithAndColoredHead.ModuleRows[2, 1] = new ModuleRow(ModuleRowContent.EnemyHead, Exclude.No, AOColor.AndBlack);
-            chipWithAndColoredHead.ModuleRows[2, 0] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndBlack);
-            chipWithAndColoredHead.ModuleRows[3, 0] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndBlack);
-            chipWithAndColoredHead.ModuleRows[3, 1] = new ModuleRow(ModuleRowContent.EnemyTail, Exclude.No, AOColor.AndBlack);
+            chip.Add(new ChipCell { Position = new Position { X = 2, Y = 1 }, Content = Content.Head, Color = Color.AndBlack });
+            chip.Add(new ChipCell { Position = new Position { X = 2, Y = 0 }, Content = Content.Body, Color = Color.AndBlack });
+            chip.Add(new ChipCell { Position = new Position { X = 3, Y = 0 }, Content = Content.Body, Color = Color.AndBlack });
+            chip.Add(new ChipCell { Position = new Position { X = 3, Y = 1 }, Content = Content.Tail, Color = Color.AndBlack });
 
             // Snake 2
-            chipWithAndColoredHead.ModuleRows[0, 0] = new ModuleRow(ModuleRowContent.EnemyHead, Exclude.No, AOColor.AndGrey);
-            chipWithAndColoredHead.ModuleRows[1, 0] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndGrey);
-            chipWithAndColoredHead.ModuleRows[1, 1] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndGrey);
-            chipWithAndColoredHead.ModuleRows[0, 1] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.AndGrey);
-            chipWithAndColoredHead.ModuleRows[0, 2] = new ModuleRow(ModuleRowContent.EnemyTail, Exclude.No, AOColor.AndGrey);
+            chip.Add(new ChipCell { Position = new Position { X = 0, Y = 0 }, Content = Content.Head, Color = Color.AndGrey });
+            chip.Add(new ChipCell { Position = new Position { X = 1, Y = 0 }, Content = Content.Body, Color = Color.AndGrey });
+            chip.Add(new ChipCell { Position = new Position { X = 1, Y = 1 }, Content = Content.Body, Color = Color.AndGrey });
+            chip.Add(new ChipCell { Position = new Position { X = 0, Y = 1 }, Content = Content.Body, Color = Color.AndGrey });
+            chip.Add(new ChipCell { Position = new Position { X = 0, Y = 2 }, Content = Content.Tail, Color = Color.AndGrey });
 
             // Snake 3
-            chipWithAndColoredHead.ModuleRows[0, 3] = new ModuleRow(ModuleRowContent.EnemyHead, Exclude.No, AOColor.OrBlue);
-            chipWithAndColoredHead.ModuleRows[0, 4] = new ModuleRow(ModuleRowContent.EnemyBody, Exclude.No, AOColor.OrBlue);
+            chip.Add(new ChipCell { Position = new Position { X = 0, Y = 3 }, Content = Content.Head, Color = Color.OrBlue });
+            chip.Add(new ChipCell { Position = new Position { X = 0, Y = 4 }, Content = Content.Body, Color = Color.OrBlue });
 
-            return chipWithAndColoredHead;
+            return chip;
         }
     }
 }
