@@ -90,14 +90,13 @@ namespace SnakeBattleNet.Core.Battlemanager
 
             int headX = snake.Head.Position.X;
             int headY = snake.Head.Position.Y;
-
-            if (battleField[headX, headY + 1].Content == Content.Empty || battleField[headX, headY + 1].Content == Content.Tail)
+            if (battleField[new Position { X = headX, Y = headY + 1 }] == Content.Empty || battleField[new Position { X = headX, Y = headY + 1 }] == Content.Tail)
                 possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
-            if (battleField[headX, headY - 1].Content == Content.Empty || battleField[headX, headY - 1].Content == Content.Tail)
+            if (battleField[new Position { X = headX, Y = headY - 1 }] == Content.Empty || battleField[new Position { X = headX, Y = headY - 1 }] == Content.Tail)
                 possibleMoves.Add(new Move(headX, headY - 1, Direction.South));
-            if (battleField[headX - 1, headY].Content == Content.Empty || battleField[headX - 1, headY].Content == Content.Tail)
+            if (battleField[new Position { X = headX - 1, Y = headY }] == Content.Empty || battleField[new Position { X = headX - 1, Y = headY }] == Content.Tail)
                 possibleMoves.Add(new Move(headX - 1, headY, Direction.West));
-            if (battleField[headX + 1, headY].Content == Content.Empty || battleField[headX + 1, headY].Content == Content.Tail)
+            if (battleField[new Position { X = headX + 1, Y = headY }] == Content.Empty || battleField[new Position { X = headX + 1, Y = headY }] == Content.Tail)
                 possibleMoves.Add(new Move(headX + 1, headY, Direction.East));
 
             return possibleMoves;

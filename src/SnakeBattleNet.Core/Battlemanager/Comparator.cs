@@ -33,7 +33,7 @@ namespace SnakeBattleNet.Core.Battlemanager
                 var positionOnChip = head.Position;
                 var color = head.Color;
 
-                IEnumerable<FieldCell> fieldRows;
+                IDictionary<Position, Content> fieldRows;
                 switch (_snake.Head.Direction)
                 {
                     case Direction.North:
@@ -81,7 +81,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             return null;
         }
 
-        private bool Compare(IEnumerable<FieldCell> fieldCells, IEnumerable<ChipCell> chipCells, Color color)
+        private bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<ChipCell> chipCells, Color color)
         {
             var orBlue = false;
             var orBlueCount = 0;
@@ -208,16 +208,17 @@ namespace SnakeBattleNet.Core.Battlemanager
             return false;
         }
 
-        private FieldCell GetFieldCell(IEnumerable<FieldCell> fieldCells, Position position)
+        private Content GetFieldCell(IDictionary<Position, Content> fieldCells, Position position)
         {
-            return fieldCells.FirstOrDefault(c => c.Position.X == position.X && c.Position.Y == position.Y);
+            Content content;
+            return fieldCells.TryGetValue(position, out content) ? content : Content.Empty;
         }
 
-        private bool IsEqual(ChipCell chipCell, FieldCell fieldCell)
+        private bool IsEqual(ChipCell chipCell, Content fieldCell)
         {
             return chipCell.Exclude
-                ? chipCell.Content != fieldCell.Content
-                : chipCell.Content == fieldCell.Content;
+                ? chipCell.Content != fieldCell
+                : chipCell.Content == fieldCell;
         }
     }
 }

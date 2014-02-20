@@ -17,10 +17,10 @@ namespace SnakeBattleNet.Test.Core
             battleField.Cells.Count.ShouldEqual(battleField.SideLength * battleField.SideLength);
 
         It should_exact_number_of_wals = () =>
-            battleField.Cells.Count(c => c.Content == Content.Wall).ShouldEqual(battleField.SideLength * 4 - 4);
+            battleField.Cells.Count(c => c.Value == Content.Wall).ShouldEqual(battleField.SideLength * 4 - 4);
 
         It should_exact_number_of_empty = () =>
-            battleField.Cells.Count(c => c.Content == Content.Empty).ShouldEqual((battleField.SideLength * battleField.SideLength) - (battleField.SideLength * 4 - 4));
+            battleField.Cells.Count(c => c.Value == Content.Empty).ShouldEqual((battleField.SideLength * battleField.SideLength) - (battleField.SideLength * 4 - 4));
 
         It should_exact_number_of_gateways = () =>
             battleField.Gateways.Count.ShouldEqual(4);

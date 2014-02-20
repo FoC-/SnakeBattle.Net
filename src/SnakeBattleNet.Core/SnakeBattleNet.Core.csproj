@@ -39,7 +39,6 @@
     <Compile Include="Battlemanager\Comparator.cs" />
     <Compile Include="Contract\ChipCell.cs" />
     <Compile Include="Contract\Content.cs" />
-    <Compile Include="Contract\FieldCell.cs" />
     <Compile Include="Contract\Position.cs" />
     <Compile Include="Prototypes\IBattleField.cs" />
     <Compile Include="Prototypes\Snake\DummyMind.cs" />

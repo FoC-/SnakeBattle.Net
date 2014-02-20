@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Core
@@ -8,26 +7,24 @@ namespace SnakeBattleNet.Core
     {
         public int SideLength { get; private set; }
         public int GatewaysPerSide { get; private set; }
-        public ICollection<FieldCell> Cells { get; private set; }
+        public IDictionary<Position, Content> Cells { get; private set; }
         public IList<Move> Gateways { get; private set; }
-
-        public FieldCell this[int x, int y]
-        {
-            get
-            {
-                var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
-                return cell ?? new FieldCell { Content = Content.Empty, Position = new Position { X = x, Y = y } };
-            }
-        }
 
         public Content this[Position position]
         {
+            get
+            {
+                Content content;
+                return Cells.TryGetValue(position, out content) ? content : Content.Empty;
+            }
             set
             {
-                var tempCells = Cells.ToList();
-                tempCells.RemoveAll(c => c.Position.X == position.X && c.Position.Y == position.Y);
-                tempCells.Add(new FieldCell { Content = value, Position = position });
-                Cells = tempCells;
+                Content content;
+                if (Cells.TryGetValue(position, out content))
+                {
+                    Cells.Remove(position);
+                }
+                Cells.Add(position, value);
             }
         }
 
@@ -35,95 +32,87 @@ namespace SnakeBattleNet.Core
         {
             SideLength = 27;
             GatewaysPerSide = 1;
-            Cells = new List<FieldCell>();
+            Cells = new Dictionary<Position, Content>();
             Gateways = new List<Move>();
             CreateEmpty();
             CreateWalls();
             CreateGateways();
         }
 
-        public IEnumerable<FieldCell> ViewToNorth(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
+        public IDictionary<Position, Content> ViewToNorth(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
         {
-            var rows = new List<FieldCell>();
+            var cells = new Dictionary<Position, Content>();
             int fx = snakeHeadPositionOnBattleField.X;
             int fy = snakeHeadPositionOnBattleField.Y;
 
             int cx = snakeHeadPositionOnModule.X;
             int cy = snakeHeadPositionOnModule.Y;
 
-            int i = 0, j = 0;
-            for (int y = fy - cy; y < fy - cy + chipSideLength; y++, j++)
-                for (int x = fx - cx; x < fx - cx + chipSideLength; x++, i++)
+            for (int j = 0, y = fy - cy; y < fy - cy + chipSideLength; y++, j++)
+                for (int i = 0, x = fx - cx; x < fx - cx + chipSideLength; x++, i++)
                 {
-                    var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
-                    cell = cell ?? new FieldCell { Content = Content.Empty };
-                    cell.Position = new Position { X = i, Y = j };
-                    rows.Add(cell);
+                    var position = new Position { X = i, Y = j };
+                    var content = this[position];
+                    cells.Add(position, content);
                 }
-            return rows;
+            return cells;
         }
 
-        public IEnumerable<FieldCell> ViewToWest(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
+        public IDictionary<Position, Content> ViewToWest(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
         {
-            var rows = new List<FieldCell>();
+            var cells = new Dictionary<Position, Content>();
             int fx = snakeHeadPositionOnBattleField.X;
             int fy = snakeHeadPositionOnBattleField.Y;
 
             int cx = snakeHeadPositionOnModule.X;
             int cy = snakeHeadPositionOnModule.Y;
 
-            int i = 0, j = 0;
-            for (int y = fy + cy; y > fy + cy - chipSideLength; y--, j++)
-                for (int x = fx - cx; x < fx - cx + chipSideLength; x++, i++)
+            for (int j = 0, y = fy + cy; y > fy + cy - chipSideLength; y--, j++)
+                for (int i = 0, x = fx - cx; x < fx - cx + chipSideLength; x++, i++)
                 {
-                    var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
-                    cell = cell ?? new FieldCell { Content = Content.Empty };
-                    cell.Position = new Position { X = i, Y = j };
-                    rows.Add(cell);
+                    var position = new Position { X = i, Y = j };
+                    var content = this[position];
+                    cells.Add(position, content);
                 }
-            return rows;
+            return cells;
         }
 
-        public IEnumerable<FieldCell> ViewToEast(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
+        public IDictionary<Position, Content> ViewToEast(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
         {
-            var rows = new List<FieldCell>();
+            var cells = new Dictionary<Position, Content>();
             int fx = snakeHeadPositionOnBattleField.X;
             int fy = snakeHeadPositionOnBattleField.Y;
 
             int cx = snakeHeadPositionOnModule.X;
             int cy = snakeHeadPositionOnModule.Y;
 
-            int i = 0, j = 0;
-            for (int y = fy - cy; y < fy - cy + chipSideLength; y++, j++)
-                for (int x = fx + cx; x > fx + cx - chipSideLength; x--, i++)
+            for (int j = 0, y = fy - cy; y < fy - cy + chipSideLength; y++, j++)
+                for (int i = 0, x = fx + cx; x > fx + cx - chipSideLength; x--, i++)
                 {
-                    var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
-                    cell = cell ?? new FieldCell { Content = Content.Empty };
-                    cell.Position = new Position { X = i, Y = j };
-                    rows.Add(cell);
+                    var position = new Position { X = i, Y = j };
+                    var content = this[position];
+                    cells.Add(position, content);
                 }
-            return rows;
+            return cells;
         }
 
-        public IEnumerable<FieldCell> ViewToSouth(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
+        public IDictionary<Position, Content> ViewToSouth(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
         {
-            var rows = new List<FieldCell>();
+            var cells = new Dictionary<Position, Content>();
             int fx = snakeHeadPositionOnBattleField.X;
             int fy = snakeHeadPositionOnBattleField.Y;
 
             int cx = snakeHeadPositionOnModule.X;
             int cy = snakeHeadPositionOnModule.Y;
 
-            int i = 0, j = 0;
-            for (int y = fy + cy; y > fy + cy - chipSideLength; y--, j++)
-                for (int x = fx + cx; x > fx + cx - chipSideLength; x--, i++)
+            for (int j = 0, y = fy + cy; y > fy + cy - chipSideLength; y--, j++)
+                for (int i = 0, x = fx + cx; x > fx + cx - chipSideLength; x--, i++)
                 {
-                    var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
-                    cell = cell ?? new FieldCell { Content = Content.Empty };
-                    cell.Position = new Position { X = i, Y = j };
-                    rows.Add(cell);
+                    var position = new Position { X = i, Y = j };
+                    var content = this[position];
+                    cells.Add(position, content);
                 }
-            return rows;
+            return cells;
         }
 
         private void CreateEmpty()
