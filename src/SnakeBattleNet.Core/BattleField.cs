@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Core
 {
-    public class BattleField
+    public class BattleField : IEnumerable<KeyValuePair<Position, Content>>
     {
-        public int SideLength { get; private set; }
-        public int GatewaysPerSide { get; private set; }
-        public IDictionary<Position, Content> Cells { get; private set; }
+        private readonly IDictionary<Position, Content> _cells;
+
+        public const int SideLength = 27;
+        public const int GatewaysPerSide = 1;
         public IList<Move> Gateways { get; private set; }
 
         public Content this[Position position]
@@ -15,24 +17,22 @@ namespace SnakeBattleNet.Core
             get
             {
                 Content content;
-                return Cells.TryGetValue(position, out content) ? content : Content.Empty;
+                return _cells.TryGetValue(position, out content) ? content : Content.Empty;
             }
             set
             {
                 Content content;
-                if (Cells.TryGetValue(position, out content))
+                if (_cells.TryGetValue(position, out content))
                 {
-                    Cells.Remove(position);
+                    _cells.Remove(position);
                 }
-                Cells.Add(position, value);
+                _cells.Add(position, value);
             }
         }
 
         public BattleField()
         {
-            SideLength = 27;
-            GatewaysPerSide = 1;
-            Cells = new Dictionary<Position, Content>();
+            _cells = new Dictionary<Position, Content>();
             Gateways = new List<Move>();
             CreateEmpty();
             CreateWalls();
@@ -150,6 +150,16 @@ namespace SnakeBattleNet.Core
                 Gateways.Add(new Move(i * x, 0, Direction.North));
                 Gateways.Add(new Move(i * x, SideLength - 1, Direction.South));
             }
+        }
+
+        IEnumerator<KeyValuePair<Position, Content>> IEnumerable<KeyValuePair<Position, Content>>.GetEnumerator()
+        {
+            return _cells.GetEnumerator();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _cells.GetEnumerator();
         }
     }
 }

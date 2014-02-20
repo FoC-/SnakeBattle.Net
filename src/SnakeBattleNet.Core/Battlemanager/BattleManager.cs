@@ -26,7 +26,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             int randomSeed = Environment.TickCount;
             random = new Random(randomSeed);
 
-            recorder.Initialize(battleField.SideLength, battleField.SideLength, randomSeed, snakes.Select(_ => _.Id).Concat(new[] { "battleField.Id" }));
+            recorder.Initialize(BattleField.SideLength, BattleField.SideLength, randomSeed, snakes.Select(_ => _.Id).Concat(new[] { "battleField.Id" }));
 
             InitializeField(battleField, snakes);
             for (int i = 0; i < rounds; i++)
@@ -163,9 +163,9 @@ namespace SnakeBattleNet.Core.Battlemanager
         #region Draw on field
         private void PutEmptySpaceAndWalls(BattleField battleField)
         {
-            for (int x = 0; x < battleField.SideLength; x++)
-                for (int y = 0; y < battleField.SideLength; y++)
-                    if (x == 0 || y == 0 || x == battleField.SideLength - 1 || y == battleField.SideLength - 1)
+            for (int x = 0; x < BattleField.SideLength; x++)
+                for (int y = 0; y < BattleField.SideLength; y++)
+                    if (x == 0 || y == 0 || x == BattleField.SideLength - 1 || y == BattleField.SideLength - 1)
                     {
                         battleField[new Position { X = x, Y = y }] = Content.Wall;
                         recorder.AddEvent("battleField.Id", x, y, LookinkgTo(Direction.NoWay), Element.Wall);
