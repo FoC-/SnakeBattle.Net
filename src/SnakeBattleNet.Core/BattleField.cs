@@ -8,13 +8,16 @@ namespace SnakeBattleNet.Core
     {
         public int SideLength { get; private set; }
         public int GatewaysPerSide { get; private set; }
-        public IEnumerable<FieldCell> Cells { get; private set; }
+        public ICollection<FieldCell> Cells { get; private set; }
         public IList<Move> Gateways { get; private set; }
 
         public FieldCell this[int x, int y]
         {
-            get { return Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y); }
-
+            get
+            {
+                var cell = Cells.FirstOrDefault(c => c.Position.X == x && c.Position.Y == y);
+                return cell ?? new FieldCell { Content = Content.Empty, Position = new Position { X = x, Y = y } };
+            }
         }
 
         public Content this[Position position]
@@ -32,8 +35,10 @@ namespace SnakeBattleNet.Core
         {
             SideLength = 27;
             GatewaysPerSide = 1;
-            Cells = Enumerable.Empty<FieldCell>();
+            Cells = new List<FieldCell>();
             Gateways = new List<Move>();
+            CreateEmpty();
+            CreateWalls();
             CreateGateways();
         }
 
@@ -121,12 +126,35 @@ namespace SnakeBattleNet.Core
             return rows;
         }
 
+        private void CreateEmpty()
+        {
+            for (var x = 1; x < SideLength - 1; x++)
+                for (var y = 1; y < SideLength - 1; y++)
+                {
+                    this[new Position { X = x, Y = y }] = Content.Empty;
+                }
+        }
+
+        private void CreateWalls()
+        {
+            for (var x = 0; x < SideLength; x++)
+            {
+                this[new Position { X = x, Y = 0 }] = Content.Wall;
+                this[new Position { X = x, Y = SideLength - 1 }] = Content.Wall;
+            }
+            for (var y = 0; y < SideLength; y++)
+            {
+                this[new Position { X = 0, Y = y }] = Content.Wall;
+                this[new Position { X = SideLength - 1, Y = y }] = Content.Wall;
+            }
+        }
+
         private void CreateGateways()
         {
-            int x = SideLength / (GatewaysPerSide + 1);
-            int y = SideLength / (GatewaysPerSide + 1);
+            var x = SideLength / (GatewaysPerSide + 1);
+            var y = SideLength / (GatewaysPerSide + 1);
 
-            for (int i = 1; i < GatewaysPerSide + 1; i++)
+            for (var i = 1; i < GatewaysPerSide + 1; i++)
             {
                 Gateways.Add(new Move(0, i * y, Direction.East));
                 Gateways.Add(new Move(SideLength - 1, i * y, Direction.West));
