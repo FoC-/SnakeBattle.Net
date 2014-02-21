@@ -64,6 +64,10 @@
     <Compile Include="BattleManager\when_call_comparator_with_predifined_chip_antother_tail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="When_BattleField_is_created.cs" />
+    <Compile Include="When_ViewToEast_is_called_and_chip_side_length_3.cs" />
+    <Compile Include="When_ViewToNorth_is_called_and_chip_side_length_3.cs" />
+    <Compile Include="When_ViewToSouth_is_called_and_chip_side_length_3.cs" />
+    <Compile Include="When_ViewToWest_is_called_and_chip_side_length_3.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
