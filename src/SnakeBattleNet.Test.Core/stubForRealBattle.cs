@@ -17,7 +17,7 @@ namespace SnakeBattleNet.Test.Core
             return snakeStub;
         }
 
-        protected static BattleField CreateBattleField(string idForOwnSnake)
+        protected static BattleField CreateBattleField()
         {
             var battleField = new BattleField();
 

@@ -9,30 +9,22 @@ namespace SnakeBattleNet.Test.Core
     [Subject(typeof(Comparator))]
     class when_call_comparator_with_predifined_chip_antother_tail : stubForRealBattle
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
-            expectedMove = new Move(4, 3, Direction.North);
-
-            Snake snake = CreateSnakeStub();
             var module = CreateChipWithAndColoredHead();
+            snake = CreateSnakeStub();
             snake.Chips.Add(module);
-
-            BattleField battleField = CreateBattleField(snake.Id);
-            comparator = new Comparator(battleField, snake);
+            battleField = CreateBattleField();
         };
 
-        private Because of = () =>
-        {
-            move = comparator.MakeDecision();
-        };
+        Because of = () =>
+            result = battleField.MakeDecision(snake);
 
-        private It should_return_move_on_that_row = () =>
-        {
-            move.ShouldEqual(expectedMove);
-        };
+        It should_return_move_on_that_row = () =>
+            result.ShouldEqual(new Move(4, 3, Direction.North));
 
-        private static Move move;
-        private static Comparator comparator;
-        private static Move expectedMove;
+        private static Move result;
+        private static BattleField battleField;
+        private static Snake snake;
     }
 }

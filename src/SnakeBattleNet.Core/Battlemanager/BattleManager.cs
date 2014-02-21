@@ -70,7 +70,7 @@ namespace SnakeBattleNet.Core.Battlemanager
                 if (possibleMoves.Count == 0) continue;
 
                 //Try to move according brain chip
-                Move move = GetLogicalMove(battleField, snake);
+                Move move = battleField.MakeDecision(snake);
                 if (possibleMoves.Contains(move))
                     TryToBite(battleField, snake, snakes, move);
 
@@ -124,18 +124,6 @@ namespace SnakeBattleNet.Core.Battlemanager
                     return new Move(headX, headY - 1, Direction.South);
             }
             throw new Exception("Something wrong in moving strait!");
-        }
-
-        /// <summary>
-        /// Make decision for next move
-        /// </summary>
-        /// <param name="battleField">Battle field or part of it</param>
-        /// <param name="snake">Snake who try to move</param>
-        /// <returns>Next move or null, if no idea where to move</returns>
-        private Move GetLogicalMove(BattleField battleField, Snake snake)
-        {
-            var comparator = new Comparator(battleField, snake);
-            return comparator.MakeDecision();
         }
 
         /// <summary>

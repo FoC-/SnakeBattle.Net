@@ -4,38 +4,29 @@ using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Core.Battlemanager
 {
-    public class Comparator
+    public static class Comparator
     {
-        private readonly BattleField _battleField;
-        private readonly Snake _snake;
-
-        public Comparator(BattleField battleField, Snake snake)
-        {
-            _snake = snake;
-            _battleField = battleField;
-        }
-
-        public Move MakeDecision()
+        public static Move MakeDecision(this BattleField battleField, Snake snake)
         {
             const int chipSizeDim = 7;
-            var positionOnField = _snake.Head.Position;
+            var positionOnField = snake.Head.Position;
 
             var moveToNorth = new Move(positionOnField.X, positionOnField.Y - 1, Direction.North);
             var moveToSouth = new Move(positionOnField.X, positionOnField.Y + 1, Direction.South);
             var moveToWest = new Move(positionOnField.X - 1, positionOnField.Y, Direction.West);
             var moveToEast = new Move(positionOnField.X + 1, positionOnField.Y, Direction.East);
 
-            foreach (var chip in _snake.Chips)
+            foreach (var chip in snake.Chips)
             {
                 var head = chip.SingleOrDefault(c => c.Value.Content == Content.Head && c.Value.IsSelf);
                 var positionOnChip = head.Key;
 
-                var northView = _battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
-                var westView = _battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
-                var eastView = _battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
-                var southView = _battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
+                var northView = battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
+                var westView = battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
+                var eastView = battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
+                var southView = battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
 
-                switch (_snake.Head.Direction)
+                switch (snake.Head.Direction)
                 {
                     case Direction.North:
                         {
@@ -71,7 +62,7 @@ namespace SnakeBattleNet.Core.Battlemanager
         }
 
         #warning Self parts are not resolved
-        private bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells)
+        private static bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells)
         {
             var cells = chipCells.ToList();
 
@@ -89,13 +80,13 @@ namespace SnakeBattleNet.Core.Battlemanager
                 : blue || green || grey || red || black;
         }
 
-        private Content GetFieldCell(IDictionary<Position, Content> fieldCells, Position position)
+        private static Content GetFieldCell(IDictionary<Position, Content> fieldCells, Position position)
         {
             Content content;
             return fieldCells.TryGetValue(position, out content) ? content : Content.Empty;
         }
 
-        private bool IsEqual(ChipCell chipCell, Content fieldCell)
+        private static bool IsEqual(ChipCell chipCell, Content fieldCell)
         {
             return chipCell.Exclude
                 ? chipCell.Content != fieldCell
