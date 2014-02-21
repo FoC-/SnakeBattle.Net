@@ -42,12 +42,10 @@ namespace SnakeBattleNet.Core
         public IDictionary<Position, Content> ViewToNorth(Position field, Position chip, int chipSideLength)
         {
             var cells = new Dictionary<Position, Content>();
-            for (var y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++)
-                for (var x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++)
+            for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
+                for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
                 {
-                    var position = new Position { X = x, Y = y };
-                    var content = this[position];
-                    cells.Add(position, content);
+                    cells.Add(new Position { X = rx, Y = ry }, this[new Position { X = x, Y = y }]);
                 }
             return cells;
         }
@@ -55,12 +53,10 @@ namespace SnakeBattleNet.Core
         public IDictionary<Position, Content> ViewToWest(Position field, Position chip, int chipSideLength)
         {
             var cells = new Dictionary<Position, Content>();
-            for (var y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--)
-                for (var x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++)
+            for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
+                for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
                 {
-                    var position = new Position { X = y, Y = x };
-                    var content = this[position];
-                    cells.Add(position, content);
+                    cells.Add(new Position { X = rx, Y = ry }, this[new Position { X = x, Y = y }]);
                 }
             return cells;
         }
@@ -68,12 +64,10 @@ namespace SnakeBattleNet.Core
         public IDictionary<Position, Content> ViewToEast(Position field, Position chip, int chipSideLength)
         {
             var cells = new Dictionary<Position, Content>();
-            for (var y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++)
-                for (var x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--)
+            for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
+                for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
                 {
-                    var position = new Position { X = y, Y = x };
-                    var content = this[position];
-                    cells.Add(position, content);
+                    cells.Add(new Position { X = rx, Y = ry }, this[new Position { X = x, Y = y }]);
                 }
             return cells;
         }
@@ -81,12 +75,10 @@ namespace SnakeBattleNet.Core
         public IDictionary<Position, Content> ViewToSouth(Position field, Position chip, int chipSideLength)
         {
             var cells = new Dictionary<Position, Content>();
-            for (var y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--)
-                for (var x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--)
+            for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
+                for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
                 {
-                    var position = new Position { X = x, Y = y };
-                    var content = this[position];
-                    cells.Add(position, content);
+                    cells.Add(new Position { X = rx, Y = ry }, this[new Position { X = x, Y = y }]);
                 }
             return cells;
         }
