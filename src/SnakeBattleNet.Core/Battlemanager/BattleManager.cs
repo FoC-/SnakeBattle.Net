@@ -69,23 +69,21 @@ namespace SnakeBattleNet.Core.Battlemanager
             }
         }
 
-        private Move StraitMove(Move headPosition)
+        private Move StraitMove(Move head)
         {
-            int headX = headPosition.Position.X;
-            int headY = headPosition.Position.Y;
-            var direction = headPosition.Direction;
-            switch (direction)
+            switch (head.Direction)
             {
                 case Direction.North:
-                    return new Move(headX, headY + 1, Direction.North);
+                    return Move.ToNothFrom(head.Position);
                 case Direction.West:
-                    return new Move(headX - 1, headY, Direction.West);
+                    return Move.ToWestFrom(head.Position);
                 case Direction.East:
-                    return new Move(headX + 1, headY, Direction.East);
+                    return Move.ToEastFrom(head.Position);
                 case Direction.South:
-                    return new Move(headX, headY - 1, Direction.South);
+                    return Move.ToSouthFrom(head.Position);
+                default:
+                    throw new Exception("Something wrong in moving strait!");
             }
-            throw new Exception("Something wrong in moving strait!");
         }
 
         /// <summary>

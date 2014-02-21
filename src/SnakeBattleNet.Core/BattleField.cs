@@ -39,7 +39,7 @@ namespace SnakeBattleNet.Core
             CreateGateways();
         }
 
-        public IDictionary<Position, Content> ViewToNorth(Position field, Position chip, int chipSideLength)
+        public IDictionary<Position, Content> ViewToNorth(Position field, Position chip, int chipSideLength = 7)
         {
             var cells = new Dictionary<Position, Content>();
             for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
@@ -50,7 +50,7 @@ namespace SnakeBattleNet.Core
             return cells;
         }
 
-        public IDictionary<Position, Content> ViewToWest(Position field, Position chip, int chipSideLength)
+        public IDictionary<Position, Content> ViewToWest(Position field, Position chip, int chipSideLength = 7)
         {
             var cells = new Dictionary<Position, Content>();
             for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
@@ -61,7 +61,7 @@ namespace SnakeBattleNet.Core
             return cells;
         }
 
-        public IDictionary<Position, Content> ViewToEast(Position field, Position chip, int chipSideLength)
+        public IDictionary<Position, Content> ViewToEast(Position field, Position chip, int chipSideLength = 7)
         {
             var cells = new Dictionary<Position, Content>();
             for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
@@ -72,7 +72,7 @@ namespace SnakeBattleNet.Core
             return cells;
         }
 
-        public IDictionary<Position, Content> ViewToSouth(Position field, Position chip, int chipSideLength)
+        public IDictionary<Position, Content> ViewToSouth(Position field, Position chip, int chipSideLength = 7)
         {
             var cells = new Dictionary<Position, Content>();
             for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
@@ -113,10 +113,10 @@ namespace SnakeBattleNet.Core
 
             for (var i = 1; i < GatewaysPerSide + 1; i++)
             {
-                Gateways.Add(new Move(0, i * y, Direction.East));
-                Gateways.Add(new Move(SideLength - 1, i * y, Direction.West));
-                Gateways.Add(new Move(i * x, 0, Direction.North));
-                Gateways.Add(new Move(i * x, SideLength - 1, Direction.South));
+                Gateways.Add(new Move(new Position { X = 0, Y = i * y }, Direction.East));
+                Gateways.Add(new Move(new Position { X = SideLength - 1, Y = i * y }, Direction.West));
+                Gateways.Add(new Move(new Position { X = i * x, Y = 0 }, Direction.North));
+                Gateways.Add(new Move(new Position { X = i * x, Y = SideLength - 1 }, Direction.South));
             }
         }
 

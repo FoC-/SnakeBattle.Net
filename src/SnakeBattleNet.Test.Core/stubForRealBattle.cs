@@ -10,10 +10,10 @@ namespace SnakeBattleNet.Test.Core
         protected static Snake CreateSnakeStub()
         {
             var snakeStub = new Snake(Guid.NewGuid().ToString());
-            snakeStub.Head = new Move(5, 4, Direction.South);
-            snakeStub.Head = new Move(5, 5, Direction.West);
-            snakeStub.Head = new Move(4, 5, Direction.North);
-            snakeStub.Head = new Move(4, 4, Direction.North);
+            snakeStub.Head = new Move(new Position { X = 5, Y = 4 }, Direction.South);
+            snakeStub.Head = new Move(new Position { X = 5, Y = 5 }, Direction.West);
+            snakeStub.Head = new Move(new Position { X = 4, Y = 5 }, Direction.North);
+            snakeStub.Head = new Move(new Position { X = 4, Y = 4 }, Direction.North);
             return snakeStub;
         }
 

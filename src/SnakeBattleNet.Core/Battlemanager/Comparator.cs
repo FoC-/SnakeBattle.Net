@@ -9,36 +9,45 @@ namespace SnakeBattleNet.Core.Battlemanager
     {
         public static Move MakeDecision(this BattleField battleField, Snake snake)
         {
-            const int chipSizeDim = 7;
             var positionOnField = snake.Head.Position;
+            var moves = new[]
+            {
+                Move.ToNothFrom(positionOnField),
+                Move.ToWestFrom(positionOnField),
+                Move.ToEastFrom(positionOnField),
+                Move.ToSouthFrom(positionOnField),
+            };
 
-            //Check if movement is possible
-            var possibleMoves = new List<Move>(GetPossibleMoves(battleField, positionOnField));
-            if (possibleMoves.Count == 0) return null;
-
-            var moveToNorth = new Move(positionOnField.X, positionOnField.Y - 1, Direction.North);
-            var moveToWest = new Move(positionOnField.X - 1, positionOnField.Y, Direction.West);
-            var moveToEast = new Move(positionOnField.X + 1, positionOnField.Y, Direction.East);
-            var moveToSouth = new Move(positionOnField.X, positionOnField.Y + 1, Direction.South);
+            var possibleMoves = moves.Where(m => IsPossible(battleField, m)).ToArray();
+            if (!possibleMoves.Any()) return null;
 
             foreach (var chip in snake.Chips)
             {
-                var head = chip.SingleOrDefault(c => c.Value.Content == Content.Head && c.Value.IsSelf);
-                var positionOnChip = head.Key;
-
-                var northView = battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
-                var westView = battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
-                var eastView = battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
-                var southView = battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
-
-#warning Order should be configurable
-                if (Compare(northView, chip)) return moveToNorth;
-                if (Compare(westView, chip)) return moveToWest;
-                if (Compare(eastView, chip)) return moveToEast;
-                if (Compare(southView, chip)) return moveToSouth;
+                var positionOnChip = chip.FirstOrDefault(c => c.Value.Content == Content.Head && c.Value.IsSelf).Key;
+                foreach (var move in possibleMoves)
+                {
+                    switch (move.Direction)
+                    {
+                        case Direction.North:
+                            if (Compare(battleField.ViewToNorth(positionOnField, positionOnChip), chip))
+                                return move;
+                            break;
+                        case Direction.West:
+                            if (Compare(battleField.ViewToWest(positionOnField, positionOnChip), chip))
+                                return move;
+                            break;
+                        case Direction.East:
+                            if (Compare(battleField.ViewToEast(positionOnField, positionOnChip), chip))
+                                return move;
+                            break;
+                        case Direction.South:
+                            if (Compare(battleField.ViewToSouth(positionOnField, positionOnChip), chip))
+                                return move;
+                            break;
+                    }
+                }
             }
-
-            return possibleMoves[new Random().Next(possibleMoves.Count)];
+            return possibleMoves[new Random().Next(possibleMoves.Length)];
         }
 
 #warning Self parts are not resolved
@@ -60,30 +69,6 @@ namespace SnakeBattleNet.Core.Battlemanager
                 : blue || green || grey || red || black;
         }
 
-        private static IEnumerable<Move> GetPossibleMoves(BattleField battleField, Position position)
-        {
-            var possibleMoves = new List<Move>();
-
-            var x = position.X;
-            var y = position.Y;
-
-            var onNorth = battleField[new Position { X = x, Y = y + 1 }];
-            var onWest = battleField[new Position { X = x - 1, Y = y }];
-            var onEast = battleField[new Position { X = x + 1, Y = y }];
-            var onSouth = battleField[new Position { X = x, Y = y - 1 }];
-
-            if (onNorth == Content.Empty || onNorth == Content.Tail)
-                possibleMoves.Add(new Move(x, y + 1, Direction.North));
-            if (onWest == Content.Empty || onWest == Content.Tail)
-                possibleMoves.Add(new Move(x - 1, y, Direction.West));
-            if (onEast == Content.Empty || onEast == Content.Tail)
-                possibleMoves.Add(new Move(x + 1, y, Direction.East));
-            if (onSouth == Content.Empty || onSouth == Content.Tail)
-                possibleMoves.Add(new Move(x, y - 1, Direction.South));
-
-            return possibleMoves;
-        }
-
         private static Content GetFieldCell(IDictionary<Position, Content> fieldCells, Position position)
         {
             Content content;
@@ -95,6 +80,12 @@ namespace SnakeBattleNet.Core.Battlemanager
             return chipCell.Exclude
                 ? chipCell.Content != fieldCell
                 : chipCell.Content == fieldCell;
+        }
+
+        private static bool IsPossible(BattleField battleField, Move move)
+        {
+            var content = battleField[move.Position];
+            return content == Content.Empty || content == Content.Tail;
         }
     }
 }

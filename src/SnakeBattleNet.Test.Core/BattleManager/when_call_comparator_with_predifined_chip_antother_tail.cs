@@ -21,7 +21,7 @@ namespace SnakeBattleNet.Test.Core
             result = battleField.MakeDecision(snake);
 
         It should_return_move_on_that_row = () =>
-            result.ShouldEqual(new Move(4, 3, Direction.North));
+            result.ShouldEqual(new Move(new Position { X = 4, Y = 3 }, Direction.North));
 
         private static Move result;
         private static BattleField battleField;

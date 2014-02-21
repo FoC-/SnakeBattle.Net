@@ -4,30 +4,37 @@ namespace SnakeBattleNet.Core.Contract
 {
     public class Move
     {
-        public Position Position { get; set; }
-        public Direction Direction { get; set; }
-        public Move(int x, int y, Direction direction)
+        public Position Position { get; private set; }
+        public Direction Direction { get; private set; }
+        public Move(Position position, Direction direction)
         {
-            Position = new Position { X = x, Y = y };
+            Position = position;
             Direction = direction;
         }
 
-        public override int GetHashCode()
+        public static Move ToNothFrom(Position position)
         {
-            return "{0}{1}".F(Position.X, Position.Y).GetHashCode();
+            return new Move(new Position { X = position.X, Y = position.Y + 1 }, Direction.North);
         }
 
-        //restuta->foc: this doesn't include direction comparison, why two Move objects with the same X and Y
-        //but different directions should be considered as equal?
-        public override bool Equals(object obj)
+        public static Move ToWestFrom(Position position)
         {
-            Move move = (Move)obj;
-            return move.Position.X == Position.X && move.Position.Y == Position.Y;
+            return new Move(new Position { X = position.X - 1, Y = position.Y }, Direction.West);
+        }
+
+        public static Move ToEastFrom(Position position)
+        {
+            return new Move(new Position { X = position.X + 1, Y = position.Y }, Direction.East);
+        }
+
+        public static Move ToSouthFrom(Position position)
+        {
+            return new Move(new Position { X = position.X, Y = position.Y - 1 }, Direction.South);
         }
 
         public override string ToString()
         {
-            return "X={0,2},Y={1,2},Direction is {2,5}".F(Position.X, Position.Y, Direction);
+            return "{0},Direction is {1,5}".F(Position, Direction);
         }
     }
 }

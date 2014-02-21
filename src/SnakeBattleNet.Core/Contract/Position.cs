@@ -9,7 +9,7 @@ namespace SnakeBattleNet.Core.Contract
 
         public override string ToString()
         {
-            return "[{0},{1}]".F(X, Y);
+            return "[{0,2},{1,2}]".F(X, Y);
         }
     }
 }
