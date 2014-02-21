@@ -39,76 +39,52 @@ namespace SnakeBattleNet.Core
             CreateGateways();
         }
 
-        public IDictionary<Position, Content> ViewToNorth(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
+        public IDictionary<Position, Content> ViewToNorth(Position field, Position chip, int chipSideLength)
         {
             var cells = new Dictionary<Position, Content>();
-            int fx = snakeHeadPositionOnBattleField.X;
-            int fy = snakeHeadPositionOnBattleField.Y;
-
-            int cx = snakeHeadPositionOnModule.X;
-            int cy = snakeHeadPositionOnModule.Y;
-
-            for (int j = 0, y = fy - cy; y < fy - cy + chipSideLength; y++, j++)
-                for (int i = 0, x = fx - cx; x < fx - cx + chipSideLength; x++, i++)
+            for (var y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++)
+                for (var x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++)
                 {
-                    var position = new Position { X = i, Y = j };
+                    var position = new Position { X = x, Y = y };
                     var content = this[position];
                     cells.Add(position, content);
                 }
             return cells;
         }
 
-        public IDictionary<Position, Content> ViewToWest(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
+        public IDictionary<Position, Content> ViewToWest(Position field, Position chip, int chipSideLength)
         {
             var cells = new Dictionary<Position, Content>();
-            int fx = snakeHeadPositionOnBattleField.X;
-            int fy = snakeHeadPositionOnBattleField.Y;
-
-            int cx = snakeHeadPositionOnModule.X;
-            int cy = snakeHeadPositionOnModule.Y;
-
-            for (int j = 0, y = fy + cy; y > fy + cy - chipSideLength; y--, j++)
-                for (int i = 0, x = fx - cx; x < fx - cx + chipSideLength; x++, i++)
+            for (var y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--)
+                for (var x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++)
                 {
-                    var position = new Position { X = i, Y = j };
+                    var position = new Position { X = y, Y = x };
                     var content = this[position];
                     cells.Add(position, content);
                 }
             return cells;
         }
 
-        public IDictionary<Position, Content> ViewToEast(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
+        public IDictionary<Position, Content> ViewToEast(Position field, Position chip, int chipSideLength)
         {
             var cells = new Dictionary<Position, Content>();
-            int fx = snakeHeadPositionOnBattleField.X;
-            int fy = snakeHeadPositionOnBattleField.Y;
-
-            int cx = snakeHeadPositionOnModule.X;
-            int cy = snakeHeadPositionOnModule.Y;
-
-            for (int j = 0, y = fy - cy; y < fy - cy + chipSideLength; y++, j++)
-                for (int i = 0, x = fx + cx; x > fx + cx - chipSideLength; x--, i++)
+            for (var y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++)
+                for (var x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--)
                 {
-                    var position = new Position { X = i, Y = j };
+                    var position = new Position { X = y, Y = x };
                     var content = this[position];
                     cells.Add(position, content);
                 }
             return cells;
         }
 
-        public IDictionary<Position, Content> ViewToSouth(Position snakeHeadPositionOnBattleField, Position snakeHeadPositionOnModule, int chipSideLength)
+        public IDictionary<Position, Content> ViewToSouth(Position field, Position chip, int chipSideLength)
         {
             var cells = new Dictionary<Position, Content>();
-            int fx = snakeHeadPositionOnBattleField.X;
-            int fy = snakeHeadPositionOnBattleField.Y;
-
-            int cx = snakeHeadPositionOnModule.X;
-            int cy = snakeHeadPositionOnModule.Y;
-
-            for (int j = 0, y = fy + cy; y > fy + cy - chipSideLength; y--, j++)
-                for (int i = 0, x = fx + cx; x > fx + cx - chipSideLength; x--, i++)
+            for (var y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--)
+                for (var x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--)
                 {
-                    var position = new Position { X = i, Y = j };
+                    var position = new Position { X = x, Y = y };
                     var content = this[position];
                     cells.Add(position, content);
                 }
