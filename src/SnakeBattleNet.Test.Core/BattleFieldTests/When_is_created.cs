@@ -3,10 +3,10 @@ using Machine.Specifications;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
 
-namespace SnakeBattleNet.Test.Core
+namespace SnakeBattleNet.Test.Core.BattleFieldTests
 {
     [Subject(typeof(BattleField))]
-    class When_BattleField_is_created
+    class When_is_created
     {
         Establish context = () =>
         {
