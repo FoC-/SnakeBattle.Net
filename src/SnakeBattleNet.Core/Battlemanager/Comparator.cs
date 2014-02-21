@@ -29,49 +29,40 @@ namespace SnakeBattleNet.Core.Battlemanager
             {
                 var head = chip.SingleOrDefault(c => c.Value.Content == Content.Head && c.Value.IsSelf);
                 var positionOnChip = head.Key;
-                var color = head.Value.Color;
 
-                IDictionary<Position, Content> fieldRows;
+                var northView = _battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
+                var westView = _battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
+                var eastView = _battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
+                var southView = _battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
+
                 switch (_snake.Head.Direction)
                 {
                     case Direction.North:
                         {
-                            fieldRows = _battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToNorth;
-                            fieldRows = _battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToWest;
-                            fieldRows = _battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToEast;
+                            if (Compare(northView, chip)) return moveToNorth;
+                            if (Compare(westView, chip)) return moveToWest;
+                            if (Compare(eastView, chip)) return moveToEast;
                         }
                         break;
                     case Direction.West:
                         {
-                            fieldRows = _battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToWest;
-                            fieldRows = _battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToSouth;
-                            fieldRows = _battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToNorth;
+                            if (Compare(westView, chip)) return moveToWest;
+                            if (Compare(southView, chip)) return moveToSouth;
+                            if (Compare(northView, chip)) return moveToNorth;
                         }
                         break;
                     case Direction.East:
                         {
-                            fieldRows = _battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToEast;
-                            fieldRows = _battleField.ViewToNorth(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToNorth;
-                            fieldRows = _battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToSouth;
+                            if (Compare(eastView, chip)) return moveToEast;
+                            if (Compare(northView, chip)) return moveToNorth;
+                            if (Compare(southView, chip)) return moveToSouth;
                         }
                         break;
                     case Direction.South:
                         {
-                            fieldRows = _battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToSouth;
-                            fieldRows = _battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToEast;
-                            fieldRows = _battleField.ViewToWest(positionOnField, positionOnChip, chipSizeDim);
-                            if (Compare(fieldRows, chip, color)) return moveToWest;
+                            if (Compare(southView, chip)) return moveToSouth;
+                            if (Compare(eastView, chip)) return moveToEast;
+                            if (Compare(westView, chip)) return moveToWest;
                         }
                         break;
                 }
@@ -79,131 +70,23 @@ namespace SnakeBattleNet.Core.Battlemanager
             return null;
         }
 
-        private bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells, Color color)
+        #warning Self parts are not resolved
+        private bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells)
         {
-            var orBlue = false;
-            var orBlueCount = 0;
-            var orGreen = false;
-            var orGreenCount = 0;
+            var cells = chipCells.ToList();
 
-            var andGrey = true;
-            var andGreyCount = 0;
-            var andRed = true;
-            var andRedCount = 0;
-            var andBlack = true;
-            var andBlackCount = 0;
+            var blue = cells.Where(c => c.Value.Color == Color.OrBlue).Any(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key)));
+            var green = cells.Where(c => c.Value.Color == Color.OrGreen).Any(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key)));
 
+            var grey = cells.Where(c => c.Value.Color == Color.AndGrey).All(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key)));
+            var red = cells.Where(c => c.Value.Color == Color.AndRed).All(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key)));
+            var black = cells.Where(c => c.Value.Color == Color.AndBlack).All(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key)));
+
+            var color = cells.FirstOrDefault(c => c.Value.IsSelf).Value.Color;
             var andType = color == Color.AndBlack || color == Color.AndGrey || color == Color.AndRed;
-            foreach (var chipCell in chipCells)
-            {
-                var fieldCell = GetFieldCell(fieldCells, chipCell.Key);
-                var isEqual = IsEqual(chipCell.Value, fieldCell);
-                var cellColor = chipCell.Value.Color;
-                #region Switch of logic depended on row color
-
-                switch (cellColor)
-                {
-                    case Color.OrBlue:
-                        {
-                            if (andType)
-                            {
-                                if (isEqual)
-                                    orBlue = true;
-                            }
-                            else
-                            {
-                                if (isEqual)
-                                    return true;
-                            }
-                            orBlueCount++;
-                        }
-                        break;
-                    case Color.OrGreen:
-                        {
-                            if (andType)
-                            {
-                                if (isEqual)
-                                    orGreen = true;
-                            }
-                            else
-                            {
-                                if (isEqual)
-                                    return true;
-                            }
-                            orGreenCount++;
-                        }
-                        break;
-                    case Color.AndGrey:
-                        {
-                            if (andType)
-                            {
-                                if (!isEqual)
-                                    return false;
-                            }
-                            else
-                            {
-                                if (!isEqual)
-                                    andGrey = false;
-                            }
-                            andGreyCount++;
-                        }
-                        break;
-                    case Color.AndRed:
-                        {
-                            if (andType)
-                            {
-                                if (!isEqual)
-                                    return false;
-                            }
-                            else
-                            {
-                                if (!isEqual)
-                                    andRed = false;
-                            }
-                            andRedCount++;
-                        }
-                        break;
-                    case Color.AndBlack:
-                        {
-                            if (andType)
-                            {
-                                if (!isEqual)
-                                    return false;
-                            }
-                            else
-                            {
-                                if (!isEqual)
-                                    andBlack = false;
-                            }
-                            andBlackCount++;
-                        }
-                        break;
-                }
-
-                #endregion Switch of logic depended on row color
-            }
-
-            if (andType)
-            {
-                if (
-                    (andGrey || andGreyCount == 0) &&
-                    (andRed || andRedCount == 0) &&
-                    (andBlack || andBlackCount == 0) &&
-                    (orBlue || orBlueCount == 0) &&
-                    (orGreen || orGreenCount == 0)
-                   ) return true;
-            }
-            else
-            {
-                if (
-                    (andGrey && andGreyCount > 0) ||
-                    (andRed && andRedCount > 0) ||
-                    (andBlack && andBlackCount > 0) ||
-                    (orBlue && orBlueCount > 0) ||
-                    (orGreen && orGreenCount > 0)
-                   ) return true;
-            }
-            return false;
+            return andType
+                ? blue && green && grey && red && black
+                : blue || green || grey || red || black;
         }
 
         private Content GetFieldCell(IDictionary<Position, Content> fieldCells, Position position)
