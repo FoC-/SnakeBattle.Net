@@ -63,7 +63,8 @@ namespace SnakeBattleNet.Core.Battlemanager
             foreach (var snake in snakes.Shuffle())
             {
                 //Try to move according brain chip
-                var move = battleField.MakeDecision(snake);
+                var possibleMoves = battleField.MakeDecision(snake);
+                var move = possibleMoves[new Random().Next(possibleMoves.Length)];
                 if (move == null) continue;
                 TryToBite(battleField, snake, snakes, move);
             }

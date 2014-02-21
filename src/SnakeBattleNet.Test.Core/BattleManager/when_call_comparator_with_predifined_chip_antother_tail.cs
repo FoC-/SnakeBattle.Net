@@ -1,3 +1,4 @@
+using System.Linq;
 using Machine.Specifications;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Battlemanager;
@@ -21,9 +22,9 @@ namespace SnakeBattleNet.Test.Core
             result = battleField.MakeDecision(snake);
 
         It should_return_move_on_that_row = () =>
-            result.ShouldEqual(new Move(new Position { X = 4, Y = 3 }, Direction.North));
+            result.First().ShouldEqual(new Move(new Position { X = 4, Y = 3 }, Direction.North));
 
-        private static Move result;
+        private static Move[] result;
         private static BattleField battleField;
         private static Snake snake;
     }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
@@ -7,7 +6,7 @@ namespace SnakeBattleNet.Core.Battlemanager
 {
     public static class Comparator
     {
-        public static Move MakeDecision(this BattleField battleField, Snake snake)
+        public static Move[] MakeDecision(this BattleField battleField, Snake snake)
         {
             var positionOnField = snake.Head.Position;
             var moves = new[]
@@ -19,7 +18,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             };
 
             var possibleMoves = moves.Where(m => IsPossible(battleField, m)).ToArray();
-            if (!possibleMoves.Any()) return null;
+            if (!possibleMoves.Any()) return possibleMoves;
 
             foreach (var chip in snake.Chips)
             {
@@ -30,24 +29,24 @@ namespace SnakeBattleNet.Core.Battlemanager
                     {
                         case Direction.North:
                             if (Compare(battleField.ViewToNorth(positionOnField, positionOnChip), chip))
-                                return move;
+                                return new[] { move };
                             break;
                         case Direction.West:
                             if (Compare(battleField.ViewToWest(positionOnField, positionOnChip), chip))
-                                return move;
+                                return new[] { move };
                             break;
                         case Direction.East:
                             if (Compare(battleField.ViewToEast(positionOnField, positionOnChip), chip))
-                                return move;
+                                return new[] { move };
                             break;
                         case Direction.South:
                             if (Compare(battleField.ViewToSouth(positionOnField, positionOnChip), chip))
-                                return move;
+                                return new[] { move };
                             break;
                     }
                 }
             }
-            return possibleMoves[new Random().Next(possibleMoves.Length)];
+            return possibleMoves;
         }
 
 #warning Self parts are not resolved
