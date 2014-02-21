@@ -17,9 +17,9 @@ namespace SnakeBattleNet.Core.Battlemanager
             if (possibleMoves.Count == 0) return null;
 
             var moveToNorth = new Move(positionOnField.X, positionOnField.Y - 1, Direction.North);
-            var moveToSouth = new Move(positionOnField.X, positionOnField.Y + 1, Direction.South);
             var moveToWest = new Move(positionOnField.X - 1, positionOnField.Y, Direction.West);
             var moveToEast = new Move(positionOnField.X + 1, positionOnField.Y, Direction.East);
+            var moveToSouth = new Move(positionOnField.X, positionOnField.Y + 1, Direction.South);
 
             foreach (var chip in snake.Chips)
             {
@@ -66,14 +66,20 @@ namespace SnakeBattleNet.Core.Battlemanager
 
             var x = position.X;
             var y = position.Y;
-            if (battleField[new Position { X = x, Y = y + 1 }] == Content.Empty || battleField[new Position { X = x, Y = y + 1 }] == Content.Tail)
+
+            var onNorth = battleField[new Position { X = x, Y = y + 1 }];
+            var onWest = battleField[new Position { X = x - 1, Y = y }];
+            var onEast = battleField[new Position { X = x + 1, Y = y }];
+            var onSouth = battleField[new Position { X = x, Y = y - 1 }];
+
+            if (onNorth == Content.Empty || onNorth == Content.Tail)
                 possibleMoves.Add(new Move(x, y + 1, Direction.North));
-            if (battleField[new Position { X = x, Y = y - 1 }] == Content.Empty || battleField[new Position { X = x, Y = y - 1 }] == Content.Tail)
-                possibleMoves.Add(new Move(x, y - 1, Direction.South));
-            if (battleField[new Position { X = x - 1, Y = y }] == Content.Empty || battleField[new Position { X = x - 1, Y = y }] == Content.Tail)
+            if (onWest == Content.Empty || onWest == Content.Tail)
                 possibleMoves.Add(new Move(x - 1, y, Direction.West));
-            if (battleField[new Position { X = x + 1, Y = y }] == Content.Empty || battleField[new Position { X = x + 1, Y = y }] == Content.Tail)
+            if (onEast == Content.Empty || onEast == Content.Tail)
                 possibleMoves.Add(new Move(x + 1, y, Direction.East));
+            if (onSouth == Content.Empty || onSouth == Content.Tail)
+                possibleMoves.Add(new Move(x, y - 1, Direction.South));
 
             return possibleMoves;
         }
