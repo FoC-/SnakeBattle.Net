@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
@@ -10,6 +11,10 @@ namespace SnakeBattleNet.Core.Battlemanager
         {
             const int chipSizeDim = 7;
             var positionOnField = snake.Head.Position;
+
+            //Check if movement is possible
+            var possibleMoves = new List<Move>(GetPossibleMoves(battleField, positionOnField));
+            if (possibleMoves.Count == 0) return null;
 
             var moveToNorth = new Move(positionOnField.X, positionOnField.Y - 1, Direction.North);
             var moveToSouth = new Move(positionOnField.X, positionOnField.Y + 1, Direction.South);
@@ -26,42 +31,17 @@ namespace SnakeBattleNet.Core.Battlemanager
                 var eastView = battleField.ViewToEast(positionOnField, positionOnChip, chipSizeDim);
                 var southView = battleField.ViewToSouth(positionOnField, positionOnChip, chipSizeDim);
 
-                switch (snake.Head.Direction)
-                {
-                    case Direction.North:
-                        {
-                            if (Compare(northView, chip)) return moveToNorth;
-                            if (Compare(westView, chip)) return moveToWest;
-                            if (Compare(eastView, chip)) return moveToEast;
-                        }
-                        break;
-                    case Direction.West:
-                        {
-                            if (Compare(westView, chip)) return moveToWest;
-                            if (Compare(southView, chip)) return moveToSouth;
-                            if (Compare(northView, chip)) return moveToNorth;
-                        }
-                        break;
-                    case Direction.East:
-                        {
-                            if (Compare(eastView, chip)) return moveToEast;
-                            if (Compare(northView, chip)) return moveToNorth;
-                            if (Compare(southView, chip)) return moveToSouth;
-                        }
-                        break;
-                    case Direction.South:
-                        {
-                            if (Compare(southView, chip)) return moveToSouth;
-                            if (Compare(eastView, chip)) return moveToEast;
-                            if (Compare(westView, chip)) return moveToWest;
-                        }
-                        break;
-                }
+#warning Order should be configurable
+                if (Compare(northView, chip)) return moveToNorth;
+                if (Compare(westView, chip)) return moveToWest;
+                if (Compare(eastView, chip)) return moveToEast;
+                if (Compare(southView, chip)) return moveToSouth;
             }
-            return null;
+
+            return possibleMoves[new Random().Next(possibleMoves.Count)];
         }
 
-        #warning Self parts are not resolved
+#warning Self parts are not resolved
         private static bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells)
         {
             var cells = chipCells.ToList();
@@ -78,6 +58,24 @@ namespace SnakeBattleNet.Core.Battlemanager
             return andType
                 ? blue && green && grey && red && black
                 : blue || green || grey || red || black;
+        }
+
+        private static IEnumerable<Move> GetPossibleMoves(BattleField battleField, Position position)
+        {
+            var possibleMoves = new List<Move>();
+
+            var x = position.X;
+            var y = position.Y;
+            if (battleField[new Position { X = x, Y = y + 1 }] == Content.Empty || battleField[new Position { X = x, Y = y + 1 }] == Content.Tail)
+                possibleMoves.Add(new Move(x, y + 1, Direction.North));
+            if (battleField[new Position { X = x, Y = y - 1 }] == Content.Empty || battleField[new Position { X = x, Y = y - 1 }] == Content.Tail)
+                possibleMoves.Add(new Move(x, y - 1, Direction.South));
+            if (battleField[new Position { X = x - 1, Y = y }] == Content.Empty || battleField[new Position { X = x - 1, Y = y }] == Content.Tail)
+                possibleMoves.Add(new Move(x - 1, y, Direction.West));
+            if (battleField[new Position { X = x + 1, Y = y }] == Content.Empty || battleField[new Position { X = x + 1, Y = y }] == Content.Tail)
+                possibleMoves.Add(new Move(x + 1, y, Direction.East));
+
+            return possibleMoves;
         }
 
         private static Content GetFieldCell(IDictionary<Position, Content> fieldCells, Position position)

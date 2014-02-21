@@ -10,7 +10,6 @@ namespace SnakeBattleNet.Core.Battlemanager
 {
     public class BattleManager
     {
-        private Random random;
         private readonly IReplayRecorder recorder;
 
         public BattleManager(IReplayRecorder recorder)
@@ -24,8 +23,6 @@ namespace SnakeBattleNet.Core.Battlemanager
                 throw new Exception("Number of snakes is more then gateways");
 
             int randomSeed = Environment.TickCount;
-            random = new Random(randomSeed);
-
             recorder.Initialize(BattleField.SideLength, BattleField.SideLength, randomSeed, snakes.Select(_ => _.Id).Concat(new[] { "battleField.Id" }));
 
             InitializeField(battleField, snakes);
@@ -65,48 +62,13 @@ namespace SnakeBattleNet.Core.Battlemanager
             // use something like builder 
             foreach (var snake in snakes.Shuffle())
             {
-                //Check if movement is possible
-                var possibleMoves = new List<Move>(GetPossibleMoves(battleField, snake));
-                if (possibleMoves.Count == 0) continue;
-
                 //Try to move according brain chip
-                Move move = battleField.MakeDecision(snake);
-                if (possibleMoves.Contains(move))
-                    TryToBite(battleField, snake, snakes, move);
-
-                TryToBite(battleField, snake, snakes, possibleMoves[random.Next(possibleMoves.Count)]);
+                var move = battleField.MakeDecision(snake);
+                if (move == null) continue;
+                TryToBite(battleField, snake, snakes, move);
             }
         }
 
-        /// <summary>
-        /// We check rows around snake header trying to find passable
-        /// </summary>
-        /// <param name="battleField">Visible area around snake header</param>
-        /// <param name="snake">Snake witch want to move</param>
-        /// <returns>List of passable rows or current head position</returns>
-        private IEnumerable<Move> GetPossibleMoves(BattleField battleField, Snake snake)
-        {
-            var possibleMoves = new List<Move>();
-
-            int headX = snake.Head.Position.X;
-            int headY = snake.Head.Position.Y;
-            if (battleField[new Position { X = headX, Y = headY + 1 }] == Content.Empty || battleField[new Position { X = headX, Y = headY + 1 }] == Content.Tail)
-                possibleMoves.Add(new Move(headX, headY + 1, Direction.North));
-            if (battleField[new Position { X = headX, Y = headY - 1 }] == Content.Empty || battleField[new Position { X = headX, Y = headY - 1 }] == Content.Tail)
-                possibleMoves.Add(new Move(headX, headY - 1, Direction.South));
-            if (battleField[new Position { X = headX - 1, Y = headY }] == Content.Empty || battleField[new Position { X = headX - 1, Y = headY }] == Content.Tail)
-                possibleMoves.Add(new Move(headX - 1, headY, Direction.West));
-            if (battleField[new Position { X = headX + 1, Y = headY }] == Content.Empty || battleField[new Position { X = headX + 1, Y = headY }] == Content.Tail)
-                possibleMoves.Add(new Move(headX + 1, headY, Direction.East));
-
-            return possibleMoves;
-        }
-
-        /// <summary>
-        /// Move in the current direction to the next row
-        /// </summary>
-        /// <param name="headPosition">Current head position</param>
-        /// <returns>Next move in front of head</returns>
         private Move StraitMove(Move headPosition)
         {
             int headX = headPosition.Position.X;
