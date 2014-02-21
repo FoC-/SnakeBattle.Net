@@ -14,7 +14,7 @@ namespace SnakeBattleNet.Test.Core
             expectedMove = new Move(4, 3, Direction.North);
 
             Snake snake = CreateSnakeStub();
-            var module = CreateChipWithAndColoredHead(snake.Id);
+            var module = CreateChipWithAndColoredHead();
             snake.Chips.Add(module);
 
             BattleField battleField = CreateBattleField(snake.Id);

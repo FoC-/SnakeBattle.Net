@@ -25,13 +25,11 @@ namespace SnakeBattleNet.Core.Battlemanager
             var moveToWest = new Move(positionOnField.X - 1, positionOnField.Y, Direction.West);
             var moveToEast = new Move(positionOnField.X + 1, positionOnField.Y, Direction.East);
 
-            foreach (var cells in _snake.Chips)
+            foreach (var chip in _snake.Chips)
             {
-                var chip = cells.ToList();
-                var head = chip.SingleOrDefault(c => c.Content == Content.Head && c.IsSelf);
-                if (head == null) return null;
-                var positionOnChip = head.Position;
-                var color = head.Color;
+                var head = chip.SingleOrDefault(c => c.Value.Content == Content.Head && c.Value.IsSelf);
+                var positionOnChip = head.Key;
+                var color = head.Value.Color;
 
                 IDictionary<Position, Content> fieldRows;
                 switch (_snake.Head.Direction)
@@ -81,7 +79,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             return null;
         }
 
-        private bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<ChipCell> chipCells, Color color)
+        private bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells, Color color)
         {
             var orBlue = false;
             var orBlueCount = 0;
@@ -98,9 +96,9 @@ namespace SnakeBattleNet.Core.Battlemanager
             var andType = color == Color.AndBlack || color == Color.AndGrey || color == Color.AndRed;
             foreach (var chipCell in chipCells)
             {
-                var fieldCell = GetFieldCell(fieldCells, chipCell.Position);
-                var isEqual = IsEqual(chipCell, fieldCell);
-                var cellColor = chipCell.Color;
+                var fieldCell = GetFieldCell(fieldCells, chipCell.Key);
+                var isEqual = IsEqual(chipCell.Value, fieldCell);
+                var cellColor = chipCell.Value.Color;
                 #region Switch of logic depended on row color
 
                 switch (cellColor)

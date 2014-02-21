@@ -17,14 +17,14 @@ namespace SnakeBattleNet.Core
         public int Matches { get; private set; }
         public int VisionRadius { get; set; }
         public int ModulesMax { get; set; }
-        public ICollection<IEnumerable<ChipCell>> Chips { get; set; }
+        public ICollection<IDictionary<Position, ChipCell>> Chips { get; set; }
 
         public int Length { get { return BodyParts.Count; } }
         public LinkedList<Move> BodyParts { get; private set; }
 
         private Snake()
         {
-            Chips = new List<IEnumerable<ChipCell>>();
+            Chips = new List<IDictionary<Position, ChipCell>>();
             BodyParts = new LinkedList<Move>();
             Id = Guid.NewGuid().ToString().ToLower().Replace("-", "");
             Created = DateTime.Now;
