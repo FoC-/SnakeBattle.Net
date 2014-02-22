@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
@@ -49,7 +50,7 @@ namespace SnakeBattleNet.Core
             return possibleMoves;
         }
 
-        private static bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells)
+        private static bool Compare(IDictionary<Position, Tuple<Position, Content>> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells)
         {
             var cells = chipCells.ToList();
 
@@ -67,10 +68,10 @@ namespace SnakeBattleNet.Core
                 : blue || green || grey || red || black;
         }
 
-        private static Content GetFieldCell(IDictionary<Position, Content> fieldCells, Position position)
+        private static Content GetFieldCell(IDictionary<Position, Tuple<Position, Content>> fieldCells, Position position)
         {
-            Content content;
-            return fieldCells.TryGetValue(position, out content) ? content : Content.Empty;
+            Tuple<Position, Content> content;
+            return fieldCells.TryGetValue(position, out content) ? content.Item2 : Content.Empty;
         }
 
         private static bool IsEqual(ChipCell chipCell, Content fieldCell)

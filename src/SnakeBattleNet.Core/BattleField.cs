@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using SnakeBattleNet.Core.Contract;
 
@@ -39,46 +40,50 @@ namespace SnakeBattleNet.Core
             CreateGateways();
         }
 
-        public IDictionary<Position, Content> ViewToNorth(Position field, Position chip, int chipSideLength = 7)
+        public IDictionary<Position, Tuple<Position, Content>> ViewToNorth(Position field, Position chip, int chipSideLength = 7)
         {
-            var cells = new Dictionary<Position, Content>();
+            var cells = new Dictionary<Position, Tuple<Position, Content>>();
             for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
                 for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
                 {
-                    cells.Add(new Position { X = rx, Y = ry }, this[new Position { X = x, Y = y }]);
+                    var absolutePostion = new Position { X = x, Y = y };
+                    cells.Add(new Position { X = rx, Y = ry }, new Tuple<Position, Content>(absolutePostion, this[absolutePostion]));
                 }
             return cells;
         }
 
-        public IDictionary<Position, Content> ViewToWest(Position field, Position chip, int chipSideLength = 7)
+        public IDictionary<Position, Tuple<Position, Content>> ViewToWest(Position field, Position chip, int chipSideLength = 7)
         {
-            var cells = new Dictionary<Position, Content>();
+            var cells = new Dictionary<Position, Tuple<Position, Content>>();
             for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
                 for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
                 {
-                    cells.Add(new Position { X = rx, Y = ry }, this[new Position { X = x, Y = y }]);
+                    var absolutePostion = new Position { X = x, Y = y };
+                    cells.Add(new Position { X = rx, Y = ry }, new Tuple<Position, Content>(absolutePostion, this[absolutePostion]));
                 }
             return cells;
         }
 
-        public IDictionary<Position, Content> ViewToEast(Position field, Position chip, int chipSideLength = 7)
+        public IDictionary<Position, Tuple<Position, Content>> ViewToEast(Position field, Position chip, int chipSideLength = 7)
         {
-            var cells = new Dictionary<Position, Content>();
+            var cells = new Dictionary<Position, Tuple<Position, Content>>();
             for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
                 for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
                 {
-                    cells.Add(new Position { X = rx, Y = ry }, this[new Position { X = x, Y = y }]);
+                    var absolutePostion = new Position { X = x, Y = y };
+                    cells.Add(new Position { X = rx, Y = ry }, new Tuple<Position, Content>(absolutePostion, this[absolutePostion]));
                 }
             return cells;
         }
 
-        public IDictionary<Position, Content> ViewToSouth(Position field, Position chip, int chipSideLength = 7)
+        public IDictionary<Position, Tuple<Position, Content>> ViewToSouth(Position field, Position chip, int chipSideLength = 7)
         {
-            var cells = new Dictionary<Position, Content>();
+            var cells = new Dictionary<Position, Tuple<Position, Content>>();
             for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
                 for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
                 {
-                    cells.Add(new Position { X = rx, Y = ry }, this[new Position { X = x, Y = y }]);
+                    var absolutePostion = new Position { X = x, Y = y };
+                    cells.Add(new Position { X = rx, Y = ry }, new Tuple<Position, Content>(absolutePostion, this[absolutePostion]));
                 }
             return cells;
         }
@@ -108,8 +113,8 @@ namespace SnakeBattleNet.Core
 
         private void CreateGateways()
         {
-            var x = SideLength / (GatewaysPerSide + 1);
-            var y = SideLength / (GatewaysPerSide + 1);
+            const int x = SideLength / (GatewaysPerSide + 1);
+            const int y = SideLength / (GatewaysPerSide + 1);
 
             for (var i = 1; i < GatewaysPerSide + 1; i++)
             {

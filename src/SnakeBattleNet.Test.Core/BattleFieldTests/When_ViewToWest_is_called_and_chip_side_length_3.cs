@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -21,15 +22,15 @@ namespace SnakeBattleNet.Test.Core.BattleFieldTests
             result.Count().ShouldEqual(9);
 
         It should_return_4_empty_spaces = () =>
-            result.Count(c => c.Value == Content.Empty).ShouldEqual(4);
+            result.Count(c => c.Value.Item2 == Content.Empty).ShouldEqual(4);
 
         It should_return_wall_at_right = () =>
-            result.Count(c => c.Key.X == 2 && c.Value == Content.Wall).ShouldEqual(3);
+            result.Count(c => c.Key.X == 2 && c.Value.Item2 == Content.Wall).ShouldEqual(3);
 
         It should_return_wall_at_bottom = () =>
-            result.Count(c => c.Key.Y == 0 && c.Value == Content.Wall).ShouldEqual(3);
+            result.Count(c => c.Key.Y == 0 && c.Value.Item2 == Content.Wall).ShouldEqual(3);
 
         private static BattleField battleField;
-        private static IDictionary<Position, Content> result;
+        private static IDictionary<Position, Tuple<Position, Content>> result;
     }
 }
