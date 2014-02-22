@@ -14,8 +14,6 @@ namespace SnakeBattleNet.Web.Core
         public int Wins { get; private set; }
         public int Loses { get; private set; }
         public int Matches { get; private set; }
-        public int VisionRadius { get; set; }
-        public int ModulesMax { get; set; }
         public ICollection<IDictionary<Position, ChipCell>> Chips { get; set; }
 
         private Snake()
@@ -27,8 +25,6 @@ namespace SnakeBattleNet.Web.Core
             Wins = 0;
             Loses = 0;
             Matches = 0;
-            VisionRadius = 7;
-            ModulesMax = 9;
         }
 
         public Snake(string ownerId)

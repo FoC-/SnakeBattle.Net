@@ -112,9 +112,7 @@ namespace SnakeBattleNet.Web
                 .ForMember(d => d.Score, o => o.MapFrom(s => s.Item1.Score))
                 .ForMember(d => d.Wins, o => o.MapFrom(s => s.Item1.Wins))
                 .ForMember(d => d.Loses, o => o.MapFrom(s => s.Item1.Loses))
-                .ForMember(d => d.Matches, o => o.MapFrom(s => s.Item1.Matches))
-                .ForMember(d => d.VisionRadius, o => o.MapFrom(s => s.Item1.VisionRadius))
-                .ForMember(d => d.ModulesMax, o => o.MapFrom(s => s.Item1.ModulesMax));
+                .ForMember(d => d.Matches, o => o.MapFrom(s => s.Item1.Matches));
         }
     }
 }
