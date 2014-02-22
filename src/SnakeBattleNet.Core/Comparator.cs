@@ -29,19 +29,19 @@ namespace SnakeBattleNet.Core
                     switch (move.Direction)
                     {
                         case Direction.North:
-                            if (Compare(battleField.ViewToNorth(positionOnField, positionOnChip), chip, fighter))
+                            if (Compare(MapViewOnSnake(battleField.ViewToNorth(positionOnField, positionOnChip), fighter), chip))
                                 return new[] { move };
                             break;
                         case Direction.West:
-                            if (Compare(battleField.ViewToWest(positionOnField, positionOnChip), chip, fighter))
+                            if (Compare(MapViewOnSnake(battleField.ViewToWest(positionOnField, positionOnChip), fighter), chip))
                                 return new[] { move };
                             break;
                         case Direction.East:
-                            if (Compare(battleField.ViewToEast(positionOnField, positionOnChip), chip, fighter))
+                            if (Compare(MapViewOnSnake(battleField.ViewToEast(positionOnField, positionOnChip), fighter), chip))
                                 return new[] { move };
                             break;
                         case Direction.South:
-                            if (Compare(battleField.ViewToSouth(positionOnField, positionOnChip), chip, fighter))
+                            if (Compare(MapViewOnSnake(battleField.ViewToSouth(positionOnField, positionOnChip), fighter), chip))
                                 return new[] { move };
                             break;
                     }
@@ -50,16 +50,16 @@ namespace SnakeBattleNet.Core
             return possibleMoves;
         }
 
-        private static bool Compare(IDictionary<Position, Tuple<Position, Content>> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells, Fighter fighter)
+        private static bool Compare(IDictionary<Position, Tuple<Content, bool>> view, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells)
         {
             var cells = chipCells.ToList();
 
-            var blue = cells.Where(c => c.Value.Color == Color.OrBlue).Any(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key, fighter)));
-            var green = cells.Where(c => c.Value.Color == Color.OrGreen).Any(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key, fighter)));
+            var blue = cells.Where(c => c.Value.Color == Color.OrBlue).Any(c => IsEqual(c.Value, GetFieldCell(view, c.Key)));
+            var green = cells.Where(c => c.Value.Color == Color.OrGreen).Any(c => IsEqual(c.Value, GetFieldCell(view, c.Key)));
 
-            var grey = cells.Where(c => c.Value.Color == Color.AndGrey).All(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key, fighter)));
-            var red = cells.Where(c => c.Value.Color == Color.AndRed).All(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key, fighter)));
-            var black = cells.Where(c => c.Value.Color == Color.AndBlack).All(c => IsEqual(c.Value, GetFieldCell(fieldCells, c.Key, fighter)));
+            var grey = cells.Where(c => c.Value.Color == Color.AndGrey).All(c => IsEqual(c.Value, GetFieldCell(view, c.Key)));
+            var red = cells.Where(c => c.Value.Color == Color.AndRed).All(c => IsEqual(c.Value, GetFieldCell(view, c.Key)));
+            var black = cells.Where(c => c.Value.Color == Color.AndBlack).All(c => IsEqual(c.Value, GetFieldCell(view, c.Key)));
 
             var color = cells.FirstOrDefault(c => c.Value.IsSelf).Value.Color;
             var andType = color == Color.AndBlack || color == Color.AndGrey || color == Color.AndRed;
@@ -68,16 +68,15 @@ namespace SnakeBattleNet.Core
                 : blue || green || grey || red || black;
         }
 
-        private static Tuple<Content, bool> GetFieldCell(IDictionary<Position, Tuple<Position, Content>> fieldCells, Position position, Fighter fighter)
+        private static IDictionary<Position, Tuple<Content, bool>> MapViewOnSnake(IEnumerable<KeyValuePair<Position, Tuple<Position, Content>>> view, Fighter fighter)
         {
-            Tuple<Position, Content> tuple;
-            var content = fieldCells.TryGetValue(position, out tuple) ? tuple.Item2 : Content.Empty;
-            var isSelf = false;
-            if (content == Content.Head || content == Content.Body || content == Content.Tail)
-            {
-                isSelf = fighter.BodyParts.Any(c => c.Position == tuple.Item1);
-            }
-            return new Tuple<Content, bool>(content, isSelf);
+            return view.ToDictionary(k => k.Key, v => new Tuple<Content, bool>(v.Value.Item2, fighter.BodyParts.Any(p => p.Position == v.Value.Item1)));
+        }
+
+        private static Tuple<Content, bool> GetFieldCell(IDictionary<Position, Tuple<Content, bool>> view, Position position)
+        {
+            Tuple<Content, bool> tuple;
+            return view.TryGetValue(position, out tuple) ? tuple : new Tuple<Content, bool>(Content.Empty, false);
         }
 
         private static bool IsEqual(ChipCell chipCell, Tuple<Content, bool> fieldCell)
