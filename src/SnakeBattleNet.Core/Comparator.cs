@@ -6,9 +6,9 @@ namespace SnakeBattleNet.Core
 {
     public static class Comparator
     {
-        public static Move[] MakeDecision(this BattleField battleField, Snake snake)
+        public static Move[] MakeDecision(this BattleField battleField, Fighter fighter)
         {
-            var positionOnField = snake.Head.Position;
+            var positionOnField = fighter.Head.Position;
             var moves = new[]
             {
                 Move.ToNothFrom(positionOnField),
@@ -20,7 +20,7 @@ namespace SnakeBattleNet.Core
             var possibleMoves = moves.Where(m => IsPossible(battleField, m)).ToArray();
             if (!possibleMoves.Any()) return possibleMoves;
 
-            foreach (var chip in snake.Chips)
+            foreach (var chip in fighter.Chips)
             {
                 var positionOnChip = chip.FirstOrDefault(c => c.Value.Content == Content.Head && c.Value.IsSelf).Key;
                 foreach (var move in possibleMoves)
@@ -49,7 +49,6 @@ namespace SnakeBattleNet.Core
             return possibleMoves;
         }
 
-#warning Self parts are not resolved
         private static bool Compare(IDictionary<Position, Content> fieldCells, IEnumerable<KeyValuePair<Position, ChipCell>> chipCells)
         {
             var cells = chipCells.ToList();
@@ -76,6 +75,7 @@ namespace SnakeBattleNet.Core
 
         private static bool IsEqual(ChipCell chipCell, Content fieldCell)
         {
+#warning Self parts are not resolved
             return chipCell.Exclude
                 ? chipCell.Content != fieldCell
                 : chipCell.Content == fieldCell;

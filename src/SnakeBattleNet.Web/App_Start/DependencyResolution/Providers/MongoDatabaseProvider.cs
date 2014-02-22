@@ -1,7 +1,7 @@
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
+using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Core.Auth;
 
 namespace SnakeBattleNet.Web.DependencyResolution.Providers
@@ -55,7 +55,6 @@ namespace SnakeBattleNet.Web.DependencyResolution.Providers
                 cm.SetDiscriminator("Snake");
                 cm.SetIgnoreExtraElements(true);
                 cm.MapIdField(c => c.Id);
-                cm.UnmapProperty(c => c.BodyParts);
             });
             BsonClassMap.RegisterClassMap<ChipCell>(cm =>
             {

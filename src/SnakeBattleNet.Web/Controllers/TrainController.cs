@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
-using SnakeBattleNet.Core;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Models.Snake;
 using SnakeBattleNet.Web.Utils;

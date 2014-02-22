@@ -12,7 +12,6 @@ using Microsoft.Owin.Security.OAuth;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using Newtonsoft.Json.Serialization;
-using SnakeBattleNet.Core;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Core.Auth;
 using SnakeBattleNet.Web.DependencyResolution.Providers;
@@ -115,12 +114,7 @@ namespace SnakeBattleNet.Web
                 .ForMember(d => d.Loses, o => o.MapFrom(s => s.Item1.Loses))
                 .ForMember(d => d.Matches, o => o.MapFrom(s => s.Item1.Matches))
                 .ForMember(d => d.VisionRadius, o => o.MapFrom(s => s.Item1.VisionRadius))
-                .ForMember(d => d.ModulesMax, o => o.MapFrom(s => s.Item1.ModulesMax))
-
-                .ForMember(d => d.Length, o => o.Ignore())
-                .ForMember(d => d.BodyParts, o => o.Ignore())
-                .ForMember(d => d.Head, o => o.Ignore())
-                .ForMember(d => d.Tail, o => o.Ignore());
+                .ForMember(d => d.ModulesMax, o => o.MapFrom(s => s.Item1.ModulesMax));
         }
     }
 }

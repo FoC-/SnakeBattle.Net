@@ -40,6 +40,7 @@
     <Compile Include="Contract\ChipCell.cs" />
     <Compile Include="Contract\Content.cs" />
     <Compile Include="Contract\Position.cs" />
+    <Compile Include="Fighter.cs" />
     <Compile Include="Prototypes\IBattleField.cs" />
     <Compile Include="Prototypes\Snake\DummyMind.cs" />
     <Compile Include="Prototypes\Snake\IMind.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="Prototypes\Passport.cs" />
     <Compile Include="Prototypes\Coordinates.cs" />
     <Compile Include="Prototypes\Snake\Snake.cs" />
-    <Compile Include="Snake.cs" />
     <Compile Include="Prototypes\VisibleArea.cs" />
   </ItemGroup>
   <ItemGroup>

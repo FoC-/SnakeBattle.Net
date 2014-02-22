@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SnakeBattleNet.Core.Contract;
 
-namespace SnakeBattleNet.Core
+namespace SnakeBattleNet.Web.Core
 {
     public class Snake
     {
@@ -19,13 +18,9 @@ namespace SnakeBattleNet.Core
         public int ModulesMax { get; set; }
         public ICollection<IDictionary<Position, ChipCell>> Chips { get; set; }
 
-        public int Length { get { return BodyParts.Count; } }
-        public LinkedList<Move> BodyParts { get; private set; }
-
         private Snake()
         {
             Chips = new List<IDictionary<Position, ChipCell>>();
-            BodyParts = new LinkedList<Move>();
             Id = Guid.NewGuid().ToString().ToLower().Replace("-", "");
             Created = DateTime.Now;
             Score = 1500;
@@ -54,22 +49,6 @@ namespace SnakeBattleNet.Core
             Loses++;
             Score -= 5;
             Matches++;
-        }
-
-        public Move Head
-        {
-            get { return Length == 0 ? null : BodyParts.First(); }
-            set { BodyParts.AddFirst(value); }
-        }
-
-        public Move Tail
-        {
-            get { return Length == 0 ? null : BodyParts.Last(); }
-        }
-
-        public void CutTail()
-        {
-            BodyParts.RemoveLast();
         }
     }
 }

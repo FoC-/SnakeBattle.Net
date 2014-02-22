@@ -7,9 +7,9 @@ namespace SnakeBattleNet.Test.Core
 {
     public class stubForRealBattle
     {
-        protected static Snake CreateSnakeStub()
+        protected static Fighter CreateSnakeStub(ICollection<IDictionary<Position, ChipCell>> chips)
         {
-            var snakeStub = new Snake(Guid.NewGuid().ToString());
+            var snakeStub = new Fighter(Guid.NewGuid().ToString(), chips);
             snakeStub.Head = new Move(new Position { X = 5, Y = 4 }, Direction.South);
             snakeStub.Head = new Move(new Position { X = 5, Y = 5 }, Direction.West);
             snakeStub.Head = new Move(new Position { X = 4, Y = 5 }, Direction.North);
