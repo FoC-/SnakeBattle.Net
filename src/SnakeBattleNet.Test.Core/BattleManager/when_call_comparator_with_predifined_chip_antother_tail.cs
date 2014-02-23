@@ -23,7 +23,7 @@ namespace SnakeBattleNet.Test.Core
             result.First().ShouldEqual(new Move(new Position { X = 4, Y = 3 }, Direction.North));
 
         private static Move[] result;
-        private static BattleField battleField;
+        private static BattleField<Content> battleField;
         private static Fighter fighter;
     }
 }

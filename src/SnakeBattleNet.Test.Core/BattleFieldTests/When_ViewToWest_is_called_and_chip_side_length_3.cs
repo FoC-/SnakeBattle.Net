@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using SnakeBattleNet.Core;
@@ -7,12 +6,12 @@ using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Test.Core.BattleFieldTests
 {
-    [Subject(typeof(BattleField))]
+    [Subject(typeof(BattleField<Content>))]
     internal class When_ViewToWest_is_called_and_chip_side_length_3
     {
         Establish context = () =>
         {
-            battleField = new BattleField();
+            battleField = BattleField.Build();
         };
 
         Because of = () =>
@@ -30,7 +29,7 @@ namespace SnakeBattleNet.Test.Core.BattleFieldTests
         It should_return_wall_at_bottom = () =>
             result.Count(c => c.Key.Y == 0 && c.Value.Item2 == Content.Wall).ShouldEqual(3);
 
-        private static BattleField battleField;
-        private static IDictionary<Position, Tuple<Position, Content>> result;
+        private static BattleField<Content> battleField;
+        private static BattleField<Tuple<Position, Content>> result;
     }
 }

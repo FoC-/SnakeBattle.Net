@@ -5,12 +5,12 @@ using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Test.Core.BattleFieldTests
 {
-    [Subject(typeof(BattleField))]
+    [Subject(typeof(BattleField<Content>))]
     class When_is_created
     {
         Establish context = () =>
         {
-            battleField = new BattleField();
+            battleField = BattleField.Build();
         };
 
         It should_exact_number_of_cells = () =>
@@ -23,8 +23,8 @@ namespace SnakeBattleNet.Test.Core.BattleFieldTests
             battleField.Count(c => c.Value == Content.Empty).ShouldEqual((BattleField.SideLength * BattleField.SideLength) - (BattleField.SideLength * 4 - 4));
 
         It should_exact_number_of_gateways = () =>
-            battleField.Gateways.Count.ShouldEqual(4);
+            BattleField.Gateways.Length.ShouldEqual(4);
 
-        private static BattleField battleField;
+        private static BattleField<Content> battleField;
     }
 }

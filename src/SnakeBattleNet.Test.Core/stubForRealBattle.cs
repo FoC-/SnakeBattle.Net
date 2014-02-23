@@ -17,9 +17,9 @@ namespace SnakeBattleNet.Test.Core
             return snakeStub;
         }
 
-        protected static BattleField CreateBattleField()
+        protected static BattleField<Content> CreateBattleField()
         {
-            var battleField = new BattleField();
+            var battleField = new BattleField<Content>();
 
             // Snake 0
             battleField[new Position { X = 4, Y = 4 }] = Content.Head;

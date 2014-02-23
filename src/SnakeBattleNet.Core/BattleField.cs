@@ -5,134 +5,143 @@ using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Core
 {
-    public class BattleField : IEnumerable<KeyValuePair<Position, Content>>
+    public class BattleField<TContent> : IEnumerable<KeyValuePair<Position, TContent>>
     {
-        private readonly IDictionary<Position, Content> _cells;
+        private readonly IDictionary<Position, TContent> elements;
 
-        public const int SideLength = 27;
-        public const int GatewaysPerSide = 1;
-        public IList<Move> Gateways { get; private set; }
-
-        public Content this[Position position]
+        public TContent this[Position position]
         {
             get
             {
-                Content content;
-                return _cells.TryGetValue(position, out content) ? content : Content.Empty;
+                TContent content;
+                return elements.TryGetValue(position, out content) ? content : default(TContent);
             }
             set
             {
-                Content content;
-                if (_cells.TryGetValue(position, out content))
+                TContent content;
+                if (elements.TryGetValue(position, out content))
                 {
-                    _cells.Remove(position);
+                    elements.Remove(position);
                 }
-                _cells.Add(position, value);
+                elements.Add(position, value);
             }
         }
 
         public BattleField()
         {
-            _cells = new Dictionary<Position, Content>();
-            Gateways = new List<Move>();
-            CreateEmpty();
-            CreateWalls();
-            CreateGateways();
+            elements = new Dictionary<Position, TContent>();
         }
 
-        public IDictionary<Position, Tuple<Position, Content>> ViewToNorth(Position field, Position chip, int chipSideLength = 7)
+        public BattleField<Tuple<Position, TContent>> ViewToNorth(Position field, Position chip, int chipSideLength = 7)
         {
-            var cells = new Dictionary<Position, Tuple<Position, Content>>();
+            var view = new BattleField<Tuple<Position, TContent>>();
             for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
                 for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
                 {
                     var absolutePostion = new Position { X = x, Y = y };
-                    cells.Add(new Position { X = rx, Y = ry }, new Tuple<Position, Content>(absolutePostion, this[absolutePostion]));
+                    view[new Position { X = rx, Y = ry }] = new Tuple<Position, TContent>(absolutePostion, this[absolutePostion]);
                 }
-            return cells;
+            return view;
         }
 
-        public IDictionary<Position, Tuple<Position, Content>> ViewToWest(Position field, Position chip, int chipSideLength = 7)
+        public BattleField<Tuple<Position, TContent>> ViewToWest(Position field, Position chip, int chipSideLength = 7)
         {
-            var cells = new Dictionary<Position, Tuple<Position, Content>>();
+            var view = new BattleField<Tuple<Position, TContent>>();
             for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
                 for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
                 {
                     var absolutePostion = new Position { X = x, Y = y };
-                    cells.Add(new Position { X = rx, Y = ry }, new Tuple<Position, Content>(absolutePostion, this[absolutePostion]));
+                    view[new Position { X = rx, Y = ry }] = new Tuple<Position, TContent>(absolutePostion, this[absolutePostion]);
                 }
-            return cells;
+            return view;
         }
 
-        public IDictionary<Position, Tuple<Position, Content>> ViewToEast(Position field, Position chip, int chipSideLength = 7)
+        public BattleField<Tuple<Position, TContent>> ViewToEast(Position field, Position chip, int chipSideLength = 7)
         {
-            var cells = new Dictionary<Position, Tuple<Position, Content>>();
+            var view = new BattleField<Tuple<Position, TContent>>();
             for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
                 for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
                 {
                     var absolutePostion = new Position { X = x, Y = y };
-                    cells.Add(new Position { X = rx, Y = ry }, new Tuple<Position, Content>(absolutePostion, this[absolutePostion]));
+                    view[new Position { X = rx, Y = ry }] = new Tuple<Position, TContent>(absolutePostion, this[absolutePostion]);
                 }
-            return cells;
+            return view;
         }
 
-        public IDictionary<Position, Tuple<Position, Content>> ViewToSouth(Position field, Position chip, int chipSideLength = 7)
+        public BattleField<Tuple<Position, TContent>> ViewToSouth(Position field, Position chip, int chipSideLength = 7)
         {
-            var cells = new Dictionary<Position, Tuple<Position, Content>>();
+            var view = new BattleField<Tuple<Position, TContent>>();
             for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
                 for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
                 {
                     var absolutePostion = new Position { X = x, Y = y };
-                    cells.Add(new Position { X = rx, Y = ry }, new Tuple<Position, Content>(absolutePostion, this[absolutePostion]));
+                    view[new Position { X = rx, Y = ry }] = new Tuple<Position, TContent>(absolutePostion, this[absolutePostion]);
                 }
-            return cells;
+            return view;
         }
 
-        private void CreateEmpty()
+        IEnumerator<KeyValuePair<Position, TContent>> IEnumerable<KeyValuePair<Position, TContent>>.GetEnumerator()
+        {
+            return elements.GetEnumerator();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return elements.GetEnumerator();
+        }
+    }
+
+    public static class BattleField
+    {
+        public const int SideLength = 27;
+        public const int GatewaysPerSide = 1;
+        public static Move[] Gateways = CreateGateways();
+
+        public static BattleField<Content> Build()
+        {
+            var battleField = new BattleField<Content>();
+            CreateEmpty(battleField);
+            CreateWalls(battleField);
+            return battleField;
+        }
+
+        private static void CreateEmpty(BattleField<Content> battleField)
         {
             for (var x = 1; x < SideLength - 1; x++)
                 for (var y = 1; y < SideLength - 1; y++)
                 {
-                    this[new Position { X = x, Y = y }] = Content.Empty;
+                    battleField[new Position { X = x, Y = y }] = Content.Empty;
                 }
         }
 
-        private void CreateWalls()
+        private static void CreateWalls(BattleField<Content> battleField)
         {
             for (var x = 0; x < SideLength; x++)
             {
-                this[new Position { X = x, Y = 0 }] = Content.Wall;
-                this[new Position { X = x, Y = SideLength - 1 }] = Content.Wall;
+                battleField[new Position { X = x, Y = 0 }] = Content.Wall;
+                battleField[new Position { X = x, Y = SideLength - 1 }] = Content.Wall;
             }
             for (var y = 0; y < SideLength; y++)
             {
-                this[new Position { X = 0, Y = y }] = Content.Wall;
-                this[new Position { X = SideLength - 1, Y = y }] = Content.Wall;
+                battleField[new Position { X = 0, Y = y }] = Content.Wall;
+                battleField[new Position { X = SideLength - 1, Y = y }] = Content.Wall;
             }
         }
 
-        private void CreateGateways()
+        private static Move[] CreateGateways()
         {
+            var moves = new List<Move>();
             const int x = SideLength / (GatewaysPerSide + 1);
             const int y = SideLength / (GatewaysPerSide + 1);
 
             for (var i = 1; i < GatewaysPerSide + 1; i++)
             {
-                Gateways.Add(new Move(new Position { X = 0, Y = i * y }, Direction.East));
-                Gateways.Add(new Move(new Position { X = SideLength - 1, Y = i * y }, Direction.West));
-                Gateways.Add(new Move(new Position { X = i * x, Y = 0 }, Direction.North));
-                Gateways.Add(new Move(new Position { X = i * x, Y = SideLength - 1 }, Direction.South));
+                moves.Add(new Move(new Position { X = 0, Y = i * y }, Direction.East));
+                moves.Add(new Move(new Position { X = SideLength - 1, Y = i * y }, Direction.West));
+                moves.Add(new Move(new Position { X = i * x, Y = 0 }, Direction.North));
+                moves.Add(new Move(new Position { X = i * x, Y = SideLength - 1 }, Direction.South));
             }
-        }
-
-        IEnumerator<KeyValuePair<Position, Content>> IEnumerable<KeyValuePair<Position, Content>>.GetEnumerator()
-        {
-            return _cells.GetEnumerator();
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return _cells.GetEnumerator();
+            return moves.ToArray();
         }
     }
 }

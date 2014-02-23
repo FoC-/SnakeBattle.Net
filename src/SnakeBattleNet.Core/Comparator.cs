@@ -7,7 +7,7 @@ namespace SnakeBattleNet.Core
 {
     public static class Comparator
     {
-        public static Move[] MakeDecision(this BattleField battleField, Fighter fighter)
+        public static Move[] MakeDecision(this BattleField<Content> battleField, Fighter fighter)
         {
             var positionOnField = fighter.Head.Position;
             var moves = new[]
@@ -68,7 +68,7 @@ namespace SnakeBattleNet.Core
                 : blue || green || grey || red || black;
         }
 
-        private static IDictionary<Position, Tuple<Content, bool>> MapViewOnSnake(IEnumerable<KeyValuePair<Position, Tuple<Position, Content>>> view, Fighter fighter)
+        private static IDictionary<Position, Tuple<Content, bool>> MapViewOnSnake(BattleField<Tuple<Position, Content>> view, Fighter fighter)
         {
             return view.ToDictionary(k => k.Key, v => new Tuple<Content, bool>(v.Value.Item2, fighter.BodyParts.Any(p => p.Position == v.Value.Item1)));
         }
@@ -86,7 +86,7 @@ namespace SnakeBattleNet.Core
                 : chipCell.Content == fieldCell.Item1 && chipCell.IsSelf == fieldCell.Item2;
         }
 
-        private static bool IsPossible(BattleField battleField, Move move)
+        private static bool IsPossible(BattleField<Content> battleField, Move move)
         {
             var content = battleField[move.Position];
             return content == Content.Empty || content == Content.Tail;
