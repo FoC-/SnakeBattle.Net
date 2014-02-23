@@ -46,7 +46,7 @@ namespace SnakeBattleNet.Core
             Notify(new ReplayEvent(Id, Tail.Position, Content.Tail, Tail.Direction));
         }
 
-        public void MoveForward()
+        public void GrowForward()
         {
             switch (Head.Direction)
             {
@@ -65,7 +65,7 @@ namespace SnakeBattleNet.Core
             }
         }
 
-        public void TryToBite(IEnumerable<Fighter> fighters, Move newHeadPosition)
+        public void BiteMove(IEnumerable<Fighter> fighters, Move newHeadPosition)
         {
             var fighter = fighters.FirstOrDefault(f => f.Tail.Position == newHeadPosition.Position);
             if (fighter == null)
