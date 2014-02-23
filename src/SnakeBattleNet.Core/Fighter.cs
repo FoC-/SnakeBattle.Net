@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
+using SnakeBattleNet.Core.Observers;
 
 namespace SnakeBattleNet.Core
 {
@@ -9,6 +10,8 @@ namespace SnakeBattleNet.Core
         public string Id { get; private set; }
         public ICollection<View<ChipCell>> Chips { get; set; }
         public LinkedList<Move> BodyParts { get; private set; }
+
+        private readonly List<IObserver> observers = new List<IObserver>();
 
         public Fighter(string id, ICollection<View<ChipCell>> chips)
         {
@@ -21,7 +24,14 @@ namespace SnakeBattleNet.Core
         public Move Head
         {
             get { return Length == 0 ? null : BodyParts.First(); }
-            set { BodyParts.AddFirst(value); }
+            set
+            {
+                if (Head != null)
+                    Notify(new ReplayEvent(Id, Head.Position, Content.Body, Head.Direction));
+
+                BodyParts.AddFirst(value);
+                Notify(new ReplayEvent(Id, Head.Position, Content.Head, Head.Direction));
+            }
         }
 
         public Move Tail
@@ -31,7 +41,9 @@ namespace SnakeBattleNet.Core
 
         public void CutTail()
         {
+            Notify(new ReplayEvent(Id, Tail.Position, Content.Empty, Tail.Direction));
             BodyParts.RemoveLast();
+            Notify(new ReplayEvent(Id, Tail.Position, Content.Tail, Tail.Direction));
         }
 
         public void MoveForward()
@@ -65,6 +77,19 @@ namespace SnakeBattleNet.Core
                 fighter.CutTail();
             }
             Head = newHeadPosition;
+        }
+
+        public void Attach(IObserver observer)
+        {
+            observers.Add(observer);
+        }
+
+        private void Notify(ReplayEvent replayEvent)
+        {
+            foreach (var observer in observers)
+            {
+                observer.Notify(replayEvent);
+            }
         }
     }
 }

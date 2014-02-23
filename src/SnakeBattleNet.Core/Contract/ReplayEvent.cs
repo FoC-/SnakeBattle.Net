@@ -2,14 +2,14 @@ namespace SnakeBattleNet.Core.Contract
 {
     public class ReplayEvent
     {
-        public int I { get; private set; }
+        public string I { get; private set; }
         public Position P { get; private set; }
         public Content C { get; private set; }
         public Direction D { get; private set; }
 
         //for serialization
         private ReplayEvent() { }
-        internal ReplayEvent(int id, Position position, Content content, Direction direction)
+        internal ReplayEvent(string id, Position position, Content content, Direction direction)
         {
             I = id;
             P = position;

@@ -1,4 +1,5 @@
 using SnakeBattleNet.Core.Contract;
+using SnakeBattleNet.Core.Observers;
 
 namespace SnakeBattleNet.Core
 {
@@ -6,9 +7,9 @@ namespace SnakeBattleNet.Core
     {
         public const int BattleFieldSideLength = 27;
 
-        public static View<Content> BattleField()
+        public static BattleField BattleField()
         {
-            var battleField = new View<Content>();
+            var battleField = new BattleField();
             CreateEmpty(battleField);
             CreateWalls(battleField);
             return battleField;

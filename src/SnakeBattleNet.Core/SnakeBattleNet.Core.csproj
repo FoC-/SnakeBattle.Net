@@ -38,7 +38,9 @@
   <ItemGroup>
     <Compile Include="Build.cs" />
     <Compile Include="Comparator.cs" />
-    <Compile Include="Replay.cs" />
+    <Compile Include="Observers\BattleField.cs" />
+    <Compile Include="Observers\IObserver.cs" />
+    <Compile Include="Observers\ReplayRecorder.cs" />
     <Compile Include="Contract\ReplayEvent.cs" />
     <Compile Include="Contract\ChipCell.cs" />
     <Compile Include="Contract\Content.cs" />
@@ -49,7 +51,7 @@
     <Compile Include="Prototypes\Snake\IMind.cs" />
     <Compile Include="Contract\Color.cs" />
     <Compile Include="View.cs" />
-    <Compile Include="Battlemanager\BattleManager.cs" />
+    <Compile Include="BattleManager.cs" />
     <Compile Include="Contract\Move.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Contract\Direction.cs" />
