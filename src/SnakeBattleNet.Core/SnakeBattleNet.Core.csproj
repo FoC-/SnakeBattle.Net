@@ -45,12 +45,10 @@
     <Compile Include="Contract\Content.cs" />
     <Compile Include="Contract\Position.cs" />
     <Compile Include="Fighter.cs" />
-    <Compile Include="IReplayRecorder.cs" />
     <Compile Include="Prototypes\IBattleField.cs" />
     <Compile Include="Prototypes\Snake\DummyMind.cs" />
     <Compile Include="Prototypes\Snake\IMind.cs" />
     <Compile Include="Contract\Color.cs" />
-    <Compile Include="ReplayRecorder.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Battlemanager\BattleManager.cs" />
     <Compile Include="Contract\Move.cs" />

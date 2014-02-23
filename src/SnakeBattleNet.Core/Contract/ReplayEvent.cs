@@ -2,26 +2,24 @@ namespace SnakeBattleNet.Core.Contract
 {
     public class ReplayEvent
     {
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        public string Id { get; private set; }
+        public Position P { get; set; }
+        public Content C { get; private set; }
         public Direction D { get; private set; }
-        public Content E { get; private set; }
-        public int I { get; private set; }
 
         //for serialization
         private ReplayEvent() { }
-        internal ReplayEvent(int x, int y, Direction directed, Content element, int shortId)
+        internal ReplayEvent(string id, Position position, Content content, Direction direction)
         {
-            X = x;
-            Y = y;
-            D = directed;
-            E = element;
-            I = shortId;
+            P = position;
+            D = direction;
+            C = content;
+            Id = id;
         }
 
         public override string ToString()
         {
-            return string.Format("ID:[{0}];Position:[{1}:{2}];Looking:[{3}]", I, X, Y, D);
+            return string.Format("ID:[{0}];Position:{1};Looking:[{2}]", Id, P, D);
         }
     }
 }

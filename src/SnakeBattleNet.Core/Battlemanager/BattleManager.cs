@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SnakeBattleNet.Core.Contract;
 using SnakeBattleNet.Utils.Extensions;
 
@@ -8,21 +7,18 @@ namespace SnakeBattleNet.Core.Battlemanager
 {
     public class BattleManager
     {
-        private readonly IReplayRecorder recorder;
+        private readonly Replay replay;
         private readonly Move[] gateways = CreateGateways();
 
-        public BattleManager(IReplayRecorder recorder)
+        public BattleManager(Replay replay)
         {
-            this.recorder = recorder;
+            this.replay = replay;
         }
 
         public void Fight(View<Content> battleField, IList<Fighter> fighters, int rounds)
         {
             if (fighters.Count > gateways.Length)
                 throw new Exception("Number of fighters is more then gateways");
-
-            int randomSeed = Environment.TickCount;
-            recorder.Initialize(Build.BattleFieldSideLength, Build.BattleFieldSideLength, randomSeed, fighters.Select(_ => _.Id).Concat(new[] { "View.Id" }));
 
             InitializeField(battleField, fighters);
             for (int i = 0; i < rounds; i++)
@@ -118,16 +114,19 @@ namespace SnakeBattleNet.Core.Battlemanager
         {
             for (int x = 0; x < Build.BattleFieldSideLength; x++)
                 for (int y = 0; y < Build.BattleFieldSideLength; y++)
+                {
+                    var position = new Position { X = x, Y = y };
                     if (x == 0 || y == 0 || x == Build.BattleFieldSideLength - 1 || y == Build.BattleFieldSideLength - 1)
                     {
-                        battleField[new Position { X = x, Y = y }] = Content.Wall;
-                        recorder.AddEvent("View.Id", x, y, Direction.North, Content.Wall);
+                        battleField[position] = Content.Wall;
+                        replay.AddEvent(new ReplayEvent("View.Id", position, Content.Wall, Direction.North));
                     }
                     else
                     {
-                        battleField[new Position { X = x, Y = y }] = Content.Empty;
-                        recorder.AddEvent("View.Id", x, y, Direction.North, Content.Empty);
+                        battleField[position] = Content.Empty;
+                        replay.AddEvent(new ReplayEvent("View.Id", position, Content.Empty, Direction.North));
                     }
+                }
         }
 
         private void SnakeIsMoving(View<Content> battleField, Fighter fighter, Move newHeadPosition)
@@ -148,41 +147,41 @@ namespace SnakeBattleNet.Core.Battlemanager
             MoveHead(battleField, snake, newHeadPosition);
         }
 
-        private void MoveHead(View<Content> battleField, Fighter snake, Move newHeadPosition)
+        private void MoveHead(View<Content> battleField, Fighter fighter, Move newHeadPosition)
         {
-            if (snake.Length != 0)
+            if (fighter.Length != 0)
             {
                 // replace old head with body
-                battleField[new Position { X = snake.Head.Position.X, Y = snake.Head.Position.Y }] = Content.Body;
-                recorder.AddEvent(snake.Id, snake.Head.Position.X, snake.Head.Position.Y, snake.Head.Direction, Content.Body);
+                battleField[fighter.Head.Position] = Content.Body;
+                replay.AddEvent(new ReplayEvent(fighter.Id, fighter.Head.Position, Content.Body, fighter.Head.Direction));
             }
             // add head to fighter
-            snake.Head = newHeadPosition;
+            fighter.Head = newHeadPosition;
             // put new head
-            battleField[new Position { X = snake.Head.Position.X, Y = snake.Head.Position.Y }] = Content.Head;
-            recorder.AddEvent(snake.Id, snake.Head.Position.X, snake.Head.Position.Y, snake.Head.Direction, Content.Head);
+            battleField[fighter.Head.Position] = Content.Head;
+            replay.AddEvent(new ReplayEvent(fighter.Id, fighter.Head.Position, Content.Head, fighter.Head.Direction));
         }
 
         private void CutTail(View<Content> battleField, Fighter fighter)
         {
             // replace old tail with empty row
-            battleField[new Position { X = fighter.Tail.Position.X, Y = fighter.Tail.Position.Y }] = Content.Empty;
-            recorder.AddEvent("View.Id", fighter.Tail.Position.X, fighter.Tail.Position.Y, fighter.Tail.Direction, Content.Empty);
+            battleField[fighter.Tail.Position] = Content.Empty;
+            replay.AddEvent(new ReplayEvent("View.Id", fighter.Tail.Position, Content.Empty, fighter.Tail.Direction));
 
             // remove tail from fighter
             fighter.CutTail();
 
             // put new tail on field
-            battleField[new Position { X = fighter.Tail.Position.X, Y = fighter.Tail.Position.Y }] = Content.Tail;
-            recorder.AddEvent(fighter.Id, fighter.Tail.Position.X, fighter.Tail.Position.Y, fighter.Tail.Direction, Content.Tail);
+            battleField[fighter.Tail.Position] = Content.Tail;
+            replay.AddEvent(new ReplayEvent(fighter.Id, fighter.Tail.Position, Content.Tail, fighter.Tail.Direction));
         }
 
         private void PutWallsOnGateways(View<Content> battleField)
         {
             foreach (var gateway in gateways)
             {
-                battleField[new Position { X = gateway.Position.X, Y = gateway.Position.Y }] = Content.Wall;
-                recorder.AddEvent("View.Id", gateway.Position.X, gateway.Position.Y, gateway.Direction, Content.Gateway);
+                battleField[gateway.Position] = Content.Wall;
+                replay.AddEvent(new ReplayEvent("View.Id", gateway.Position, Content.Gateway, gateway.Direction));
             }
         }
     }
