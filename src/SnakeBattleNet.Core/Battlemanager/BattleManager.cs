@@ -11,6 +11,7 @@ namespace SnakeBattleNet.Core.Battlemanager
     public class BattleManager
     {
         private readonly IReplayRecorder recorder;
+        private readonly Move[] _gateways = CreateGateways();
 
         public BattleManager(IReplayRecorder recorder)
         {
@@ -19,7 +20,7 @@ namespace SnakeBattleNet.Core.Battlemanager
 
         public void Fight(View<Content> battleField, IList<Fighter> fighters, int rounds)
         {
-            if (fighters.Count > Build.Gateways.Length)
+            if (fighters.Count > _gateways.Length)
                 throw new Exception("Number of fighters is more then gateways");
 
             int randomSeed = Environment.TickCount;
@@ -28,6 +29,24 @@ namespace SnakeBattleNet.Core.Battlemanager
             InitializeField(battleField, fighters);
             for (int i = 0; i < rounds; i++)
                 Act(battleField, fighters);
+        }
+
+        private static Move[] CreateGateways()
+        {
+            const int gatewaysPerSide = 1;
+
+            var moves = new List<Move>();
+            const int x = Build.BattleFieldSideLength / (gatewaysPerSide + 1);
+            const int y = Build.BattleFieldSideLength / (gatewaysPerSide + 1);
+
+            for (var i = 1; i < gatewaysPerSide + 1; i++)
+            {
+                moves.Add(new Move(new Position { X = 0, Y = i * y }, Direction.East));
+                moves.Add(new Move(new Position { X = Build.BattleFieldSideLength - 1, Y = i * y }, Direction.West));
+                moves.Add(new Move(new Position { X = i * x, Y = 0 }, Direction.North));
+                moves.Add(new Move(new Position { X = i * x, Y = Build.BattleFieldSideLength - 1 }, Direction.South));
+            }
+            return moves.ToArray();
         }
 
         /// <summary>
@@ -40,7 +59,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             //bite: gateways
             int n = 0;
             foreach (var snake in fighters)
-                SnakeIsGrowing(battleField, snake, Build.Gateways[n++]);
+                SnakeIsGrowing(battleField, snake, _gateways[n++]);
 
             //bite: 10 times empty space in front of head to grow
             foreach (var snake in fighters)
@@ -175,7 +194,7 @@ namespace SnakeBattleNet.Core.Battlemanager
 
         private void PutWallsOnGateways(View<Content> battleField)
         {
-            foreach (var gateway in Build.Gateways)
+            foreach (var gateway in _gateways)
             {
                 battleField[new Position { X = gateway.Position.X, Y = gateway.Position.Y }] = Content.Wall;
                 recorder.AddEvent("View.Id", gateway.Position.X, gateway.Position.Y, LookinkgTo(gateway.Direction), Element.Gateway);

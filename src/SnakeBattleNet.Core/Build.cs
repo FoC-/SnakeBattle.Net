@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Core
@@ -6,8 +5,6 @@ namespace SnakeBattleNet.Core
     public static class Build
     {
         public const int BattleFieldSideLength = 27;
-        public const int GatewaysPerSide = 1;
-        public static Move[] Gateways = CreateGateways();
 
         public static View<Content> BattleField()
         {
@@ -38,22 +35,6 @@ namespace SnakeBattleNet.Core
                 battleField[new Position { X = 0, Y = y }] = Content.Wall;
                 battleField[new Position { X = BattleFieldSideLength - 1, Y = y }] = Content.Wall;
             }
-        }
-
-        private static Move[] CreateGateways()
-        {
-            var moves = new List<Move>();
-            const int x = BattleFieldSideLength / (GatewaysPerSide + 1);
-            const int y = BattleFieldSideLength / (GatewaysPerSide + 1);
-
-            for (var i = 1; i < GatewaysPerSide + 1; i++)
-            {
-                moves.Add(new Move(new Position { X = 0, Y = i * y }, Direction.East));
-                moves.Add(new Move(new Position { X = BattleFieldSideLength - 1, Y = i * y }, Direction.West));
-                moves.Add(new Move(new Position { X = i * x, Y = 0 }, Direction.North));
-                moves.Add(new Move(new Position { X = i * x, Y = BattleFieldSideLength - 1 }, Direction.South));
-            }
-            return moves.ToArray();
         }
     }
 }

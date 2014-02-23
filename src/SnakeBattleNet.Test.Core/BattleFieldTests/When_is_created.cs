@@ -22,9 +22,6 @@ namespace SnakeBattleNet.Test.Core.BattleFieldTests
         It should_exact_number_of_empty = () =>
             battleField.Count(c => c.Value == Content.Empty).ShouldEqual((Build.BattleFieldSideLength * Build.BattleFieldSideLength) - (Build.BattleFieldSideLength * 4 - 4));
 
-        It should_exact_number_of_gateways = () =>
-            Build.Gateways.Length.ShouldEqual(4);
-
         private static View<Content> battleField;
     }
 }
