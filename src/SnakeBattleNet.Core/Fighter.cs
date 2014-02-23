@@ -33,5 +33,38 @@ namespace SnakeBattleNet.Core
         {
             BodyParts.RemoveLast();
         }
+
+        public void MoveForward()
+        {
+            switch (Head.Direction)
+            {
+                case Direction.North:
+                    Head = Move.ToNothFrom(Head.Position);
+                    break;
+                case Direction.West:
+                    Head = Move.ToWestFrom(Head.Position);
+                    break;
+                case Direction.East:
+                    Head = Move.ToEastFrom(Head.Position);
+                    break;
+                case Direction.South:
+                    Head = Move.ToSouthFrom(Head.Position);
+                    break;
+            }
+        }
+
+        public void TryToBite(IEnumerable<Fighter> fighters, Move newHeadPosition)
+        {
+            var fighter = fighters.FirstOrDefault(f => f.Tail.Position == newHeadPosition.Position);
+            if (fighter == null)
+            {
+                CutTail();
+            }
+            else
+            {
+                fighter.CutTail();
+            }
+            Head = newHeadPosition;
+        }
     }
 }
