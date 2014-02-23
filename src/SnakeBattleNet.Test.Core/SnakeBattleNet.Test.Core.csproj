@@ -78,10 +78,6 @@
       <Project>{D01054C3-B067-418C-9A67-11A55F4E5536}</Project>
       <Name>SnakeBattleNet.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SnakeBattleNet.ReplayRecorder\SnakeBattleNet.ReplayRecorder.csproj">
-      <Project>{B99CEF26-B083-4DE2-9E70-EB195657150B}</Project>
-      <Name>SnakeBattleNet.ReplayRecorder</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

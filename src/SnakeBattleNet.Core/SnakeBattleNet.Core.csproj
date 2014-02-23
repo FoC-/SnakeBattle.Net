@@ -38,14 +38,19 @@
   <ItemGroup>
     <Compile Include="Build.cs" />
     <Compile Include="Comparator.cs" />
+    <Compile Include="Contract\LongShortIdPair.cs" />
+    <Compile Include="Contract\Replay.cs" />
+    <Compile Include="Contract\ReplayEvent.cs" />
     <Compile Include="Contract\ChipCell.cs" />
     <Compile Include="Contract\Content.cs" />
     <Compile Include="Contract\Position.cs" />
     <Compile Include="Fighter.cs" />
+    <Compile Include="IReplayRecorder.cs" />
     <Compile Include="Prototypes\IBattleField.cs" />
     <Compile Include="Prototypes\Snake\DummyMind.cs" />
     <Compile Include="Prototypes\Snake\IMind.cs" />
     <Compile Include="Contract\Color.cs" />
+    <Compile Include="ReplayRecorder.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Battlemanager\BattleManager.cs" />
     <Compile Include="Contract\Move.cs" />
@@ -68,10 +73,6 @@
     <Compile Include="Prototypes\VisibleArea.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SnakeBattleNet.ReplayRecorder\SnakeBattleNet.ReplayRecorder.csproj">
-      <Project>{B99CEF26-B083-4DE2-9E70-EB195657150B}</Project>
-      <Name>SnakeBattleNet.ReplayRecorder</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj">
       <Project>{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}</Project>
       <Name>SnakeBattleNet.Utils</Name>

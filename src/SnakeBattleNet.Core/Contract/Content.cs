@@ -7,5 +7,6 @@ namespace SnakeBattleNet.Core.Contract
         Head,
         Body,
         Tail,
+        Gateway,
     }
 }

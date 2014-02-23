@@ -6,6 +6,5 @@
         West,
         East,
         South,
-        NoWay
     }
 }

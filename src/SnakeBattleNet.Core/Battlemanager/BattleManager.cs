@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
-using SnakeBattleNet.ReplayRecorder;
-using SnakeBattleNet.ReplayRecorder.Contracts;
 using SnakeBattleNet.Utils.Extensions;
 
 namespace SnakeBattleNet.Core.Battlemanager
@@ -123,12 +121,12 @@ namespace SnakeBattleNet.Core.Battlemanager
                     if (x == 0 || y == 0 || x == Build.BattleFieldSideLength - 1 || y == Build.BattleFieldSideLength - 1)
                     {
                         battleField[new Position { X = x, Y = y }] = Content.Wall;
-                        recorder.AddEvent("View.Id", x, y, LookinkgTo(Direction.NoWay), Element.Wall);
+                        recorder.AddEvent("View.Id", x, y, Direction.North, Content.Wall);
                     }
                     else
                     {
                         battleField[new Position { X = x, Y = y }] = Content.Empty;
-                        recorder.AddEvent("View.Id", x, y, LookinkgTo(Direction.NoWay), Element.Empty);
+                        recorder.AddEvent("View.Id", x, y, Direction.North, Content.Empty);
                     }
         }
 
@@ -156,27 +154,27 @@ namespace SnakeBattleNet.Core.Battlemanager
             {
                 // replace old head with body
                 battleField[new Position { X = snake.Head.Position.X, Y = snake.Head.Position.Y }] = Content.Body;
-                recorder.AddEvent(snake.Id, snake.Head.Position.X, snake.Head.Position.Y, LookinkgTo(snake.Head.Direction), Element.Body);
+                recorder.AddEvent(snake.Id, snake.Head.Position.X, snake.Head.Position.Y, snake.Head.Direction, Content.Body);
             }
             // add head to fighter
             snake.Head = newHeadPosition;
             // put new head
             battleField[new Position { X = snake.Head.Position.X, Y = snake.Head.Position.Y }] = Content.Head;
-            recorder.AddEvent(snake.Id, snake.Head.Position.X, snake.Head.Position.Y, LookinkgTo(snake.Head.Direction), Element.Head);
+            recorder.AddEvent(snake.Id, snake.Head.Position.X, snake.Head.Position.Y, snake.Head.Direction, Content.Head);
         }
 
         private void CutTail(View<Content> battleField, Fighter fighter)
         {
             // replace old tail with empty row
             battleField[new Position { X = fighter.Tail.Position.X, Y = fighter.Tail.Position.Y }] = Content.Empty;
-            recorder.AddEvent("View.Id", fighter.Tail.Position.X, fighter.Tail.Position.Y, LookinkgTo(fighter.Tail.Direction), Element.Empty);
+            recorder.AddEvent("View.Id", fighter.Tail.Position.X, fighter.Tail.Position.Y, fighter.Tail.Direction, Content.Empty);
 
             // remove tail from fighter
             fighter.CutTail();
 
             // put new tail on field
             battleField[new Position { X = fighter.Tail.Position.X, Y = fighter.Tail.Position.Y }] = Content.Tail;
-            recorder.AddEvent(fighter.Id, fighter.Tail.Position.X, fighter.Tail.Position.Y, LookinkgTo(fighter.Tail.Direction), Element.Tail);
+            recorder.AddEvent(fighter.Id, fighter.Tail.Position.X, fighter.Tail.Position.Y, fighter.Tail.Direction, Content.Tail);
         }
 
         private void PutWallsOnGateways(View<Content> battleField)
@@ -184,24 +182,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             foreach (var gateway in gateways)
             {
                 battleField[new Position { X = gateway.Position.X, Y = gateway.Position.Y }] = Content.Wall;
-                recorder.AddEvent("View.Id", gateway.Position.X, gateway.Position.Y, LookinkgTo(gateway.Direction), Element.Gateway);
-            }
-        }
-
-        private Directed LookinkgTo(Direction direction)
-        {
-            switch (direction)
-            {
-                case Direction.South:
-                    return Directed.Down;
-                case Direction.West:
-                    return Directed.Left;
-                case Direction.East:
-                    return Directed.Right;
-                case Direction.North:
-                case Direction.NoWay:
-                default:
-                    return Directed.Up;
+                recorder.AddEvent("View.Id", gateway.Position.X, gateway.Position.Y, gateway.Direction, Content.Gateway);
             }
         }
     }
