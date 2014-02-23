@@ -7,7 +7,7 @@ namespace SnakeBattleNet.Test.Core
 {
     public class stubForRealBattle
     {
-        protected static Fighter CreateSnakeStub(ICollection<IDictionary<Position, ChipCell>> chips)
+        protected static Fighter CreateSnakeStub(ICollection<View<ChipCell>> chips)
         {
             var snakeStub = new Fighter(Guid.NewGuid().ToString(), chips);
             snakeStub.Head = new Move(new Position { X = 5, Y = 4 }, Direction.South);
@@ -17,9 +17,9 @@ namespace SnakeBattleNet.Test.Core
             return snakeStub;
         }
 
-        protected static BattleField<Content> CreateBattleField()
+        protected static View<Content> CreateBattleField()
         {
-            var battleField = new BattleField<Content>();
+            var battleField = new View<Content>();
 
             // Snake 0
             battleField[new Position { X = 4, Y = 4 }] = Content.Head;
@@ -48,32 +48,32 @@ namespace SnakeBattleNet.Test.Core
             return battleField;
         }
 
-        protected static IDictionary<Position, ChipCell> CreateChipWithAndColoredHead()
+        protected static View<ChipCell> CreateChipWithAndColoredHead()
         {
-            var chip = new Dictionary<Position, ChipCell>();
+            var chip = new View<ChipCell>();
 
             // Own snake
-            chip.Add(new Position { X = 2, Y = 2 }, new ChipCell { Content = Content.Head, Color = Color.AndGrey, IsSelf = true });
-            chip.Add(new Position { X = 2, Y = 3 }, new ChipCell { Content = Content.Body, Color = Color.OrGreen, IsSelf = true });
-            chip.Add(new Position { X = 3, Y = 3 }, new ChipCell { Content = Content.Body, Color = Color.OrGreen, IsSelf = true });
-            chip.Add(new Position { X = 3, Y = 2 }, new ChipCell { Content = Content.Tail, Color = Color.OrGreen, IsSelf = true });
+            chip[new Position { X = 2, Y = 2 }] = new ChipCell { Content = Content.Head, Color = Color.AndGrey, IsSelf = true };
+            chip[new Position { X = 2, Y = 3 }] = new ChipCell { Content = Content.Body, Color = Color.OrGreen, IsSelf = true };
+            chip[new Position { X = 3, Y = 3 }] = new ChipCell { Content = Content.Body, Color = Color.OrGreen, IsSelf = true };
+            chip[new Position { X = 3, Y = 2 }] = new ChipCell { Content = Content.Tail, Color = Color.OrGreen, IsSelf = true };
 
             // Snake 1
-            chip.Add(new Position { X = 2, Y = 1 }, new ChipCell { Content = Content.Head, Color = Color.AndBlack });
-            chip.Add(new Position { X = 2, Y = 0 }, new ChipCell { Content = Content.Body, Color = Color.AndBlack });
-            chip.Add(new Position { X = 3, Y = 0 }, new ChipCell { Content = Content.Body, Color = Color.AndBlack });
-            chip.Add(new Position { X = 3, Y = 1 }, new ChipCell { Content = Content.Tail, Color = Color.AndBlack });
+            chip[new Position { X = 2, Y = 1 }] = new ChipCell { Content = Content.Head, Color = Color.AndBlack };
+            chip[new Position { X = 2, Y = 0 }] = new ChipCell { Content = Content.Body, Color = Color.AndBlack };
+            chip[new Position { X = 3, Y = 0 }] = new ChipCell { Content = Content.Body, Color = Color.AndBlack };
+            chip[new Position { X = 3, Y = 1 }] = new ChipCell { Content = Content.Tail, Color = Color.AndBlack };
 
             // Snake 2
-            chip.Add(new Position { X = 0, Y = 0 }, new ChipCell { Content = Content.Head, Color = Color.AndGrey });
-            chip.Add(new Position { X = 1, Y = 0 }, new ChipCell { Content = Content.Body, Color = Color.AndGrey });
-            chip.Add(new Position { X = 1, Y = 1 }, new ChipCell { Content = Content.Body, Color = Color.AndGrey });
-            chip.Add(new Position { X = 0, Y = 1 }, new ChipCell { Content = Content.Body, Color = Color.AndGrey });
-            chip.Add(new Position { X = 0, Y = 2 }, new ChipCell { Content = Content.Tail, Color = Color.AndGrey });
+            chip[new Position { X = 0, Y = 0 }] = new ChipCell { Content = Content.Head, Color = Color.AndGrey };
+            chip[new Position { X = 1, Y = 0 }] = new ChipCell { Content = Content.Body, Color = Color.AndGrey };
+            chip[new Position { X = 1, Y = 1 }] = new ChipCell { Content = Content.Body, Color = Color.AndGrey };
+            chip[new Position { X = 0, Y = 1 }] = new ChipCell { Content = Content.Body, Color = Color.AndGrey };
+            chip[new Position { X = 0, Y = 2 }] = new ChipCell { Content = Content.Tail, Color = Color.AndGrey };
 
             // Snake 3
-            chip.Add(new Position { X = 0, Y = 3 }, new ChipCell { Content = Content.Head, Color = Color.OrBlue });
-            chip.Add(new Position { X = 0, Y = 4 }, new ChipCell { Content = Content.Body, Color = Color.OrBlue });
+            chip[new Position { X = 0, Y = 3 }] = new ChipCell { Content = Content.Head, Color = Color.OrBlue };
+            chip[new Position { X = 0, Y = 4 }] = new ChipCell { Content = Content.Body, Color = Color.OrBlue };
 
             return chip;
         }

@@ -36,6 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build.cs" />
     <Compile Include="Comparator.cs" />
     <Compile Include="Contract\ChipCell.cs" />
     <Compile Include="Contract\Content.cs" />
@@ -45,7 +46,7 @@
     <Compile Include="Prototypes\Snake\DummyMind.cs" />
     <Compile Include="Prototypes\Snake\IMind.cs" />
     <Compile Include="Contract\Color.cs" />
-    <Compile Include="BattleField.cs" />
+    <Compile Include="View.cs" />
     <Compile Include="Battlemanager\BattleManager.cs" />
     <Compile Include="Contract\Move.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

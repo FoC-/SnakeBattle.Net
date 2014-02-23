@@ -7,10 +7,10 @@ namespace SnakeBattleNet.Core
     public class Fighter
     {
         public string Id { get; private set; }
-        public ICollection<IDictionary<Position, ChipCell>> Chips { get; set; }
+        public ICollection<View<ChipCell>> Chips { get; set; }
         public LinkedList<Move> BodyParts { get; private set; }
 
-        public Fighter(string id, ICollection<IDictionary<Position, ChipCell>> chips)
+        public Fighter(string id, ICollection<View<ChipCell>> chips)
         {
             Id = id;
             Chips = chips;

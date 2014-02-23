@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BattleFieldTests\ViewTestContext.cs" />
     <Compile Include="stubForRealBattle.cs" />
     <Compile Include="BattleManager\when_call_comparator_with_predifined_chip_antother_tail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

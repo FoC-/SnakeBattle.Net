@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using SnakeBattleNet.Core;
@@ -7,30 +6,30 @@ using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Test.Core.BattleFieldTests
 {
-    [Subject(typeof(BattleField<Content>))]
-    internal class When_ViewToEast_is_called_and_chip_side_length_3
+    [Subject(typeof(View<Content>))]
+    internal class When_ViewToEast_is_called_and_chip_side_length_3 : ViewTestContext
     {
         Establish context = () =>
         {
-            battleField = BattleField.Build();
+            battleField = Build.BattleField();
         };
 
         Because of = () =>
-            result = battleField.ViewToEast(new Position { X = 25, Y = 25 }, new Position { X = 1, Y = 1 }, 3);
+            result = battleField.ToEast(CreateFighter(), new Position { X = 1, Y = 1 }, 3);
 
         It should_return_9_elements = () =>
             result.Count().ShouldEqual(9);
 
         It should_return_4_empty_spaces = () =>
-            result.Count(c => c.Value.Item2 == Content.Empty).ShouldEqual(4);
+            result.Count(c => c.Value.Item1 == Content.Empty).ShouldEqual(4);
 
         It should_return_wall_at_left = () =>
-            result.Count(c => c.Key.X == 0 & c.Value.Item2 == Content.Wall).ShouldEqual(3);
+            result.Count(c => c.Key.X == 0 & c.Value.Item1 == Content.Wall).ShouldEqual(3);
 
         It should_return_wall_at_top = () =>
-            result.Count(c => c.Key.Y == 2 && c.Value.Item2 == Content.Wall).ShouldEqual(3);
+            result.Count(c => c.Key.Y == 2 && c.Value.Item1 == Content.Wall).ShouldEqual(3);
 
-        private static BattleField<Content> battleField;
-        private static BattleField<Tuple<Position, Content>> result;
+        private static View<Content> battleField;
+        private static View<Tuple<Content, bool>> result;
     }
 }
