@@ -38,8 +38,7 @@
   <ItemGroup>
     <Compile Include="Build.cs" />
     <Compile Include="Comparator.cs" />
-    <Compile Include="Contract\LongShortIdPair.cs" />
-    <Compile Include="Contract\Replay.cs" />
+    <Compile Include="Replay.cs" />
     <Compile Include="Contract\ReplayEvent.cs" />
     <Compile Include="Contract\ChipCell.cs" />
     <Compile Include="Contract\Content.cs" />

@@ -119,12 +119,14 @@ namespace SnakeBattleNet.Core.Battlemanager
                     if (x == 0 || y == 0 || x == Build.BattleFieldSideLength - 1 || y == Build.BattleFieldSideLength - 1)
                     {
                         battleField[position] = Content.Wall;
-                        replay.AddEvent(new ReplayEvent("View.Id", position, Content.Wall, Direction.North));
+                        var id = replay.GetShortId("View.Id");
+                        replay.AddEvent(new ReplayEvent(id, position, Content.Wall, Direction.North));
                     }
                     else
                     {
                         battleField[position] = Content.Empty;
-                        replay.AddEvent(new ReplayEvent("View.Id", position, Content.Empty, Direction.North));
+                        var id = replay.GetShortId("View.Id");
+                        replay.AddEvent(new ReplayEvent(id, position, Content.Empty, Direction.North));
                     }
                 }
         }
@@ -153,27 +155,27 @@ namespace SnakeBattleNet.Core.Battlemanager
             {
                 // replace old head with body
                 battleField[fighter.Head.Position] = Content.Body;
-                replay.AddEvent(new ReplayEvent(fighter.Id, fighter.Head.Position, Content.Body, fighter.Head.Direction));
+                replay.AddEvent(new ReplayEvent(replay.GetShortId(fighter.Id), fighter.Head.Position, Content.Body, fighter.Head.Direction));
             }
             // add head to fighter
             fighter.Head = newHeadPosition;
             // put new head
             battleField[fighter.Head.Position] = Content.Head;
-            replay.AddEvent(new ReplayEvent(fighter.Id, fighter.Head.Position, Content.Head, fighter.Head.Direction));
+            replay.AddEvent(new ReplayEvent(replay.GetShortId(fighter.Id), fighter.Head.Position, Content.Head, fighter.Head.Direction));
         }
 
         private void CutTail(View<Content> battleField, Fighter fighter)
         {
             // replace old tail with empty row
             battleField[fighter.Tail.Position] = Content.Empty;
-            replay.AddEvent(new ReplayEvent("View.Id", fighter.Tail.Position, Content.Empty, fighter.Tail.Direction));
+            replay.AddEvent(new ReplayEvent(replay.GetShortId("View.Id"), fighter.Tail.Position, Content.Empty, fighter.Tail.Direction));
 
             // remove tail from fighter
             fighter.CutTail();
 
             // put new tail on field
             battleField[fighter.Tail.Position] = Content.Tail;
-            replay.AddEvent(new ReplayEvent(fighter.Id, fighter.Tail.Position, Content.Tail, fighter.Tail.Direction));
+            replay.AddEvent(new ReplayEvent(replay.GetShortId(fighter.Id), fighter.Tail.Position, Content.Tail, fighter.Tail.Direction));
         }
 
         private void PutWallsOnGateways(View<Content> battleField)
@@ -181,7 +183,7 @@ namespace SnakeBattleNet.Core.Battlemanager
             foreach (var gateway in gateways)
             {
                 battleField[gateway.Position] = Content.Wall;
-                replay.AddEvent(new ReplayEvent("View.Id", gateway.Position, Content.Gateway, gateway.Direction));
+                replay.AddEvent(new ReplayEvent(replay.GetShortId("View.Id"), gateway.Position, Content.Gateway, gateway.Direction));
             }
         }
     }
