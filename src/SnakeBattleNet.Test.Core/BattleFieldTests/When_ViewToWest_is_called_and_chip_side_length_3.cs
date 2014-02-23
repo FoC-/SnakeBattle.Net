@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
+using SnakeBattleNet.Core.Observers;
 
 namespace SnakeBattleNet.Test.Core.BattleFieldTests
 {
@@ -11,7 +12,7 @@ namespace SnakeBattleNet.Test.Core.BattleFieldTests
     {
         Establish context = () =>
         {
-            battleField = Build.BattleField();
+            battleField = BattleField.Build();
         };
 
         Because of = () =>

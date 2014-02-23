@@ -36,7 +36,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Build.cs" />
     <Compile Include="Comparator.cs" />
     <Compile Include="Observers\BattleField.cs" />
     <Compile Include="Observers\IObserver.cs" />

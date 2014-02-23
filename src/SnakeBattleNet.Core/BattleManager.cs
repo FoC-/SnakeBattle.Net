@@ -11,7 +11,7 @@ namespace SnakeBattleNet.Core
         public void Fight(IList<Fighter> fighters, int rounds)
         {
             var replayRecorder = new ReplayRecorder();
-            var battleField = Build.BattleField();
+            var battleField = BattleField.Build();
             foreach (var fighter in fighters)
             {
                 fighter.Attach(replayRecorder);
@@ -59,15 +59,15 @@ namespace SnakeBattleNet.Core
             const int gatewaysPerSide = 1;
 
             var moves = new List<Move>();
-            const int x = Build.BattleFieldSideLength / (gatewaysPerSide + 1);
-            const int y = Build.BattleFieldSideLength / (gatewaysPerSide + 1);
+            const int x = BattleField.SideLength / (gatewaysPerSide + 1);
+            const int y = BattleField.SideLength / (gatewaysPerSide + 1);
 
             for (var i = 1; i < gatewaysPerSide + 1; i++)
             {
                 moves.Add(new Move(new Position { X = 0, Y = i * y }, Direction.East));
-                moves.Add(new Move(new Position { X = Build.BattleFieldSideLength - 1, Y = i * y }, Direction.West));
+                moves.Add(new Move(new Position { X = BattleField.SideLength - 1, Y = i * y }, Direction.West));
                 moves.Add(new Move(new Position { X = i * x, Y = 0 }, Direction.North));
-                moves.Add(new Move(new Position { X = i * x, Y = Build.BattleFieldSideLength - 1 }, Direction.South));
+                moves.Add(new Move(new Position { X = i * x, Y = BattleField.SideLength - 1 }, Direction.South));
             }
             return moves;
         }
