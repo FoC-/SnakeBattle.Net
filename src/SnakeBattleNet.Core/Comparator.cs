@@ -6,7 +6,7 @@ namespace SnakeBattleNet.Core
 {
     public static class Comparator
     {
-        public static Move[] MakeDecision(this View<Content> view, Fighter fighter)
+        public static Move[] PossibleMoves(this View<Content> view, Fighter fighter)
         {
             var moves = new[]
             {
@@ -27,19 +27,19 @@ namespace SnakeBattleNet.Core
                     switch (move.Direction)
                     {
                         case Direction.North:
-                            if (Compare(view.ToNorth(fighter, positionOnChip), chip))
+                            if (IsEqual(view.ToNorth(fighter, positionOnChip), chip))
                                 return new[] { move };
                             break;
                         case Direction.West:
-                            if (Compare(view.ToWest(fighter, positionOnChip), chip))
+                            if (IsEqual(view.ToWest(fighter, positionOnChip), chip))
                                 return new[] { move };
                             break;
                         case Direction.East:
-                            if (Compare(view.ToEast(fighter, positionOnChip), chip))
+                            if (IsEqual(view.ToEast(fighter, positionOnChip), chip))
                                 return new[] { move };
                             break;
                         case Direction.South:
-                            if (Compare(view.ToSouth(fighter, positionOnChip), chip))
+                            if (IsEqual(view.ToSouth(fighter, positionOnChip), chip))
                                 return new[] { move };
                             break;
                     }
@@ -48,18 +48,16 @@ namespace SnakeBattleNet.Core
             return possibleMoves;
         }
 
-        private static bool Compare(View<Tuple<Content, bool>> fieldView, View<ChipCell> chipView)
+        private static bool IsEqual(View<Tuple<Content, bool>> field, View<ChipCell> chip)
         {
-            var cells = chipView.ToList();
+            var blue = chip.Where(c => c.Value.Color == Color.OrBlue).Any(c => IsEqual(field[c.Key], c.Value));
+            var green = chip.Where(c => c.Value.Color == Color.OrGreen).Any(c => IsEqual(field[c.Key], c.Value));
 
-            var blue = cells.Where(c => c.Value.Color == Color.OrBlue).Any(c => IsEqual(fieldView[c.Key], c.Value));
-            var green = cells.Where(c => c.Value.Color == Color.OrGreen).Any(c => IsEqual(fieldView[c.Key], c.Value));
+            var grey = chip.Where(c => c.Value.Color == Color.AndGrey).All(c => IsEqual(field[c.Key], c.Value));
+            var red = chip.Where(c => c.Value.Color == Color.AndRed).All(c => IsEqual(field[c.Key], c.Value));
+            var black = chip.Where(c => c.Value.Color == Color.AndBlack).All(c => IsEqual(field[c.Key], c.Value));
 
-            var grey = cells.Where(c => c.Value.Color == Color.AndGrey).All(c => IsEqual(fieldView[c.Key], c.Value));
-            var red = cells.Where(c => c.Value.Color == Color.AndRed).All(c => IsEqual(fieldView[c.Key], c.Value));
-            var black = cells.Where(c => c.Value.Color == Color.AndBlack).All(c => IsEqual(fieldView[c.Key], c.Value));
-
-            var color = cells.FirstOrDefault(c => c.Value.IsSelf).Value.Color;
+            var color = chip.FirstOrDefault(c => c.Value.IsSelf).Value.Color;
             var andType = color == Color.AndBlack || color == Color.AndGrey || color == Color.AndRed;
             return andType
                 ? blue && green && grey && red && black

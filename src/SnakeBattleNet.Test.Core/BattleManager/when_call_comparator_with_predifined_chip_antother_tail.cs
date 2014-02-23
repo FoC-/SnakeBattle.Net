@@ -17,7 +17,7 @@ namespace SnakeBattleNet.Test.Core
         };
 
         Because of = () =>
-            result = battleField.MakeDecision(fighter);
+            result = battleField.PossibleMoves(fighter);
 
         It should_return_move_on_that_row = () =>
             result.First().ShouldEqual(new Move(new Position { X = 4, Y = 3 }, Direction.North));
