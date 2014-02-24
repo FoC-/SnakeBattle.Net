@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
@@ -7,17 +6,16 @@ namespace SnakeBattleNet.Core.Observers
 {
     public class ReplayRecorder : IObserver
     {
-        public string Id { get; private set; }
-
         private readonly Dictionary<string, int> idMapUniqueToShort;
         private readonly IDictionary<int, ICollection<ReplayEvent>> frames;
         private int frameIndex;
+        private readonly Replay replay;
 
         public ReplayRecorder()
         {
             idMapUniqueToShort = new Dictionary<string, int>();
-            Id = Guid.NewGuid().ToString().ToLower().Replace("-", "");
             frames = new Dictionary<int, ICollection<ReplayEvent>>();
+            replay = new Replay();
         }
 
         public int GetShortId(string longId)
@@ -30,6 +28,11 @@ namespace SnakeBattleNet.Core.Observers
                 idMapUniqueToShort.Add(longId, id);
             }
             return id;
+        }
+
+        public void SetBattlefield(View<Content> battleField)
+        {
+            replay.BattleField = battleField.ToDictionary(k => k.Key, v => v.Value);
         }
 
         public void SetFrameIndex(int index)
@@ -48,9 +51,10 @@ namespace SnakeBattleNet.Core.Observers
             replayEvents.Add(replayEvent);
         }
 
-        public IDictionary<int, ICollection<ReplayEvent>> Replay()
+        public Replay Replay()
         {
-            return frames;
+            replay.Frames = new Dictionary<int, ICollection<ReplayEvent>>(frames);
+            return replay;
         }
     }
 }
