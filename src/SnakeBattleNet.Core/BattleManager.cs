@@ -8,7 +8,7 @@ namespace SnakeBattleNet.Core
 {
     public class BattleManager
     {
-        public void Fight(IList<Fighter> fighters, int rounds)
+        public IDictionary<int, ICollection<ReplayEvent>> Fight(IList<Fighter> fighters, int rounds)
         {
             var replayRecorder = new ReplayRecorder();
             var battleField = BattleField.Build();
@@ -27,6 +27,7 @@ namespace SnakeBattleNet.Core
 
             while (rounds-- > 0)
             {
+                replayRecorder.SetFrameIndex(rounds);
                 foreach (var snake in fighters.Shuffle())
                 {
                     var possibleMoves = battleField.PossibleMoves(snake);
@@ -35,6 +36,7 @@ namespace SnakeBattleNet.Core
                     snake.BiteMove(fighters, move);
                 }
             }
+            return replayRecorder.Replay();
         }
 
         private void PutFighters(IList<Move> gateways, IList<Fighter> fighters)
