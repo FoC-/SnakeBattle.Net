@@ -186,9 +186,11 @@
     <Compile Include="App_Start\DependencyResolution\StructuremapMvc.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\SnakeController.cs" />
     <Compile Include="Core\Snake.cs" />
-    <Compile Include="Models\Snake\BrainModuleViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\Snake\CellViewModel.cs" />
+    <Compile Include="Models\Snake\ChipViewModel.cs" />
     <Compile Include="Models\Snake\SnakeViewModel.cs" />
     <Compile Include="Controllers\TrainController.cs" />
     <Compile Include="Core\Auth\CustomUserStore.cs" />

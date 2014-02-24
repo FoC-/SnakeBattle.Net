@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -12,6 +14,8 @@ using Microsoft.Owin.Security.OAuth;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using Newtonsoft.Json.Serialization;
+using SnakeBattleNet.Core;
+using SnakeBattleNet.Core.Contract;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Core.Auth;
 using SnakeBattleNet.Web.DependencyResolution.Providers;
@@ -101,10 +105,15 @@ namespace SnakeBattleNet.Web
 
         public static void RegisterMappings()
         {
+            Mapper.CreateMap<View<ChipCell>, ChipViewModel>()
+                .ConvertUsing(v => new ChipViewModel { Cells = v.Select(p => new CellViewModel { Position = p.Key, Content = p.Value }) });
+
+            Mapper.CreateMap<Position, Position>();
             Mapper.CreateMap<Snake, SnakeViewModel>();
+
             Mapper.CreateMap<Tuple<Snake, SnakeViewModel>, Snake>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Item2.Name))
-                .ForMember(d => d.Chips, o => o.MapFrom(s => s.Item2.BrainModules))
+                .ForMember(d => d.Chips, o => o.MapFrom(s => s.Item2.Chips))
 
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Item1.Id))
                 .ForMember(d => d.OwnerId, o => o.MapFrom(s => s.Item1.OwnerId))

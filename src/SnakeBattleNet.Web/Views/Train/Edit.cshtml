@@ -1,39 +1,46 @@
-﻿@model SnakeBattleNet.Web.Models.Snake.SnakeViewModel
+﻿@model string
 
 <div class="row">
     <div class="col-md-8">
-        <dl>
-            <dt>Name</dt>
-            <dd>@Model.Name</dd>
-            <dt>Score</dt>
-            <dd>@Model.Score</dd>
-            <dt>Matches</dt>
-            <dd>@Model.Matches</dd>
-            <dt>Wins</dt>
-            <dd>@Model.Wins</dd>
-            <dt>Looses</dt>
-            <dd>@Model.Loses</dd>
-        </dl>
-        <hr />
-        @using (Html.BeginForm("Edit", "Train", FormMethod.Post, new { @class = "form-inline", role = "form" }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.Id)
-
-            @Html.ValidationSummary(true)
-
-            <div class="form-group">
-                @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Name)
-                </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <button type="button" id="button_get_snake" class="btn btn-default">Get</button>
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
+            <div class="col-md-10">
+                <button type="button" id="button_save_snake" class="btn btn-default">Save</button>
             </div>
-        }
+        </div>
     </div>
 </div>
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#button_get_snake').on('click', function () {
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/Snake/Get?id=' + '@Model',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    success: function (data) {
+                        window.snake = data;
+                        alert('data: ' + JSON.stringify(data));
+                    }
+                });
+            });
+            $('#button_save_snake').on('click', function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/Snake/Save',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    data: JSON.stringify(window.snake),
+                    success: function (data) {
+                        window.snake = data;
+                        alert('data: ' + JSON.stringify(data));
+                    }
+                });
+            });
+        });
+    </script>
+}

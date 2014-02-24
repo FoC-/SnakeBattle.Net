@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
@@ -12,16 +11,16 @@ namespace SnakeBattleNet.Web.Controllers
     [Authorize]
     public class TrainController : Controller
     {
-        private readonly ISnakeStore _snakeStore;
+        private readonly ISnakeStore snakeStore;
 
         public TrainController(ISnakeStore snakeStore)
         {
-            _snakeStore = snakeStore;
+            this.snakeStore = snakeStore;
         }
 
         public ActionResult Index()
         {
-            var snakes = _snakeStore.GetByOwnerId(User.Identity.GetUserId());
+            var snakes = snakeStore.GetByOwnerId(User.Identity.GetUserId());
             var model = Mapper.Map<IEnumerable<Snake>, IEnumerable<SnakeViewModel>>(snakes);
             return View(model);
         }
@@ -33,7 +32,7 @@ namespace SnakeBattleNet.Web.Controllers
                 return RedirectToAction("Index");
             }
             var snake = new Snake(User.Identity.GetUserId());
-            _snakeStore.SaveSnake(snake);
+            snakeStore.SaveSnake(snake);
             return RedirectToAction("Edit", new { id = snake.Id });
         }
 
@@ -43,34 +42,7 @@ namespace SnakeBattleNet.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var snake = _snakeStore.GetById(id);
-            var model = Mapper.Map<Snake, SnakeViewModel>(snake);
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(SnakeViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var snakeStored = _snakeStore.GetById(model.Id);
-                if (IsCurrentUserOwner(snakeStored))
-                {
-                    var snakemapped = Mapper.Map<Tuple<Snake, SnakeViewModel>, Snake>(new Tuple<Snake, SnakeViewModel>(snakeStored, model));
-                    _snakeStore.SaveSnake(snakemapped);
-                }
-                else
-                {
-                    ModelState.AddModelError("", "You are not owner for this snake");
-                }
-            }
-            return View(model);
-        }
-
-        private bool IsCurrentUserOwner(Snake snakeStored)
-        {
-            return snakeStored.OwnerId == User.Identity.GetUserId();
+            return View(model: id);
         }
     }
 }

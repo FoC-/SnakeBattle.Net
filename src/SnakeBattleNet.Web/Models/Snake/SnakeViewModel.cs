@@ -12,6 +12,11 @@ namespace SnakeBattleNet.Web.Models.Snake
         public int Matches { get; set; }
         public int Wins { get; set; }
         public int Loses { get; set; }
-        public ICollection<BrainModuleViewModel> BrainModules { get; set; }
+        public ICollection<ChipViewModel> Chips { get; set; }
+
+        public SnakeViewModel()
+        {
+            Chips = new List<ChipViewModel>();
+        }
     }
 }
