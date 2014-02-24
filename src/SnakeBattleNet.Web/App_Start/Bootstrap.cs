@@ -14,7 +14,6 @@ using Microsoft.Owin.Security.OAuth;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using Newtonsoft.Json.Serialization;
-using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Core.Auth;
@@ -105,8 +104,10 @@ namespace SnakeBattleNet.Web
 
         public static void RegisterMappings()
         {
-            Mapper.CreateMap<View<ChipCell>, ChipViewModel>()
+            Mapper.CreateMap<Dictionary<Position, ChipCell>, ChipViewModel>()
                 .ConvertUsing(v => new ChipViewModel { Cells = v.Select(p => new CellViewModel { Position = p.Key, Content = p.Value }) });
+            Mapper.CreateMap<ChipViewModel, IDictionary<Position, ChipCell>>()
+                .ConvertUsing(v => v.Cells.ToDictionary(k => k.Position, va => va.Content));
 
             Mapper.CreateMap<Position, Position>();
             Mapper.CreateMap<Snake, SnakeViewModel>();

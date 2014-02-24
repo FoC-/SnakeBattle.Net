@@ -47,21 +47,35 @@ namespace SnakeBattleNet.Web.DependencyResolution.Providers
 
         private static void MapSnake()
         {
-            if (BsonClassMap.IsClassMapRegistered(typeof(Snake))) return;
-            BsonClassMap.RegisterClassMap<Snake>(cm =>
+            if (!BsonClassMap.IsClassMapRegistered(typeof(Snake)))
             {
-                cm.AutoMap();
-                cm.SetIsRootClass(true);
-                cm.SetDiscriminator("Snake");
-                cm.SetIgnoreExtraElements(true);
-                cm.MapIdField(c => c.Id);
-            });
-            BsonClassMap.RegisterClassMap<ChipCell>(cm =>
+                BsonClassMap.RegisterClassMap<Snake>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetIsRootClass(true);
+                    cm.SetDiscriminator("Snake");
+                    cm.SetIgnoreExtraElements(true);
+                    cm.MapIdField(c => c.Id);
+                });
+            }
+            if (!BsonClassMap.IsClassMapRegistered(typeof(ChipCell)))
             {
-                cm.AutoMap();
-                cm.SetDiscriminator("ChipCell");
-                cm.SetIgnoreExtraElements(true);
-            });
+                BsonClassMap.RegisterClassMap<ChipCell>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetDiscriminator("ChipCell");
+                    cm.SetIgnoreExtraElements(true);
+                });
+            }
+            if (!BsonClassMap.IsClassMapRegistered(typeof(Position)))
+            {
+                BsonClassMap.RegisterClassMap<Position>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetDiscriminator("Position");
+                    cm.SetIgnoreExtraElements(true);
+                });
+            }
         }
     }
 }

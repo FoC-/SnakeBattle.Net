@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
-using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Models.Snake;
@@ -53,9 +53,9 @@ namespace SnakeBattleNet.Web.Controllers
         }
 
 
-        private static View<ChipCell> CreateChipWithAndColoredHead()
+        private static Dictionary<Position, ChipCell> CreateChipWithAndColoredHead()
         {
-            var chip = new View<ChipCell>();
+            var chip = new Dictionary<Position, ChipCell>();
 
             // Own snake
             chip[new Position { X = 2, Y = 2 }] = new ChipCell { Content = SnakeBattleNet.Core.Contract.Content.Head, Color = Color.AndGrey, IsSelf = true };
