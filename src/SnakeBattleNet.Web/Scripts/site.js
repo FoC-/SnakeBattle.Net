@@ -11,7 +11,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     function addChip(model) {
         var $kineticContainer = $(template).appendTo($container).find(selectors.kineticContainer);
         Renderer.render($kineticContainer, model);
-    }
+    };
 
     $container.on('click', selectors.insertButton, function () {
         var parent = $(this).closest('.chip');
@@ -44,6 +44,8 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
             addChip(value);
         });
     });
+
+    Renderer.renderSelector($(selectors.selctorContainer));
 };
 
 SBN.Kinetic = {};
@@ -113,6 +115,35 @@ SBN.Kinetic.render = function ($container, model) {
         layer.add(group);
     });
 
+    stage.add(layer);
+};
+SBN.Kinetic.renderSelector = function ($container) {
+    var model = {};
+    $container.data('model', model);
+
+    var size = 30; //50
+    var stage = new Kinetic.Stage({
+        container: $container[0],
+        width: 350,
+        height: 50
+    });
+    var layer = new Kinetic.Layer();
+
+    $.each(SBN.Contract.colorMap, function (index, value) {
+        var rect = new Kinetic.Rect({
+            x: index * size,
+            y: 0,
+            width: size,
+            height: size,
+            fill: value,
+            opacity: 0.65
+        });
+        rect.on('mousedown', function () {
+            model.color = index;
+            alert(JSON.stringify(model));
+        });
+        layer.add(rect);
+    });
     stage.add(layer);
 };
 
