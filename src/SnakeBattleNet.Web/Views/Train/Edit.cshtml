@@ -11,6 +11,9 @@
             </div>
         </div>
     </div>
+</div>
+<hr />
+<div class="row">
     <div class="col-md-12">
         <div id="chip_container"></div>
     </div>
@@ -30,37 +33,82 @@
     <script type="text/javascript">
         $(function () {
             var template = $("script#chip_view").html();
+            var colorMap = ['blue', 'green', 'grey', 'red', 'black'];
 
-            function render(container, model) {
-                container.data('model', model);
+            function createCell(cell) {
+                var size = 30; //50
+                var fontSize = 18;
+                var x = cell.position.x * size;
+                var y = cell.position.y * size;
+                var group = new Kinetic.Group();
+
+                var rect = new Kinetic.Rect({
+                    x: x,
+                    y: y,
+                    width: size,
+                    height: size,
+                    fill: colorMap[cell.content.color],
+                    opacity: 0.65
+                });
+                group.add(rect);
+
+                var content = new Kinetic.Text({
+                    x: x,
+                    y: y,
+                    text: cell.content.content,
+                    fontSize: fontSize,
+                    fontFamily: 'Calibri',
+                    fill: 'black',
+                    width: size,
+                    padding: (size - fontSize) / 2,
+                    align: 'center'
+                });
+                group.add(content);
+
+                if (cell.content.exclude) {
+                    var crossLine1 = new Kinetic.Line({
+                        points: [x, y, x + size, y + size],
+                        stroke: 'black',
+                        strokeWidth: 1
+                    });
+                    var crossLine2 = new Kinetic.Line({
+                        points: [x + size, y, x, y + size],
+                        stroke: 'black',
+                        strokeWidth: 1
+                    });
+                    group.add(crossLine1);
+                    group.add(crossLine2);
+                }
+
+                return group;
+            }
+
+            function render($container, model) {
+                $container.data('model', model);
 
                 var stage = new Kinetic.Stage({
-                    container: container[0],
-                    width: 300,
-                    height: 70
+                    container: $container[0],
+                    width: 350,
+                    height: 350
                 });
 
                 var layer = new Kinetic.Layer();
 
-                for (var i = 0; i < 5; i++) {
-                    (function () {
-                        var r = i;
-                        var rect = new Kinetic.Rect({
-                            x: r * 35,
-                            y: 0,
-                            width: 30,
-                            height: 30,
-                            fill: 'green'
-                        });
-                        rect.on('mousedown', function () {
-                            model[model.length] = r;
-                        });
-                        layer.add(rect);
-                    })();
-                }
+                $.each(model.cells, function (index, cell) {
+                    var group = createCell(cell);
+                    group.on('mousedown', function () {
+                        alert(JSON.stringify(cell));
+                    });
+                    layer.add(group);
+                });
 
                 stage.add(layer);
             };
+
+            function addChip(model) {
+                var $container = $(template).appendTo("#chip_container").find('.kinetic_container');
+                render($container, model);
+            }
 
             $('#chip_container').on('click', '#button_insert_chip', function () {
                 var parent = $(this).closest('.chip');
@@ -73,8 +121,7 @@
             });
 
             $('#button_add_chip').on('click', function () {
-                var $container = $(template).appendTo("#chip_container").find('.kinetic_container');
-                render($container, []);
+                addChip([]);
             });
 
             $('#button_show_all').on('click', function () {
@@ -91,9 +138,11 @@
                     url: '/api/Snake/Get?id=' + '@Model',
                     contentType: "application/json",
                     dataType: 'json',
-                    success: function (data) {
-                        window.snake = data;
-                        alert('data: ' + JSON.stringify(data));
+                    success: function (snake) {
+                        var chips = snake.chips;
+                        $.each(chips, function (index, value) {
+                            addChip(value);
+                        });
                     }
                 });
             });
@@ -106,8 +155,7 @@
                     dataType: 'json',
                     data: JSON.stringify(window.snake),
                     success: function (data) {
-                        window.snake = data;
-                        alert('data: ' + JSON.stringify(data));
+                        alert('Response: ' + JSON.stringify(data));
                     }
                 });
             });
