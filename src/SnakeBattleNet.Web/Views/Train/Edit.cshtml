@@ -2,22 +2,17 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div id="chip_container" class="form-group form-horizontal">
+        <div class="form-inline">
             <div class="form-group">
-                <div class="col-md-10">
-                    <button type="button" id="button_add_chip" class="btn btn-default">Add chip</button>
-                </div>
-                <div class="col-md-10">
-                    <button type="button" id="button_show_all" class="btn btn-default">Show all</button>
-                </div>
-                <div class="col-md-10">
-                    <button type="button" id="button_get_snake" class="btn btn-default">Get</button>
-                </div>
-                <div class="col-md-10">
-                    <button type="button" id="button_save_snake" class="btn btn-default">Save</button>
-                </div>
+                <button type="button" id="button_get_snake" class="btn btn-default">Get</button>
+                <button type="button" id="button_save_snake" class="btn btn-default">Save</button>
+                <button type="button" id="button_show_all" class="btn btn-default">Show all</button>
+                <button type="button" id="button_add_chip" class="btn btn-default">Add chip</button>
             </div>
         </div>
+    </div>
+    <div class="col-md-12">
+        <div id="chip_container"></div>
     </div>
 </div>
 <script type="html/template" id="chip_view">
@@ -34,15 +29,15 @@
 {
     <script type="text/javascript">
         $(function () {
-            var modules = [];
             var template = $("script#chip_view").html();
 
-            function render(container) {
-                var model = container.data('model');
+            function render(container, model) {
+                container.data('model', model);
+
                 var stage = new Kinetic.Stage({
                     container: container[0],
                     width: 300,
-                    height: 200
+                    height: 70
                 });
 
                 var layer = new Kinetic.Layer();
@@ -51,8 +46,8 @@
                     (function () {
                         var r = i;
                         var rect = new Kinetic.Rect({
-                            x: r * 40,
-                            y: 75,
+                            x: r * 35,
+                            y: 0,
                             width: 30,
                             height: 30,
                             fill: 'green'
@@ -67,22 +62,27 @@
                 stage.add(layer);
             };
 
-            $('#button_add_chip').on('click', function () {
-                var index = modules.length;
-                modules[index] = [];
-
-                var $container = $(template).appendTo("#chip_container").find('.kinetic_container');
-                $container.data('model', modules[index]);
-                render($container);
+            $('#chip_container').on('click', '#button_insert_chip', function () {
+                var parent = $(this).closest('.chip');
+                var $container = $(template).insertAfter(parent).find('.kinetic_container');
+                render($container, []);
             });
 
             $('#chip_container').on('click', '#button_delete_chip', function () {
-                var parent = $(this).closest('.chip');
-                parent.remove();
+                $(this).closest('.chip').remove();
+            });
+
+            $('#button_add_chip').on('click', function () {
+                var $container = $(template).appendTo("#chip_container").find('.kinetic_container');
+                render($container, []);
             });
 
             $('#button_show_all').on('click', function () {
-                alert(JSON.stringify(modules));
+                var m = [];
+                $('#chip_container .kinetic_container').each(function () {
+                    m[m.length] = $(this).data('model');
+                });
+                alert(JSON.stringify(m));
             });
 
             $('#button_get_snake').on('click', function () {
@@ -97,6 +97,7 @@
                     }
                 });
             });
+
             $('#button_save_snake').on('click', function () {
                 $.ajax({
                     type: 'POST',
