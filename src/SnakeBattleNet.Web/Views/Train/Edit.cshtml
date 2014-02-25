@@ -4,9 +4,7 @@
     <div class="col-md-12">
         <div class="form-inline">
             <div class="form-group">
-                <button type="button" id="button_get_snake" class="btn btn-default">Get</button>
                 <button type="button" id="button_save_snake" class="btn btn-default">Save</button>
-                <button type="button" id="button_show_all" class="btn btn-default">Show all</button>
                 <button type="button" id="button_add_chip" class="btn btn-default">Add chip</button>
             </div>
         </div>
@@ -32,133 +30,21 @@
 {
     <script type="text/javascript">
         $(function () {
-            var template = $("script#chip_view").html();
-            var colorMap = ['blue', 'green', 'grey', 'red', 'black'];
-
-            function createCell(cell) {
-                var size = 30; //50
-                var fontSize = 18;
-                var x = cell.position.x * size;
-                var y = cell.position.y * size;
-                var group = new Kinetic.Group();
-
-                var rect = new Kinetic.Rect({
-                    x: x,
-                    y: y,
-                    width: size,
-                    height: size,
-                    fill: colorMap[cell.content.color],
-                    opacity: 0.65
-                });
-                group.add(rect);
-
-                var content = new Kinetic.Text({
-                    x: x,
-                    y: y,
-                    text: cell.content.content,
-                    fontSize: fontSize,
-                    fontFamily: 'Calibri',
-                    fill: 'black',
-                    width: size,
-                    padding: (size - fontSize) / 2,
-                    align: 'center'
-                });
-                group.add(content);
-
-                if (cell.content.exclude) {
-                    var crossLine1 = new Kinetic.Line({
-                        points: [x, y, x + size, y + size],
-                        stroke: 'black',
-                        strokeWidth: 1
-                    });
-                    var crossLine2 = new Kinetic.Line({
-                        points: [x + size, y, x, y + size],
-                        stroke: 'black',
-                        strokeWidth: 1
-                    });
-                    group.add(crossLine1);
-                    group.add(crossLine2);
+            SBN.Edit({
+                snake: {
+                    id: '@Model'
+                },
+                selectors: {
+                    template: 'script#chip_view',
+                    kineticContainer: '.kinetic_container',
+                    container: '#chip_container',
+                    chip: '.chip',
+                    insertButton: '#button_insert_chip',
+                    deleteButton: '#button_delete_chip',
+                    addButton: '#button_add_chip',
+                    saveButton: '#button_save_snake'
                 }
-
-                return group;
-            }
-
-            function render($container, model) {
-                $container.data('model', model);
-
-                var stage = new Kinetic.Stage({
-                    container: $container[0],
-                    width: 350,
-                    height: 350
-                });
-
-                var layer = new Kinetic.Layer();
-
-                $.each(model.cells, function (index, cell) {
-                    var group = createCell(cell);
-                    group.on('mousedown', function () {
-                        alert(JSON.stringify(cell));
-                    });
-                    layer.add(group);
-                });
-
-                stage.add(layer);
-            };
-
-            function addChip(model) {
-                var $container = $(template).appendTo("#chip_container").find('.kinetic_container');
-                render($container, model);
-            }
-
-            $('#chip_container').on('click', '#button_insert_chip', function () {
-                var parent = $(this).closest('.chip');
-                var $container = $(template).insertAfter(parent).find('.kinetic_container');
-                render($container, []);
-            });
-
-            $('#chip_container').on('click', '#button_delete_chip', function () {
-                $(this).closest('.chip').remove();
-            });
-
-            $('#button_add_chip').on('click', function () {
-                addChip([]);
-            });
-
-            $('#button_show_all').on('click', function () {
-                var m = [];
-                $('#chip_container .kinetic_container').each(function () {
-                    m[m.length] = $(this).data('model');
-                });
-                alert(JSON.stringify(m));
-            });
-
-            $('#button_get_snake').on('click', function () {
-                $.ajax({
-                    type: 'GET',
-                    url: '/api/Snake/Get?id=' + '@Model',
-                    contentType: "application/json",
-                    dataType: 'json',
-                    success: function (snake) {
-                        var chips = snake.chips;
-                        $.each(chips, function (index, value) {
-                            addChip(value);
-                        });
-                    }
-                });
-            });
-
-            $('#button_save_snake').on('click', function () {
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/Snake/Save',
-                    contentType: "application/json",
-                    dataType: 'json',
-                    data: JSON.stringify(window.snake),
-                    success: function (data) {
-                        alert('Response: ' + JSON.stringify(data));
-                    }
-                });
-            });
+            }, SBN.Kinetic, SBN.Service.Snake);
         });
     </script>
 }
