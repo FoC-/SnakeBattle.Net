@@ -70,6 +70,10 @@ namespace SnakeBattleNet.Web
                 "~/Scripts/bootstrap.js"
                 ));
 
+            bundles.Add(new ScriptBundle("~/bundles/kinetic").Include(
+                "~/Scripts/kinetic-v5.0.1.js"
+                ));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                  "~/Content/bootstrap.css",
                  "~/Content/Site.css"));
