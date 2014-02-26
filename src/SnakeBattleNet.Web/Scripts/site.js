@@ -63,7 +63,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
 
 SBN.Kinetic = {};
 SBN.Kinetic.Configuration = {
-    size: 30,//50,
+    size: 50,
     fontSize: 18
 };
 SBN.Kinetic.createCell = function (cell) {
@@ -118,7 +118,7 @@ SBN.Kinetic.element = function (config, stage, handler) {
     var background = new Kinetic.Rect({
         name: config.name,
         x: config.x,
-        y: 0,
+        y: 0 + 5,
         width: config.size,
         height: config.size,
         fill: config.color,
@@ -149,7 +149,7 @@ SBN.Kinetic.element = function (config, stage, handler) {
     this.putImage = function (src) {
         var image = new Kinetic.Image({
             x: config.x,
-            y: 0,
+            y: 0 + 5,
             image: src,
             width: config.size,
             height: config.size
@@ -160,12 +160,12 @@ SBN.Kinetic.element = function (config, stage, handler) {
 
     this.putCross = function () {
         var crossLine1 = new Kinetic.Line({
-            points: [config.x, 0, config.x + config.size, config.size],
+            points: [config.x, 0 + 8, config.x + config.size, config.size],
             stroke: 'black',
             strokeWidth: 5
         });
         var crossLine2 = new Kinetic.Line({
-            points: [config.x + config.size, 0, config.x, config.size],
+            points: [config.x + config.size, 0 + 8, config.x, config.size],
             stroke: 'black',
             strokeWidth: 5
         });
@@ -217,10 +217,10 @@ SBN.Kinetic.renderSelector = function ($container) {
 
     $.each(SBN.Contract.colorMap, function (index, value) {
         var element = new SBN.Kinetic.element({
-            x: elementNumber++ * size,
+            x: elementNumber++ * size + 5,
             name: 'color-selector',
             color: value,
-            size: SBN.Kinetic.Configuration.size
+            size: SBN.Kinetic.Configuration.size - 10
         }, stage, function () {
             model.color = index;
         });
@@ -228,10 +228,10 @@ SBN.Kinetic.renderSelector = function ($container) {
     });
 
     var excludeSelector = new SBN.Kinetic.element({
-        x: elementNumber++ * size,
+        x: elementNumber++ * size + 5,
         name: 'exclude-selector',
         color: '#555',
-        size: SBN.Kinetic.Configuration.size
+        size: SBN.Kinetic.Configuration.size - 10
     }, stage, function () {
         model.exclude = !model.exclude;
     });
@@ -241,10 +241,10 @@ SBN.Kinetic.renderSelector = function ($container) {
     SBN.Service.ImageLoader.load(SBN.Contract.imageMap, function (images) {
         $.each(SBN.Contract.content, function (index, value) {
             var element = new SBN.Kinetic.element({
-                x: elementNumber++ * size,
+                x: elementNumber++ * size + 5,
                 name: 'content-selector',
                 color: '#555',
-                size: SBN.Kinetic.Configuration.size
+                size: SBN.Kinetic.Configuration.size - 10
             }, stage, function () {
                 model.content = index;
                 model.isSelf = false;
@@ -258,10 +258,10 @@ SBN.Kinetic.renderSelector = function ($container) {
             var img = images['o' + value];
             if (img) {
                 var element = new SBN.Kinetic.element({
-                    x: elementNumber++ * size,
+                    x: elementNumber++ * size + 5,
                     name: 'content-selector',
                     color: '#555',
-                    size: SBN.Kinetic.Configuration.size
+                    size: SBN.Kinetic.Configuration.size - 10
                 }, stage, function () {
                     model.content = index;
                     model.isSelf = true;
