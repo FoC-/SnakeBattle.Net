@@ -113,6 +113,71 @@ SBN.Kinetic.createCell = function (cell) {
 
     return group;
 };
+SBN.Kinetic.element = function (config, stage, handler) {
+    var group = new Kinetic.Group();
+    var background = new Kinetic.Rect({
+        name: config.name,
+        x: config.x,
+        y: 0,
+        width: config.size,
+        height: config.size,
+        fill: config.color,
+        stroke: 'black',
+        strokeWidth: 10
+    });
+    group.add(background);
+
+    group.on('mousedown', function () {
+        handler();
+
+        var thisRect = background;
+        var wasStroked = thisRect.strokeEnabled();
+        var countElements = 0;
+        stage.find('.' + config.name).each(function (shape) {
+            shape.strokeEnabled(false);
+            countElements++;
+        });
+        if (countElements === 1) {
+            thisRect.strokeEnabled(!wasStroked);
+        } else {
+            thisRect.strokeEnabled(true);
+        }
+
+        stage.draw();
+    });
+
+    this.putImage = function (src) {
+        var image = new Kinetic.Image({
+            x: config.x,
+            y: 0,
+            image: src,
+            width: config.size,
+            height: config.size
+        });
+        group.add(image);
+        return this;
+    };
+
+    this.putCross = function () {
+        var crossLine1 = new Kinetic.Line({
+            points: [config.x, 0, config.x + config.size, config.size],
+            stroke: 'black',
+            strokeWidth: 5
+        });
+        var crossLine2 = new Kinetic.Line({
+            points: [config.x + config.size, 0, config.x, config.size],
+            stroke: 'black',
+            strokeWidth: 5
+        });
+        group.add(crossLine1);
+        group.add(crossLine2);
+        return this;
+    };
+
+    this.get = function () {
+        return group;
+    };
+};
 SBN.Kinetic.render = function ($container, model, $selectorContainer) {
     $container.data('model', model);
     var selected = $selectorContainer.data('model');
@@ -151,139 +216,63 @@ SBN.Kinetic.renderSelector = function ($container) {
     var layer = new Kinetic.Layer();
 
     $.each(SBN.Contract.colorMap, function (index, value) {
-        var rect = new Kinetic.Rect({
-            name: 'color-selector',
+        var element = new SBN.Kinetic.element({
             x: elementNumber++ * size,
-            y: 0,
-            width: size,
-            height: size,
-            fill: value
-        });
-        rect.on('mousedown', function () {
+            name: 'color-selector',
+            color: value,
+            size: SBN.Kinetic.Configuration.size
+        }, stage, function () {
             model.color = index;
-            var shapes = stage.find('.color-selector');
-            shapes.each(function (shape) {
-                shape.stroke('black');
-                shape.strokeWidth(0);
-            });
-            this.stroke('black');
-            this.strokeWidth(10);
-            stage.draw();
         });
-        layer.add(rect);
+        layer.add(element.get());
     });
+
+    var excludeSelector = new SBN.Kinetic.element({
+        x: elementNumber++ * size,
+        name: 'exclude-selector',
+        color: '#555',
+        size: SBN.Kinetic.Configuration.size
+    }, stage, function () {
+        model.exclude = !model.exclude;
+    });
+    excludeSelector.putCross();
+    layer.add(excludeSelector.get());
 
     SBN.Service.ImageLoader.load(SBN.Contract.imageMap, function (images) {
         $.each(SBN.Contract.content, function (index, value) {
-            var group = new Kinetic.Group();
-            var x = elementNumber++ * size;
-            var rect = new Kinetic.Rect({
+            var element = new SBN.Kinetic.element({
+                x: elementNumber++ * size,
                 name: 'content-selector',
-                x: x,
-                y: 0,
-                width: size,
-                height: size,
-                fill: '#555'
-            });
-            group.add(rect);
-            var image = new Kinetic.Image({
-                x: x,
-                y: 0,
-                image: images[value] ? images[value] : images['e' + value],
-                width: size,
-                height: size
-            });
-            group.add(image);
-
-            group.on('mousedown', function () {
-                var thisRect = rect;
+                color: '#555',
+                size: SBN.Kinetic.Configuration.size
+            }, stage, function () {
                 model.content = index;
                 model.isSelf = false;
-                stage.find('.content-selector').each(function (shape) {
-                    shape.stroke('black');
-                    shape.strokeWidth(0);
-                });
-                thisRect.stroke('black');
-                thisRect.strokeWidth(10);
-                stage.draw();
             });
-            layer.add(group);
+            element.putImage(images[value] || images['e' + value]);
+
+            layer.add(element.get());
             stage.draw();
         });
         $.each(SBN.Contract.content, function (index, value) {
             var img = images['o' + value];
             if (img) {
-                var group = new Kinetic.Group();
-                var x = elementNumber++ * size;
-                var rect = new Kinetic.Rect({
+                var element = new SBN.Kinetic.element({
+                    x: elementNumber++ * size,
                     name: 'content-selector',
-                    x: x,
-                    y: 0,
-                    width: size,
-                    height: size,
-                    fill: '#555'
-                });
-                group.add(rect);
-                var image = new Kinetic.Image({
-                    x: x,
-                    y: 0,
-                    image: img,
-                    width: size,
-                    height: size
-                });
-                group.add(image);
-
-                group.on('mousedown', function () {
-                    var thisRect = rect;
+                    color: '#555',
+                    size: SBN.Kinetic.Configuration.size
+                }, stage, function () {
                     model.content = index;
                     model.isSelf = true;
-                    stage.find('.content-selector').each(function (shape) {
-                        shape.stroke('black');
-                        shape.strokeWidth(0);
-                    });
-                    thisRect.stroke('black');
-                    thisRect.strokeWidth(10);
-                    stage.draw();
                 });
-                layer.add(group);
+                element.putImage(img);
+
+                layer.add(element.get());
                 stage.draw();
             }
         });
     });
-
-    (function () {
-        var x = elementNumber++ * size;
-        var group = new Kinetic.Group();
-        var rect = new Kinetic.Rect({
-            x: x,
-            y: 0,
-            width: size,
-            height: size,
-            fill: '#555',
-            stroke: 'black'
-        });
-        group.add(rect);
-
-        var crossLine1 = new Kinetic.Line({
-            points: [x, 0, x + size, size],
-            stroke: 'black',
-            strokeWidth: 5
-        });
-        var crossLine2 = new Kinetic.Line({
-            points: [x + size, 0, x, size],
-            stroke: 'black',
-            strokeWidth: 5
-        });
-        group.add(crossLine1);
-        group.add(crossLine2);
-        group.on('mousedown', function () {
-            model.exclude = !model.exclude;
-            var thisRect = rect;
-            model.exclude ? thisRect.strokeWidth(10) : thisRect.strokeWidth(0);
-            stage.draw();
-        });
-        layer.add(group);
-    })();
 
     stage.add(layer);
 };
