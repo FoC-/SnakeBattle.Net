@@ -19,16 +19,18 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     var selectors = settings.selectors;
     var template = $(selectors.template).html();
     var $container = $(selectors.container);
+    var $selectorContainer = $(selectors.selctorContainer);
+
 
     function addChip(model) {
         var $kineticContainer = $(template).appendTo($container).find(selectors.kineticContainer);
-        Renderer.render($kineticContainer, model);
+        Renderer.render($kineticContainer, model, $selectorContainer);
     };
 
     $container.on('click', selectors.insertButton, function () {
         var parent = $(this).closest('.chip');
         var kineticContainer = $(template).insertAfter(parent).find(selectors.kineticContainer);
-        Renderer.render(kineticContainer, []);
+        Renderer.render(kineticContainer, [], $selectorContainer);
     });
 
     $container.on('click', selectors.deleteButton, function () {
@@ -56,8 +58,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
             addChip(value);
         });
     });
-
-    Renderer.renderSelector($(selectors.selctorContainer));
+    Renderer.renderSelector($selectorContainer);
 };
 
 SBN.Kinetic = {};
@@ -112,8 +113,9 @@ SBN.Kinetic.createCell = function (cell) {
 
     return group;
 };
-SBN.Kinetic.render = function ($container, model) {
+SBN.Kinetic.render = function ($container, model, $selectorContainer) {
     $container.data('model', model);
+    var selected = $selectorContainer.data('model');
 
     var stage = new Kinetic.Stage({
         container: $container[0],
@@ -126,6 +128,8 @@ SBN.Kinetic.render = function ($container, model) {
     $.each(model.cells, function (index, cell) {
         var group = SBN.Kinetic.createCell(cell);
         group.on('mousedown', function () {
+            cell.content = selected;
+            stage.draw();
             alert(JSON.stringify(cell));
         });
         layer.add(group);
@@ -165,7 +169,6 @@ SBN.Kinetic.renderSelector = function ($container) {
             this.stroke('black');
             this.strokeWidth(10);
             stage.draw();
-            alert(JSON.stringify(model));
         });
         layer.add(rect);
     });
@@ -203,7 +206,6 @@ SBN.Kinetic.renderSelector = function ($container) {
                 thisRect.stroke('black');
                 thisRect.strokeWidth(10);
                 stage.draw();
-                alert(JSON.stringify(model));
             });
             layer.add(group);
             stage.draw();
@@ -242,7 +244,6 @@ SBN.Kinetic.renderSelector = function ($container) {
                     thisRect.stroke('black');
                     thisRect.strokeWidth(10);
                     stage.draw();
-                    alert(JSON.stringify(model));
                 });
                 layer.add(group);
                 stage.draw();
@@ -280,7 +281,6 @@ SBN.Kinetic.renderSelector = function ($container) {
             var thisRect = rect;
             model.exclude ? thisRect.strokeWidth(10) : thisRect.strokeWidth(0);
             stage.draw();
-            alert(JSON.stringify(model));
         });
         layer.add(group);
     })();
