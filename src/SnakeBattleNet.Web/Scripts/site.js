@@ -62,7 +62,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
 
 SBN.Kinetic = {};
 SBN.Kinetic.Configuration = {
-    size: 30, //50
+    size: 30,//50,
     fontSize: 18
 };
 SBN.Kinetic.createCell = function (cell) {
@@ -134,29 +134,36 @@ SBN.Kinetic.render = function ($container, model) {
     stage.add(layer);
 };
 SBN.Kinetic.renderSelector = function ($container) {
-    var model = {};
+    var model = { content: 3, color: 2, isSelf: false, exclude: false };
     $container.data('model', model);
 
     var size = SBN.Kinetic.Configuration.size;
     var elementNumber = 0;
     var stage = new Kinetic.Stage({
         container: $container[0],
-        width: size * 14,
+        width: size * 15,
         height: size
     });
     var layer = new Kinetic.Layer();
 
     $.each(SBN.Contract.colorMap, function (index, value) {
         var rect = new Kinetic.Rect({
+            name: 'color-selector',
             x: elementNumber++ * size,
             y: 0,
             width: size,
             height: size,
-            fill: value,
-            opacity: 0.65
+            fill: value
         });
         rect.on('mousedown', function () {
             model.color = index;
+            var shapes = stage.find('.color-selector');
+            shapes.each(function (shape) {
+                shape.stroke('black');
+                shape.strokeWidth(0);
+            });
+            this.stroke('black');
+            this.strokeWidth(10);
             stage.draw();
             alert(JSON.stringify(model));
         });
@@ -168,12 +175,12 @@ SBN.Kinetic.renderSelector = function ($container) {
             var group = new Kinetic.Group();
             var x = elementNumber++ * size;
             var rect = new Kinetic.Rect({
+                name: 'content-selector',
                 x: x,
                 y: 0,
                 width: size,
                 height: size,
-                fill: '#555',
-                opacity: 0.65
+                fill: '#555'
             });
             group.add(rect);
             var image = new Kinetic.Image({
@@ -186,8 +193,15 @@ SBN.Kinetic.renderSelector = function ($container) {
             group.add(image);
 
             group.on('mousedown', function () {
+                var thisRect = rect;
                 model.content = index;
                 model.isSelf = false;
+                stage.find('.content-selector').each(function (shape) {
+                    shape.stroke('black');
+                    shape.strokeWidth(0);
+                });
+                thisRect.stroke('black');
+                thisRect.strokeWidth(10);
                 stage.draw();
                 alert(JSON.stringify(model));
             });
@@ -200,12 +214,12 @@ SBN.Kinetic.renderSelector = function ($container) {
                 var group = new Kinetic.Group();
                 var x = elementNumber++ * size;
                 var rect = new Kinetic.Rect({
+                    name: 'content-selector',
                     x: x,
                     y: 0,
                     width: size,
                     height: size,
-                    fill: '#555',
-                    opacity: 0.65
+                    fill: '#555'
                 });
                 group.add(rect);
                 var image = new Kinetic.Image({
@@ -218,8 +232,15 @@ SBN.Kinetic.renderSelector = function ($container) {
                 group.add(image);
 
                 group.on('mousedown', function () {
+                    var thisRect = rect;
                     model.content = index;
                     model.isSelf = true;
+                    stage.find('.content-selector').each(function (shape) {
+                        shape.stroke('black');
+                        shape.strokeWidth(0);
+                    });
+                    thisRect.stroke('black');
+                    thisRect.strokeWidth(10);
                     stage.draw();
                     alert(JSON.stringify(model));
                 });
@@ -228,6 +249,41 @@ SBN.Kinetic.renderSelector = function ($container) {
             }
         });
     });
+
+    (function () {
+        var x = elementNumber++ * size;
+        var group = new Kinetic.Group();
+        var rect = new Kinetic.Rect({
+            x: x,
+            y: 0,
+            width: size,
+            height: size,
+            fill: '#555',
+            stroke: 'black'
+        });
+        group.add(rect);
+
+        var crossLine1 = new Kinetic.Line({
+            points: [x, 0, x + size, size],
+            stroke: 'black',
+            strokeWidth: 5
+        });
+        var crossLine2 = new Kinetic.Line({
+            points: [x + size, 0, x, size],
+            stroke: 'black',
+            strokeWidth: 5
+        });
+        group.add(crossLine1);
+        group.add(crossLine2);
+        group.on('mousedown', function () {
+            model.exclude = !model.exclude;
+            var thisRect = rect;
+            model.exclude ? thisRect.strokeWidth(10) : thisRect.strokeWidth(0);
+            stage.draw();
+            alert(JSON.stringify(model));
+        });
+        layer.add(group);
+    })();
 
     stage.add(layer);
 };
