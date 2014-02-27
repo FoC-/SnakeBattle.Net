@@ -194,7 +194,7 @@ SBN.Kinetic.render = function ($container, model, $selectorContainer) {
         map[cell.position.x][cell.position.y] = cell;
     });
 
-    SBN.Service.ImageLoader.load(SBN.Contract.imageMap, function (images) {
+    new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
         $.each(map, function (i, col) {
             $.each(col, function (j, cell) {
                 SBN.Kinetic.createCell(layer, cell, images, selectorModel);
@@ -242,7 +242,7 @@ SBN.Kinetic.renderSelector = function ($container) {
     excludeSelector.putCross();
     layer.add(excludeSelector.get());
 
-    SBN.Service.ImageLoader.load(SBN.Contract.imageMap, function (images) {
+    new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
         $.each(SBN.Contract.content, function (index, value) {
             var element = new SBN.Kinetic.element({
                 x: elementNumber++ * size + 5,
@@ -286,24 +286,34 @@ SBN.Kinetic.renderSelector = function ($container) {
 };
 
 SBN.Service = {};
-SBN.Service.ImageLoader = {
-    load: function (sources, callback) {
-        var images = {},
-         loaded = 0,
-         total = 0;
-        for (var source in sources) {
-            images[source] = new Image();
-            images[source].onload = function () {
-                if (++loaded >= total) {
-                    callback(images);
-                }
-            };
-            total++;
-        }
-        for (var src in sources) {
-            images[src].src = sources[src];
-        }
+SBN.Service.ImageLoader = function (sources) {
+    var images = {},
+        loaded = 0,
+        total = 0,
+        clb = undefined,
+        isAsyncComplete = false;
+
+    for (var source in sources) {
+        images[source] = new Image();
+        images[source].onload = function () {
+            if (++loaded >= total) {
+                isAsyncComplete = true;
+                clb && clb(images);
+            }
+        };
+        total++;
     }
+    for (var src in sources) {
+        images[src].src = sources[src];
+    }
+
+    this.then = function (callback) {
+        if (isAsyncComplete) {
+            callback(images);
+        } else {
+            clb = callback;
+        }
+    };
 };
 
 SBN.Service.Snake = {
