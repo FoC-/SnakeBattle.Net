@@ -118,12 +118,13 @@ SBN.Kinetic.element = function (config, stage, handler) {
     var background = new Kinetic.Rect({
         name: config.name,
         x: config.x,
-        y: 0 + 5,
+        y: config.y,
         width: config.size,
         height: config.size,
         fill: config.color,
         stroke: 'black',
-        strokeWidth: 10
+        strokeWidth: 10,
+        strokeEnabled: config.selected
     });
     group.add(background);
 
@@ -149,7 +150,7 @@ SBN.Kinetic.element = function (config, stage, handler) {
     this.putImage = function (src) {
         var image = new Kinetic.Image({
             x: config.x,
-            y: 0 + 5,
+            y: config.y,
             image: src,
             width: config.size,
             height: config.size
@@ -160,12 +161,12 @@ SBN.Kinetic.element = function (config, stage, handler) {
 
     this.putCross = function () {
         var crossLine1 = new Kinetic.Line({
-            points: [config.x, 0 + 8, config.x + config.size, config.size],
+            points: [config.x, config.y, config.x + config.size, config.y + config.size],
             stroke: 'black',
             strokeWidth: 5
         });
         var crossLine2 = new Kinetic.Line({
-            points: [config.x + config.size, 0 + 8, config.x, config.size],
+            points: [config.x + config.size, config.y, config.x, config.y + config.size],
             stroke: 'black',
             strokeWidth: 5
         });
@@ -218,7 +219,9 @@ SBN.Kinetic.renderSelector = function ($container) {
     $.each(SBN.Contract.colorMap, function (index, value) {
         var element = new SBN.Kinetic.element({
             x: elementNumber++ * size + 5,
+            y: 5,
             name: 'color-selector',
+            selected: model.color === index,
             color: value,
             size: SBN.Kinetic.Configuration.size - 10
         }, stage, function () {
@@ -229,7 +232,9 @@ SBN.Kinetic.renderSelector = function ($container) {
 
     var excludeSelector = new SBN.Kinetic.element({
         x: elementNumber++ * size + 5,
+        y: 5,
         name: 'exclude-selector',
+        selected: model.exclude,
         color: '#555',
         size: SBN.Kinetic.Configuration.size - 10
     }, stage, function () {
@@ -242,7 +247,9 @@ SBN.Kinetic.renderSelector = function ($container) {
         $.each(SBN.Contract.content, function (index, value) {
             var element = new SBN.Kinetic.element({
                 x: elementNumber++ * size + 5,
+                y: 5,
                 name: 'content-selector',
+                selected: model.content == index && model.isSelf == false,
                 color: '#555',
                 size: SBN.Kinetic.Configuration.size - 10
             }, stage, function () {
@@ -259,7 +266,9 @@ SBN.Kinetic.renderSelector = function ($container) {
             if (img) {
                 var element = new SBN.Kinetic.element({
                     x: elementNumber++ * size + 5,
+                    y: 5,
                     name: 'content-selector',
+                    selected: model.content == index && model.isSelf == true,
                     color: '#555',
                     size: SBN.Kinetic.Configuration.size - 10
                 }, stage, function () {
