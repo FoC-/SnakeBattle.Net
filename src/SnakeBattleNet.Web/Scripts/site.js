@@ -29,8 +29,8 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
 
     $container.on('click', selectors.insertButton, function () {
         var parent = $(this).closest('.chip');
-        var kineticContainer = $(template).insertAfter(parent).find(selectors.kineticContainer);
-        Renderer.render(kineticContainer, [], $selectorContainer);
+        var $kineticContainer = $(template).insertAfter(parent).find(selectors.kineticContainer);
+        Renderer.render($kineticContainer, { cells: [] }, $selectorContainer);
     });
 
     $container.on('click', selectors.deleteButton, function () {
@@ -38,7 +38,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     });
 
     $(selectors.addButton).on('click', function () {
-        addChip([]);
+        addChip({ cells: [] });
     });
 
     $(selectors.saveButton).on('click', function () {
@@ -162,7 +162,6 @@ SBN.Kinetic.element = function (config, layer, handler) {
     };
 };
 SBN.Kinetic.render = function ($container, model, $selectorContainer) {
-    $container.data('model', model);
     var selectorModel = $selectorContainer.data('model');
 
     var stage = new Kinetic.Stage({
@@ -170,16 +169,38 @@ SBN.Kinetic.render = function ($container, model, $selectorContainer) {
         width: 350,
         height: 350
     });
-
     var layer = new Kinetic.Layer();
+    var background = new Kinetic.Rect({
+        x: 0,
+        y: 0,
+        width: 350,
+        height: 350,
+        fill: '#555',
+        opacity: 0.1
+    });
+    layer.add(background);
+    stage.add(layer);
 
-    SBN.Service.ImageLoader.load(SBN.Contract.imageMap, function (images) {
-        $.each(model.cells, function (index, cell) {
-            SBN.Kinetic.createCell(layer, cell, images, selectorModel);
-        });
+    var map = [];
+    for (var x = 0; x < 7; x++) {
+        map[x] = [];
+        for (var y = 0; y < 7; y++) {
+            map[x][y] = { position: { x: x, y: y }, content: {} };
+        }
+    }
+    $container.data('model', map);
+
+    $.each(model.cells, function (index, cell) {
+        map[cell.position.x][cell.position.y] = cell;
     });
 
-    stage.add(layer);
+    SBN.Service.ImageLoader.load(SBN.Contract.imageMap, function (images) {
+        $.each(map, function (i, col) {
+            $.each(col, function (j, cell) {
+                SBN.Kinetic.createCell(layer, cell, images, selectorModel);
+            });
+        });
+    });
 };
 SBN.Kinetic.renderSelector = function ($container) {
     var model = { content: 3, color: 2, isSelf: false, exclude: false };
