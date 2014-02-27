@@ -63,57 +63,39 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
 
 SBN.Kinetic = {};
 SBN.Kinetic.Configuration = {
-    size: 50,
-    fontSize: 18
+    size: 50
 };
-SBN.Kinetic.createCell = function (cell) {
+SBN.Kinetic.createCell = function (layer, cell, images, selectorModel) {
     var size = SBN.Kinetic.Configuration.size;
-    var fontSize = SBN.Kinetic.Configuration.fontSize;
     var x = cell.position.x * size;
     var y = cell.position.y * size;
-    var group = new Kinetic.Group();
 
-    var rect = new Kinetic.Rect({
+    var element = new SBN.Kinetic.element({
         x: x,
         y: y,
-        width: size,
-        height: size,
-        fill: SBN.Contract.colorMap[cell.content.color],
-        opacity: 0.65
+        name: 'cell-selector',
+        selected: false,
+        color: SBN.Contract.colorMap[cell.content.color],
+        size: SBN.Kinetic.Configuration.size
+    }, layer, function () {
+        element.get().remove();
+        cell.content = selectorModel;
+        SBN.Kinetic.createCell(layer, cell, images, selectorModel);
+        layer.draw();
     });
-    group.add(rect);
 
-    var content = new Kinetic.Text({
-        x: x,
-        y: y,
-        text: cell.content.content,
-        fontSize: fontSize,
-        fontFamily: 'Calibri',
-        fill: 'black',
-        width: size,
-        padding: (size - fontSize) / 2,
-        align: 'center'
-    });
-    group.add(content);
+    var content = SBN.Contract.content[cell.content.content];
+    var image = cell.content.isSelf ? images['o' + content] : images[content] || images['e' + content];
+    element.putImage(image);
 
     if (cell.content.exclude) {
-        var crossLine1 = new Kinetic.Line({
-            points: [x, y, x + size, y + size],
-            stroke: 'black',
-            strokeWidth: 1
-        });
-        var crossLine2 = new Kinetic.Line({
-            points: [x + size, y, x, y + size],
-            stroke: 'black',
-            strokeWidth: 1
-        });
-        group.add(crossLine1);
-        group.add(crossLine2);
+        element.putCross();
     }
 
-    return group;
+    layer.add(element.get());
+    layer.draw();
 };
-SBN.Kinetic.element = function (config, stage, handler) {
+SBN.Kinetic.element = function (config, layer, handler) {
     var group = new Kinetic.Group();
     var background = new Kinetic.Rect({
         name: config.name,
@@ -134,7 +116,7 @@ SBN.Kinetic.element = function (config, stage, handler) {
         var thisRect = background;
         var wasStroked = thisRect.strokeEnabled();
         var countElements = 0;
-        stage.find('.' + config.name).each(function (shape) {
+        layer.find('.' + config.name).each(function (shape) {
             shape.strokeEnabled(false);
             countElements++;
         });
@@ -144,16 +126,16 @@ SBN.Kinetic.element = function (config, stage, handler) {
             thisRect.strokeEnabled(true);
         }
 
-        stage.draw();
+        layer.draw();
     });
 
     this.putImage = function (src) {
         var image = new Kinetic.Image({
-            x: config.x,
-            y: config.y,
+            x: config.x + 5,
+            y: config.y + 5,
             image: src,
-            width: config.size,
-            height: config.size
+            width: config.size - 10,
+            height: config.size - 10
         });
         group.add(image);
         return this;
@@ -181,7 +163,7 @@ SBN.Kinetic.element = function (config, stage, handler) {
 };
 SBN.Kinetic.render = function ($container, model, $selectorContainer) {
     $container.data('model', model);
-    var selected = $selectorContainer.data('model');
+    var selectorModel = $selectorContainer.data('model');
 
     var stage = new Kinetic.Stage({
         container: $container[0],
@@ -191,14 +173,10 @@ SBN.Kinetic.render = function ($container, model, $selectorContainer) {
 
     var layer = new Kinetic.Layer();
 
-    $.each(model.cells, function (index, cell) {
-        var group = SBN.Kinetic.createCell(cell);
-        group.on('mousedown', function () {
-            cell.content = selected;
-            stage.draw();
-            alert(JSON.stringify(cell));
+    SBN.Service.ImageLoader.load(SBN.Contract.imageMap, function (images) {
+        $.each(model.cells, function (index, cell) {
+            SBN.Kinetic.createCell(layer, cell, images, selectorModel);
         });
-        layer.add(group);
     });
 
     stage.add(layer);
