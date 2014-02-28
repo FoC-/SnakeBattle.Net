@@ -7,7 +7,7 @@ using SnakeBattleNet.Web.Models.Snake;
 
 namespace SnakeBattleNet.Web.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [RoutePrefix("api/Snake")]
     public class SnakeController : ApiController
     {
@@ -21,10 +21,10 @@ namespace SnakeBattleNet.Web.Controllers
         public SnakeViewModel Get(string id)
         {
             var snake = snakeStore.GetById(id);
-            //if (!IsCurrentUserOwner(snake))
-            //{
-            //    return new SnakeViewModel();
-            //}
+            if (!IsCurrentUserOwner(snake))
+            {
+                return new SnakeViewModel();
+            }
             var model = Mapper.Map<Snake, SnakeViewModel>(snake);
             return model;
         }
@@ -38,11 +38,11 @@ namespace SnakeBattleNet.Web.Controllers
             }
 
             var snakeStored = snakeStore.GetById(model.Id);
-            //if (!IsCurrentUserOwner(snakeStored))
-            //{
-            //    ModelState.AddModelError("", "You are not owner for this snake");
-            //    return BadRequest(ModelState);
-            //}
+            if (!IsCurrentUserOwner(snakeStored))
+            {
+                ModelState.AddModelError("", "You are not owner for this snake");
+                return BadRequest(ModelState);
+            }
 
             var snakemapped = Mapper.Map<Tuple<Snake, SnakeViewModel>, Snake>(new Tuple<Snake, SnakeViewModel>(snakeStored, model));
             snakeStore.SaveSnake(snakemapped);

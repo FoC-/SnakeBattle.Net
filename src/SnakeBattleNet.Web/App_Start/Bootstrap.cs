@@ -10,7 +10,6 @@ using System.Web.Routing;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.OAuth;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using Newtonsoft.Json.Serialization;
@@ -27,11 +26,6 @@ namespace SnakeBattleNet.Web
     {
         public static void RegisterApis(HttpConfiguration config)
         {
-            // Web API configuration and services
-            // Configure Web API to use only bearer token authentication.
-            config.SuppressDefaultHostAuthentication();
-            config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
-
             // Use camel case for JSON data.
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
