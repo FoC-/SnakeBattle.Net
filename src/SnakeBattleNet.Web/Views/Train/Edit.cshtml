@@ -4,6 +4,7 @@
     <div class="col-md-12">
         <div class="form-inline">
             <div class="form-group">
+                <input type="text" id="input_name" placeholder="New name" class="form-control">
                 <button type="button" id="button_save_snake" class="btn btn-default">Save</button>
                 <button type="button" id="button_add_chip" class="btn btn-default">Add chip</button>
             </div>
@@ -46,7 +47,8 @@
                     insertButton: '#button_insert_chip',
                     deleteButton: '#button_delete_chip',
                     addButton: '#button_add_chip',
-                    saveButton: '#button_save_snake'
+                    saveButton: '#button_save_snake',
+                    nameInput: '#input_name'
                 }
             }, SBN.Kinetic, SBN.Service.Snake);
         });

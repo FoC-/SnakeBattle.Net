@@ -20,7 +20,19 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     var template = $(selectors.template).html();
     var $container = $(selectors.container);
     var $selectorContainer = $(selectors.selctorContainer);
+    var $nameInput = $(selectors.nameInput);
 
+    var mapToModel = function (map) {
+        var m = [];
+        $.each(map, function (i, col) {
+            $.each(col, function (j, cell) {
+                if (cell.content.content) {
+                    m[m.length] = cell;
+                }
+            });
+        });
+        return m;
+    };
 
     function addChip(model) {
         var $kineticContainer = $(template).appendTo($container).find(selectors.kineticContainer);
@@ -42,12 +54,19 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     });
 
     $(selectors.saveButton).on('click', function () {
-        var m = [];
+        var name = $nameInput.val();
+        var snake = {
+            id: settings.snake.id,
+            name: name,
+            chips: []
+        };
+
         $container.find(selectors.kineticContainer).each(function () {
-            m[m.length] = $(this).data('model');
+            snake.chips[snake.chips.length] = {
+                cells: mapToModel($(this).data('model'))
+            };
         });
-        alert(JSON.stringify(m));
-        SnakeService.save(m, function (data) {
+        SnakeService.save(snake, function (data) {
             alert('Response: ' + JSON.stringify(data));
         });
     });
