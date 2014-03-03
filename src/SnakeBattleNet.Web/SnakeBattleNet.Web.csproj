@@ -186,6 +186,8 @@
     <Compile Include="App_Start\DependencyResolution\StructuremapMvc.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\BattleController.cs" />
+    <Compile Include="Controllers\ShowController.cs" />
     <Compile Include="Controllers\SnakeController.cs" />
     <Compile Include="Core\Snake.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -282,6 +284,7 @@
     <Content Include="Views\Train\Index.cshtml" />
     <Content Include="Views\Train\Edit.cshtml" />
     <Content Include="Views\Shared\_GoogleAnalytics.cshtml" />
+    <Content Include="Views\Show\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SnakeBattleNet.Core\SnakeBattleNet.Core.csproj">

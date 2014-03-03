@@ -20,6 +20,18 @@ namespace SnakeBattleNet.Core
             BodyParts = new LinkedList<Move>();
         }
 
+        public Fighter(string id, IEnumerable<IDictionary<Position, ChipCell>> chips)
+        {
+            Id = id;
+            Chips = chips.Select(chipCells =>
+            {
+                var view = new View<ChipCell>();
+                chipCells.ToList().ForEach(cell => view[cell.Key] = cell.Value);
+                return view;
+            }).ToList();
+            BodyParts = new LinkedList<Move>();
+        }
+
         public int Length { get { return BodyParts.Count; } }
         public Move Head
         {

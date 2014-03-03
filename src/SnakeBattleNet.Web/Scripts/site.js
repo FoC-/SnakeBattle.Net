@@ -357,3 +357,19 @@ SBN.Service.Snake = {
         });
     }
 };
+
+SBN.Show = function (settings) {
+    SBN.Service.Battle.get(settings.snakes);
+};
+SBN.Service.Battle = {
+    get: function (query, success) {
+        var url = '/api/Battle/Get' + (query ? '?' + $.param(query) : '');
+        $.ajax({
+            type: 'GET',
+            url: url,
+            contentType: "application/json",
+            dataType: 'json',
+            success: success || $.noop
+        });
+    }
+};

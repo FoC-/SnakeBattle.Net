@@ -1,0 +1,28 @@
+﻿@model List<string>
+
+<div class="row">
+    <div class="col-md-8">
+        @foreach (var s in Model)
+        {
+            <h6>@s</h6>
+        }
+    </div>
+</div>
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            SBN.Show({
+                snakes: {
+                    ids: ['bf72b63e50b0474b8742f28296daa952',
+                        'bf72b63e50b0474b8742f28296daa952',
+                        'bf72b63e50b0474b8742f28296daa952',
+                        'bf72b63e50b0474b8742f28296daa952']
+                },
+                selectors: {
+                    container: '#chip_container',
+                }
+            });
+        });
+    </script>
+}
