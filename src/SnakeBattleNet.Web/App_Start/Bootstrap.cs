@@ -9,21 +9,40 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using Newtonsoft.Json.Serialization;
+using Owin;
 using SnakeBattleNet.Core.Contract;
+using SnakeBattleNet.Web;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Core.Auth;
+using SnakeBattleNet.Web.DependencyResolution;
 using SnakeBattleNet.Web.DependencyResolution.Providers;
 using SnakeBattleNet.Web.Models.Snake;
 using StructureMap;
+
+[assembly: OwinStartup(typeof(Bootstrap), "RegisterOwin")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(Bootstrap), "RegisterDependencies")]
 
 namespace SnakeBattleNet.Web
 {
     public class Bootstrap
     {
+        public static void RegisterOwin(IAppBuilder app)
+        {
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                LoginPath = new PathString("/Account/Login"),
+                LogoutPath = new PathString("/Account/Logout"),
+                Provider = new CookieAuthenticationProvider()
+            });
+        }
+
         public static void RegisterApis(HttpConfiguration config)
         {
             // Use camel case for JSON data.
@@ -77,7 +96,7 @@ namespace SnakeBattleNet.Web
                  "~/Content/Site.css"));
         }
 
-        public static IContainer RegisterDependencies()
+        public static void RegisterDependencies()
         {
             ObjectFactory.Initialize(x =>
             {
@@ -101,7 +120,10 @@ namespace SnakeBattleNet.Web
                 x.For<IFileStore>().Singleton().Use<FileStore>()
                     .Ctor<MongoGridFS>().Is(c => c.GetInstance<MongoDatabase>().GridFS);
             });
-            return ObjectFactory.Container;
+
+            var container = ObjectFactory.Container;
+            DependencyResolver.SetResolver(new StructureMapDependencyResolver(container));
+            GlobalConfiguration.Configuration.DependencyResolver = new StructureMapDependencyResolver(container);
         }
 
         public static void RegisterMappings()
