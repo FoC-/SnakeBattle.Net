@@ -29,6 +29,13 @@
         </div>
     </div>
 </script>
+<script type="html/template" id="alert_view">
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <strong>Not Saved</strong>
+        <dl></dl>
+    </div>
+</script>
 
 @section Scripts
 {
@@ -39,7 +46,8 @@
                     id: '@Model'
                 },
                 selectors: {
-                    template: 'script#chip_view',
+                    chipView: 'script#chip_view',
+                    alertView: 'script#alert_view',
                     kineticContainer: '.kinetic_container',
                     selctorContainer: '#selector_container',
                     container: '#chip_container',

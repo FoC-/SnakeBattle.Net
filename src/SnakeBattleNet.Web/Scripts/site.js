@@ -17,7 +17,8 @@ SBN.Contract = {
 
 SBN.Edit = function (settings, Renderer, SnakeService) {
     var selectors = settings.selectors;
-    var template = $(selectors.template).html();
+    var chipView = $(selectors.chipView).html();
+    var alertView = $(selectors.alertView).html();
     var $container = $(selectors.container);
     var $selectorContainer = $(selectors.selctorContainer);
     var $nameInput = $(selectors.nameInput);
@@ -35,13 +36,13 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     };
 
     function addChip(model) {
-        var $kineticContainer = $(template).appendTo($container).find(selectors.kineticContainer);
+        var $kineticContainer = $(chipView).appendTo($container).find(selectors.kineticContainer);
         Renderer.render($kineticContainer, model, $selectorContainer);
     };
 
     $container.on('click', selectors.insertButton, function () {
         var parent = $(this).closest('.chip');
-        var $kineticContainer = $(template).insertAfter(parent).find(selectors.kineticContainer);
+        var $kineticContainer = $(chipView).insertAfter(parent).find(selectors.kineticContainer);
         Renderer.render($kineticContainer, [], $selectorContainer);
     });
 
@@ -54,6 +55,8 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     });
 
     $(selectors.saveButton).on('click', function () {
+        $(".alert").alert('close');
+
         var name = $nameInput.val();
         var snake = {
             id: settings.snake.id,
@@ -66,6 +69,18 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
         });
         SnakeService.save(snake, function (data) {
             alert('Response: ' + JSON.stringify(data));
+        }, function (data) {
+            if (data.statusText == 'OK') return;
+            var $alertView = $(alertView);
+            var $alertList = $alertView.find('dl');
+            var responseText = $.parseJSON(data.responseText);
+            $.each(responseText.modelState, function (key, value) {
+                $alertList.append('<dt>' + key + '</dt>');
+                $.each(value, function (index, message) {
+                    $alertList.append('<dd>' + message + '</dd>');
+                });
+            });
+            $selectorContainer.append($alertView);
         });
     });
 
@@ -347,14 +362,15 @@ SBN.Service.Snake = {
             success: success || $.noop
         });
     },
-    save: function (snake, success) {
+    save: function (snake, success, error) {
         $.ajax({
             type: 'POST',
             url: '/api/Snake/Save',
             contentType: "application/json",
             dataType: 'json',
             data: JSON.stringify(snake),
-            success: success || $.noop
+            success: success || $.noop,
+            error: error || $.noop
         });
     }
 };

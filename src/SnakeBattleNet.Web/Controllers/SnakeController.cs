@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Linq;
 using System.Web.Http;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
@@ -42,6 +42,12 @@ namespace SnakeBattleNet.Web.Controllers
             if (!IsCurrentUserOwner(snakeStored))
             {
                 ModelState.AddModelError("", "You are not owner for this snake");
+                return BadRequest(ModelState);
+            }
+
+            if (!model.Chips.All(c => c.Any(m => m.IsSelf && m.C == SnakeBattleNet.Core.Contract.Content.Head)))
+            {
+                ModelState.AddModelError("", "Each chip should contain own head");
                 return BadRequest(ModelState);
             }
 
