@@ -26,7 +26,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
         var m = [];
         $.each(map, function (i, col) {
             $.each(col, function (j, cell) {
-                if (cell.content.content) {
+                if (cell.color) {
                     m[m.length] = cell;
                 }
             });
@@ -42,7 +42,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     $container.on('click', selectors.insertButton, function () {
         var parent = $(this).closest('.chip');
         var $kineticContainer = $(template).insertAfter(parent).find(selectors.kineticContainer);
-        Renderer.render($kineticContainer, { cells: [] }, $selectorContainer);
+        Renderer.render($kineticContainer, [], $selectorContainer);
     });
 
     $container.on('click', selectors.deleteButton, function () {
@@ -50,7 +50,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     });
 
     $(selectors.addButton).on('click', function () {
-        addChip({ cells: [] });
+        addChip([]);
     });
 
     $(selectors.saveButton).on('click', function () {
@@ -62,9 +62,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
         };
 
         $container.find(selectors.kineticContainer).each(function () {
-            snake.chips[snake.chips.length] = {
-                cells: mapToModel($(this).data('model'))
-            };
+            snake.chips[snake.chips.length] = mapToModel($(this).data('model'));
         });
         SnakeService.save(snake, function (data) {
             alert('Response: ' + JSON.stringify(data));
@@ -72,8 +70,7 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     });
 
     SnakeService.get(settings.snake, function (snake) {
-        var chips = snake.chips;
-        $.each(chips, function (index, value) {
+        $.each(snake.chips, function (index, value) {
             addChip(value);
         });
     });
@@ -86,28 +83,32 @@ SBN.Kinetic.Configuration = {
 };
 SBN.Kinetic.createCell = function (layer, cell, images, selectorModel) {
     var size = SBN.Kinetic.Configuration.size;
-    var x = cell.position.x * size;
-    var y = cell.position.y * size;
+    var x = cell.p.x * size;
+    var y = cell.p.y * size;
 
     var element = new SBN.Kinetic.element({
         x: x,
         y: y,
         name: 'cell-selector',
         selected: false,
-        color: SBN.Contract.colorMap[cell.content.color],
+        color: SBN.Contract.colorMap[cell.color],
         size: SBN.Kinetic.Configuration.size
     }, layer, function () {
         element.get().remove();
-        cell.content = selectorModel;
+        cell.color = selectorModel.color;
+        cell.c = selectorModel.content;
+        cell.exclude = selectorModel.exclude;
+        cell.isSelf = selectorModel.isSelf;
+
         SBN.Kinetic.createCell(layer, cell, images, selectorModel);
         layer.draw();
     });
 
-    var content = SBN.Contract.content[cell.content.content];
-    var image = cell.content.isSelf ? images['o' + content] : images[content] || images['e' + content];
+    var content = SBN.Contract.content[cell.c];
+    var image = cell.isSelf ? images['o' + content] : images[content] || images['e' + content];
     element.putImage(image);
 
-    if (cell.content.exclude) {
+    if (cell.exclude) {
         element.putCross();
     }
 
@@ -204,13 +205,13 @@ SBN.Kinetic.render = function ($container, model, $selectorContainer) {
     for (var x = 0; x < 7; x++) {
         map[x] = [];
         for (var y = 0; y < 7; y++) {
-            map[x][y] = { position: { x: x, y: y }, content: {} };
+            map[x][y] = { p: { x: x, y: y }, c: {} };
         }
     }
     $container.data('model', map);
 
-    $.each(model.cells, function (index, cell) {
-        map[cell.position.x][cell.position.y] = cell;
+    $.each(model, function (index, cell) {
+        map[cell.p.x][cell.p.y] = cell;
     });
 
     new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {

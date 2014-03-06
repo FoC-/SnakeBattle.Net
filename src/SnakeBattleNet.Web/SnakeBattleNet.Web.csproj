@@ -191,8 +191,7 @@
     <Compile Include="Controllers\SnakeController.cs" />
     <Compile Include="Core\Snake.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Models\Snake\CellViewModel.cs" />
-    <Compile Include="Models\Snake\ChipViewModel.cs" />
+    <Compile Include="Models\Snake\ChipCellViewModel.cs" />
     <Compile Include="Models\Snake\ContentViewModel.cs" />
     <Compile Include="Models\Snake\SnakeViewModel.cs" />
     <Compile Include="Controllers\TrainController.cs" />

@@ -128,10 +128,23 @@ namespace SnakeBattleNet.Web
 
         public static void RegisterMappings()
         {
-            Mapper.CreateMap<Dictionary<Position, ChipCell>, ChipViewModel>()
-                .ConvertUsing(v => new ChipViewModel { Cells = v.Select(p => new CellViewModel { Position = p.Key, Content = p.Value }) });
-            Mapper.CreateMap<ChipViewModel, IDictionary<Position, ChipCell>>()
-                .ConvertUsing(v => v.Cells.ToDictionary(k => k.Position, va => va.Content));
+            Mapper.CreateMap<IDictionary<Position, ChipCell>, IEnumerable<ChipCellViewModel>>()
+                .ConvertUsing(v => v.Select(p => new ChipCellViewModel
+                {
+                    P = p.Key,
+                    C = p.Value.Content,
+                    Color = p.Value.Color,
+                    Exclude = p.Value.Exclude,
+                    IsSelf = p.Value.IsSelf
+                }));
+            Mapper.CreateMap<IEnumerable<ChipCellViewModel>, IDictionary<Position, ChipCell>>()
+                .ConvertUsing(v => v.ToDictionary(k => k.P, va => new ChipCell
+                {
+                    Color = va.Color,
+                    Content = va.C,
+                    Exclude = va.Exclude,
+                    IsSelf = va.IsSelf
+                }));
 
             Mapper.CreateMap<Replay, ReplayViewModel>();
             Mapper.CreateMap<IDictionary<Position, Content>, IEnumerable<ContentViewModel>>()
