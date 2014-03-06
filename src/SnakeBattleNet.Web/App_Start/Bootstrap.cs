@@ -133,6 +133,10 @@ namespace SnakeBattleNet.Web
             Mapper.CreateMap<ChipViewModel, IDictionary<Position, ChipCell>>()
                 .ConvertUsing(v => v.Cells.ToDictionary(k => k.Position, va => va.Content));
 
+            Mapper.CreateMap<Replay, ReplayViewModel>();
+            Mapper.CreateMap<IDictionary<Position, Content>, IEnumerable<ContentViewModel>>()
+                .ConvertUsing(v => v.Select(p => new ContentViewModel { P = p.Key, C = p.Value }));
+
             Mapper.CreateMap<Position, Position>();
             Mapper.CreateMap<Snake, SnakeViewModel>();
 
