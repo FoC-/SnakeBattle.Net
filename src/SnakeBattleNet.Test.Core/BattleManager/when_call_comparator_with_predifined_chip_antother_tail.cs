@@ -20,7 +20,7 @@ namespace SnakeBattleNet.Test.Core
             result = battleField.PossibleMoves(fighter);
 
         It should_return_move_on_that_row = () =>
-            result.First().ShouldEqual(new Move(new Position { X = 4, Y = 3 }, Direction.North));
+            result.First().ShouldEqual(new Move { X = 4, Y = 3, Direction = Direction.North });
 
         private static Move[] result;
         private static View<Content> battleField;

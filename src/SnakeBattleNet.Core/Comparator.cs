@@ -10,10 +10,10 @@ namespace SnakeBattleNet.Core
         {
             var moves = new[]
             {
-                Move.ToNothFrom(fighter.Head.Position),
-                Move.ToWestFrom(fighter.Head.Position),
-                Move.ToEastFrom(fighter.Head.Position),
-                Move.ToSouthFrom(fighter.Head.Position)
+                Move.ToNothFrom(fighter.Head),
+                Move.ToWestFrom(fighter.Head),
+                Move.ToEastFrom(fighter.Head),
+                Move.ToSouthFrom(fighter.Head)
             };
 
             var possibleMoves = moves.Where(m => IsPossible(view, m)).ToArray();
@@ -50,52 +50,52 @@ namespace SnakeBattleNet.Core
 
         public static View<Tuple<Content, bool>> ToNorth(this View<Content> view, Fighter fighter, Position chip, int chipSideLength = 7)
         {
-            var field = fighter.Head.Position;
+            var field = fighter.Head;
             var pairs = new View<Tuple<Content, bool>>();
             for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
                 for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
                 {
                     var absolutePostion = new Position { X = x, Y = y };
-                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m.Position == absolutePostion));
+                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m == absolutePostion));
                 }
             return pairs;
         }
 
         public static View<Tuple<Content, bool>> ToWest(this View<Content> view, Fighter fighter, Position chip, int chipSideLength = 7)
         {
-            var field = fighter.Head.Position;
+            var field = fighter.Head;
             var pairs = new View<Tuple<Content, bool>>();
             for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
                 for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
                 {
                     var absolutePostion = new Position { X = x, Y = y };
-                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m.Position == absolutePostion));
+                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m == absolutePostion));
                 }
             return pairs;
         }
 
         public static View<Tuple<Content, bool>> ToEast(this View<Content> view, Fighter fighter, Position chip, int chipSideLength = 7)
         {
-            var field = fighter.Head.Position;
+            var field = fighter.Head;
             var pairs = new View<Tuple<Content, bool>>();
             for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
                 for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
                 {
                     var absolutePostion = new Position { X = x, Y = y };
-                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m.Position == absolutePostion));
+                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m == absolutePostion));
                 }
             return pairs;
         }
 
         public static View<Tuple<Content, bool>> ToSouth(this View<Content> view, Fighter fighter, Position chip, int chipSideLength = 7)
         {
-            var field = fighter.Head.Position;
+            var field = fighter.Head;
             var pairs = new View<Tuple<Content, bool>>();
             for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
                 for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
                 {
                     var absolutePostion = new Position { X = x, Y = y };
-                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m.Position == absolutePostion));
+                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m == absolutePostion));
                 }
             return pairs;
         }
@@ -125,7 +125,7 @@ namespace SnakeBattleNet.Core
 
         private static bool IsPossible(View<Content> battleField, Move move)
         {
-            var content = battleField[move.Position];
+            var content = battleField[move];
             return content == Content.Empty || content == Content.Tail;
         }
     }

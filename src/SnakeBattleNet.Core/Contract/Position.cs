@@ -7,16 +7,6 @@ namespace SnakeBattleNet.Core.Contract
         public int X { get; set; }
         public int Y { get; set; }
 
-        public static bool operator ==(Position p1, Position p2)
-        {
-            return p1.Equals(p2);
-        }
-
-        public static bool operator !=(Position p1, Position p2)
-        {
-            return !p1.Equals(p2);
-        }
-
         public bool Equals(Position other)
         {
             return X == other.X && Y == other.Y;

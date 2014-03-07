@@ -39,9 +39,7 @@
     <Compile Include="Comparator.cs" />
     <Compile Include="Observers\BattleField.cs" />
     <Compile Include="Observers\IObserver.cs" />
-    <Compile Include="Contract\Replay.cs" />
-    <Compile Include="Observers\ReplayRecorder.cs" />
-    <Compile Include="Contract\ReplayEvent.cs" />
+    <Compile Include="Replay.cs" />
     <Compile Include="Contract\ChipCell.cs" />
     <Compile Include="Contract\Content.cs" />
     <Compile Include="Contract\Position.cs" />

@@ -10,10 +10,10 @@ namespace SnakeBattleNet.Test.Core
         protected static Fighter CreateSnakeStub(ICollection<View<ChipCell>> chips)
         {
             var snakeStub = new Fighter(Guid.NewGuid().ToString(), chips);
-            snakeStub.Head = new Move(new Position { X = 5, Y = 4 }, Direction.South);
-            snakeStub.Head = new Move(new Position { X = 5, Y = 5 }, Direction.West);
-            snakeStub.Head = new Move(new Position { X = 4, Y = 5 }, Direction.North);
-            snakeStub.Head = new Move(new Position { X = 4, Y = 4 }, Direction.North);
+            snakeStub.Head = new Move { X = 5, Y = 4, Direction = Direction.South };
+            snakeStub.Head = new Move { X = 5, Y = 5, Direction = Direction.West };
+            snakeStub.Head = new Move { X = 4, Y = 5, Direction = Direction.North };
+            snakeStub.Head = new Move { X = 4, Y = 4, Direction = Direction.North };
             return snakeStub;
         }
 

@@ -9,7 +9,7 @@ namespace SnakeBattleNet.Test.Core.BattleFieldTests
         internal static Fighter CreateFighter()
         {
             var fighter = new Fighter("id", new List<View<ChipCell>>());
-            fighter.Head = new Move(new Position { X = 25, Y = 25 }, Direction.North);
+            fighter.Head = new Move { X = 25, Y = 25, Direction = Direction.North };
             return fighter;
         }
     }

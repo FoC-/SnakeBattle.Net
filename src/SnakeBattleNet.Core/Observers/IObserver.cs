@@ -4,6 +4,6 @@ namespace SnakeBattleNet.Core.Observers
 {
     public interface IObserver
     {
-        void Notify(ReplayEvent replayEvent);
+        void Notify(Move cell);
     }
 }

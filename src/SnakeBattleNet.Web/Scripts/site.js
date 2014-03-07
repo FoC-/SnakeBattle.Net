@@ -413,24 +413,25 @@ SBN.Show = function (settings) {
             frameIndex = 0;
         var anim = new Kinetic.Animation(function (frame) {
             //var frameRate = Math.floor(frame.frameRate / 3);
-            if (++frameNumber % 3 === 0) {
+            if (++frameNumber % 8 === 0) {
                 layer.removeChildren();
-                var cells = frames[frameIndex];
-
-                $.each(cells, function (index, cell) {
-                    var content = SBN.Contract.content[cell.c];
-                    var src = images[content] || images['e' + content];
-                    var image = new Kinetic.Image({
-                        x: cell.p.x * 30,
-                        y: cell.p.y * 30,
-                        image: src,
-                        width: 30,
-                        height: 30
+                var frm = frames[frameIndex];
+                $.each(frm, function (key, value) {
+                    $.each(value, function (index, cell) {
+                        var content = SBN.Contract.content[cell.content];
+                        var src = images[content] || images['o' + content];
+                        var image = new Kinetic.Image({
+                            x: cell.x * 30,
+                            y: cell.y * 30,
+                            image: src,
+                            width: 30,
+                            height: 30
+                        });
+                        layer.add(image);
                     });
-                    layer.add(image);
                 });
-                layer.draw();
 
+                layer.draw();
                 frameIndex++;
             }
         }, layer);

@@ -37,9 +37,9 @@ namespace SnakeBattleNet.Core.Observers
             }
         }
 
-        public void Notify(ReplayEvent replayEvent)
+        public void Notify(Move cell)
         {
-            this[replayEvent.P] = replayEvent.C;
+            this[cell] = cell.Content;
         }
     }
 }

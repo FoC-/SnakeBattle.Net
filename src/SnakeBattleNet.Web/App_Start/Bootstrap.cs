@@ -16,6 +16,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using Newtonsoft.Json.Serialization;
 using Owin;
+using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
 using SnakeBattleNet.Web;
 using SnakeBattleNet.Web.Core;

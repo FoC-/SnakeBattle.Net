@@ -39,10 +39,10 @@ namespace SnakeBattleNet.Core
             set
             {
                 if (Head != null)
-                    Notify(new ReplayEvent(Id, Head.Position, Content.Body, Head.Direction));
+                    Notify(new Move { Content = Content.Body, Direction = Head.Direction, X = Head.X, Y = Head.Y });
 
                 BodyParts.AddFirst(value);
-                Notify(new ReplayEvent(Id, Head.Position, Content.Head, Head.Direction));
+                Notify(new Move { Content = Content.Head, Direction = Head.Direction, X = Head.X, Y = Head.Y });
             }
         }
 
@@ -53,9 +53,9 @@ namespace SnakeBattleNet.Core
 
         public void CutTail()
         {
-            Notify(new ReplayEvent(Id, Tail.Position, Content.Empty, Tail.Direction));
+            Notify(new Move { Content = Content.Empty, Direction = Tail.Direction, X = Tail.X, Y = Tail.Y });
             BodyParts.RemoveLast();
-            Notify(new ReplayEvent(Id, Tail.Position, Content.Tail, Tail.Direction));
+            Notify(new Move { Content = Content.Tail, Direction = Tail.Direction, X = Tail.X, Y = Tail.Y });
         }
 
         public void GrowForward()
@@ -63,23 +63,23 @@ namespace SnakeBattleNet.Core
             switch (Head.Direction)
             {
                 case Direction.North:
-                    Head = Move.ToNothFrom(Head.Position);
+                    Head = Move.ToNothFrom(Head);
                     break;
                 case Direction.West:
-                    Head = Move.ToWestFrom(Head.Position);
+                    Head = Move.ToWestFrom(Head);
                     break;
                 case Direction.East:
-                    Head = Move.ToEastFrom(Head.Position);
+                    Head = Move.ToEastFrom(Head);
                     break;
                 case Direction.South:
-                    Head = Move.ToSouthFrom(Head.Position);
+                    Head = Move.ToSouthFrom(Head);
                     break;
             }
         }
 
         public void BiteMove(IEnumerable<Fighter> fighters, Move newHeadPosition)
         {
-            var fighter = fighters.FirstOrDefault(f => f.Tail.Position == newHeadPosition.Position);
+            var fighter = fighters.FirstOrDefault(f => f.Tail.Equals(newHeadPosition));
             if (fighter == null)
             {
                 CutTail();
@@ -96,11 +96,11 @@ namespace SnakeBattleNet.Core
             observers.Add(observer);
         }
 
-        private void Notify(ReplayEvent replayEvent)
+        private void Notify(Move cell)
         {
             foreach (var observer in observers)
             {
-                observer.Notify(replayEvent);
+                observer.Notify(cell);
             }
         }
     }
