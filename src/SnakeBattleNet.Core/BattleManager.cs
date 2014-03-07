@@ -33,8 +33,8 @@ namespace SnakeBattleNet.Core
                 foreach (var snake in fighters.Shuffle())
                 {
                     var possibleMoves = battleField.PossibleMoves(snake);
+                    if (possibleMoves.Length == 0) continue;
                     var move = possibleMoves[new Random().Next(possibleMoves.Length)];
-                    if (move == null) continue;
                     snake.BiteMove(fighters, move);
                 }
             }
