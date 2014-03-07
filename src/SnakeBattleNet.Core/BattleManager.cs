@@ -29,7 +29,7 @@ namespace SnakeBattleNet.Core
 
             for (var round = 0; round < rounds; round++)
             {
-                replayRecorder.SetFrameIndex(rounds);
+                replayRecorder.SetFrameIndex(round);
                 foreach (var snake in fighters.Shuffle())
                 {
                     var possibleMoves = battleField.PossibleMoves(snake);

@@ -53,7 +53,7 @@ namespace SnakeBattleNet.Core.Observers
 
         public Replay Replay()
         {
-            replay.Frames = new Dictionary<int, ICollection<ReplayEvent>>(frames);
+            replay.Frames = frames;
             return replay;
         }
     }
