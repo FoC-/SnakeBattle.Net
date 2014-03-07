@@ -377,18 +377,21 @@ SBN.Service.Snake = {
 
 SBN.Show = function (settings) {
     var $container = $(settings.selectors.container);
+    var $buttonStart = $(settings.selectors.buttonStart);
 
-    function render(replay) {
+    function render(battleField) {
         var stage = new Kinetic.Stage({
             container: $container[0],
             width: 810,
             height: 810
         });
         var background = new Kinetic.Layer();
+        var mainLayer = new Kinetic.Layer();
         stage.add(background);
+        stage.add(mainLayer);
 
         new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
-            $.each(replay.battleField, function (index, cell) {
+            $.each(battleField, function (index, cell) {
                 var src = images[SBN.Contract.content[cell.c]];
                 var image = new Kinetic.Image({
                     x: cell.p.x * 30,
@@ -401,9 +404,45 @@ SBN.Show = function (settings) {
             });
             background.draw();
         });
+
+        return mainLayer;
     };
 
-    SBN.Service.Battle.get(settings.snakes, render);
+    function animation(frames, layer) {
+        var frameNumber = 0,
+            frameIndex = 0;
+        var anim = new Kinetic.Animation(function (frame) {
+            //var frameRate = Math.floor(frame.frameRate / 3);
+            if (++frameNumber % 7 === 0) {
+                layer.removeChildren();
+                var rect = new Kinetic.Rect({
+                    x: frameIndex * 30,
+                    y: 50,
+                    width: 30,
+                    height: 30,
+                    fill: 'black'
+                });
+                layer.add(rect);
+
+                frameIndex++;
+            }
+        }, layer);
+        return anim;
+    }
+
+    SBN.Service.Battle.get(settings.snakes, function (replay) {
+        var layer = render(replay.battleField);
+        var anim = animation(replay.frames, layer);
+        $buttonStart.on('click', function () {
+            if (anim.isRunning()) {
+                $buttonStart.html('Start');
+                anim.stop();
+            } else {
+                $buttonStart.html('Stop');
+                anim.start();
+            }
+        });
+    });
 };
 SBN.Service.Battle = {
     get: function (query, success) {

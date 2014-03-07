@@ -1,7 +1,14 @@
 ﻿@model List<string>
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
+        <div class="form-inline">
+            <div class="form-group">
+                <button type="button" id="button_start" class="btn btn-default">Start</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
         <div id="replay_container"></div>
     </div>
 </div>
@@ -18,6 +25,7 @@
                 },
                 selectors: {
                     container: '#replay_container',
+                    buttonStart: '#button_start',
                 }
             });
         });
