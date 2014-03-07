@@ -376,7 +376,34 @@ SBN.Service.Snake = {
 };
 
 SBN.Show = function (settings) {
-    SBN.Service.Battle.get(settings.snakes);
+    var $container = $(settings.selectors.container);
+
+    function render(replay) {
+        var stage = new Kinetic.Stage({
+            container: $container[0],
+            width: 810,
+            height: 810
+        });
+        var background = new Kinetic.Layer();
+        stage.add(background);
+
+        new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
+            $.each(replay.battleField, function (index, cell) {
+                var src = images[SBN.Contract.content[cell.c]];
+                var image = new Kinetic.Image({
+                    x: cell.p.x * 30,
+                    y: cell.p.y * 30,
+                    image: src,
+                    width: 30,
+                    height: 30
+                });
+                background.add(image);
+            });
+            background.draw();
+        });
+    };
+
+    SBN.Service.Battle.get(settings.snakes, render);
 };
 SBN.Service.Battle = {
     get: function (query, success) {
