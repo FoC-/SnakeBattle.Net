@@ -408,39 +408,47 @@ SBN.Show = function (settings) {
         return mainLayer;
     };
 
-    function animation(frames, layer) {
+    function animation(frames, layer, images) {
         var frameNumber = 0,
             frameIndex = 0;
         var anim = new Kinetic.Animation(function (frame) {
             //var frameRate = Math.floor(frame.frameRate / 3);
-            if (++frameNumber % 7 === 0) {
+            if (++frameNumber % 3 === 0) {
                 layer.removeChildren();
-                var rect = new Kinetic.Rect({
-                    x: frameIndex * 30,
-                    y: 50,
-                    width: 30,
-                    height: 30,
-                    fill: 'black'
+                var cells = frames[frameIndex];
+
+                $.each(cells, function (index, cell) {
+                    var content = SBN.Contract.content[cell.c];
+                    var src = images[content] || images['e' + content];
+                    var image = new Kinetic.Image({
+                        x: cell.p.x * 30,
+                        y: cell.p.y * 30,
+                        image: src,
+                        width: 30,
+                        height: 30
+                    });
+                    layer.add(image);
                 });
-                layer.add(rect);
+                layer.draw();
 
                 frameIndex++;
             }
         }, layer);
         return anim;
     }
-
-    SBN.Service.Battle.get(settings.snakes, function (replay) {
-        var layer = render(replay.battleField);
-        var anim = animation(replay.frames, layer);
-        $buttonStart.on('click', function () {
-            if (anim.isRunning()) {
-                $buttonStart.html('Start');
-                anim.stop();
-            } else {
-                $buttonStart.html('Stop');
-                anim.start();
-            }
+    new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
+        SBN.Service.Battle.get(settings.snakes, function (replay) {
+            var layer = render(replay.battleField);
+            var anim = animation(replay.frames, layer, images);
+            $buttonStart.on('click', function () {
+                if (anim.isRunning()) {
+                    $buttonStart.html('Start');
+                    anim.stop();
+                } else {
+                    $buttonStart.html('Stop');
+                    anim.start();
+                }
+            });
         });
     });
 };
