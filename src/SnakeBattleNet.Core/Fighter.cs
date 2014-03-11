@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
 
@@ -93,25 +94,24 @@ namespace SnakeBattleNet.Core
 
             foreach (var chip in Chips)
             {
-                var chipHead = chip.FirstOrDefault(c => c.Content == Content.Head && c.IsSelf);
                 foreach (var move in possibleMoves)
                 {
                     switch (move.Direction)
                     {
                         case Direction.North:
-                            if (IsEqual(ToNorth(chipHead), chip))
+                            if (IsEqual(ToNorth, chip))
                                 return new[] { move };
                             break;
                         case Direction.West:
-                            if (IsEqual(ToWest(chipHead), chip))
+                            if (IsEqual(ToWest, chip))
                                 return new[] { move };
                             break;
                         case Direction.East:
-                            if (IsEqual(ToEast(chipHead), chip))
+                            if (IsEqual(ToEast, chip))
                                 return new[] { move };
                             break;
                         case Direction.South:
-                            if (IsEqual(ToSouth(chipHead), chip))
+                            if (IsEqual(ToSouth, chip))
                                 return new[] { move };
                             break;
                     }
@@ -120,72 +120,32 @@ namespace SnakeBattleNet.Core
             return possibleMoves;
         }
 
-        public ChipCell[,] ToNorth(Position chipHead, int chipSideLength = 7)
+        public ChipCell ToNorth(Position chipHead, Position chipCell)
         {
-            var view = new ChipCell[chipSideLength, chipSideLength];
-            for (int ry = 0, y = Head.Y - chipHead.Y; y < Head.Y - chipHead.Y + chipSideLength; y++, ry++)
-                for (int rx = 0, x = Head.X - chipHead.X; x < Head.X - chipHead.X + chipSideLength; x++, rx++)
-                {
-                    view[rx, ry] = new ChipCell
-                    {
-                        X = rx,
-                        Y = ry,
-                        Content = Field[x, y],
-                        IsSelf = BodyParts.Any(m => m.X == x && m.Y == y)
-                    };
-                }
-            return view;
+            var ry = Head.Y - chipHead.Y + chipCell.Y;
+            var rx = Head.X - chipHead.X + chipCell.X;
+            return new ChipCell { X = rx, Y = ry, Content = Field[rx, ry], IsSelf = BodyParts.Any(m => m.X == rx && m.Y == ry) };
         }
 
-        public ChipCell[,] ToWest(Position chipHead, int chipSideLength = 7)
+        public ChipCell ToWest(Position chipHead, Position chipCell)
         {
-            var view = new ChipCell[chipSideLength, chipSideLength];
-            for (int ry = 0, y = Head.Y + chipHead.Y; y > Head.Y + chipHead.Y - chipSideLength; y--, ry++)
-                for (int rx = 0, x = Head.X - chipHead.X; x < Head.X - chipHead.X + chipSideLength; x++, rx++)
-                {
-                    view[rx, ry] = new ChipCell
-                    {
-                        X = rx,
-                        Y = ry,
-                        Content = Field[x, y],
-                        IsSelf = BodyParts.Any(m => m.X == x && m.Y == y)
-                    };
-                }
-            return view;
+            var ry = Head.Y + chipHead.Y - chipCell.Y;
+            var rx = Head.X - chipHead.X + chipCell.X;
+            return new ChipCell { X = rx, Y = ry, Content = Field[rx, ry], IsSelf = BodyParts.Any(m => m.X == rx && m.Y == ry) };
         }
 
-        public ChipCell[,] ToEast(Position chipHead, int chipSideLength = 7)
+        public ChipCell ToEast(Position chipHead, Position chipCell)
         {
-            var view = new ChipCell[chipSideLength, chipSideLength];
-            for (int ry = 0, y = Head.Y - chipHead.Y; y < Head.Y - chipHead.Y + chipSideLength; y++, ry++)
-                for (int rx = 0, x = Head.X + chipHead.X; x > Head.X + chipHead.X - chipSideLength; x--, rx++)
-                {
-                    view[rx, ry] = new ChipCell
-                    {
-                        X = rx,
-                        Y = ry,
-                        Content = Field[x, y],
-                        IsSelf = BodyParts.Any(m => m.X == x && m.Y == y)
-                    };
-                }
-            return view;
+            var ry = Head.Y - chipHead.Y + chipCell.Y;
+            var rx = Head.X + chipHead.X - chipCell.X;
+            return new ChipCell { X = rx, Y = ry, Content = Field[rx, ry], IsSelf = BodyParts.Any(m => m.X == rx && m.Y == ry) };
         }
 
-        public ChipCell[,] ToSouth(Position chipHead, int chipSideLength = 7)
+        public ChipCell ToSouth(Position chipHead, Position chipCell)
         {
-            var view = new ChipCell[chipSideLength, chipSideLength];
-            for (int ry = 0, y = Head.Y + chipHead.Y; y > Head.Y + chipHead.Y - chipSideLength; y--, ry++)
-                for (int rx = 0, x = Head.X + chipHead.X; x > Head.X + chipHead.X - chipSideLength; x--, rx++)
-                {
-                    view[rx, ry] = new ChipCell
-                    {
-                        X = rx,
-                        Y = ry,
-                        Content = Field[x, y],
-                        IsSelf = BodyParts.Any(m => m.X == x && m.Y == y)
-                    };
-                }
-            return view;
+            var ry = Head.Y + chipHead.Y - chipCell.Y;
+            var rx = Head.X + chipHead.X - chipCell.X;
+            return new ChipCell { X = rx, Y = ry, Content = Field[rx, ry], IsSelf = BodyParts.Any(m => m.X == rx && m.Y == ry) };
         }
 
         private bool IsPossible(Position position)
@@ -193,14 +153,16 @@ namespace SnakeBattleNet.Core
             return Field[position.X, position.Y] == Content.Empty || Field[position.X, position.Y] == Content.Tail;
         }
 
-        private static bool IsEqual(ChipCell[,] view, IEnumerable<ChipCell> chip)
+        private static bool IsEqual(Func<Position, Position, ChipCell> cellGetter, IEnumerable<ChipCell> chip)
         {
-            var blue = chip.Where(c => c.Color == Color.OrBlue).Any(c => IsEqual(view[c.X, c.Y], c));
-            var green = chip.Where(c => c.Color == Color.OrGreen).Any(c => IsEqual(view[c.X, c.Y], c));
+            var chipHead = chip.FirstOrDefault(c => c.Content == Content.Head && c.IsSelf);
 
-            var grey = chip.Where(c => c.Color == Color.AndGrey).All(c => IsEqual(view[c.X, c.Y], c));
-            var red = chip.Where(c => c.Color == Color.AndRed).All(c => IsEqual(view[c.X, c.Y], c));
-            var black = chip.Where(c => c.Color == Color.AndBlack).All(c => IsEqual(view[c.X, c.Y], c));
+            var blue = chip.Where(c => c.Color == Color.OrBlue).Any(c => IsEqual(cellGetter(chipHead, c), c));
+            var green = chip.Where(c => c.Color == Color.OrGreen).Any(c => IsEqual(cellGetter(chipHead, c), c));
+
+            var grey = chip.Where(c => c.Color == Color.AndGrey).All(c => IsEqual(cellGetter(chipHead, c), c));
+            var red = chip.Where(c => c.Color == Color.AndRed).All(c => IsEqual(cellGetter(chipHead, c), c));
+            var black = chip.Where(c => c.Color == Color.AndBlack).All(c => IsEqual(cellGetter(chipHead, c), c));
 
             var color = chip.FirstOrDefault(c => c.IsSelf && c.Content == Content.Head).Color;
             var andType = color == Color.AndBlack || color == Color.AndGrey || color == Color.AndRed;
