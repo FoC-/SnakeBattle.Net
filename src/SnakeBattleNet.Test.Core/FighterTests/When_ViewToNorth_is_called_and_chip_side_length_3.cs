@@ -2,28 +2,21 @@ using Machine.Specifications;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
 
-namespace SnakeBattleNet.Test.Core.BattleFieldTests
+namespace SnakeBattleNet.Test.Core.FighterTests
 {
-    [Subject(typeof(BattleField))]
+    [Subject(typeof(Fighter))]
     internal class When_ViewToNorth_is_called_and_chip_side_length_3 : ViewTestContext
     {
         Establish context = () =>
         {
-            battleField = new BattleField();
+            fighter = CreateFighter();
         };
 
         Because of = () =>
-            result = battleField.ToNorth(CreateFighter(), new Position { X = 1, Y = 1 }, 3);
+            result = fighter.ToNorth(new Position { X = 1, Y = 1 }, 3);
 
         It should_return_9_elements = () =>
             result.Length.ShouldEqual(9);
-
-        It should_return_4_empty_spaces = () =>
-        {
-            for (var x = 0; x < 2; x++)
-                for (var y = 0; y < 2; y++)
-                    result[x, y].Content.ShouldEqual(Content.Empty);
-        };
 
         It should_return_wall_at_right = () =>
         {
@@ -35,7 +28,7 @@ namespace SnakeBattleNet.Test.Core.BattleFieldTests
             for (var x = 0; x < 3; x++) result[x, 2].Content.ShouldEqual(Content.Wall);
         };
 
-        private static BattleField battleField;
         private static ChipCell[,] result;
+        private static Fighter fighter;
     }
 }

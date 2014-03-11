@@ -60,14 +60,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BattleFieldTests\ViewTestContext.cs" />
-    <Compile Include="stubForRealBattle.cs" />
-    <Compile Include="BattleManager\when_call_comparator_with_predifined_chip_antother_tail.cs" />
+    <Compile Include="FighterTests\ViewTestContext.cs" />
+    <Compile Include="FighterTests\When_call_comparator_with_predifined_chip_antother_tail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BattleFieldTests\When_ViewToEast_is_called_and_chip_side_length_3.cs" />
-    <Compile Include="BattleFieldTests\When_ViewToNorth_is_called_and_chip_side_length_3.cs" />
-    <Compile Include="BattleFieldTests\When_ViewToSouth_is_called_and_chip_side_length_3.cs" />
-    <Compile Include="BattleFieldTests\When_ViewToWest_is_called_and_chip_side_length_3.cs" />
+    <Compile Include="FighterTests\When_ViewToEast_is_called_and_chip_side_length_3.cs" />
+    <Compile Include="FighterTests\When_ViewToNorth_is_called_and_chip_side_length_3.cs" />
+    <Compile Include="FighterTests\When_ViewToSouth_is_called_and_chip_side_length_3.cs" />
+    <Compile Include="FighterTests\When_ViewToWest_is_called_and_chip_side_length_3.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -36,7 +36,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comparator.cs" />
     <Compile Include="Contract\Cell.cs" />
     <Compile Include="BattleField.cs" />
     <Compile Include="Replay.cs" />
