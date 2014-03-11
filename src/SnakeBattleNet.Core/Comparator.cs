@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
 
@@ -6,7 +6,7 @@ namespace SnakeBattleNet.Core
 {
     public static class Comparator
     {
-        public static Move[] PossibleMoves(this View<Content> view, Fighter fighter)
+        public static Move[] PossibleMoves(this Fighter fighter)
         {
             var moves = new[]
             {
@@ -16,30 +16,30 @@ namespace SnakeBattleNet.Core
                 Move.ToSouthFrom(fighter.Head)
             };
 
-            var possibleMoves = moves.Where(m => IsPossible(view, m)).ToArray();
+            var possibleMoves = moves.Where(m => IsPossible(fighter.Field, m)).ToArray();
             if (!possibleMoves.Any()) return possibleMoves;
 
             foreach (var chip in fighter.Chips)
             {
-                var positionOnChip = chip.FirstOrDefault(c => c.Value.Content == Content.Head && c.Value.IsSelf).Key;
+                var chipHead = chip.FirstOrDefault(c => c.Content == Content.Head && c.IsSelf);
                 foreach (var move in possibleMoves)
                 {
                     switch (move.Direction)
                     {
                         case Direction.North:
-                            if (IsEqual(view.ToNorth(fighter, positionOnChip), chip))
+                            if (IsEqual(fighter.Field.ToNorth(fighter, chipHead), chip))
                                 return new[] { move };
                             break;
                         case Direction.West:
-                            if (IsEqual(view.ToWest(fighter, positionOnChip), chip))
+                            if (IsEqual(fighter.Field.ToWest(fighter, chipHead), chip))
                                 return new[] { move };
                             break;
                         case Direction.East:
-                            if (IsEqual(view.ToEast(fighter, positionOnChip), chip))
+                            if (IsEqual(fighter.Field.ToEast(fighter, chipHead), chip))
                                 return new[] { move };
                             break;
                         case Direction.South:
-                            if (IsEqual(view.ToSouth(fighter, positionOnChip), chip))
+                            if (IsEqual(fighter.Field.ToSouth(fighter, chipHead), chip))
                                 return new[] { move };
                             break;
                     }
@@ -48,85 +48,104 @@ namespace SnakeBattleNet.Core
             return possibleMoves;
         }
 
-        public static View<Tuple<Content, bool>> ToNorth(this View<Content> view, Fighter fighter, Position chip, int chipSideLength = 7)
+        public static ChipCell[,] ToNorth(this BattleField field, Fighter fighter, Position chipHead, int chipSideLength = 7)
         {
-            var field = fighter.Head;
-            var pairs = new View<Tuple<Content, bool>>();
-            for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
-                for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
+            var head = fighter.Head;
+            var view = new ChipCell[chipSideLength, chipSideLength];
+            for (int ry = 0, y = head.Y - chipHead.Y; y < head.Y - chipHead.Y + chipSideLength; y++, ry++)
+                for (int rx = 0, x = head.X - chipHead.X; x < head.X - chipHead.X + chipSideLength; x++, rx++)
                 {
-                    var absolutePostion = new Position { X = x, Y = y };
-                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m == absolutePostion));
+                    view[rx, ry] = new ChipCell
+                    {
+                        X = rx,
+                        Y = ry,
+                        Content = field[x, y],
+                        IsSelf = fighter.BodyParts.Any(m => m.X == x && m.Y == y)
+                    };
                 }
-            return pairs;
+            return view;
         }
 
-        public static View<Tuple<Content, bool>> ToWest(this View<Content> view, Fighter fighter, Position chip, int chipSideLength = 7)
+        public static ChipCell[,] ToWest(this BattleField field, Fighter fighter, Position chipHead, int chipSideLength = 7)
         {
-            var field = fighter.Head;
-            var pairs = new View<Tuple<Content, bool>>();
-            for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
-                for (int rx = 0, x = field.X - chip.X; x < field.X - chip.X + chipSideLength; x++, rx++)
+            var head = fighter.Head;
+            var view = new ChipCell[chipSideLength, chipSideLength];
+            for (int ry = 0, y = head.Y + chipHead.Y; y > head.Y + chipHead.Y - chipSideLength; y--, ry++)
+                for (int rx = 0, x = head.X - chipHead.X; x < head.X - chipHead.X + chipSideLength; x++, rx++)
                 {
-                    var absolutePostion = new Position { X = x, Y = y };
-                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m == absolutePostion));
+                    view[rx, ry] = new ChipCell
+                    {
+                        X = rx,
+                        Y = ry,
+                        Content = field[x, y],
+                        IsSelf = fighter.BodyParts.Any(m => m.X == x && m.Y == y)
+                    };
                 }
-            return pairs;
+            return view;
         }
 
-        public static View<Tuple<Content, bool>> ToEast(this View<Content> view, Fighter fighter, Position chip, int chipSideLength = 7)
+        public static ChipCell[,] ToEast(this BattleField field, Fighter fighter, Position chipHead, int chipSideLength = 7)
         {
-            var field = fighter.Head;
-            var pairs = new View<Tuple<Content, bool>>();
-            for (int ry = 0, y = field.Y - chip.Y; y < field.Y - chip.Y + chipSideLength; y++, ry++)
-                for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
+            var head = fighter.Head;
+            var view = new ChipCell[chipSideLength, chipSideLength];
+            for (int ry = 0, y = head.Y - chipHead.Y; y < head.Y - chipHead.Y + chipSideLength; y++, ry++)
+                for (int rx = 0, x = head.X + chipHead.X; x > head.X + chipHead.X - chipSideLength; x--, rx++)
                 {
-                    var absolutePostion = new Position { X = x, Y = y };
-                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m == absolutePostion));
+                    view[rx, ry] = new ChipCell
+                    {
+                        X = rx,
+                        Y = ry,
+                        Content = field[x, y],
+                        IsSelf = fighter.BodyParts.Any(m => m.X == x && m.Y == y)
+                    };
                 }
-            return pairs;
+            return view;
         }
 
-        public static View<Tuple<Content, bool>> ToSouth(this View<Content> view, Fighter fighter, Position chip, int chipSideLength = 7)
+        public static ChipCell[,] ToSouth(this BattleField field, Fighter fighter, Position chipHead, int chipSideLength = 7)
         {
-            var field = fighter.Head;
-            var pairs = new View<Tuple<Content, bool>>();
-            for (int ry = 0, y = field.Y + chip.Y; y > field.Y + chip.Y - chipSideLength; y--, ry++)
-                for (int rx = 0, x = field.X + chip.X; x > field.X + chip.X - chipSideLength; x--, rx++)
+            var head = fighter.Head;
+            var view = new ChipCell[chipSideLength, chipSideLength];
+            for (int ry = 0, y = head.Y + chipHead.Y; y > head.Y + chipHead.Y - chipSideLength; y--, ry++)
+                for (int rx = 0, x = head.X + chipHead.X; x > head.X + chipHead.X - chipSideLength; x--, rx++)
                 {
-                    var absolutePostion = new Position { X = x, Y = y };
-                    pairs[new Position { X = rx, Y = ry }] = new Tuple<Content, bool>(view[absolutePostion], fighter.BodyParts.Any(m => m == absolutePostion));
+                    view[rx, ry] = new ChipCell
+                    {
+                        X = rx,
+                        Y = ry,
+                        Content = field[x, y],
+                        IsSelf = fighter.BodyParts.Any(m => m.X == x && m.Y == y)
+                    };
                 }
-            return pairs;
+            return view;
         }
 
-        private static bool IsEqual(View<Tuple<Content, bool>> field, View<ChipCell> chip)
+        private static bool IsEqual(ChipCell[,] view, IEnumerable<ChipCell> chip)
         {
-            var blue = chip.Where(c => c.Value.Color == Color.OrBlue).Any(c => IsEqual(field[c.Key], c.Value));
-            var green = chip.Where(c => c.Value.Color == Color.OrGreen).Any(c => IsEqual(field[c.Key], c.Value));
+            var blue = chip.Where(c => c.Color == Color.OrBlue).Any(c => IsEqual(view[c.X, c.Y], c));
+            var green = chip.Where(c => c.Color == Color.OrGreen).Any(c => IsEqual(view[c.X, c.Y], c));
 
-            var grey = chip.Where(c => c.Value.Color == Color.AndGrey).All(c => IsEqual(field[c.Key], c.Value));
-            var red = chip.Where(c => c.Value.Color == Color.AndRed).All(c => IsEqual(field[c.Key], c.Value));
-            var black = chip.Where(c => c.Value.Color == Color.AndBlack).All(c => IsEqual(field[c.Key], c.Value));
+            var grey = chip.Where(c => c.Color == Color.AndGrey).All(c => IsEqual(view[c.X, c.Y], c));
+            var red = chip.Where(c => c.Color == Color.AndRed).All(c => IsEqual(view[c.X, c.Y], c));
+            var black = chip.Where(c => c.Color == Color.AndBlack).All(c => IsEqual(view[c.X, c.Y], c));
 
-            var color = chip.FirstOrDefault(c => c.Value.IsSelf).Value.Color;
+            var color = chip.FirstOrDefault(c => c.IsSelf && c.Content == Content.Head).Color;
             var andType = color == Color.AndBlack || color == Color.AndGrey || color == Color.AndRed;
             return andType
                 ? blue && green && grey && red && black
                 : blue || green || grey || red || black;
         }
 
-        private static bool IsEqual(Tuple<Content, bool> fieldCell, ChipCell chipCell)
+        private static bool IsEqual(ChipCell fieldCell, ChipCell chipCell)
         {
             return chipCell.Exclude
-                ? chipCell.Content != fieldCell.Item1 || chipCell.IsSelf != fieldCell.Item2
-                : chipCell.Content == fieldCell.Item1 && chipCell.IsSelf == fieldCell.Item2;
+                ? chipCell.Content != fieldCell.Content || chipCell.IsSelf != fieldCell.IsSelf
+                : chipCell.Content == fieldCell.Content && chipCell.IsSelf == fieldCell.IsSelf;
         }
 
-        private static bool IsPossible(View<Content> battleField, Move move)
+        private static bool IsPossible(BattleField battleField, Position position)
         {
-            var content = battleField[move];
-            return content == Content.Empty || content == Content.Tail;
+            return battleField[position.X, position.Y] == Content.Empty || battleField[position.X, position.Y] == Content.Tail;
         }
     }
 }

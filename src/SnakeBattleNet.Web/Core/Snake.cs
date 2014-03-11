@@ -14,11 +14,11 @@ namespace SnakeBattleNet.Web.Core
         public int Wins { get; private set; }
         public int Loses { get; private set; }
         public int Matches { get; private set; }
-        public ICollection<IDictionary<Position, ChipCell>> Chips { get; set; }
+        public ICollection<IEnumerable<ChipCell>> Chips { get; set; }
 
         private Snake()
         {
-            Chips = new List<IDictionary<Position, ChipCell>>();
+            Chips = new List<IEnumerable<ChipCell>>();
             Id = Guid.NewGuid().ToString().ToLower().Replace("-", "");
             Created = DateTime.Now;
             Score = 1500;

@@ -1,36 +1,41 @@
-using System;
-using System.Linq;
 using Machine.Specifications;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
-using SnakeBattleNet.Core.Observers;
 
 namespace SnakeBattleNet.Test.Core.BattleFieldTests
 {
-    [Subject(typeof(View<Content>))]
+    [Subject(typeof(BattleField))]
     internal class When_ViewToNorth_is_called_and_chip_side_length_3 : ViewTestContext
     {
         Establish context = () =>
         {
-            battleField = BattleField.Build();
+            battleField = new BattleField();
         };
 
         Because of = () =>
             result = battleField.ToNorth(CreateFighter(), new Position { X = 1, Y = 1 }, 3);
 
         It should_return_9_elements = () =>
-            result.Count().ShouldEqual(9);
+            result.Length.ShouldEqual(9);
 
         It should_return_4_empty_spaces = () =>
-            result.Count(c => c.Value.Item1 == Content.Empty).ShouldEqual(4);
+        {
+            for (var x = 0; x < 2; x++)
+                for (var y = 0; y < 2; y++)
+                    result[x, y].Content.ShouldEqual(Content.Empty);
+        };
 
         It should_return_wall_at_right = () =>
-            result.Count(c => c.Key.X == 2 && c.Value.Item1 == Content.Wall).ShouldEqual(3);
+        {
+            for (var y = 0; y < 3; y++) result[2, y].Content.ShouldEqual(Content.Wall);
+        };
 
         It should_return_wall_at_top = () =>
-            result.Count(c => c.Key.Y == 2 && c.Value.Item1 == Content.Wall).ShouldEqual(3);
+        {
+            for (var x = 0; x < 3; x++) result[x, 2].Content.ShouldEqual(Content.Wall);
+        };
 
-        private static View<Content> battleField;
-        private static View<Tuple<Content, bool>> result;
+        private static BattleField battleField;
+        private static ChipCell[,] result;
     }
 }

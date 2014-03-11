@@ -129,29 +129,36 @@ namespace SnakeBattleNet.Web
 
         public static void RegisterMappings()
         {
-            Mapper.CreateMap<IDictionary<Position, ChipCell>, IEnumerable<ChipCellViewModel>>()
-                .ConvertUsing(v => v.Select(p => new ChipCellViewModel
+            Mapper.CreateMap<ChipCell, ChipCellViewModel>()
+                .ConvertUsing(v => new ChipCellViewModel
                 {
-                    P = p.Key,
-                    C = p.Value.Content,
-                    Color = p.Value.Color,
-                    Exclude = p.Value.Exclude,
-                    IsSelf = p.Value.IsSelf
-                }));
-            Mapper.CreateMap<IEnumerable<ChipCellViewModel>, IDictionary<Position, ChipCell>>()
-                .ConvertUsing(v => v.ToDictionary(k => k.P, va => new ChipCell
+                    P = new Position { X = v.X, Y = v.Y },
+                    C = v.Content,
+                    Color = v.Color,
+                    Exclude = v.Exclude,
+                    IsSelf = v.IsSelf
+                });
+            Mapper.CreateMap<ChipCellViewModel, ChipCell>()
+                .ConvertUsing(v => new ChipCell
                 {
-                    Color = va.Color,
-                    Content = va.C,
-                    Exclude = va.Exclude,
-                    IsSelf = va.IsSelf
-                }));
+                    X = v.P.X,
+                    Y = v.P.Y,
+                    Color = v.Color,
+                    Content = v.C,
+                    Exclude = v.Exclude,
+                    IsSelf = v.IsSelf
+                });
 
             Mapper.CreateMap<Replay, ReplayViewModel>();
-            Mapper.CreateMap<IDictionary<Position, Content>, IEnumerable<ContentViewModel>>()
-                .ConvertUsing(v => v.Select(p => new ContentViewModel { P = p.Key, C = p.Value }));
-
-            Mapper.CreateMap<Position, Position>();
+            Mapper.CreateMap<BattleField, IEnumerable<ContentViewModel>>()
+                .ConvertUsing(v =>
+                {
+                    var models = new List<ContentViewModel>();
+                    for (var x = 0; x < v.SideLength; x++)
+                        for (var y = 0; y < v.SideLength; y++)
+                            models.Add(new ContentViewModel { C = v[x, y], P = new Position { X = x, Y = y } });
+                    return models;
+                });
             Mapper.CreateMap<Snake, SnakeViewModel>();
 
             Mapper.CreateMap<Tuple<Snake, SnakeViewModel>, Snake>()

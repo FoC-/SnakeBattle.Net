@@ -12,18 +12,18 @@ namespace SnakeBattleNet.Test.Core
         Establish context = () =>
         {
             var module = CreateChipWithAndColoredHead();
-            fighter = CreateSnakeStub(new[] { module });
             battleField = CreateBattleField();
+            fighter = CreateSnakeStub(new[] { module }, battleField);
         };
 
         Because of = () =>
-            result = battleField.PossibleMoves(fighter);
+            result = fighter.PossibleMoves();
 
         It should_return_move_on_that_row = () =>
             result.First().ShouldEqual(new Move { X = 4, Y = 3, Direction = Direction.North });
 
         private static Move[] result;
-        private static View<Content> battleField;
+        private static BattleField battleField;
         private static Fighter fighter;
     }
 }

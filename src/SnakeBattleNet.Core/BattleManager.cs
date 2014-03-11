@@ -1,37 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SnakeBattleNet.Core.Contract;
-using SnakeBattleNet.Core.Observers;
 using SnakeBattleNet.Utils.Extensions;
 
 namespace SnakeBattleNet.Core
 {
     public class BattleManager
     {
-        public Replay Fight(IList<Fighter> fighters, int rounds)
+        private readonly BattleField battleField;
+        private readonly IList<Fighter> fighters;
+        private readonly Replay replay;
+        private readonly Random random = new Random();
+
+        public BattleManager(BattleField battleField, IList<Fighter> fighters, Replay replay)
         {
-            var random = new Random();
-            var battleField = BattleField.Build();
-            var replay = new Replay { BattleField = battleField.ToDictionary(k => k.Key, v => v.Value) };
+            this.battleField = battleField;
+            this.fighters = fighters;
+            this.replay = replay;
+        }
 
-            foreach (var fighter in fighters)
-            {
-                fighter.Attach(battleField);
-            }
-
+        public void Fight(int rounds)
+        {
             var gateways = CreateGateways();
             PutFighters(gateways, fighters);
             foreach (var gateway in gateways)
             {
-                battleField[gateway] = Content.Wall;
+                battleField[gateway.X, gateway.Y] = gateway.Content;
             }
 
             for (var round = 0; round < rounds; round++)
             {
                 foreach (var fighter in fighters.Shuffle())
                 {
-                    var possibleMoves = battleField.PossibleMoves(fighter);
+                    var possibleMoves = fighter.PossibleMoves();
                     if (possibleMoves.Length == 0) continue;
                     var move = possibleMoves[random.Next(possibleMoves.Length)];
                     fighter.BiteMove(fighters, move);
@@ -41,7 +42,6 @@ namespace SnakeBattleNet.Core
                     replay.SaveFighter(round, fighter);
                 }
             }
-            return replay;
         }
 
         private static void PutFighters(IList<Move> gateways, IList<Fighter> fighters)
@@ -61,20 +61,20 @@ namespace SnakeBattleNet.Core
                 fighter.CutTail();
         }
 
-        private static IList<Move> CreateGateways()
+        private IList<Move> CreateGateways()
         {
             const int gatewaysPerSide = 1;
 
             var moves = new List<Move>();
-            const int x = BattleField.SideLength / (gatewaysPerSide + 1);
-            const int y = BattleField.SideLength / (gatewaysPerSide + 1);
+            var x = battleField.SideLength / (gatewaysPerSide + 1);
+            var y = battleField.SideLength / (gatewaysPerSide + 1);
 
             for (var i = 1; i < gatewaysPerSide + 1; i++)
             {
-                moves.Add(new Move { X = 0, Y = i * y, Direction = Direction.East });
-                moves.Add(new Move { X = BattleField.SideLength - 1, Y = i * y, Direction = Direction.West });
-                moves.Add(new Move { X = i * x, Y = 0, Direction = Direction.North });
-                moves.Add(new Move { X = i * x, Y = BattleField.SideLength - 1, Direction = Direction.South });
+                moves.Add(new Move { Content = Content.Wall, X = 0, Y = i * y, Direction = Direction.East });
+                moves.Add(new Move { Content = Content.Wall, X = battleField.SideLength - 1, Y = i * y, Direction = Direction.West });
+                moves.Add(new Move { Content = Content.Wall, X = i * x, Y = 0, Direction = Direction.North });
+                moves.Add(new Move { Content = Content.Wall, X = i * x, Y = battleField.SideLength - 1, Direction = Direction.South });
             }
             return moves;
         }

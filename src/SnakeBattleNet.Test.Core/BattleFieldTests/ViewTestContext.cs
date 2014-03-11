@@ -8,7 +8,7 @@ namespace SnakeBattleNet.Test.Core.BattleFieldTests
     {
         internal static Fighter CreateFighter()
         {
-            var fighter = new Fighter("id", new List<View<ChipCell>>());
+            var fighter = new Fighter("id", new BattleField(), new List<IEnumerable<ChipCell>>());
             fighter.Head = new Move { X = 25, Y = 25, Direction = Direction.North };
             return fighter;
         }

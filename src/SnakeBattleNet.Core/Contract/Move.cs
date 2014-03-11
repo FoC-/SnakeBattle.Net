@@ -2,9 +2,8 @@
 
 namespace SnakeBattleNet.Core.Contract
 {
-    public class Move : Position
+    public class Move : Cell<Content>
     {
-        public Content Content { get; set; }
         public Direction Direction { get; set; }
 
         public static Move ToNothFrom(Position position)

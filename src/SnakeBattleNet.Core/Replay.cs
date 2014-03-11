@@ -8,7 +8,7 @@ namespace SnakeBattleNet.Core
     public class Replay
     {
         public string Id { get; private set; }
-        public IDictionary<Position, Content> BattleField { get; set; }
+        public BattleField BattleField { get; set; }
         public IDictionary<int, IDictionary<string, IEnumerable<Move>>> Frames { get; set; }
 
         public Replay()

@@ -64,7 +64,6 @@
     <Compile Include="stubForRealBattle.cs" />
     <Compile Include="BattleManager\when_call_comparator_with_predifined_chip_antother_tail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BattleFieldTests\When_is_created.cs" />
     <Compile Include="BattleFieldTests\When_ViewToEast_is_called_and_chip_side_length_3.cs" />
     <Compile Include="BattleFieldTests\When_ViewToNorth_is_called_and_chip_side_length_3.cs" />
     <Compile Include="BattleFieldTests\When_ViewToSouth_is_called_and_chip_side_length_3.cs" />
