@@ -7,27 +7,19 @@ namespace SnakeBattleNet.Core
 {
     public class BattleManager
     {
-        private readonly BattleField battleField;
         private readonly IList<Fighter> fighters;
         private readonly Replay replay;
         private readonly Random random = new Random();
 
-        public BattleManager(BattleField battleField, IList<Fighter> fighters, Replay replay)
+        public BattleManager(IList<Fighter> fighters, Replay replay)
         {
-            this.battleField = battleField;
             this.fighters = fighters;
             this.replay = replay;
         }
 
         public void Fight(int rounds)
         {
-            var gateways = CreateGateways();
-            PutFighters(gateways, fighters);
-            foreach (var gateway in gateways)
-            {
-                battleField[gateway.X, gateway.Y] = gateway.Content;
-            }
-
+            PutFighters();
             for (var round = 0; round < rounds; round++)
             {
                 foreach (var fighter in fighters.Shuffle())
@@ -44,37 +36,35 @@ namespace SnakeBattleNet.Core
             }
         }
 
-        private static void PutFighters(IList<Move> gateways, IList<Fighter> fighters)
+        private void PutFighters()
         {
+            var heads = CreateHeads();
+
             // Set heads on gateways
-            int n = 0;
+            var n = 0;
             foreach (var fighter in fighters)
-                fighter.Head = gateways[n++];
+                fighter.Head = heads[n++];
 
-            //bite: 10 times empty space in front of head to grow
+            //bite: 9 times empty space in front of head to grow
             foreach (var fighter in fighters)
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 9; i++)
                     fighter.GrowForward();
-
-            // remove tails
-            foreach (var fighter in fighters)
-                fighter.CutTail();
         }
 
-        private IList<Move> CreateGateways()
+        private static IList<Move> CreateHeads()
         {
             const int gatewaysPerSide = 1;
+            const int sideLength = 27;
+            const int x = sideLength / (gatewaysPerSide + 1);
+            const int y = sideLength / (gatewaysPerSide + 1);
 
             var moves = new List<Move>();
-            var x = battleField.SideLength / (gatewaysPerSide + 1);
-            var y = battleField.SideLength / (gatewaysPerSide + 1);
-
             for (var i = 1; i < gatewaysPerSide + 1; i++)
             {
-                moves.Add(new Move { Content = Content.Wall, X = 0, Y = i * y, Direction = Direction.East });
-                moves.Add(new Move { Content = Content.Wall, X = battleField.SideLength - 1, Y = i * y, Direction = Direction.West });
-                moves.Add(new Move { Content = Content.Wall, X = i * x, Y = 0, Direction = Direction.North });
-                moves.Add(new Move { Content = Content.Wall, X = i * x, Y = battleField.SideLength - 1, Direction = Direction.South });
+                moves.Add(new Move { X = 1, Y = i * y, Direction = Direction.East });
+                moves.Add(new Move { X = sideLength - 2, Y = i * y, Direction = Direction.West });
+                moves.Add(new Move { X = i * x, Y = 1, Direction = Direction.North });
+                moves.Add(new Move { X = i * x, Y = sideLength - 2, Direction = Direction.South });
             }
             return moves;
         }

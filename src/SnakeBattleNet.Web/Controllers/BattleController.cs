@@ -23,7 +23,7 @@ namespace SnakeBattleNet.Web.Controllers
             var battleField = new BattleField();
             var fighters = ids.Select(id => snakeStore.GetById(id)).Select(snake => new Fighter(snake.Id, battleField, snake.Chips)).ToList();
             var replay = new Replay { BattleField = new BattleField() };
-            var battleManager = new BattleManager(battleField, fighters, replay);
+            var battleManager = new BattleManager(fighters, replay);
             battleManager.Fight(500);
             var model = Mapper.Map<Replay, ReplayViewModel>(replay);
             return model;
