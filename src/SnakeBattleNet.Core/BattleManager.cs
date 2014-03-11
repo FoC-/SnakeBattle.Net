@@ -38,7 +38,13 @@ namespace SnakeBattleNet.Core
 
         private void PutFighters()
         {
-            var heads = CreateHeads();
+            var heads = new[]
+            {
+                new Move {X = 1, Y = 13, Direction = Direction.East},
+                new Move {X = 25, Y = 13, Direction = Direction.West},
+                new Move {X = 13, Y = 1, Direction = Direction.North},
+                new Move {X = 13, Y = 25, Direction = Direction.South}
+            };
 
             // Set heads on gateways
             var n = 0;
@@ -49,24 +55,6 @@ namespace SnakeBattleNet.Core
             foreach (var fighter in fighters)
                 for (var i = 0; i < 9; i++)
                     fighter.GrowForward();
-        }
-
-        private static IList<Move> CreateHeads()
-        {
-            const int gatewaysPerSide = 1;
-            const int sideLength = 27;
-            const int x = sideLength / (gatewaysPerSide + 1);
-            const int y = sideLength / (gatewaysPerSide + 1);
-
-            var moves = new List<Move>();
-            for (var i = 1; i < gatewaysPerSide + 1; i++)
-            {
-                moves.Add(new Move { X = 1, Y = i * y, Direction = Direction.East });
-                moves.Add(new Move { X = sideLength - 2, Y = i * y, Direction = Direction.West });
-                moves.Add(new Move { X = i * x, Y = 1, Direction = Direction.North });
-                moves.Add(new Move { X = i * x, Y = sideLength - 2, Direction = Direction.South });
-            }
-            return moves;
         }
     }
 }

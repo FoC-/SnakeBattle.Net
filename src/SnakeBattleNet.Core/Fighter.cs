@@ -99,19 +99,19 @@ namespace SnakeBattleNet.Core
                     switch (move.Direction)
                     {
                         case Direction.North:
-                            if (IsEqual(this.ToNorth(chipHead), chip))
+                            if (IsEqual(ToNorth(chipHead), chip))
                                 return new[] { move };
                             break;
                         case Direction.West:
-                            if (IsEqual(this.ToWest(chipHead), chip))
+                            if (IsEqual(ToWest(chipHead), chip))
                                 return new[] { move };
                             break;
                         case Direction.East:
-                            if (IsEqual(this.ToEast(chipHead), chip))
+                            if (IsEqual(ToEast(chipHead), chip))
                                 return new[] { move };
                             break;
                         case Direction.South:
-                            if (IsEqual(this.ToSouth(chipHead), chip))
+                            if (IsEqual(ToSouth(chipHead), chip))
                                 return new[] { move };
                             break;
                     }
