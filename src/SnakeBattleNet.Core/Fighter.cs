@@ -7,44 +7,36 @@ namespace SnakeBattleNet.Core
 {
     public class Fighter
     {
+        private readonly BattleField field;
+        private readonly ICollection<IEnumerable<ChipCell>> chips;
+
         public string Id { get; private set; }
-        public BattleField Field { get; private set; }
-        public ICollection<IEnumerable<ChipCell>> Chips { get; private set; }
         public LinkedList<Move> BodyParts { get; private set; }
-
-        public Fighter(string id, BattleField field, ICollection<IEnumerable<ChipCell>> chips)
-        {
-            Field = field;
-            Id = id;
-            Chips = chips;
-            BodyParts = new LinkedList<Move>();
-        }
-
-        public int Length { get { return BodyParts.Count; } }
 
         public Move Head
         {
-            get { return Length == 0 ? null : BodyParts.First(); }
+            get { return BodyParts.Count == 0 ? null : BodyParts.First(); }
             set
             {
                 if (Head != null)
-                    Field[Head.X, Head.Y] = Content.Body;
+                    field[Head.X, Head.Y] = Content.Body;
 
                 BodyParts.AddFirst(value);
-                Field[Head.X, Head.Y] = Content.Head;
+                field[Head.X, Head.Y] = Content.Head;
             }
         }
 
         public Move Tail
         {
-            get { return Length == 0 ? null : BodyParts.Last(); }
+            get { return BodyParts.Count == 0 ? null : BodyParts.Last(); }
         }
 
-        public void CutTail()
+        public Fighter(string id, BattleField field, ICollection<IEnumerable<ChipCell>> chips)
         {
-            Field[Tail.X, Tail.Y] = Content.Empty;
-            BodyParts.RemoveLast();
-            Field[Tail.X, Tail.Y] = Content.Tail;
+            Id = id;
+            BodyParts = new LinkedList<Move>();
+            this.field = field;
+            this.chips = chips;
         }
 
         public void GrowForward()
@@ -80,6 +72,13 @@ namespace SnakeBattleNet.Core
             Head = newHeadPosition;
         }
 
+        public void CutTail()
+        {
+            field[Tail.X, Tail.Y] = Content.Empty;
+            BodyParts.RemoveLast();
+            field[Tail.X, Tail.Y] = Content.Tail;
+        }
+
         public Move[] PossibleMoves()
         {
             var moves = new[]
@@ -93,7 +92,7 @@ namespace SnakeBattleNet.Core
             var possibleMoves = moves.Where(IsPossible).ToArray();
             if (!possibleMoves.Any()) return possibleMoves;
 
-            foreach (var chip in Chips)
+            foreach (var chip in chips)
             {
                 foreach (var move in possibleMoves)
                 {
@@ -143,7 +142,7 @@ namespace SnakeBattleNet.Core
 
         private bool IsPossible(Position position)
         {
-            return Field[position.X, position.Y] == Content.Empty || Field[position.X, position.Y] == Content.Tail;
+            return field[position.X, position.Y] == Content.Empty || field[position.X, position.Y] == Content.Tail;
         }
 
         private static bool IsEqual(Func<Position, ChipCell, bool> validator, IEnumerable<ChipCell> chip)
@@ -165,7 +164,7 @@ namespace SnakeBattleNet.Core
 
         private bool IsEqual(Position fieldPosition, ChipCell chipCell)
         {
-            var fieldContent = Field[fieldPosition.X, fieldPosition.Y];
+            var fieldContent = field[fieldPosition.X, fieldPosition.Y];
             var fieldIsSelf = BodyParts.Any(m => m.X == fieldPosition.X && m.Y == fieldPosition.Y);
 
             return chipCell.Exclude
