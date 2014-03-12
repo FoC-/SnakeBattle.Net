@@ -12,6 +12,9 @@ namespace SnakeBattleNet.Test.Core.FighterTests
             fighter = CreateFighter();
         };
 
+        It should_return_own_head = () =>
+            fighter.ToEast(new Position { X = 1, Y = 1 }, new ChipCell { X = 1, Y = 1, Content = Content.Head, IsSelf = true }).ShouldBeTrue();
+
         It should_return_wall_at_left = () =>
         {
             for (var y = 0; y < 3; y++)
