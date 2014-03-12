@@ -15,13 +15,13 @@ namespace SnakeBattleNet.Test.Core.FighterTests
         It should_return_wall_at_left = () =>
         {
             for (var y = 0; y < 3; y++)
-                fighter.ToSouth(new Position { X = 1, Y = 1 }, new Position { X = 0, Y = y }).Content.ShouldEqual(Content.Wall);
+                fighter.ToSouth(new Position { X = 1, Y = 1 }, new ChipCell { X = 0, Y = y, Content = Content.Wall }).ShouldBeTrue();
         };
 
         It should_return_wall_at_bottom = () =>
         {
             for (var x = 0; x < 3; x++)
-                fighter.ToSouth(new Position { X = 1, Y = 1 }, new Position { X = x, Y = 0 }).Content.ShouldEqual(Content.Wall);
+                fighter.ToSouth(new Position { X = 1, Y = 1 }, new ChipCell { X = x, Y = 0, Content = Content.Wall }).ShouldBeTrue();
         };
 
         private static Fighter fighter;
