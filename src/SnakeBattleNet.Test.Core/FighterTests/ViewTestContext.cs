@@ -12,83 +12,24 @@ namespace SnakeBattleNet.Test.Core.FighterTests
             return new Fighter("id", new BattleField(), new List<IEnumerable<ChipCell>>(), new Directed { X = 25, Y = 25, Direction = Direction.North });
         }
 
-        internal static Fighter CreateSnakeStub(ICollection<IEnumerable<ChipCell>> chips, BattleField battleField)
+        internal static Fighter CreateSnakeStub(BattleField battleField)
         {
-            var fighter = new Fighter(Guid.NewGuid().ToString(), battleField, chips, new Directed { X = 5, Y = 4, Direction = Direction.South });
-            fighter.Move(Direction.West, true);
-            fighter.Move(Direction.North, true);
-            fighter.Move(Direction.North, true);
-            return fighter;
-        }
-
-        internal static BattleField WithEnemyFighter()
-        {
-            var battleField = new BattleField();
-            var fighter1 = new Fighter(Guid.NewGuid().ToString(), battleField, new List<IEnumerable<ChipCell>>(), new Directed { X = 10, Y = 10, Direction = Direction.North });
-            fighter1.Grow();
-
-            return battleField;
+            var chip = new List<ChipCell>
+            {
+                new ChipCell {X = 0, Y = 1, Content = Content.Tail, Color = Color.AndGrey},
+                new ChipCell {X = 0, Y = 0, Content = Content.Head, Color = Color.AndGrey, IsSelf = true}
+            };
+            return new Fighter(Guid.NewGuid().ToString(), battleField, new[] { chip }, new Directed { X = 10, Y = 9, Direction = Direction.South });
         }
 
         internal static BattleField CreateBattleField()
         {
             var battleField = new BattleField();
-
-            // Snake 0
-            battleField[4, 4] = Content.Head;
-            battleField[4, 5] = Content.Body;
-            battleField[5, 5] = Content.Body;
-            battleField[5, 4] = Content.Tail;
-
-            // Snake 1
-            battleField[4, 3] = Content.Head;
-            battleField[4, 2] = Content.Body;
-            battleField[5, 2] = Content.Body;
-            battleField[5, 3] = Content.Tail;
-
-            // Snake 2
-            battleField[2, 2] = Content.Head;
-            battleField[3, 2] = Content.Body;
-            battleField[3, 3] = Content.Body;
-            battleField[2, 3] = Content.Body;
-            battleField[2, 4] = Content.Tail;
-
-            // Snake 3
-            battleField[2, 5] = Content.Head;
-            battleField[2, 6] = Content.Body;
-            battleField[2, 7] = Content.Tail;
-
+            var fighter1 = new Fighter("fighter1", battleField, new List<IEnumerable<ChipCell>>(), new Directed { X = 10, Y = 10, Direction = Direction.North });
+            fighter1.Grow(4);
+            var fighter2 = new Fighter("fighter2", battleField, new List<IEnumerable<ChipCell>>(), new Directed { X = 11, Y = 10, Direction = Direction.North });
+            fighter2.Grow(4);
             return battleField;
-        }
-
-        internal static IEnumerable<ChipCell> CreateChipWithAndColoredHead()
-        {
-            var chip = new List<ChipCell>();
-
-            // Own snake
-            chip.Add(new ChipCell { X = 2, Y = 2, Content = Content.Head, Color = Color.AndGrey, IsSelf = true });
-            chip.Add(new ChipCell { X = 2, Y = 3, Content = Content.Body, Color = Color.OrGreen, IsSelf = true });
-            chip.Add(new ChipCell { X = 3, Y = 3, Content = Content.Body, Color = Color.OrGreen, IsSelf = true });
-            chip.Add(new ChipCell { X = 3, Y = 2, Content = Content.Tail, Color = Color.OrGreen, IsSelf = true });
-
-            // Snake 1
-            chip.Add(new ChipCell { X = 2, Y = 1, Content = Content.Head, Color = Color.AndBlack });
-            chip.Add(new ChipCell { X = 2, Y = 0, Content = Content.Body, Color = Color.AndBlack });
-            chip.Add(new ChipCell { X = 3, Y = 0, Content = Content.Body, Color = Color.AndBlack });
-            chip.Add(new ChipCell { X = 3, Y = 1, Content = Content.Tail, Color = Color.AndBlack });
-
-            // Snake 2
-            chip.Add(new ChipCell { X = 0, Y = 0, Content = Content.Head, Color = Color.AndGrey });
-            chip.Add(new ChipCell { X = 1, Y = 0, Content = Content.Body, Color = Color.AndGrey });
-            chip.Add(new ChipCell { X = 1, Y = 1, Content = Content.Body, Color = Color.AndGrey });
-            chip.Add(new ChipCell { X = 0, Y = 1, Content = Content.Body, Color = Color.AndGrey });
-            chip.Add(new ChipCell { X = 0, Y = 2, Content = Content.Tail, Color = Color.AndGrey });
-
-            // Snake 3
-            chip.Add(new ChipCell { X = 0, Y = 3, Content = Content.Head, Color = Color.OrBlue });
-            chip.Add(new ChipCell { X = 0, Y = 4, Content = Content.Body, Color = Color.OrBlue });
-
-            return chip;
         }
     }
 }

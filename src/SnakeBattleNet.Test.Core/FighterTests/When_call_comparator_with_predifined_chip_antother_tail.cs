@@ -10,16 +10,15 @@ namespace SnakeBattleNet.Test.Core.FighterTests
     {
         Establish context = () =>
         {
-            var module = CreateChipWithAndColoredHead();
             battleField = CreateBattleField();
-            fighter = CreateSnakeStub(new[] { module }, battleField);
+            fighter = CreateSnakeStub(battleField);
         };
 
         Because of = () =>
             result = fighter.PossibleDirections();
 
         It should_return_move_on_that_row = () =>
-            result.First().ShouldEqual(Direction.North);
+            result.Single().ShouldEqual(Direction.North);
 
         private static Direction[] result;
         private static BattleField battleField;

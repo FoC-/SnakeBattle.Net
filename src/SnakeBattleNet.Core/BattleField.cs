@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Core
@@ -52,6 +54,20 @@ namespace SnakeBattleNet.Core
                 field[0, y] = Content.Wall;
                 field[SideLength - 1, y] = Content.Wall;
             }
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            for (var y = SideLength - 1; y >= 0; y--)
+            {
+                for (var x = 0; x < SideLength; x++)
+                {
+                    builder.Append(field[x, y].ToString().Substring(0, 1));
+                }
+                builder.AppendLine();
+            }
+            return builder.ToString();
         }
     }
 }
