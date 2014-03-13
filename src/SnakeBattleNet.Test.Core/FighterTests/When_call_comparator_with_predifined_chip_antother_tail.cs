@@ -16,12 +16,12 @@ namespace SnakeBattleNet.Test.Core.FighterTests
         };
 
         Because of = () =>
-            result = fighter.PossibleMoves();
+            result = fighter.PossibleDirections();
 
         It should_return_move_on_that_row = () =>
-            result.First().ShouldEqual(new Move { X = 4, Y = 3, Direction = Direction.North });
+            result.First().ShouldEqual(Direction.North);
 
-        private static Move[] result;
+        private static Direction[] result;
         private static BattleField battleField;
         private static Fighter fighter;
     }

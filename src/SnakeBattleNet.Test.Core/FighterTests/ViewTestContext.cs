@@ -9,23 +9,23 @@ namespace SnakeBattleNet.Test.Core.FighterTests
     {
         internal static Fighter CreateFighter()
         {
-            return new Fighter("id", new BattleField(), new List<IEnumerable<ChipCell>>(), new Move { X = 25, Y = 25, Direction = Direction.North });
+            return new Fighter("id", new BattleField(), new List<IEnumerable<ChipCell>>(), new Directed { X = 25, Y = 25, Direction = Direction.North });
         }
 
         internal static Fighter CreateSnakeStub(ICollection<IEnumerable<ChipCell>> chips, BattleField battleField)
         {
-            var snakeStub = new Fighter(Guid.NewGuid().ToString(), battleField, chips, new Move { X = 5, Y = 4, Direction = Direction.South });
-            snakeStub.Head = new Move { X = 5, Y = 5, Direction = Direction.West };
-            snakeStub.Head = new Move { X = 4, Y = 5, Direction = Direction.North };
-            snakeStub.Head = new Move { X = 4, Y = 4, Direction = Direction.North };
-            return snakeStub;
+            var fighter = new Fighter(Guid.NewGuid().ToString(), battleField, chips, new Directed { X = 5, Y = 4, Direction = Direction.South });
+            fighter.Move(Direction.West, true);
+            fighter.Move(Direction.North, true);
+            fighter.Move(Direction.North, true);
+            return fighter;
         }
 
         internal static BattleField WithEnemyFighter()
         {
             var battleField = new BattleField();
-            var fighter1 = new Fighter(Guid.NewGuid().ToString(), battleField, new List<IEnumerable<ChipCell>>(), new Move { X = 10, Y = 10, Direction = Direction.North });
-            fighter1.GrowForward();
+            var fighter1 = new Fighter(Guid.NewGuid().ToString(), battleField, new List<IEnumerable<ChipCell>>(), new Directed { X = 10, Y = 10, Direction = Direction.North });
+            fighter1.Grow();
 
             return battleField;
         }

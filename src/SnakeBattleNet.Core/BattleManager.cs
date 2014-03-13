@@ -19,21 +19,21 @@ namespace SnakeBattleNet.Core
         public void Fight(int rounds)
         {
             foreach (var fighter in fighters)
-                fighter.GrowForward(9);
+                fighter.Grow(9);
 
             for (var round = 0; round < rounds; round++)
             {
                 var skipped = 0;
                 foreach (var fighter in Shuffle(fighters))
                 {
-                    var possibleMoves = fighter.PossibleMoves();
-                    if (possibleMoves.Length == 0)
+                    var directions = fighter.PossibleDirections();
+                    if (directions.Length == 0)
                     {
                         skipped++;
                         continue;
                     }
-                    var move = possibleMoves[random.Next(possibleMoves.Length)];
-                    fighter.BiteMove(fighters, move);
+                    var direction = directions[random.Next(directions.Length)];
+                    fighter.BiteMove(fighters, direction);
                 }
 
                 foreach (var fighter in fighters)
@@ -42,6 +42,7 @@ namespace SnakeBattleNet.Core
                 if (skipped == fighters.Count) break;
             }
         }
+
         /// <summary>
         /// According to this http://stackoverflow.com/questions/1287567/c-is-using-random-and-orderby-a-good-shuffle-algorithm
         /// </summary>

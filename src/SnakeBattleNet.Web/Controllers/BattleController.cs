@@ -23,10 +23,10 @@ namespace SnakeBattleNet.Web.Controllers
         {
             var heads = new[]
             {
-                new Move {X = 1, Y = 13, Direction = Direction.East},
-                new Move {X = 25, Y = 13, Direction = Direction.West},
-                new Move {X = 13, Y = 1, Direction = Direction.North},
-                new Move {X = 13, Y = 25, Direction = Direction.South}
+                new Directed {X = 1, Y = 13, Direction = Direction.East},
+                new Directed {X = 25, Y = 13, Direction = Direction.West},
+                new Directed {X = 13, Y = 1, Direction = Direction.North},
+                new Directed {X = 13, Y = 25, Direction = Direction.South}
             };
             var n = 0;
 

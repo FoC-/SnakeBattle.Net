@@ -11,9 +11,9 @@ namespace SnakeBattleNet.Core
         private readonly ICollection<IEnumerable<ChipCell>> chips;
 
         public string Id { get; private set; }
-        public LinkedList<Move> BodyParts { get; private set; }
+        public LinkedList<Directed> BodyParts { get; private set; }
 
-        public Move Head
+        private Directed Head
         {
             get { return BodyParts.Count == 0 ? null : BodyParts.First(); }
             set
@@ -26,102 +26,114 @@ namespace SnakeBattleNet.Core
             }
         }
 
-        public Move Tail
+        private Directed Tail
         {
             get { return BodyParts.Count == 0 ? null : BodyParts.Last(); }
         }
 
-        public Fighter(string id, BattleField field, ICollection<IEnumerable<ChipCell>> chips, Move head)
+        public Fighter(string id, BattleField field, ICollection<IEnumerable<ChipCell>> chips, Directed head)
         {
             Id = id;
-            BodyParts = new LinkedList<Move>();
+            BodyParts = new LinkedList<Directed>();
             this.field = field;
             this.chips = chips;
             Head = head;
         }
 
-        public void GrowForward(int times = 1)
+        public void Grow(int length = 1)
         {
-            for (var i = 0; i < times; i++)
+            for (var i = 0; i < length; i++)
             {
-                switch (Head.Direction)
-                {
-                    case Direction.North:
-                        Head = Move.ToNothFrom(Head);
-                        break;
-                    case Direction.West:
-                        Head = Move.ToWestFrom(Head);
-                        break;
-                    case Direction.East:
-                        Head = Move.ToEastFrom(Head);
-                        break;
-                    case Direction.South:
-                        Head = Move.ToSouthFrom(Head);
-                        break;
-                }
+                Move(Head.Direction, true);
             }
         }
 
-        public void BiteMove(IEnumerable<Fighter> fighters, Move newHeadPosition)
+        public void Move(Direction direction, bool isGrow = false)
         {
-            var fighter = fighters.FirstOrDefault(f => f.Tail.Equals(newHeadPosition));
+            switch (direction)
+            {
+                case Direction.North:
+                    Head = Directed.ToNothFrom(Head);
+                    break;
+                case Direction.West:
+                    Head = Directed.ToWestFrom(Head);
+                    break;
+                case Direction.East:
+                    Head = Directed.ToEastFrom(Head);
+                    break;
+                case Direction.South:
+                    Head = Directed.ToSouthFrom(Head);
+                    break;
+            }
+            if (!isGrow)
+                MoveTail();
+        }
+
+        public void BiteMove(IEnumerable<Fighter> fighters, Direction direction)
+        {
+            Move(direction, true);
+            var fighter = fighters.FirstOrDefault(f => f.Tail.Equals(Head));
             if (fighter == null)
             {
-                CutTail();
+                MoveTail();
             }
             else
             {
                 fighter.CutTail();
             }
-            Head = newHeadPosition;
         }
 
-        public void CutTail()
+        private void MoveTail()
         {
             field[Tail.X, Tail.Y] = Content.Empty;
+            CutTail();
+        }
+
+        private void CutTail()
+        {
             BodyParts.RemoveLast();
             field[Tail.X, Tail.Y] = Content.Tail;
         }
 
-        public Move[] PossibleMoves()
+        public Direction[] PossibleDirections()
         {
             var moves = new[]
             {
-                Move.ToNothFrom(Head),
-                Move.ToWestFrom(Head),
-                Move.ToEastFrom(Head),
-                Move.ToSouthFrom(Head)
+                Directed.ToNothFrom(Head),
+                Directed.ToWestFrom(Head),
+                Directed.ToEastFrom(Head),
+                Directed.ToSouthFrom(Head)
             };
 
-            var possibleMoves = moves.Where(IsPossible).ToArray();
-            if (!possibleMoves.Any()) return possibleMoves;
+            var directions = moves.Where(IsPossible).Select(_ => _.Direction).ToArray();
+            if (!directions.Any()) return directions;
 
             foreach (var chip in chips)
             {
-                foreach (var move in possibleMoves)
+                foreach (var direction in directions)
                 {
-                    switch (move.Direction)
+                    switch (direction)
                     {
                         case Direction.North:
                             if (IsEqual(ToNorth, chip))
-                                return new[] { move };
+                                return new[] { direction };
                             break;
                         case Direction.West:
                             if (IsEqual(ToWest, chip))
-                                return new[] { move };
+                                return new[] { direction };
                             break;
                         case Direction.East:
                             if (IsEqual(ToEast, chip))
-                                return new[] { move };
+                                return new[] { direction };
                             break;
                         case Direction.South:
                             if (IsEqual(ToSouth, chip))
-                                return new[] { move };
+                                return new[] { direction };
                             break;
                     }
                 }
             }
-            return possibleMoves;
+            return directions;
         }
 
         public bool ToNorth(Position chipHead, ChipCell chipCell)
