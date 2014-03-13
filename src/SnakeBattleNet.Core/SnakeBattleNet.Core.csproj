@@ -67,12 +67,6 @@
     <Compile Include="Prototypes\Snake\Snake.cs" />
     <Compile Include="Prototypes\VisibleArea.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj">
-      <Project>{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}</Project>
-      <Name>SnakeBattleNet.Utils</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -31,30 +31,34 @@ namespace SnakeBattleNet.Core
             get { return BodyParts.Count == 0 ? null : BodyParts.Last(); }
         }
 
-        public Fighter(string id, BattleField field, ICollection<IEnumerable<ChipCell>> chips)
+        public Fighter(string id, BattleField field, ICollection<IEnumerable<ChipCell>> chips, Move head)
         {
             Id = id;
             BodyParts = new LinkedList<Move>();
             this.field = field;
             this.chips = chips;
+            Head = head;
         }
 
-        public void GrowForward()
+        public void GrowForward(int times = 1)
         {
-            switch (Head.Direction)
+            for (var i = 0; i < times; i++)
             {
-                case Direction.North:
-                    Head = Move.ToNothFrom(Head);
-                    break;
-                case Direction.West:
-                    Head = Move.ToWestFrom(Head);
-                    break;
-                case Direction.East:
-                    Head = Move.ToEastFrom(Head);
-                    break;
-                case Direction.South:
-                    Head = Move.ToSouthFrom(Head);
-                    break;
+                switch (Head.Direction)
+                {
+                    case Direction.North:
+                        Head = Move.ToNothFrom(Head);
+                        break;
+                    case Direction.West:
+                        Head = Move.ToWestFrom(Head);
+                        break;
+                    case Direction.East:
+                        Head = Move.ToEastFrom(Head);
+                        break;
+                    case Direction.South:
+                        Head = Move.ToSouthFrom(Head);
+                        break;
+                }
             }
         }
 

@@ -1,5 +1,3 @@
-using SnakeBattleNet.Utils.Extensions;
-
 namespace SnakeBattleNet.Core.Contract
 {
     public class Position
@@ -9,7 +7,7 @@ namespace SnakeBattleNet.Core.Contract
 
         public override string ToString()
         {
-            return "[{0,2},{1,2}]".F(X, Y);
+            return string.Format("[{0,2},{1,2}]", X, Y);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using SnakeBattleNet.Utils.Extensions;
-
-namespace SnakeBattleNet.Core.Contract
+﻿namespace SnakeBattleNet.Core.Contract
 {
     public class Move : Position
     {
@@ -28,7 +26,7 @@ namespace SnakeBattleNet.Core.Contract
 
         public override string ToString()
         {
-            return "{0},Direction is {1,5}".F("[{0,2},{1,2}]".F(X, Y), Direction);
+            return string.Format("[{0,2},{1,2}] {2,5}", X, Y, Direction);
         }
     }
 }

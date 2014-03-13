@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Core", "SnakeBattleNet.Core\SnakeBattleNet.Core.csproj", "{D01054C3-B067-418C-9A67-11A55F4E5536}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Utils", "SnakeBattleNet.Utils\SnakeBattleNet.Utils.csproj", "{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeBattleNet.Test.Core", "SnakeBattleNet.Test.Core\SnakeBattleNet.Test.Core.csproj", "{64C225FF-59EB-4C16-9519-DC93A8CB95FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B5A85014-8616-4360-AFC3-38F6F5A01E84}"
@@ -28,10 +26,6 @@ Global
 		{D01054C3-B067-418C-9A67-11A55F4E5536}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D01054C3-B067-418C-9A67-11A55F4E5536}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D01054C3-B067-418C-9A67-11A55F4E5536}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BB3D63F-17C2-4FC2-B1EE-70E38DD7D522}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64C225FF-59EB-4C16-9519-DC93A8CB95FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{64C225FF-59EB-4C16-9519-DC93A8CB95FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64C225FF-59EB-4C16-9519-DC93A8CB95FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
