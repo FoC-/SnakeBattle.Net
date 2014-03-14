@@ -9,7 +9,7 @@ namespace SnakeBattleNet.Test.Core.FighterTests
     {
         Establish context = () =>
         {
-            fighter = CreateFighter();
+            fighter = CreateDummyFighter();
         };
 
         It should_return_own_head = () =>

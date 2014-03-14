@@ -11,7 +11,7 @@ namespace SnakeBattleNet.Test.Core.FighterTests
         Establish context = () =>
         {
             battleField = CreateBattleField();
-            fighter = CreateSnakeStub(battleField);
+            fighter = CreateFighterWithOneChip(battleField, FullGreyWithOneEnemyTail(), 10, 9);
         };
 
         Because of = () =>
