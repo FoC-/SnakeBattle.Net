@@ -408,7 +408,7 @@ SBN.Show = function (settings) {
         return mainLayer;
     };
 
-    function animation(frames, layer, images) {
+    function animation(frames, layer, images, onFinish, onEach) {
         var frameNumber = 0,
             frameIndex = 0;
         var anim = new Kinetic.Animation(function (frame) {
@@ -416,23 +416,28 @@ SBN.Show = function (settings) {
             if (++frameNumber % 8 === 0) {
                 layer.removeChildren();
                 var frm = frames[frameIndex];
-                $.each(frm, function (key, value) {
-                    $.each(value, function (index, cell) {
-                        var content = SBN.Contract.content[cell.content];
-                        var src = images[content] || images['o' + content];
-                        var image = new Kinetic.Image({
-                            x: cell.x * 30,
-                            y: cell.y * 30,
-                            image: src,
-                            width: 30,
-                            height: 30
+                if (frm) {
+                    $.each(frm, function (key, value) {
+                        $.each(value, function (index, cell) {
+                            var content = SBN.Contract.content[cell.content];
+                            var src = images[content] || images['o' + content];
+                            var image = new Kinetic.Image({
+                                x: cell.x * 30,
+                                y: cell.y * 30,
+                                image: src,
+                                width: 30,
+                                height: 30
+                            });
+                            layer.add(image);
                         });
-                        layer.add(image);
                     });
-                });
-
-                layer.draw();
-                frameIndex++;
+                    layer.draw();
+                    frameIndex++;
+                    onEach();
+                } else {
+                    frameIndex--;
+                    onFinish();
+                }
             }
         }, layer);
         return anim;
@@ -440,7 +445,9 @@ SBN.Show = function (settings) {
     new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
         SBN.Service.Battle.get(settings.snakes, function (replay) {
             var layer = render(replay.battleField);
-            var anim = animation(replay.frames, layer, images);
+            var anim = animation(replay.frames, layer, images, function () {
+                $buttonStart.html('Stop');
+            }, $.noop);
             $buttonStart.on('click', function () {
                 if (anim.isRunning()) {
                     $buttonStart.html('Start');
@@ -455,7 +462,7 @@ SBN.Show = function (settings) {
 };
 SBN.Service.Battle = {
     get: function (query, success) {
-        var url = '/api/Battle/Get' + (query ? '?' + $.param(query) : '');
+        var url = '/api/Battle/' + (query ? 'Get?' + $.param(query) : 'Demo');
         $.ajax({
             type: 'GET',
             url: url,

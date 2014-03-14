@@ -163,6 +163,7 @@ namespace SnakeBattleNet.Core
 
         private bool IsPossible(Position position)
         {
+            // todo: single head equal tail
             return field[position.X, position.Y] == Content.Empty || field[position.X, position.Y] == Content.Tail;
         }
 
