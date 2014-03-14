@@ -16,8 +16,8 @@ namespace SnakeBattleNet.Test.Core.FighterTests
         {
             var chip = new List<ChipCell>
             {
-                new ChipCell {X = 0, Y = 1, Content = Content.Tail, Color = Color.AndGrey},
-                new ChipCell {X = 0, Y = 0, Content = Content.Head, Color = Color.AndGrey, IsSelf = true}
+                new ChipCell {X = 5, Y = 6, Content = Content.Tail, Color = Color.AndGrey},
+                new ChipCell {X = 5, Y = 5, Content = Content.Head, Color = Color.AndGrey, IsSelf = true}
             };
             return new Fighter(Guid.NewGuid().ToString(), battleField, new[] { chip }, new Directed { X = 10, Y = 9, Direction = Direction.South });
         }
