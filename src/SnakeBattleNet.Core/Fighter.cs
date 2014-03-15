@@ -74,7 +74,7 @@ namespace SnakeBattleNet.Core
         public void BiteMove(IEnumerable<Fighter> fighters, Direction direction)
         {
             Move(direction, true);
-            var fighter = fighters.FirstOrDefault(f => f.Tail.Equals(Head) || (f.Head.Equals(Head) || f.BodyParts.Count == 1));
+            var fighter = fighters.FirstOrDefault(f => (f.Tail.X == Head.X && f.Tail.Y == Head.Y) || (f.Head.X == Head.X && f.Head.Y == Head.Y || f.BodyParts.Count == 1));
             if (fighter == null)
             {
                 MoveTail();
