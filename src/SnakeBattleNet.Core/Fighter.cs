@@ -50,28 +50,14 @@ namespace SnakeBattleNet.Core
 
         public void Move(Direction direction, bool isGrow = false)
         {
-            switch (direction)
-            {
-                case Direction.North:
-                    Head = Directed.ToNothFrom(Head);
-                    break;
-                case Direction.West:
-                    Head = Directed.ToWestFrom(Head);
-                    break;
-                case Direction.East:
-                    Head = Directed.ToEastFrom(Head);
-                    break;
-                case Direction.South:
-                    Head = Directed.ToSouthFrom(Head);
-                    break;
-            }
+            Head = Directed.ToDirection(Head, direction);
             if (!isGrow)
                 MoveTail();
-            else if (BodyParts.Count > 1)
+            if (BodyParts.Count > 1)
                 field[Tail.X, Tail.Y] = Content.Tail;
         }
 
-        public void BiteMove(IEnumerable<Fighter> fighters, Direction direction)
+        public void BiteMove(IList<Fighter> fighters, Direction direction)
         {
             Move(direction, true);
             var fighter = fighters.FirstOrDefault(f => (f.Tail.X == Head.X && f.Tail.Y == Head.Y) || (f.Head.X == Head.X && f.Head.Y == Head.Y || f.BodyParts.Count == 1));

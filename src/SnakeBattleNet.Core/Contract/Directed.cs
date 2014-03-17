@@ -1,8 +1,27 @@
-﻿namespace SnakeBattleNet.Core.Contract
+﻿using System;
+
+namespace SnakeBattleNet.Core.Contract
 {
     public class Directed : Position
     {
         public Direction Direction { get; set; }
+
+        public static Directed ToDirection(Position position, Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.North:
+                    return ToNothFrom(position);
+                case Direction.West:
+                    return ToWestFrom(position);
+                case Direction.East:
+                    return ToEastFrom(position);
+                case Direction.South:
+                    return ToSouthFrom(position);
+                default:
+                    throw new ArgumentOutOfRangeException("direction");
+            }
+        }
 
         public static Directed ToNothFrom(Position position)
         {
