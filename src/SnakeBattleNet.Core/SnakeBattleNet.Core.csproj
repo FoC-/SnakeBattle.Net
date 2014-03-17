@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Contract\Cell.cs" />
     <Compile Include="BattleField.cs" />
+    <Compile Include="FieldComparer.cs" />
     <Compile Include="Replay.cs" />
     <Compile Include="Contract\ChipCell.cs" />
     <Compile Include="Contract\Content.cs" />

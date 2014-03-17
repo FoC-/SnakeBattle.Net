@@ -9,12 +9,14 @@ namespace SnakeBattleNet.Core
     {
         private readonly IList<Fighter> fighters;
         private readonly Replay replay;
+        private readonly FieldComparer fieldComparer;
         private readonly Random random = new Random();
 
-        public BattleManager(IList<Fighter> fighters, Replay replay)
+        public BattleManager(IList<Fighter> fighters, Replay replay, FieldComparer fieldComparer)
         {
             this.fighters = fighters;
             this.replay = replay;
+            this.fieldComparer = fieldComparer;
         }
 
         public void Fight(int rounds)
@@ -27,7 +29,8 @@ namespace SnakeBattleNet.Core
                 var skipped = 0;
                 foreach (var fighter in Shuffle(fighters))
                 {
-                    var directions = fighter.PossibleDirections();
+                    var possibleDirections = fieldComparer.PossibleDirections(fighter.Head, fighters);
+                    var directions = fieldComparer.DecidedDirections(fighter, possibleDirections);
                     if (directions.Length == 0)
                     {
                         skipped++;

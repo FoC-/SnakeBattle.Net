@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
 
-namespace SnakeBattleNet.Test.Core.FighterTests
+namespace SnakeBattleNet.Test.Core.FieldComparerTests
 {
-    internal class ViewTestContext
+    internal class ComparerTestContext
     {
         internal static Fighter CreateFighterWithOneChip(BattleField battleField, List<ChipCell> chip, int x, int y)
         {
             return new Fighter(Guid.NewGuid().ToString(), battleField, new[] { chip }, new Directed { X = x, Y = y, Direction = Direction.South });
-        }
-
-        internal static Fighter CreateDummyFighter()
-        {
-            return CreateFighterWithOneChip(new BattleField(), new List<ChipCell>(), 25, 25);
         }
 
         internal static List<ChipCell> FullGreyWithOneEnemyTail()

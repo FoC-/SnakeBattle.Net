@@ -6,7 +6,7 @@ using SnakeBattleNet.Core.Contract;
 namespace SnakeBattleNet.Test.Core.FighterTests
 {
     [Subject(typeof(Fighter))]
-    internal class When_call_CutTail : ViewTestContext
+    internal class When_call_CutTail
     {
         Establish context = () =>
         {
