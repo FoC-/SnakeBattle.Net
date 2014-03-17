@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using SnakeBattleNet.Core.Contract;
 
@@ -30,6 +31,51 @@ namespace SnakeBattleNet.Core
             field = new Content[SideLength, SideLength];
             CreateEmpty();
             CreateWalls();
+        }
+
+        public Cell<Content> RelativeCell(Direction direction, Position fieldHead, Position chipHead, Position chipCell)
+        {
+            switch (direction)
+            {
+                case Direction.North:
+                    return NorthView(fieldHead, chipHead, chipCell);
+                case Direction.West:
+                    return WestView(fieldHead, chipHead, chipCell);
+                case Direction.East:
+                    return EastView(fieldHead, chipHead, chipCell);
+                case Direction.South:
+                    return SouthView(fieldHead, chipHead, chipCell);
+                default:
+                    throw new ArgumentOutOfRangeException("direction");
+            }
+        }
+
+        private Cell<Content> NorthView(Position fieldHead, Position chipHead, Position chipCell)
+        {
+            var x = fieldHead.X + chipCell.X - chipHead.X;
+            var y = fieldHead.Y + chipCell.Y - chipHead.Y;
+            return new Cell<Content> { X = x, Y = y, Content = field[x, y] };
+        }
+
+        private Cell<Content> WestView(Position fieldHead, Position chipHead, Position chipCell)
+        {
+            var x = fieldHead.X - chipCell.Y + chipHead.Y;
+            var y = fieldHead.Y + chipCell.X - chipHead.X;
+            return new Cell<Content> { X = x, Y = y, Content = field[x, y] };
+        }
+
+        private Cell<Content> EastView(Position fieldHead, Position chipHead, Position chipCell)
+        {
+            var x = fieldHead.X + chipCell.Y - chipHead.Y;
+            var y = fieldHead.Y - chipCell.X + chipHead.X;
+            return new Cell<Content> { X = x, Y = y, Content = field[x, y] };
+        }
+
+        private Cell<Content> SouthView(Position fieldHead, Position chipHead, Position chipCell)
+        {
+            var x = fieldHead.X - chipCell.X + chipHead.X;
+            var y = fieldHead.Y - chipCell.Y + chipHead.Y;
+            return new Cell<Content> { X = x, Y = y, Content = field[x, y] };
         }
 
         private void CreateEmpty()

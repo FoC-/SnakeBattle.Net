@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
 
@@ -71,55 +70,11 @@ namespace SnakeBattleNet.Core
             var directions = moves.Where(IsPossible).Select(_ => _.Direction).ToArray();
             if (!directions.Any()) return directions;
 
-            foreach (var chip in chips)
-            {
-                var list = new List<Direction>();
-                foreach (var direction in directions)
-                {
-                    switch (direction)
-                    {
-                        case Direction.North:
-                            if (IsEqual(ToNorth, chip))
-                                list.Add(direction);
-                            break;
-                        case Direction.West:
-                            if (IsEqual(ToWest, chip))
-                                list.Add(direction);
-                            break;
-                        case Direction.East:
-                            if (IsEqual(ToEast, chip))
-                                list.Add(direction);
-                            break;
-                        case Direction.South:
-                            if (IsEqual(ToSouth, chip))
-                                list.Add(direction);
-                            break;
-                    }
-                }
-                if (list.Count > 0)
-                    return list.ToArray();
-            }
-            return directions;
-        }
+            var possibleDirections = chips
+                .Select(c => directions.Where(direction => IsEqual(direction, c)))
+                .FirstOrDefault(d => d.Any());
 
-        public bool ToNorth(Position chipHead, ChipCell chipCell)
-        {
-            return IsEqual(new Position { X = Head.X + chipCell.X - chipHead.X, Y = Head.Y + chipCell.Y - chipHead.Y }, chipCell);
-        }
-
-        public bool ToWest(Position chipHead, ChipCell chipCell)
-        {
-            return IsEqual(new Position { X = Head.X - chipCell.Y + chipHead.Y, Y = Head.Y + chipCell.X - chipHead.X }, chipCell);
-        }
-
-        public bool ToEast(Position chipHead, ChipCell chipCell)
-        {
-            return IsEqual(new Position { X = Head.X + chipCell.Y - chipHead.Y, Y = Head.Y - chipCell.X + chipHead.X }, chipCell);
-        }
-
-        public bool ToSouth(Position chipHead, ChipCell chipCell)
-        {
-            return IsEqual(new Position { X = Head.X - chipCell.X + chipHead.X, Y = Head.Y - chipCell.Y + chipHead.Y }, chipCell);
+            return possibleDirections == null ? directions : possibleDirections.ToArray();
         }
 
         private bool IsPossible(Position position)
@@ -128,22 +83,22 @@ namespace SnakeBattleNet.Core
             return field[position.X, position.Y] == Content.Empty || field[position.X, position.Y] == Content.Tail;
         }
 
-        private static bool IsEqual(Func<Position, ChipCell, bool> validator, IEnumerable<ChipCell> chip)
+        private bool IsEqual(Direction direction, IEnumerable<ChipCell> chip)
         {
             var chipHead = chip.FirstOrDefault(c => c.Content == Content.Head && c.IsSelf);
 
             var bools = new List<bool>();
             if (chip.Count(c => c.Color == Color.OrBlue) > 1)
-                bools.Add(chip.Where(c => c.Color == Color.OrBlue).Any(c => validator(chipHead, c)));
+                bools.Add(chip.Where(c => c.Color == Color.OrBlue).Any(c => IsEqual(field.RelativeCell(direction, Head, chipHead, c), c)));
             if (chip.Count(c => c.Color == Color.OrGreen) > 1)
-                bools.Add(chip.Where(c => c.Color == Color.OrGreen).Any(c => validator(chipHead, c)));
+                bools.Add(chip.Where(c => c.Color == Color.OrGreen).Any(c => IsEqual(field.RelativeCell(direction, Head, chipHead, c), c)));
 
             if (chip.Count(c => c.Color == Color.AndGrey) > 1)
-                bools.Add(chip.Where(c => c.Color == Color.AndGrey).All(c => validator(chipHead, c)));
+                bools.Add(chip.Where(c => c.Color == Color.AndGrey).All(c => IsEqual(field.RelativeCell(direction, Head, chipHead, c), c)));
             if (chip.Count(c => c.Color == Color.AndRed) > 1)
-                bools.Add(chip.Where(c => c.Color == Color.AndRed).All(c => validator(chipHead, c)));
+                bools.Add(chip.Where(c => c.Color == Color.AndRed).All(c => IsEqual(field.RelativeCell(direction, Head, chipHead, c), c)));
             if (chip.Count(c => c.Color == Color.AndBlack) > 1)
-                bools.Add(chip.Where(c => c.Color == Color.AndBlack).All(c => validator(chipHead, c)));
+                bools.Add(chip.Where(c => c.Color == Color.AndBlack).All(c => IsEqual(field.RelativeCell(direction, Head, chipHead, c), c)));
 
             var andType = chipHead.Color == Color.AndBlack || chipHead.Color == Color.AndGrey || chipHead.Color == Color.AndRed;
             return andType
@@ -151,14 +106,12 @@ namespace SnakeBattleNet.Core
                 : bools.Any(b => b);
         }
 
-        private bool IsEqual(Position fieldPosition, ChipCell chipCell)
+        private bool IsEqual(Cell<Content> fieldCell, ChipCell chipCell)
         {
-            var fieldContent = field[fieldPosition.X, fieldPosition.Y];
-            var fieldIsSelf = BodyParts.Any(m => m.X == fieldPosition.X && m.Y == fieldPosition.Y);
-
+            var fieldIsSelf = BodyParts.Any(m => m.X == fieldCell.X && m.Y == fieldCell.Y);
             return chipCell.Exclude
-                ? chipCell.Content != fieldContent || chipCell.IsSelf != fieldIsSelf
-                : chipCell.Content == fieldContent && chipCell.IsSelf == fieldIsSelf;
+                ? chipCell.Content != fieldCell.Content || chipCell.IsSelf != fieldIsSelf
+                : chipCell.Content == fieldCell.Content && chipCell.IsSelf == fieldIsSelf;
         }
     }
 }
