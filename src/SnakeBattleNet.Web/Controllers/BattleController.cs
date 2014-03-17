@@ -36,10 +36,10 @@ namespace SnakeBattleNet.Web.Controllers
             var battleField = new BattleField();
             var fighters = ids
                 .Select(id => snakeStore.GetById(id))
-                .Select(snake => new Fighter(snake.Id, battleField, snake.Chips, heads[n++]))
+                .Select(snake => new Fighter(snake.Id, snake.Chips, heads[n++]))
                 .ToList();
             var replay = new Replay { BattleField = new BattleField() };
-            var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField));
+            var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField);
             battleManager.Fight(550); //original 550
             var model = Mapper.Map<Replay, ReplayViewModel>(replay);
             return model;
@@ -57,9 +57,9 @@ namespace SnakeBattleNet.Web.Controllers
             };
 
             var battleField = new BattleField();
-            var fighters = heads.Select(h => new Fighter(Guid.NewGuid().ToString(), battleField, new Collection<IEnumerable<ChipCell>>(), h)).ToList();
+            var fighters = heads.Select(h => new Fighter(Guid.NewGuid().ToString(), new Collection<IEnumerable<ChipCell>>(), h)).ToList();
             var replay = new Replay { BattleField = new BattleField() };
-            var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField));
+            var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField);
             battleManager.Fight(550); //original 550
             var model = Mapper.Map<Replay, ReplayViewModel>(replay);
             return model;

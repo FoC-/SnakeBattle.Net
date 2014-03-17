@@ -7,9 +7,9 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
 {
     internal class ComparerTestContext
     {
-        internal static Fighter CreateFighterWithOneChip(BattleField battleField, List<ChipCell> chip, int x, int y)
+        internal static Fighter CreateFighterWithOneChip(List<ChipCell> chip, int x, int y)
         {
-            return new Fighter(Guid.NewGuid().ToString(), battleField, new[] { chip }, new Directed { X = x, Y = y, Direction = Direction.South });
+            return new Fighter(Guid.NewGuid().ToString(), new[] { chip }, new Directed { X = x, Y = y, Direction = Direction.South });
         }
 
         internal static List<ChipCell> FullGreyWithOneEnemyTail()
@@ -21,15 +21,19 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
             };
         }
 
-        internal static BattleField CreateBattleField()
+        internal static FieldComparer CreateFieldComparer(int ownHeadX, int ownHeadY)
         {
             var battleField = new BattleField();
-            var fighter1 = new Fighter("fighter1", battleField, new List<IEnumerable<ChipCell>>(), new Directed { X = 10, Y = 10, Direction = Direction.North });
-            fighter1.Grow(fighter1.Head.Direction, 4);
-            var fighter2 = new Fighter("fighter2", battleField, new List<IEnumerable<ChipCell>>(), new Directed { X = 11, Y = 10, Direction = Direction.North });
-            fighter2.Grow(fighter2.Head.Direction, 4);
-            var fighter3 = new Fighter("fighter3", battleField, new List<IEnumerable<ChipCell>>(), new Directed { X = 12, Y = 10, Direction = Direction.North });
-            return battleField;
+            battleField[10, 10] = Content.Tail;
+            battleField[10, 11] = Content.Body;
+            battleField[10, 12] = Content.Head;
+
+            battleField[11, 10] = Content.Tail;
+            battleField[11, 11] = Content.Head;
+
+            battleField[12, 10] = Content.Head;
+            battleField[ownHeadX, ownHeadY] = Content.Head;
+            return new FieldComparer(battleField);
         }
     }
 }

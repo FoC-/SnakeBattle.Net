@@ -13,14 +13,14 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
             var battleField = new BattleField();
             fighters = new List<Fighter>();
 
-            var fighter1 = new Fighter("fighter1", battleField, new List<IEnumerable<ChipCell>>(), new Directed { X = 2, Y = 2, Direction = Direction.North });
+            var fighter1 = new Fighter("fighter1", new List<IEnumerable<ChipCell>>(), new Directed { X = 2, Y = 2, Direction = Direction.North });
             fighter1.Grow(fighter1.Head.Direction);
             fighters.Add(fighter1);
 
-            var fighter2 = new Fighter("fighter2", battleField, new List<IEnumerable<ChipCell>>(), new Directed { X = 3, Y = 1, Direction = Direction.North });
+            var fighter2 = new Fighter("fighter2", new List<IEnumerable<ChipCell>>(), new Directed { X = 3, Y = 1, Direction = Direction.North });
             fighters.Add(fighter2);
 
-            fighter = CreateFighterWithOneChip(battleField, FullGreyWithOneEnemyTail(), 2, 1);
+            fighter = CreateFighterWithOneChip(FullGreyWithOneEnemyTail(), 2, 1);
             comparer = new FieldComparer(battleField);
         };
 

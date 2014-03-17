@@ -10,9 +10,8 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
     {
         Establish context = () =>
         {
-            var battleField = CreateBattleField();
-            fighter = CreateFighterWithOneChip(battleField, FullGreyWithOneEnemyTail(), 10, 9);
-            comparer = new FieldComparer(battleField);
+            fighter = CreateFighterWithOneChip(FullGreyWithOneEnemyTail(), 10, 9);
+            comparer = CreateFieldComparer(10, 9);
         };
 
         Because of = () =>

@@ -10,8 +10,7 @@ namespace SnakeBattleNet.Test.Core.FighterTests
     {
         Establish context = () =>
         {
-            field = new BattleField();
-            fighter = new Fighter("fighter", field, new List<IEnumerable<ChipCell>>(), new Directed { X = 10, Y = 10, Direction = Direction.North });
+            fighter = new Fighter("fighter", new List<IEnumerable<ChipCell>>(), new Directed { X = 10, Y = 10, Direction = Direction.North });
         };
 
         Because of = () =>
@@ -20,16 +19,6 @@ namespace SnakeBattleNet.Test.Core.FighterTests
         It should_make_fighter_longer = () =>
             fighter.BodyParts.Count.ShouldEqual(3);
 
-        It should_put_head_on_field = () =>
-           field[10, 12].ShouldEqual(Content.Head);
-
-        It should_put_body_on_field = () =>
-           field[10, 11].ShouldEqual(Content.Body);
-
-        It should_put_tail_on_field = () =>
-           field[10, 10].ShouldEqual(Content.Tail);
-
         private static Fighter fighter;
-        private static BattleField field;
     }
 }

@@ -10,19 +10,24 @@ namespace SnakeBattleNet.Core
         private readonly IList<Fighter> fighters;
         private readonly Replay replay;
         private readonly FieldComparer fieldComparer;
+        private readonly BattleField battleField;
         private readonly Random random = new Random();
 
-        public BattleManager(IList<Fighter> fighters, Replay replay, FieldComparer fieldComparer)
+        public BattleManager(IList<Fighter> fighters, Replay replay, FieldComparer fieldComparer, BattleField battleField)
         {
             this.fighters = fighters;
             this.replay = replay;
             this.fieldComparer = fieldComparer;
+            this.battleField = battleField;
         }
 
         public void Fight(int rounds)
         {
             foreach (var fighter in fighters)
+            {
                 fighter.Grow(fighter.Head.Direction, 9);
+                PutOnBattleField(fighter);
+            }
 
             for (var round = 0; round < rounds; round++)
             {
@@ -53,14 +58,39 @@ namespace SnakeBattleNet.Core
             var bitten = fighters.FirstOrDefault(f => f.Tail.X == newHead.X && f.Tail.Y == newHead.Y);
             if (bitten == null)
             {
-                biting.Grow(direction);
-                biting.CutTail();
+                Grow(biting, direction);
+                CutTail(biting);
             }
             else
             {
-                bitten.CutTail();
-                biting.Grow(direction);
+                CutTail(bitten);
+                Grow(biting, direction);
             }
+        }
+
+        private void PutOnBattleField(Fighter fighter)
+        {
+            foreach (var part in fighter.BodyParts)
+            {
+                battleField[part.X, part.Y] = Content.Body;
+            }
+            battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Tail;
+            battleField[fighter.Head.X, fighter.Head.Y] = Content.Head;
+        }
+
+        private void CutTail(Fighter fighter)
+        {
+            battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Empty;
+            fighter.CutTail();
+            if (fighter.BodyParts.Count > 1)
+                battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Tail;
+        }
+
+        private void Grow(Fighter fighter, Direction direction)
+        {
+            battleField[fighter.Head.X, fighter.Head.Y] = Content.Body;
+            fighter.Grow(direction);
+            battleField[fighter.Head.X, fighter.Head.Y] = Content.Head;
         }
 
         /// <summary>
