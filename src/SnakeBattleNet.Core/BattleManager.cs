@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Core
 {
@@ -19,7 +20,7 @@ namespace SnakeBattleNet.Core
         public void Fight(int rounds)
         {
             foreach (var fighter in fighters)
-                fighter.Grow(9);
+                fighter.Grow(fighter.Head.Direction, 9);
 
             for (var round = 0; round < rounds; round++)
             {
@@ -33,13 +34,29 @@ namespace SnakeBattleNet.Core
                         continue;
                     }
                     var direction = directions[random.Next(directions.Length)];
-                    fighter.BiteMove(fighters, direction);
+                    TryBite(fighter, direction);
                 }
 
                 foreach (var fighter in fighters)
                     replay.SaveFighter(round, fighter);
 
                 if (skipped == fighters.Count) break;
+            }
+        }
+
+        private void TryBite(Fighter biting, Direction direction)
+        {
+            var newHead = Directed.ToDirection(biting.Head, direction);
+            var bitten = fighters.FirstOrDefault(f => f.Tail.X == newHead.X && f.Tail.Y == newHead.Y);
+            if (bitten == null)
+            {
+                biting.Grow(direction);
+                biting.CutTail();
+            }
+            else
+            {
+                bitten.CutTail();
+                biting.Grow(direction);
             }
         }
 

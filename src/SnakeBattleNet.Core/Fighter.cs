@@ -13,7 +13,7 @@ namespace SnakeBattleNet.Core
         public string Id { get; private set; }
         public LinkedList<Directed> BodyParts { get; private set; }
 
-        private Directed Head
+        public Directed Head
         {
             get { return BodyParts.Count == 0 ? null : BodyParts.First(); }
             set
@@ -26,7 +26,7 @@ namespace SnakeBattleNet.Core
             }
         }
 
-        private Directed Tail
+        public Directed Tail
         {
             get { return BodyParts.Count == 0 ? null : BodyParts.Last(); }
         }
@@ -40,46 +40,21 @@ namespace SnakeBattleNet.Core
             Head = head;
         }
 
-        public void Grow(int length = 1)
+        public void CutTail()
         {
-            for (var i = 0; i < length; i++)
-            {
-                Move(Head.Direction, true);
-            }
-        }
-
-        public void Move(Direction direction, bool isGrow = false)
-        {
-            Head = Directed.ToDirection(Head, direction);
-            if (!isGrow)
-                MoveTail();
+            // todo: dead
+            field[Tail.X, Tail.Y] = Content.Empty;
+            BodyParts.RemoveLast();
             if (BodyParts.Count > 1)
                 field[Tail.X, Tail.Y] = Content.Tail;
         }
 
-        public void BiteMove(IList<Fighter> fighters, Direction direction)
+        public void Grow(Direction direction, int length = 1)
         {
-            Move(direction, true);
-            var fighter = fighters.FirstOrDefault(f => (f.Tail.X == Head.X && f.Tail.Y == Head.Y) || (f.Head.X == Head.X && f.Head.Y == Head.Y || f.BodyParts.Count == 1));
-            if (fighter == null)
+            for (var i = 0; i < length; i++)
             {
-                MoveTail();
+                Head = Directed.ToDirection(Head, direction);
             }
-            else
-            {
-                fighter.CutTail();
-            }
-        }
-
-        private void MoveTail()
-        {
-            field[Tail.X, Tail.Y] = Content.Empty;
-            CutTail();
-        }
-
-        private void CutTail()
-        {
-            BodyParts.RemoveLast();
             field[Tail.X, Tail.Y] = Content.Tail;
         }
 

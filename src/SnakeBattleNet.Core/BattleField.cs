@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using SnakeBattleNet.Core.Contract;
 
