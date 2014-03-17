@@ -5,6 +5,11 @@
         <div class="form-inline">
             <div class="form-group">
                 <button type="button" id="button_start" class="btn btn-default">Start</button>
+                <select class="form-control" id="select_speed">
+                    <option>1</option>
+                    <option>5</option>
+                    <option selected>8</option>
+                </select>
             </div>
         </div>
     </div>
@@ -23,6 +28,7 @@
                 selectors: {
                     container: '#replay_container',
                     buttonStart: '#button_start',
+                    selectSpeed: '#select_speed',
                 }
             });
         });

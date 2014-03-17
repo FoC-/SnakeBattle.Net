@@ -378,6 +378,7 @@ SBN.Service.Snake = {
 SBN.Show = function (settings) {
     var $container = $(settings.selectors.container);
     var $buttonStart = $(settings.selectors.buttonStart);
+    var $selectSpeed = $(settings.selectors.selectSpeed);
 
     function render(battleField) {
         var stage = new Kinetic.Stage({
@@ -413,7 +414,7 @@ SBN.Show = function (settings) {
             frameIndex = 0;
         var anim = new Kinetic.Animation(function (frame) {
             //var frameRate = Math.floor(frame.frameRate / 3);
-            if (++frameNumber % 8 === 0) {
+            if (++frameNumber % $selectSpeed.val() === 0) {
                 layer.removeChildren();
                 var frm = frames[frameIndex];
                 if (frm) {
