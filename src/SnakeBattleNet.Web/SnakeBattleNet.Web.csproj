@@ -185,10 +185,10 @@
     <Compile Include="App_Start\Bootstrap.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\BattleController.cs" />
+    <Compile Include="Controllers\Api\BattleController.cs" />
     <Compile Include="Models\Snake\ReplayViewModel.cs" />
     <Compile Include="Controllers\ShowController.cs" />
-    <Compile Include="Controllers\SnakeController.cs" />
+    <Compile Include="Controllers\Api\SnakeController.cs" />
     <Compile Include="Core\Snake.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Models\Snake\ChipCellViewModel.cs" />

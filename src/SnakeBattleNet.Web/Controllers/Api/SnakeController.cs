@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Models.Snake;
 
-namespace SnakeBattleNet.Web.Controllers
+namespace SnakeBattleNet.Web.Controllers.Api
 {
     [Authorize]
     [RoutePrefix("api/Snake")]

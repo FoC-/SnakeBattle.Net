@@ -9,7 +9,7 @@ using SnakeBattleNet.Core.Contract;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Models.Snake;
 
-namespace SnakeBattleNet.Web.Controllers
+namespace SnakeBattleNet.Web.Controllers.Api
 {
     [RoutePrefix("api/Battle")]
     public class BattleController : ApiController
@@ -32,13 +32,12 @@ namespace SnakeBattleNet.Web.Controllers
                 new Directed {X = 13, Y = 25, Direction = Direction.South}
             };
             var n = 0;
-
-            var battleField = new BattleField();
             var fighters = ids
                 .Select(id => snakeStore.GetById(id))
                 .Select(snake => new Fighter(snake.Id, snake.Chips, heads[n++]))
                 .ToList();
             var replay = new Replay { BattleField = new BattleField() };
+            var battleField = new BattleField();
             var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField);
             battleManager.Fight(550); //original 550
             var model = Mapper.Map<Replay, ReplayViewModel>(replay);
@@ -55,10 +54,9 @@ namespace SnakeBattleNet.Web.Controllers
                 new Directed {X = 13, Y = 1, Direction = Direction.North},
                 new Directed {X = 13, Y = 25, Direction = Direction.South}
             };
-
-            var battleField = new BattleField();
             var fighters = heads.Select(h => new Fighter(Guid.NewGuid().ToString(), new Collection<IEnumerable<ChipCell>>(), h)).ToList();
             var replay = new Replay { BattleField = new BattleField() };
+            var battleField = new BattleField();
             var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField);
             battleManager.Fight(550); //original 550
             var model = Mapper.Map<Replay, ReplayViewModel>(replay);
