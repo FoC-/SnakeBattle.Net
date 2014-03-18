@@ -119,11 +119,22 @@ SBN.Show = function (settings, Battle, ImageLoader) {
 
     imageLoader.then(function (images) {
         Battle(settings.snakes).Get(function (replay) {
-            var layer = SBN.Kinetic.renderBattleField($container, replay.battleField, images);
-            var anim = SBN.Kinetic.animation(replay.frames, layer, images, speedSelector, function () {
-                $buttonStart.html('Stop');
-                anim.stop();
-            }, $.noop);
+            var imageSelector = function (content) {
+                var c = SBN.Contract.content[content];
+                if (images[c]) {
+                    return images[c];
+                } else {
+                    return images['o' + c];
+                }
+            };
+
+            var stage = new Kinetic.Stage({
+                container: $container[0],
+                width: 810,
+                height: 810
+            });
+            SBN.Kinetic.renderBattleField(stage, replay.battleField, imageSelector);
+            var anim = SBN.Kinetic.animation(replay.frames, stage, imageSelector, speedSelector);
             $buttonStart.on('click', function () {
                 if (anim.isRunning()) {
                     $buttonStart.html('Start');
@@ -363,62 +374,50 @@ SBN.Kinetic = {
 
         stage.add(layer);
     },
-    renderBattleField: function ($container, model, images) {
-        var stage = new Kinetic.Stage({
-            container: $container[0],
-            width: 810,
-            height: 810
-        });
+    renderBattleField: function (stage, model, imageSelector) {
         var background = new Kinetic.Layer();
-        var mainLayer = new Kinetic.Layer();
-        stage.add(background);
-        stage.add(mainLayer);
-
         $.each(model, function (index, cell) {
-            var src = images[SBN.Contract.content[cell.c]];
             var image = new Kinetic.Image({
                 x: cell.p.x * 30,
                 y: cell.p.y * 30,
-                image: src,
+                image: imageSelector(cell.c),
                 width: 30,
                 height: 30
             });
             background.add(image);
         });
-        background.draw();
-
-        return mainLayer;
+        stage.add(background);
     },
-    animation: function (frames, layer, images, speedSelector, onFinish, onEach) {
+    animation: function (frames, stage, imageSelector, speedSelector) {
+        var layer = new Kinetic.Layer();
+        stage.add(layer);
+
         var frameNumber = 0,
             frameIndex = 0;
         var anim = new Kinetic.Animation(function (frame) {
-            //var frameRate = Math.floor(frame.frameRate / 3);
             if (++frameNumber % speedSelector() === 0) {
                 layer.removeChildren();
                 var frm = frames[frameIndex];
                 if (frm) {
-                    $.each(frm, function (key, value) {
-                        $.each(value, function (index, cell) {
-                            var content = SBN.Contract.content[cell.content];
-                            var src = images[content] || images['o' + content];
-                            var image = new Kinetic.Image({
-                                x: cell.x * 30,
-                                y: cell.y * 30,
-                                image: src,
-                                width: 30,
-                                height: 30
-                            });
-                            layer.add(image);
-                        });
-                    });
-                    layer.draw();
                     frameIndex++;
-                    onEach();
                 } else {
                     frameIndex--;
-                    onFinish();
+                    frm = frames[frameIndex];
+                    anim.stop();
                 }
+                $.each(frm, function (key, value) {
+                    $.each(value, function (index, cell) {
+                        var image = new Kinetic.Image({
+                            x: cell.x * 30,
+                            y: cell.y * 30,
+                            image: imageSelector(cell.content),
+                            width: 30,
+                            height: 30
+                        });
+                        layer.add(image);
+                    });
+                });
+                layer.draw();
             }
         }, layer);
         return anim;
