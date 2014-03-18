@@ -21,7 +21,7 @@
 {
     <script type="text/javascript">
         $(function () {
-            SBN.Show({
+            SBN.App.set('settings', {
                 //snakes: {
                 //    ids: ['da3c18b44e024f19a9f411e77a5460d8']
                 //},
@@ -30,7 +30,8 @@
                     buttonStart: '#button_start',
                     selectSpeed: '#select_speed',
                 }
-            }, SBN.Service.Resource.Battle);
+            });
+            SBN.App.run(SBN.Show);
         });
     </script>
 }

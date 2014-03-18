@@ -7,7 +7,7 @@
 {
     <script type="text/javascript">
         $(function () {
-            SBN.Show({
+            SBN.App.set('settings', {
                 auto: {
                     play: true,
                     rewind: true,
@@ -16,7 +16,8 @@
                 selectors: {
                     container: '#replay_container',
                 }
-            }, SBN.Service.Resource.Battle);
+            });
+            SBN.App.run(SBN.Show);
         });
     </script>
 }

@@ -41,7 +41,7 @@
 {
     <script type="text/javascript">
         $(function () {
-            SBN.Edit({
+            SBN.App.set('settings', {
                 snake: {
                     id: '@Model'
                 },
@@ -58,7 +58,8 @@
                     saveButton: '#button_save_snake',
                     nameInput: '#input_name'
                 }
-            }, SBN.Kinetic, SBN.Service.Resource.Snake);
+            });
+            SBN.App.run(SBN.Edit);
         });
     </script>
 }

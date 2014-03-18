@@ -1,4 +1,6 @@
-﻿var SBN = SBN || {};
+﻿'use strict';
+
+var SBN = SBN || {};
 SBN.Contract = {
     colorMap: ['blue', 'green', 'grey', 'red', 'black'],
     imageMap: {
@@ -15,8 +17,9 @@ SBN.Contract = {
     content: ['empty', 'wall', 'head', 'body', 'tail', 'gateway']
 };
 
-SBN.Edit = function (settings, Renderer, SnakeService) {
-    var Snake = SnakeService(settings.snake);
+SBN.Edit = function (settings, Renderer, Snake, ImageLoader) {
+    var imageLoader = ImageLoader.load(SBN.Contract.imageMap);
+    var snake = Snake(settings.snake);
     var selectors = settings.selectors;
     var chipView = $(selectors.chipView).html();
     var alertView = $(selectors.alertView).html();
@@ -38,7 +41,9 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
 
     function addChip(model) {
         var $kineticContainer = $(chipView).appendTo($container).find(selectors.kineticContainer);
-        Renderer.render($kineticContainer, model, $selectorContainer);
+        imageLoader.then(function (images) {
+            Renderer.render($kineticContainer, model, $selectorContainer, images);
+        });
     };
 
     $container.on('click', selectors.insertButton, function () {
@@ -59,16 +64,16 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
         $(".alert").alert('close');
 
         var name = $nameInput.val();
-        var snake = {
+        var snakeTemplate = {
             id: settings.snake.id,
             name: name,
             chips: []
         };
 
         $container.find(selectors.kineticContainer).each(function () {
-            snake.chips[snake.chips.length] = mapToModel($(this).data('model'));
+            snakeTemplate.chips[snakeTemplate.chips.length] = mapToModel($(this).data('model'));
         });
-        Snake.Save(snake, function (data) {
+        snake.Save(snakeTemplate, function (data) {
             alert('Response: ' + JSON.stringify(data));
         }, function (data) {
             if (data.statusText == 'OK') return;
@@ -85,14 +90,17 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
         });
     });
 
-    Snake.Get(function (snake) {
-        $.each(snake.chips, function (index, value) {
+    snake.Get(function (data) {
+        $.each(data.chips, function (index, value) {
             addChip(value);
         });
     });
-    Renderer.renderSelector($selectorContainer);
+    imageLoader.then(function (images) {
+        Renderer.renderSelector($selectorContainer, images);
+    });
 };
-SBN.Show = function (settings, Battle) {
+SBN.Show = function (settings, Battle, ImageLoader) {
+    var imageLoader = ImageLoader.load(SBN.Contract.imageMap);
     var $container = $(settings.selectors.container);
     var $buttonStart = $(settings.selectors.buttonStart);
     var $selectSpeed = $(settings.selectors.selectSpeed);
@@ -107,7 +115,7 @@ SBN.Show = function (settings, Battle) {
         };
     }
 
-    new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
+    imageLoader.then(function (images) {
         Battle(settings.snakes).Get(function (replay) {
             var layer = SBN.Kinetic.renderBattleField($container, replay.battleField, images);
             var anim = SBN.Kinetic.animation(replay.frames, layer, images, speedSelector, function () {
@@ -234,7 +242,7 @@ SBN.Kinetic = {
             return group;
         };
     },
-    render: function ($container, model, $selectorContainer) {
+    render: function ($container, model, $selectorContainer, images) {
         var selectorModel = $selectorContainer.data('model');
 
         var stage = new Kinetic.Stage({
@@ -267,15 +275,13 @@ SBN.Kinetic = {
             map[cell.p.x][cell.p.y] = cell;
         });
 
-        new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
-            $.each(map, function (i, col) {
-                $.each(col, function (j, cell) {
-                    SBN.Kinetic.createCell(layer, cell, images, selectorModel);
-                });
+        $.each(map, function (i, col) {
+            $.each(col, function (j, cell) {
+                SBN.Kinetic.createCell(layer, cell, images, selectorModel);
             });
         });
     },
-    renderSelector: function ($container) {
+    renderSelector: function ($container, images) {
         var model = { content: 3, color: 2, isSelf: false, exclude: false };
         $container.data('model', model);
 
@@ -315,44 +321,42 @@ SBN.Kinetic = {
         excludeSelector.putCross();
         layer.add(excludeSelector.get());
 
-        new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
-            $.each(SBN.Contract.content, function (index, value) {
+        $.each(SBN.Contract.content, function (index, value) {
+            var element = new SBN.Kinetic.element({
+                x: elementNumber++ * size + 5,
+                y: 5,
+                name: 'content-selector',
+                selected: model.content == index && model.isSelf == false,
+                color: '#555',
+                size: SBN.Kinetic.Configuration.size - 10
+            }, stage, function () {
+                model.content = index;
+                model.isSelf = false;
+            });
+            element.putImage(images[value] || images['e' + value]);
+
+            layer.add(element.get());
+            stage.draw();
+        });
+        $.each(SBN.Contract.content, function (index, value) {
+            var img = images['o' + value];
+            if (img) {
                 var element = new SBN.Kinetic.element({
                     x: elementNumber++ * size + 5,
                     y: 5,
                     name: 'content-selector',
-                    selected: model.content == index && model.isSelf == false,
+                    selected: model.content == index && model.isSelf == true,
                     color: '#555',
                     size: SBN.Kinetic.Configuration.size - 10
                 }, stage, function () {
                     model.content = index;
-                    model.isSelf = false;
+                    model.isSelf = true;
                 });
-                element.putImage(images[value] || images['e' + value]);
+                element.putImage(img);
 
                 layer.add(element.get());
                 stage.draw();
-            });
-            $.each(SBN.Contract.content, function (index, value) {
-                var img = images['o' + value];
-                if (img) {
-                    var element = new SBN.Kinetic.element({
-                        x: elementNumber++ * size + 5,
-                        y: 5,
-                        name: 'content-selector',
-                        selected: model.content == index && model.isSelf == true,
-                        color: '#555',
-                        size: SBN.Kinetic.Configuration.size - 10
-                    }, stage, function () {
-                        model.content = index;
-                        model.isSelf = true;
-                    });
-                    element.putImage(img);
-
-                    layer.add(element.get());
-                    stage.draw();
-                }
-            });
+            }
         });
 
         stage.add(layer);
@@ -420,26 +424,30 @@ SBN.Kinetic = {
 };
 
 SBN.Service = {
-    ImageLoader: function (sources) {
-        var images = {},
+    ImageLoader: new function () {
+        var self = this,
+            images = {},
             loaded = 0,
             total = 0,
             clb = undefined,
             isAsyncComplete = false;
 
-        for (var source in sources) {
-            images[source] = new Image();
-            images[source].onload = function () {
-                if (++loaded >= total) {
-                    isAsyncComplete = true;
-                    clb && clb(images);
-                }
-            };
-            total++;
-        }
-        for (var src in sources) {
-            images[src].src = sources[src];
-        }
+        this.load = function (sources) {
+            for (var source in sources) {
+                images[source] = new Image();
+                images[source].onload = function () {
+                    if (++loaded >= total) {
+                        isAsyncComplete = true;
+                        clb && clb(images);
+                    }
+                };
+                total++;
+            }
+            for (var src in sources) {
+                images[src].src = sources[src];
+            }
+            return self;
+        };
 
         this.then = function (callback) {
             if (isAsyncComplete) {
@@ -487,3 +495,30 @@ SBN.Service = {
         };
     },
 };
+
+SBN.App = new function () {
+    var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
+    var FN_ARG_SPLIT = /,/;
+    var FN_ARG = /^\s*(_?)(\S+?)\1\s*$/;
+    var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+    var self = this;
+    var dependencies = {};
+
+    this.set = function (name, dependency) {
+        dependencies[name] = dependency;
+        return self;
+    };
+    this.run = function (target) {
+        var text = target.toString().replace(STRIP_COMMENTS, '');
+        var args = text.match(FN_ARGS)[1].split(FN_ARG_SPLIT);
+        var params = args.map(function (value) {
+            return dependencies[value.replace(FN_ARG, function (match, offset, name) { return name; })];
+        });
+
+        target.apply(target, params);
+    };
+};
+SBN.App.set('Battle', SBN.Service.Resource.Battle);
+SBN.App.set('Snake', SBN.Service.Resource.Snake);
+SBN.App.set('ImageLoader', SBN.Service.ImageLoader);
+SBN.App.set('Renderer', SBN.Kinetic);
