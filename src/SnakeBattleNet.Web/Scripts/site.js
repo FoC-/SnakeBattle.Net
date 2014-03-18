@@ -48,8 +48,10 @@ SBN.Edit = function (settings, Renderer, Snake, ImageLoader) {
 
     $container.on('click', selectors.insertButton, function () {
         var parent = $(this).closest('.chip');
-        var $kineticContainer = $(chipView).insertAfter(parent).find(selectors.kineticContainer);
-        Renderer.render($kineticContainer, [], $selectorContainer);
+        var $kineticContainer = $(chipView).insertBefore(parent).find(selectors.kineticContainer);
+        imageLoader.then(function (images) {
+            Renderer.render($kineticContainer, [], $selectorContainer, images);
+        });
     });
 
     $container.on('click', selectors.deleteButton, function () {
