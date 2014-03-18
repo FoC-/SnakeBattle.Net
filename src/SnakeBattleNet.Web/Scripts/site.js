@@ -91,6 +91,43 @@ SBN.Edit = function (settings, Renderer, SnakeService) {
     });
     Renderer.renderSelector($selectorContainer);
 };
+SBN.Show = function (settings) {
+    var $container = $(settings.selectors.container);
+    var $buttonStart = $(settings.selectors.buttonStart);
+    var $selectSpeed = $(settings.selectors.selectSpeed);
+    var speedSelector;
+    if ($selectSpeed[0]) {
+        speedSelector = function () {
+            return $selectSpeed.val();
+        };
+    } else {
+        speedSelector = function () {
+            return settings.auto.speed;
+        };
+    }
+
+    new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
+        SBN.Service.Battle.get(settings.snakes, function (replay) {
+            var layer = SBN.Kinetic.renderBattleField($container, replay.battleField, images);
+            var anim = SBN.Kinetic.animation(replay.frames, layer, images, speedSelector, function () {
+                $buttonStart.html('Stop');
+                anim.stop();
+            }, $.noop);
+            $buttonStart.on('click', function () {
+                if (anim.isRunning()) {
+                    $buttonStart.html('Start');
+                    anim.stop();
+                } else {
+                    $buttonStart.html('Stop');
+                    anim.start();
+                }
+            });
+            if (settings.auto && settings.auto.play) {
+                anim.start();
+            }
+        });
+    });
+};
 
 SBN.Kinetic = {};
 SBN.Kinetic.Configuration = {
@@ -319,157 +356,132 @@ SBN.Kinetic.renderSelector = function ($container) {
 
     stage.add(layer);
 };
+SBN.Kinetic.renderBattleField = function ($container, model, images) {
+    var stage = new Kinetic.Stage({
+        container: $container[0],
+        width: 810,
+        height: 810
+    });
+    var background = new Kinetic.Layer();
+    var mainLayer = new Kinetic.Layer();
+    stage.add(background);
+    stage.add(mainLayer);
 
-SBN.Service = {};
-SBN.Service.ImageLoader = function (sources) {
-    var images = {},
-        loaded = 0,
-        total = 0,
-        clb = undefined,
-        isAsyncComplete = false;
+    $.each(model, function (index, cell) {
+        var src = images[SBN.Contract.content[cell.c]];
+        var image = new Kinetic.Image({
+            x: cell.p.x * 30,
+            y: cell.p.y * 30,
+            image: src,
+            width: 30,
+            height: 30
+        });
+        background.add(image);
+    });
+    background.draw();
 
-    for (var source in sources) {
-        images[source] = new Image();
-        images[source].onload = function () {
-            if (++loaded >= total) {
-                isAsyncComplete = true;
-                clb && clb(images);
+    return mainLayer;
+};
+SBN.Kinetic.animation = function (frames, layer, images, speedSelector, onFinish, onEach) {
+    var frameNumber = 0,
+        frameIndex = 0;
+    var anim = new Kinetic.Animation(function (frame) {
+        //var frameRate = Math.floor(frame.frameRate / 3);
+        if (++frameNumber % speedSelector() === 0) {
+            layer.removeChildren();
+            var frm = frames[frameIndex];
+            if (frm) {
+                $.each(frm, function (key, value) {
+                    $.each(value, function (index, cell) {
+                        var content = SBN.Contract.content[cell.content];
+                        var src = images[content] || images['o' + content];
+                        var image = new Kinetic.Image({
+                            x: cell.x * 30,
+                            y: cell.y * 30,
+                            image: src,
+                            width: 30,
+                            height: 30
+                        });
+                        layer.add(image);
+                    });
+                });
+                layer.draw();
+                frameIndex++;
+                onEach();
+            } else {
+                frameIndex--;
+                onFinish();
+            }
+        }
+    }, layer);
+    return anim;
+};
+
+SBN.Service = {
+    ImageLoader: function (sources) {
+        var images = {},
+            loaded = 0,
+            total = 0,
+            clb = undefined,
+            isAsyncComplete = false;
+
+        for (var source in sources) {
+            images[source] = new Image();
+            images[source].onload = function () {
+                if (++loaded >= total) {
+                    isAsyncComplete = true;
+                    clb && clb(images);
+                }
+            };
+            total++;
+        }
+        for (var src in sources) {
+            images[src].src = sources[src];
+        }
+
+        this.then = function (callback) {
+            if (isAsyncComplete) {
+                callback(images);
+            } else {
+                clb = callback;
             }
         };
-        total++;
-    }
-    for (var src in sources) {
-        images[src].src = sources[src];
-    }
-
-    this.then = function (callback) {
-        if (isAsyncComplete) {
-            callback(images);
-        } else {
-            clb = callback;
-        }
-    };
-};
-
-SBN.Service.Snake = {
-    get: function (query, success) {
-        var url = '/api/Snake/Get' + (query ? '?' + $.param(query) : '');
-        $.ajax({
-            type: 'GET',
-            url: url,
-            contentType: "application/json",
-            dataType: 'json',
-            success: success || $.noop
-        });
     },
-    save: function (snake, success, error) {
-        $.ajax({
-            type: 'POST',
-            url: '/api/Snake/Save',
-            contentType: "application/json",
-            dataType: 'json',
-            data: JSON.stringify(snake),
-            success: success || $.noop,
-            error: error || $.noop
-        });
-    }
-};
-
-SBN.Show = function (settings) {
-    var $container = $(settings.selectors.container);
-    var $buttonStart = $(settings.selectors.buttonStart);
-    var $selectSpeed = $(settings.selectors.selectSpeed);
-
-    function render(battleField) {
-        var stage = new Kinetic.Stage({
-            container: $container[0],
-            width: 810,
-            height: 810
-        });
-        var background = new Kinetic.Layer();
-        var mainLayer = new Kinetic.Layer();
-        stage.add(background);
-        stage.add(mainLayer);
-
-        new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
-            $.each(battleField, function (index, cell) {
-                var src = images[SBN.Contract.content[cell.c]];
-                var image = new Kinetic.Image({
-                    x: cell.p.x * 30,
-                    y: cell.p.y * 30,
-                    image: src,
-                    width: 30,
-                    height: 30
-                });
-                background.add(image);
+    Snake: {
+        get: function (query, success) {
+            var url = '/api/Snake/Get' + (query ? '?' + $.param(query) : '');
+            $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: "application/json",
+                dataType: 'json',
+                success: success || $.noop
             });
-            background.draw();
-        });
-
-        return mainLayer;
-    };
-
-    function animation(frames, layer, images, onFinish, onEach) {
-        var frameNumber = 0,
-            frameIndex = 0;
-        var anim = new Kinetic.Animation(function (frame) {
-            //var frameRate = Math.floor(frame.frameRate / 3);
-            if (++frameNumber % $selectSpeed.val() === 0) {
-                layer.removeChildren();
-                var frm = frames[frameIndex];
-                if (frm) {
-                    $.each(frm, function (key, value) {
-                        $.each(value, function (index, cell) {
-                            var content = SBN.Contract.content[cell.content];
-                            var src = images[content] || images['o' + content];
-                            var image = new Kinetic.Image({
-                                x: cell.x * 30,
-                                y: cell.y * 30,
-                                image: src,
-                                width: 30,
-                                height: 30
-                            });
-                            layer.add(image);
-                        });
-                    });
-                    layer.draw();
-                    frameIndex++;
-                    onEach();
-                } else {
-                    frameIndex--;
-                    onFinish();
-                }
-            }
-        }, layer);
-        return anim;
-    }
-    new SBN.Service.ImageLoader(SBN.Contract.imageMap).then(function (images) {
-        SBN.Service.Battle.get(settings.snakes, function (replay) {
-            var layer = render(replay.battleField);
-            var anim = animation(replay.frames, layer, images, function () {
-                $buttonStart.html('Stop');
-            }, $.noop);
-            $buttonStart.on('click', function () {
-                if (anim.isRunning()) {
-                    $buttonStart.html('Start');
-                    anim.stop();
-                } else {
-                    $buttonStart.html('Stop');
-                    anim.start();
-                }
+        },
+        save: function (snake, success, error) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/Snake/Save',
+                contentType: "application/json",
+                dataType: 'json',
+                data: JSON.stringify(snake),
+                success: success || $.noop,
+                error: error || $.noop
             });
-        });
-    });
-};
-SBN.Service.Battle = {
-    get: function (query, success) {
-        var url = '/api/Battle/' + (query ? 'Get?' + $.param(query) : 'Demo');
-        $.ajax({
-            type: 'GET',
-            url: url,
-            contentType: "application/json",
-            dataType: 'json',
-            success: success || $.noop
-        });
+        }
+    },
+    Battle: {
+        get: function (query, success) {
+            var url = '/api/Battle/' + (query ? 'Get?' + $.param(query) : 'Demo');
+            $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: "application/json",
+                dataType: 'json',
+                success: success || $.noop
+            });
+        }
     }
 };
+
+

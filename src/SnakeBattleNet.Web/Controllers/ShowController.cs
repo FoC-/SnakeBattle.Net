@@ -10,5 +10,10 @@ namespace SnakeBattleNet.Web.Controllers
             var model = new List<string>();
             return View(model);
         }
+
+        public ActionResult Demo()
+        {
+            return View();
+        }
     }
 }

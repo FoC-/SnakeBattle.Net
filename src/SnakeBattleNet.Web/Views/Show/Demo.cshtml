@@ -1,0 +1,22 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div id="replay_container"></div>
+    </div>
+</div>
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            SBN.Show({
+                auto: {
+                    play: true,
+                    rewind: true,
+                    speed: 5
+                },
+                selectors: {
+                    container: '#replay_container',
+                }
+            });
+        });
+    </script>
+}
