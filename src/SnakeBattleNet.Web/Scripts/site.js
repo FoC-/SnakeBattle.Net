@@ -128,13 +128,32 @@ SBN.Show = function (settings, Battle, ImageLoader) {
                 }
             };
 
+            var frameSelector = new function () {
+                var frames = replay.frames,
+                    frameNumber = 0,
+                    frameIndex = 0,
+                    frm = frames[0];
+                this.get = function () {
+                    if (++frameNumber % speedSelector() === 0) {
+                        frameIndex++;
+                        frm = frames[frameIndex];
+                        if (!frm) {
+                            frameIndex--;
+                            frm = frames[frameIndex];
+                        }
+                    }
+                    return frm;
+                };
+            };
+
             var stage = new Kinetic.Stage({
                 container: $container[0],
                 width: 810,
                 height: 810
             });
             SBN.Kinetic.renderBattleField(stage, replay.battleField, imageSelector);
-            var anim = SBN.Kinetic.animation(replay.frames, stage, imageSelector, speedSelector);
+
+            var anim = SBN.Kinetic.animateBattle(stage, imageSelector, frameSelector);
             $buttonStart.on('click', function () {
                 if (anim.isRunning()) {
                     $buttonStart.html('Start');
@@ -374,53 +393,38 @@ SBN.Kinetic = {
 
         stage.add(layer);
     },
-    renderBattleField: function (stage, model, imageSelector) {
+    renderBattleField: function (stage, cells, imageSelector) {
         var background = new Kinetic.Layer();
-        $.each(model, function (index, cell) {
-            var image = new Kinetic.Image({
+        $.each(cells, function (index, cell) {
+            background.add(new Kinetic.Image({
                 x: cell.p.x * 30,
                 y: cell.p.y * 30,
                 image: imageSelector(cell.c),
                 width: 30,
                 height: 30
-            });
-            background.add(image);
+            }));
         });
         stage.add(background);
     },
-    animation: function (frames, stage, imageSelector, speedSelector) {
+    animateBattle: function (stage, imageSelector, frameSelector) {
         var layer = new Kinetic.Layer();
         stage.add(layer);
-
-        var frameNumber = 0,
-            frameIndex = 0;
-        var anim = new Kinetic.Animation(function (frame) {
-            if (++frameNumber % speedSelector() === 0) {
-                layer.removeChildren();
-                var frm = frames[frameIndex];
-                if (frm) {
-                    frameIndex++;
-                } else {
-                    frameIndex--;
-                    frm = frames[frameIndex];
-                    anim.stop();
-                }
-                $.each(frm, function (key, value) {
-                    $.each(value, function (index, cell) {
-                        var image = new Kinetic.Image({
-                            x: cell.x * 30,
-                            y: cell.y * 30,
-                            image: imageSelector(cell.content),
-                            width: 30,
-                            height: 30
-                        });
-                        layer.add(image);
-                    });
+        return new Kinetic.Animation(function () {
+            layer.removeChildren();
+            var frame = frameSelector.get();
+            $.each(frame, function (key, value) {
+                $.each(value, function (index, cell) {
+                    layer.add(new Kinetic.Image({
+                        x: cell.x * 30,
+                        y: cell.y * 30,
+                        image: imageSelector(cell.content),
+                        width: 30,
+                        height: 30
+                    }));
                 });
-                layer.draw();
-            }
+            });
+            layer.draw();
         }, layer);
-        return anim;
     },
 };
 
