@@ -1,37 +1,61 @@
-﻿@model List<string>
+﻿@model IEnumerable<SnakeBattleNet.Web.Models.Snake.SnakeViewModel>
 
 <div class="row">
-    <div class="col-md-12">
-        <div class="form-inline">
-            <div class="form-group">
-                <button type="button" id="button_start" class="btn btn-default">Start</button>
-                <select class="form-control" id="select_speed">
-                    <option>1</option>
-                    <option>5</option>
-                    <option selected>8</option>
-                </select>
+    <div id="snake_container" class="col-md-10">
+        @foreach (var snake in Model)
+        {
+            <div class="col-md-2 js-snake" data-id="@snake.Id">
+                <h3 class="text-center js-name">@snake.Name</h3>
+                <ul class="list-unstyled">
+                    <li>Matches: @snake.Matches</li>
+                    <li>Wins: @snake.Wins</li>
+                    <li>Loses: @snake.Loses</li>
+                    <li>Score: @snake.Score</li>
+                </ul>
+                <button type="button" class="btn btn-default btn-xs js-select">Select</button>
             </div>
+        }
+    </div>
+    <div class="col-md-2">
+        <button id="button-go" type="button" class="btn btn-success">Go</button>
+        <div id="selected_container" class="row">
         </div>
     </div>
-    <div class="col-md-12">
-        <div id="replay_container"></div>
-    </div>
 </div>
+<script type="html/template" id="selected_view">
+    <div class="col-md-12 js-selected">
+        <button type="button" class="btn btn-default btn-xs js-remove">Remove</button>
+    </div>
+</script>
 @section Scripts
 {
     <script type="text/javascript">
         $(function () {
-            SBN.App.set('settings', {
-                //snakes: {
-                //    ids: ['da3c18b44e024f19a9f411e77a5460d8']
-                //},
-                selectors: {
-                    container: '#replay_container',
-                    buttonStart: '#button_start',
-                    selectSpeed: '#select_speed',
-                }
+            var $buttonGo = $('#button-go');
+            var $snakeContainer = $('#snake_container');
+            var $selectedContainer = $('#selected_container');
+            var selectedView = $('#selected_view').html();
+
+            $snakeContainer.on('click', 'button.js-select', function () {
+                var $snake = $(this).closest('.js-snake');
+                var $selectedView = $(selectedView);
+
+                $selectedView.data('id', $snake.data('id'));
+                $snake.find('.js-name').clone().prependTo($selectedView);
+
+                $selectedContainer.append($selectedView);
             });
-            SBN.App.run(SBN.Show);
+
+            $buttonGo.on('click', function () {
+                var ids = [];
+                $selectedContainer.find('.js-selected').each(function () {
+                    ids[ids.length] = $(this).data('id');
+                });
+                // todo: validation
+                window.location.href = "/Show/Go?ids=" + ids.join('&ids=');
+            });
+
+            // todo: remove
         });
     </script>
 }

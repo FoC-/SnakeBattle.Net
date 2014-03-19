@@ -285,6 +285,7 @@
     <Content Include="Views\Shared\_GoogleAnalytics.cshtml" />
     <Content Include="Views\Show\Index.cshtml" />
     <Content Include="Views\Show\Demo.cshtml" />
+    <Content Include="Views\Show\Go.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SnakeBattleNet.Core\SnakeBattleNet.Core.csproj">
