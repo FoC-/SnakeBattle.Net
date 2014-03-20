@@ -513,14 +513,28 @@ SBN.App = new function () {
         dependencies[name] = dependency;
         return self;
     };
-    this.run = function (target) {
-        var text = target.toString().replace(STRIP_COMMENTS, '');
-        var args = text.match(FN_ARGS)[1].split(FN_ARG_SPLIT);
-        var params = args.map(function (value) {
-            return dependencies[value.replace(FN_ARG, function (match, offset, name) { return name; })];
+    this.run = function (o) {
+        var names = [],
+            target;
+
+        if (typeof o == 'function') {
+            var text = o.toString().replace(STRIP_COMMENTS, '');
+            var args = text.match(FN_ARGS)[1].split(FN_ARG_SPLIT);
+            names = args.map(function (value) {
+                return value.replace(FN_ARG, function (match, offset, name) { return name; });
+            });
+            target = o;
+        } else if (o instanceof Array) {
+            var last = o.length - 1;
+            names = o.slice(0, last);
+            target = o[last];
+        }
+
+        var deps = names.map(function (value) {
+            return dependencies[value];
         });
 
-        target.apply(target, params);
+        target.apply(target, deps);
     };
 };
 SBN.App.set('Battle', SBN.Service.Resource.Battle);
