@@ -54,28 +54,28 @@ namespace SnakeBattleNet.Core
         {
             var x = fieldHead.X + chipCell.X - chipHead.X;
             var y = fieldHead.Y + chipCell.Y - chipHead.Y;
-            return new Cell<Content> { X = x, Y = y, Content = field[x, y] };
+            return new Cell<Content> { X = x, Y = y, Content = this[x, y] };
         }
 
         private Cell<Content> WestView(Position fieldHead, Position chipHead, Position chipCell)
         {
             var x = fieldHead.X - chipCell.Y + chipHead.Y;
             var y = fieldHead.Y + chipCell.X - chipHead.X;
-            return new Cell<Content> { X = x, Y = y, Content = field[x, y] };
+            return new Cell<Content> { X = x, Y = y, Content = this[x, y] };
         }
 
         private Cell<Content> EastView(Position fieldHead, Position chipHead, Position chipCell)
         {
             var x = fieldHead.X + chipCell.Y - chipHead.Y;
             var y = fieldHead.Y - chipCell.X + chipHead.X;
-            return new Cell<Content> { X = x, Y = y, Content = field[x, y] };
+            return new Cell<Content> { X = x, Y = y, Content = this[x, y] };
         }
 
         private Cell<Content> SouthView(Position fieldHead, Position chipHead, Position chipCell)
         {
             var x = fieldHead.X - chipCell.X + chipHead.X;
             var y = fieldHead.Y - chipCell.Y + chipHead.Y;
-            return new Cell<Content> { X = x, Y = y, Content = field[x, y] };
+            return new Cell<Content> { X = x, Y = y, Content = this[x, y] };
         }
 
         private void CreateEmpty()
