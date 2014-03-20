@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using SnakeBattleNet.Core;
 
 namespace SnakeBattleNet.Web.Core
 {

@@ -32,14 +32,20 @@ namespace SnakeBattleNet.Web.Controllers.Api
                 new Directed {X = 13, Y = 25, Direction = Direction.South}
             };
             var n = 0;
-            var fighters = ids
+            var unique = new HashSet<string>(ids);
+            var fighters = unique
                 .Select(id => snakeStore.GetById(id))
+                .Where(s => s != null)
+                .Take(4)
                 .Select(snake => new Fighter(snake.Id, snake.Chips, heads[n++]))
                 .ToList();
             var replay = new Replay { BattleField = new BattleField() };
-            var battleField = new BattleField();
-            var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField);
-            battleManager.Fight(550); //original 550
+            if (fighters.Count > 0)
+            {
+                var battleField = new BattleField();
+                var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField);
+                battleManager.Fight(550); //original 550    
+            }
             var model = Mapper.Map<Replay, ReplayViewModel>(replay);
             return model;
         }

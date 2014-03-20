@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using SnakeBattleNet.Core;
 using SnakeBattleNet.Web.Utils;
 
 namespace SnakeBattleNet.Web.Core
