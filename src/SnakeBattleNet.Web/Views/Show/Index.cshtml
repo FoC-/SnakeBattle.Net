@@ -5,13 +5,7 @@
         @foreach (var snake in Model)
         {
             <div class="col-md-2 js-snake" data-id="@snake.Id">
-                <h3 class="text-center js-name">@snake.Name</h3>
-                <ul class="list-unstyled">
-                    <li>Matches: @snake.Matches</li>
-                    <li>Wins: @snake.Wins</li>
-                    <li>Loses: @snake.Loses</li>
-                    <li>Score: @snake.Score</li>
-                </ul>
+                @{Html.RenderPartial("_Snake", snake);}
                 <button type="button" class="btn btn-default btn-xs js-select">Select</button>
             </div>
         }
@@ -53,8 +47,6 @@
                 });
             };
 
-            validateSelected();
-
             $snakeContainer.on('click', 'button.js-select', function () {
                 var $snake = $(this).closest('.js-snake');
                 var $selectedView = $(selectedView);
@@ -78,6 +70,8 @@
                 });
                 window.location.href = "/Show/Go?s=" + ids.join('&s=');
             });
+
+            validateSelected();
         });
     </script>
 }

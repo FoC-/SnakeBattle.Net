@@ -56,9 +56,21 @@ input[type="checkbox"].input-validation-error {
 
 /* prevent text selection */
 .unselectable {
-   -moz-user-select     : none;
-   -khtml-user-select   : none;
-   -webkit-user-select  : none;
-   -o-user-select       : none;
-   user-select          : none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.centering {
+    display: table !important;
+    width: 100%;
+    height: 168px;
+}
+
+.centered {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
 }
