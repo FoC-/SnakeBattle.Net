@@ -22,9 +22,9 @@
     <script type="text/javascript">
         $(function () {
             SBN.App.set('settings', {
-                //snakes: {
-                //    ids: ['da3c18b44e024f19a9f411e77a5460d8']
-                //},
+                snakes: {
+                    ids: [@Html.Raw("'" + string.Join("','", Model) + "'")]
+                },
                 selectors: {
                     container: '#replay_container',
                     buttonStart: '#button_start',

@@ -23,9 +23,13 @@ namespace SnakeBattleNet.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Go(IEnumerable<string> ids)
+        public ActionResult Go(IEnumerable<string> s)
         {
-            return View(ids.Take(4));
+            if (s == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(s);
         }
 
         public ActionResult Demo()
