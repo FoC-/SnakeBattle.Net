@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<SnakeBattleNet.Web.Models.Snake.SnakeViewModel>
 
-<div class="row">
+<div class="row unselectable">
     <div id="snake_container" class="col-md-10">
         @foreach (var snake in Model)
         {
@@ -36,6 +36,25 @@
             var $selectedContainer = $('#selected_container');
             var selectedView = $('#selected_view').html();
 
+            var validateSelected = function () {
+                var $selected = $selectedContainer.find('.js-selected');
+                if ($selected.length === 0) {
+                    $buttonGo.prop('disabled', true);
+                } else {
+                    $buttonGo.prop('disabled', false);
+                }
+                if ($selected.length >= 4) {
+                    $snakeContainer.find('button.js-select').prop('disabled', true);
+                } else {
+                    $snakeContainer.find('button.js-select').prop('disabled', false);
+                }
+                $selected.each(function () {
+                    $snakeContainer.find('[data-id="' + $(this).data('id') + '"]').find('button.js-select').prop('disabled', true);
+                });
+            };
+
+            validateSelected();
+
             $snakeContainer.on('click', 'button.js-select', function () {
                 var $snake = $(this).closest('.js-snake');
                 var $selectedView = $(selectedView);
@@ -44,6 +63,12 @@
                 $snake.find('.js-name').clone().prependTo($selectedView);
 
                 $selectedContainer.append($selectedView);
+                validateSelected();
+            });
+
+            $selectedContainer.on('click', 'button.js-remove', function () {
+                $(this).closest('.js-selected').remove();
+                validateSelected();
             });
 
             $buttonGo.on('click', function () {
@@ -51,11 +76,8 @@
                 $selectedContainer.find('.js-selected').each(function () {
                     ids[ids.length] = $(this).data('id');
                 });
-                // todo: validation
                 window.location.href = "/Show/Go?ids=" + ids.join('&ids=');
             });
-
-            // todo: remove
         });
     </script>
 }

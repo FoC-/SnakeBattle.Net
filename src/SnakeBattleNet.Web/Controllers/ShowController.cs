@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
 using SnakeBattleNet.Web.Core;
@@ -24,7 +25,7 @@ namespace SnakeBattleNet.Web.Controllers
 
         public ActionResult Go(IEnumerable<string> ids)
         {
-            return View(ids);
+            return View(ids.Take(4));
         }
 
         public ActionResult Demo()
