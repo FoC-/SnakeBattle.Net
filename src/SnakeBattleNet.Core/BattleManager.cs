@@ -11,14 +11,15 @@ namespace SnakeBattleNet.Core
         private readonly Replay replay;
         private readonly FieldComparer fieldComparer;
         private readonly BattleField battleField;
-        private readonly Random random = new Random();
+        private readonly Random random;
 
-        public BattleManager(IList<Fighter> fighters, Replay replay, FieldComparer fieldComparer, BattleField battleField)
+        public BattleManager(IList<Fighter> fighters, Replay replay, FieldComparer fieldComparer, BattleField battleField, int randomSeed)
         {
             this.fighters = fighters;
             this.replay = replay;
             this.fieldComparer = fieldComparer;
             this.battleField = battleField;
+            random = new Random(randomSeed);
         }
 
         public void Fight(int rounds)

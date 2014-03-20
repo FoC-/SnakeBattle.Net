@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
@@ -7,13 +6,13 @@ namespace SnakeBattleNet.Core
 {
     public class Replay
     {
-        public string Id { get; private set; }
+        public int RandomSeed { get; private set; }
         public BattleField BattleField { get; set; }
         public IDictionary<int, IDictionary<string, IEnumerable<Cell<Content>>>> Frames { get; set; }
 
-        public Replay()
+        public Replay(int randomSeed)
         {
-            Id = Guid.NewGuid().ToString().ToLower().Replace("-", "");
+            RandomSeed = randomSeed;
             Frames = new Dictionary<int, IDictionary<string, IEnumerable<Cell<Content>>>>();
         }
 

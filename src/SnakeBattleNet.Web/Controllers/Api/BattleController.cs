@@ -39,11 +39,12 @@ namespace SnakeBattleNet.Web.Controllers.Api
                 .Take(4)
                 .Select(snake => new Fighter(snake.Id, snake.Chips, heads[n++]))
                 .ToList();
-            var replay = new Replay { BattleField = new BattleField() };
+            var tickCount = Environment.TickCount;
+            var replay = new Replay(tickCount) { BattleField = new BattleField() };
             if (fighters.Count > 0)
             {
                 var battleField = new BattleField();
-                var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField);
+                var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField, tickCount);
                 battleManager.Fight(550); //original 550    
             }
             var model = Mapper.Map<Replay, ReplayViewModel>(replay);
@@ -61,9 +62,10 @@ namespace SnakeBattleNet.Web.Controllers.Api
                 new Directed {X = 13, Y = 25, Direction = Direction.South}
             };
             var fighters = heads.Select(h => new Fighter(Guid.NewGuid().ToString(), new Collection<IEnumerable<ChipCell>>(), h)).ToList();
-            var replay = new Replay { BattleField = new BattleField() };
+            var tickCount = Environment.TickCount;
+            var replay = new Replay(tickCount) { BattleField = new BattleField() };
             var battleField = new BattleField();
-            var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField);
+            var battleManager = new BattleManager(fighters, replay, new FieldComparer(battleField), battleField, tickCount);
             battleManager.Fight(550); //original 550
             var model = Mapper.Map<Replay, ReplayViewModel>(replay);
             return model;
