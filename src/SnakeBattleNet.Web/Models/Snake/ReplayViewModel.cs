@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Web.Models.Snake
 {
@@ -7,6 +6,6 @@ namespace SnakeBattleNet.Web.Models.Snake
     {
         public int RandomSeed { get; set; }
         public IEnumerable<ContentViewModel> BattleField { get; set; }
-        public IDictionary<int, IDictionary<string, IEnumerable<Cell<Content>>>> Frames { get; set; }
+        public IDictionary<int, IDictionary<string, IEnumerable<ContentViewModel>>> Frames { get; set; }
     }
 }

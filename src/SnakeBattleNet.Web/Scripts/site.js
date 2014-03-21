@@ -2,7 +2,7 @@
 
 var SBN = SBN || {};
 SBN.Contract = {
-    colorMap: ['blue', 'green', 'grey', 'red', 'black'],
+    colorMap: { Blue: 'blue', Green: 'green', Grey: 'grey', Red: 'red', Black: 'black' },
     imageMap: {
         ebody: '/img/eBody.png',
         ehead: '/img/eHead.png',
@@ -14,7 +14,7 @@ SBN.Contract = {
         otail: '/img/oTail.png',
         wall: '/img/wall.png'
     },
-    content: ['empty', 'wall', 'head', 'body', 'tail', 'gateway']
+    content: { Empty: 'empty', Wall: 'wall', Head: 'head', Body: 'body', Tail: 'tail', Gateway: 'gateway' }
 };
 
 SBN.Edit = function (settings, Renderer, Snake, ImageLoader) {
@@ -314,7 +314,7 @@ SBN.Kinetic = {
         });
     },
     renderSelector: function ($container, images) {
-        var model = { content: 3, color: 2, isSelf: false, exclude: false };
+        var model = { content: 'Tail', color: 'Grey', isSelf: false, exclude: false };
         $container.data('model', model);
 
         var size = SBN.Kinetic.Configuration.size;
@@ -415,9 +415,9 @@ SBN.Kinetic = {
             $.each(frame, function (key, value) {
                 $.each(value, function (index, cell) {
                     layer.add(new Kinetic.Image({
-                        x: cell.x * 30,
-                        y: cell.y * 30,
-                        image: imageSelector(cell.content),
+                        x: cell.p.x * 30,
+                        y: cell.p.y * 30,
+                        image: imageSelector(cell.c),
                         width: 30,
                         height: 30
                     }));

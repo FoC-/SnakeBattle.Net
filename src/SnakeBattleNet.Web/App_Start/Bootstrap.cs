@@ -159,6 +159,9 @@ namespace SnakeBattleNet.Web
                             models.Add(new ContentViewModel { C = v[x, y], P = new Position { X = x, Y = y } });
                     return models;
                 });
+            Mapper.CreateMap<Cell<Content>, ContentViewModel>()
+                .ConvertUsing(v => new ContentViewModel { C = v.Content, P = new Position { X = v.X, Y = v.Y } });
+
             Mapper.CreateMap<Snake, SnakeViewModel>();
 
             Mapper.CreateMap<Tuple<Snake, SnakeViewModel>, Snake>()
