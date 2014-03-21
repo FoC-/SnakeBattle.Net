@@ -143,7 +143,7 @@ namespace SnakeBattleNet.Web
                 {
                     X = v.P.X,
                     Y = v.P.Y,
-                    Color = Activator.CreateInstance(Type.GetType(v.Color)) as Color.IColor,
+                    Color = Color.ByName(v.Color),
                     Content = v.C,
                     Exclude = v.Exclude,
                     IsSelf = v.IsSelf

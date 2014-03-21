@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SnakeBattleNet.Core.Contract
 {
@@ -16,6 +17,20 @@ namespace SnakeBattleNet.Core.Contract
         public class Or : IColor
         {
             public bool IsAnd { get { return false; } }
+        }
+
+        public static IColor ByName(string name)
+        {
+            switch (name)
+            {
+                case "Blue": return new Blue();
+                case "Green": return new Green();
+                case "Grey": return new Grey();
+                case "Red": return new Red();
+                case "Black": return new Black();
+                default:
+                    throw new ArgumentOutOfRangeException("name", name);
+            }
         }
 
         public class Blue : Or
