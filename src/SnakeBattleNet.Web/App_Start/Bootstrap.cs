@@ -134,7 +134,7 @@ namespace SnakeBattleNet.Web
                 {
                     P = new Position { X = v.X, Y = v.Y },
                     C = v.Content,
-                    Color = v.Color,
+                    Color = v.Color.GetType().Name,
                     Exclude = v.Exclude,
                     IsSelf = v.IsSelf
                 });
@@ -143,7 +143,7 @@ namespace SnakeBattleNet.Web
                 {
                     X = v.P.X,
                     Y = v.P.Y,
-                    Color = v.Color,
+                    Color = Activator.CreateInstance(Type.GetType(v.Color)) as Color.IColor,
                     Content = v.C,
                     Exclude = v.Exclude,
                     IsSelf = v.IsSelf

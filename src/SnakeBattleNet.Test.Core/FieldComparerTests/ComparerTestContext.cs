@@ -16,8 +16,8 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
         {
             return new List<ChipCell>
             {
-                new ChipCell {X = 5, Y = 6, Content = Content.Tail, Color = Color.Grey()},
-                new ChipCell {X = 5, Y = 5, Content = Content.Head, Color = Color.Grey(), IsSelf = true}
+                new ChipCell {X = 5, Y = 6, Content = Content.Tail, Color = new Color.Grey()},
+                new ChipCell {X = 5, Y = 5, Content = Content.Head, Color = new Color.Grey(), IsSelf = true}
             };
         }
 

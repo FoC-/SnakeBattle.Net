@@ -2,46 +2,38 @@
 
 namespace SnakeBattleNet.Core.Contract
 {
-    public class Color
+    public abstract class Color
     {
-        public bool IsAnd { get; set; }
-        public string Name { get; set; }
-
-        public static IEnumerable<Color> GetAll()
+        public interface IColor
         {
-            return new[]
-            {
-                Blue(),
-                Green(),
-                Grey(),
-                Red(),
-                Black(),
-            };
+            bool IsAnd { get; }
         }
 
-        public static Color Blue()
+        public class And : IColor
         {
-            return new Color { Name = "Blue" };
+            public bool IsAnd { get { return true; } }
+        }
+        public class Or : IColor
+        {
+            public bool IsAnd { get { return false; } }
         }
 
-        public static Color Green()
+        public class Blue : Or
         {
-            return new Color { Name = "Green" };
+        }
+        public class Green : Or
+        {
+        }
+        public class Grey : And
+        {
+        }
+        public class Red : And
+        {
+        }
+        public class Black : And
+        {
         }
 
-        public static Color Grey()
-        {
-            return new Color { Name = "Grey", IsAnd = true };
-        }
-
-        public static Color Red()
-        {
-            return new Color { Name = "Red", IsAnd = true };
-        }
-
-        public static Color Black()
-        {
-            return new Color { Name = "Black", IsAnd = true };
-        }
+        public static IEnumerable<IColor> All = new IColor[] { new Blue(), new Green(), new Grey(), new Red(), new Black() };
     }
 }

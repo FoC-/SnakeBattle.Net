@@ -28,7 +28,7 @@ namespace SnakeBattleNet.Core
         public Direction[] DecidedDirections(Fighter fighter, Direction[] possibleDirections)
         {
             var directions = fighter.Chips
-                .Select(c => possibleDirections.Where(direction => IsEqual(direction, c, fighter)))
+                .Select(cells => possibleDirections.Where(direction => IsEqual(direction, cells.ToList(), fighter)))
                 .FirstOrDefault(d => d.Any());
             return directions == null ? possibleDirections : directions.ToArray();
         }
@@ -42,18 +42,19 @@ namespace SnakeBattleNet.Core
                    || (field[x, y] == Content.Head && fighters.Any(f => f.BodyParts.Count > 0 && f.Head.X == x && f.Head.Y == y));
         }
 
-        private bool IsEqual(Direction direction, IEnumerable<ChipCell> chip, Fighter fighter)
+        private bool IsEqual(Direction direction, IList<ChipCell> chip, Fighter fighter)
         {
-            var chipHead = chip.FirstOrDefault(c => c.Content == Content.Head && c.IsSelf);
-            var colors = Color.GetAll();
-            var bools = (from color in colors
-                         let cells = chip.Where(c => c.Color.Name == color.Name)
-                         where cells.Any()
-                         select color.IsAnd
-                         ? cells.All(c => IsEqual(fighter.BodyParts, field.RelativeCell(direction, fighter.Head, chipHead, c), c))
-                         : cells.Any(c => IsEqual(fighter.BodyParts, field.RelativeCell(direction, fighter.Head, chipHead, c), c))).ToList();
+            var chipHead = chip.First(c => c.Content == Content.Head && c.IsSelf);
 
-            var andType = colors.Any(c => c.IsAnd && c.Name == chipHead.Color.Name);
+            var bools = Color.All.Where(color => chip.Any(c => c.Color == color))
+                .Select(color => color.IsAnd
+                    ? chip.Where(cell => cell.Color == color)
+                        .All(c => IsEqual(fighter.BodyParts, field.RelativeCell(direction, fighter.Head, chipHead, c), c))
+                    : chip.Where(cell => cell.Color == color)
+                        .Any(c => IsEqual(fighter.BodyParts, field.RelativeCell(direction, fighter.Head, chipHead, c), c)))
+                .ToList();
+
+            var andType = Color.All.Any(c => c.IsAnd && c == chipHead.Color);
             return andType
                 ? bools.All(b => b)
                 : bools.Any(b => b);
