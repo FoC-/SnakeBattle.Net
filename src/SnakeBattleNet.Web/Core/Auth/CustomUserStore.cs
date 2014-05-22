@@ -8,7 +8,7 @@ using SnakeBattleNet.Web.Utils;
 
 namespace SnakeBattleNet.Web.Core.Auth
 {
-    public class CustomUserStore<TUser> : IUserPasswordStore<TUser>, IUserRoleStore<TUser>, IUserSearch<TUser> where TUser : UserIdentity
+    public class CustomUserStore<TUser> : IUserPasswordStore<TUser>, IUserRoleStore<TUser>, IUserSearch<TUser>, IUserStore<TUser> where TUser : UserIdentity
     {
         private readonly MongoCollection<UserIdentity> _usersCollection;
 

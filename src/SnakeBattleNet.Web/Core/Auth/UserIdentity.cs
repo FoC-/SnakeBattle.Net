@@ -4,7 +4,7 @@ using Microsoft.AspNet.Identity;
 
 namespace SnakeBattleNet.Web.Core.Auth
 {
-    public class UserIdentity : IUser
+    public class UserIdentity : IUser<string>
     {
         public string Id { get; private set; }
         public string UserName { get; set; }
