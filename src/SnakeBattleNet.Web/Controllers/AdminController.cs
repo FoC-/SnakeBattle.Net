@@ -8,7 +8,7 @@ using SnakeBattleNet.Web.Utils;
 
 namespace SnakeBattleNet.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IUserSearch<UserIdentity> _userSearch;
