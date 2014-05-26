@@ -5,7 +5,7 @@
     <title>@ViewBag.Title</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/bundles/css")
 </head>
 <body>
     @Html.Partial("_HeaderMenu")
@@ -13,10 +13,8 @@
         @RenderBody()
     </div>
     @*@Html.Partial("_GoogleAnalytics", "UA-32101944-1")*@
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/kinetic")
-    @Scripts.Render("~/bundles/site")
+    @Scripts.Render("~/bundles/jb")
+    @Scripts.Render("~/bundles/ks")
     @RenderSection("Scripts", required: false)
 </body>
 </html>
