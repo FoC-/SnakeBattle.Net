@@ -18,7 +18,7 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
             result = comparer.DecidedDirections(fighter, new[] { Direction.East, Direction.West, Direction.North, Direction.South, });
 
         It should_return_move_on_that_row = () =>
-            result.Single().ShouldEqual(Direction.North);
+            result.ShouldContainOnly(new[] { Direction.North });
 
         private static Direction[] result;
         private static Fighter fighter;
