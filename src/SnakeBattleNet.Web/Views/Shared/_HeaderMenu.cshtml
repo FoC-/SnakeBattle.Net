@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
+@using SnakeBattleNet.Web.Core.Auth
 
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -23,7 +24,7 @@
                     @Html.AntiForgeryToken()
 
                     <ul class="nav navbar-nav navbar-right">
-                        @if (User.IsInRole("Admin"))
+                        @if (User.IsInRole(RolesProvider.Admin))
                         {
                             <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
                         }
