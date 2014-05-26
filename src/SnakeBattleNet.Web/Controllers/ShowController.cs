@@ -30,10 +30,5 @@ namespace SnakeBattleNet.Web.Controllers
             }
             return View(s);
         }
-
-        public ActionResult Demo()
-        {
-            return View();
-        }
     }
 }

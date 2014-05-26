@@ -288,7 +288,6 @@
     <Content Include="Views\Train\Edit.cshtml" />
     <Content Include="Views\Shared\_GoogleAnalytics.cshtml" />
     <Content Include="Views\Show\Index.cshtml" />
-    <Content Include="Views\Show\Demo.cshtml" />
     <Content Include="Views\Show\Go.cshtml" />
     <Content Include="Views\Shared\_Snake.cshtml" />
   </ItemGroup>
