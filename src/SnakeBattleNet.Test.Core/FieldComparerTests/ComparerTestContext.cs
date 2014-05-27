@@ -7,33 +7,70 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
 {
     internal class ComparerTestContext
     {
-        internal static Fighter CreateFighterWithOneChip(List<ChipCell> chip, int x, int y)
+        internal static Fighter CreateFighter(int x, int y, ICollection<IEnumerable<ChipCell>> chips, params  Direction[] growDirections)
         {
-            return new Fighter(Guid.NewGuid().ToString(), new[] { chip }, new Directed { X = x, Y = y, Direction = Direction.South });
+            var fighter = new Fighter(Guid.NewGuid().ToString(), chips, new Directed { X = x, Y = y, Direction = Direction.North });
+            foreach (var direction in growDirections)
+            {
+                fighter.Grow(direction);
+            }
+            return fighter;
         }
 
-        internal static List<ChipCell> FullGreyWithOneEnemyTail()
+        internal static ICollection<IEnumerable<ChipCell>> FullGreyWithOneEnemyTail()
         {
-            return new List<ChipCell>
+            return new[]{ new List<ChipCell>
             {
                 new ChipCell {X = 5, Y = 6, Content = Content.Tail, Color = new Color.Grey()},
                 new ChipCell {X = 5, Y = 5, Content = Content.Head, Color = new Color.Grey(), IsSelf = true}
-            };
+            }};
         }
 
-        internal static FieldComparer CreateFieldComparer(int ownHeadX, int ownHeadY)
+        internal static FieldComparer CreateFieldComparer(BattleField battleField)
+        {
+            return new FieldComparer(battleField);
+        }
+
+        internal static BattleField CreateFieldForFighters(IEnumerable<Fighter> fighters, params Cell<Content>[] additionFieldElements)
         {
             var battleField = new BattleField();
-            battleField[10, 10] = Content.Tail;
-            battleField[10, 11] = Content.Body;
-            battleField[10, 12] = Content.Head;
+            foreach (var fighter in fighters)
+            {
+                foreach (var part in fighter.BodyParts)
+                {
+                    battleField[part.X, part.Y] = Content.Body;
+                }
+                battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Tail;
+                battleField[fighter.Head.X, fighter.Head.Y] = Content.Head;
+            }
+            if (additionFieldElements != null)
+            {
+                foreach (var cell in additionFieldElements)
+                {
+                    battleField[cell.X, cell.Y] = cell.Content;
+                }
+            }
+            return battleField;
+        }
+    }
 
-            battleField[11, 10] = Content.Tail;
-            battleField[11, 11] = Content.Head;
+    internal class ComparerTestScenarious : ComparerTestContext
+    {
+        internal static class FighterStub
+        {
+            internal static Fighter TopRightLengthTwo()
+            {
+                return CreateFighter(25, 24, GreyEmptyInfront(), Direction.North);
+            }
 
-            battleField[12, 10] = Content.Head;
-            battleField[ownHeadX, ownHeadY] = Content.Head;
-            return new FieldComparer(battleField);
+            internal static ICollection<IEnumerable<ChipCell>> GreyEmptyInfront()
+            {
+                return new[]{ new List<ChipCell>
+                {
+                    new ChipCell {X = 5, Y = 6, Content = Content.Empty, Color = new Color.Grey()},
+                    new ChipCell {X = 5, Y = 5, Content = Content.Head, Color = new Color.Grey(), IsSelf = true}
+                }};
+            }
         }
     }
 }

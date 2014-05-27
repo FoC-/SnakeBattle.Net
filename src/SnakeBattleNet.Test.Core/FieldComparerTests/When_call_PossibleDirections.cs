@@ -20,12 +20,12 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
             var fighter2 = new Fighter("fighter2", new List<IEnumerable<ChipCell>>(), new Directed { X = 3, Y = 1, Direction = Direction.North });
             fighters.Add(fighter2);
 
-            fighter = CreateFighterWithOneChip(FullGreyWithOneEnemyTail(), 2, 1);
+            fighter = CreateFighter(2, 1, FullGreyWithOneEnemyTail());
             comparer = new FieldComparer(battleField);
         };
 
         Because of = () =>
-            result = comparer.PossibleDirections(fighter.Head, fighters);
+            result = comparer.PossibleDirections(fighter, fighters);
 
         It should_return_north_west_east = () =>
             result.ShouldContainOnly(Direction.North, Direction.West, Direction.East);

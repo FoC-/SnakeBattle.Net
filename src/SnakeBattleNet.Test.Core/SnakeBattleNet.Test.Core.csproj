@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FieldComparerTests\ComparerTestContext.cs" />
+    <Compile Include="FieldComparerTests\When_call_DecidedDirections_case1.cs" />
     <Compile Include="FieldComparerTests\When_call_DecidedDirections_with_predifined_chip_antother_tail.cs" />
     <Compile Include="FighterTests\When_call_CutTail.cs" />
     <Compile Include="FieldComparerTests\When_call_PossibleDirections.cs" />

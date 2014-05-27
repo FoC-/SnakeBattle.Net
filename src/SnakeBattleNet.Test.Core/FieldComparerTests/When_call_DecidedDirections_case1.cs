@@ -1,3 +1,4 @@
+using System.Linq;
 using Machine.Specifications;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
@@ -5,20 +6,20 @@ using SnakeBattleNet.Core.Contract;
 namespace SnakeBattleNet.Test.Core.FieldComparerTests
 {
     [Subject(typeof(FieldComparer))]
-    class When_call_DecidedDirections_with_predifined_chip_antother_tail : ComparerTestContext
+    class When_call_PossibleDirections_case_1 : ComparerTestScenarious
     {
         Establish context = () =>
         {
-            fighter = CreateFighter(10, 9, FullGreyWithOneEnemyTail());
+            fighter = FighterStub.TopRightLengthTwo();
             var field = CreateFieldForFighters(new[] { fighter });
             comparer = CreateFieldComparer(field);
         };
 
         Because of = () =>
-            result = comparer.DecidedDirections(fighter, new[] { Direction.East, Direction.West, Direction.North, Direction.South, });
+            result = comparer.PossibleDirections(fighter, Enumerable.Empty<Fighter>());
 
-        It should_return_move_on_that_row = () =>
-            result.ShouldContainOnly(new[] { Direction.North });
+        It should_return_only_west_direction = () =>
+            result.ShouldContainOnly(Direction.West);
 
         private static Direction[] result;
         private static Fighter fighter;
