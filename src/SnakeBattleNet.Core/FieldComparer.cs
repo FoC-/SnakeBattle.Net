@@ -13,16 +13,48 @@ namespace SnakeBattleNet.Core
             this.field = field;
         }
 
-        public Direction[] PossibleDirections(Directed head, IEnumerable<Fighter> fighters)
+        public Direction[] PossibleDirections(Fighter self, IEnumerable<Fighter> enemies)
         {
+            var fighters = enemies as Fighter[] ?? enemies.ToArray();
             var moves = new[]
             {
-                Directed.ToNothFrom(head),
-                Directed.ToWestFrom(head),
-                Directed.ToEastFrom(head),
-                Directed.ToSouthFrom(head),
+                Directed.ToNothFrom(self.Head),
+                Directed.ToWestFrom(self.Head),
+                Directed.ToEastFrom(self.Head),
+                Directed.ToSouthFrom(self.Head),
             };
-            return moves.Where(m => IsPossible(m, fighters)).Select(_ => _.Direction).ToArray();
+            var result = new HashSet<Directed>();
+            foreach (var move in moves)
+            {
+                // Empty cells
+                if (field[move.X, move.Y] == Content.Empty)
+                {
+                    result.Add(move);
+                    continue;
+                }
+
+                // Own tail
+                if (self.BodyParts.Count > 3 && self.Tail.X == move.X && self.Tail.Y == move.Y)
+                {
+                    result.Add(move);
+                    continue;
+                }
+
+                // Enemy single heads and tails
+                foreach (var fighter in fighters)
+                {
+                    if (fighter.BodyParts.Count == 1 && fighter.Head.X == move.X && fighter.Head.Y == move.Y)
+                    {
+                        result.Add(move);
+                        break;
+                    }
+                    if (fighter.Tail.X == move.X && fighter.Tail.Y == move.Y)
+                    {
+                        result.Add(move);
+                    }
+                }
+            }
+            return result.Select(_ => _.Direction).ToArray();
         }
 
         public Direction[] DecidedDirections(Fighter fighter, Direction[] possibleDirections)
@@ -31,15 +63,6 @@ namespace SnakeBattleNet.Core
                 .Select(cells => possibleDirections.Where(direction => IsEqual(direction, cells.ToList(), fighter)))
                 .FirstOrDefault(d => d.Any());
             return directions == null ? possibleDirections : directions.ToArray();
-        }
-
-        private bool IsPossible(Position position, IEnumerable<Fighter> fighters)
-        {
-            var x = position.X;
-            var y = position.Y;
-            return field[x, y] == Content.Empty
-                   || field[x, y] == Content.Tail
-                   || (field[x, y] == Content.Head && fighters.Any(f => f.BodyParts.Count > 0 && f.Head.X == x && f.Head.Y == y));
         }
 
         private bool IsEqual(Direction direction, IList<ChipCell> chip, Fighter fighter)

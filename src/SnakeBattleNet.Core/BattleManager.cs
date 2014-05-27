@@ -35,7 +35,7 @@ namespace SnakeBattleNet.Core
                 var skipped = 0;
                 foreach (var fighter in Shuffle(fighters))
                 {
-                    var possibleDirections = fieldComparer.PossibleDirections(fighter.Head, fighters);
+                    var possibleDirections = fieldComparer.PossibleDirections(fighter, fighters.Except(new[] { fighter }));
                     var directions = fieldComparer.DecidedDirections(fighter, possibleDirections);
                     if (directions.Length == 0)
                     {
