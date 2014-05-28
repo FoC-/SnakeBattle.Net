@@ -59,10 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FieldComparerTests\ComparerTestContext.cs" />
-    <Compile Include="FieldComparerTests\When_call_DecidedDirections_case1.cs" />
+    <Compile Include="FieldComparerTests\When_call_PossibleDirections_case_blocked.cs" />
     <Compile Include="FieldComparerTests\When_call_DecidedDirections_with_predifined_chip_antother_tail.cs" />
+    <Compile Include="FieldComparerTests\When_call_PossibleDirections_case_tails.cs" />
     <Compile Include="FighterTests\When_call_CutTail.cs" />
-    <Compile Include="FieldComparerTests\When_call_PossibleDirections.cs" />
     <Compile Include="FighterTests\When_call_Grow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BattleFieldTests\When_RelativeCell_is_called_and_direction_is_east.cs" />

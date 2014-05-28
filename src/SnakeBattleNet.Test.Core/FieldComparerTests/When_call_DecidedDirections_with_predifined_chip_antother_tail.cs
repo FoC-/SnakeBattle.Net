@@ -9,7 +9,7 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
     {
         Establish context = () =>
         {
-            fighter = CreateFighter(10, 9, FullGreyWithOneEnemyTail());
+            fighter = CreateDummyFighter(10, 9).AttachChips(FullGreyWithOneEnemyTail());
             var field = CreateFieldForFighters(new[] { fighter });
             comparer = CreateFieldComparer(field);
         };

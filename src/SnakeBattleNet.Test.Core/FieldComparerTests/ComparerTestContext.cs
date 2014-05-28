@@ -7,23 +7,18 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
 {
     internal class ComparerTestContext
     {
-        internal static Fighter CreateFighter(int x, int y, ICollection<IEnumerable<ChipCell>> chips, params  Direction[] growDirections)
+        internal static Fighter CreateDummyFighter(int x, int y)
         {
-            var fighter = new Fighter(Guid.NewGuid().ToString(), chips, new Directed { X = x, Y = y, Direction = Direction.North });
-            foreach (var direction in growDirections)
-            {
-                fighter.Grow(direction);
-            }
-            return fighter;
+            return new Fighter(Guid.NewGuid().ToString(), new List<IEnumerable<ChipCell>>(), new Directed { X = x, Y = y, Direction = Direction.North });
         }
 
-        internal static ICollection<IEnumerable<ChipCell>> FullGreyWithOneEnemyTail()
+        internal static IEnumerable<ChipCell> FullGreyWithOneEnemyTail()
         {
-            return new[]{ new List<ChipCell>
+            return new List<ChipCell>
             {
                 new ChipCell {X = 5, Y = 6, Content = Content.Tail, Color = new Color.Grey()},
                 new ChipCell {X = 5, Y = 5, Content = Content.Head, Color = new Color.Grey(), IsSelf = true}
-            }};
+            };
         }
 
         internal static FieldComparer CreateFieldComparer(BattleField battleField)
@@ -43,34 +38,35 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
                 battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Tail;
                 battleField[fighter.Head.X, fighter.Head.Y] = Content.Head;
             }
-            if (additionFieldElements != null)
+            foreach (var cell in additionFieldElements)
             {
-                foreach (var cell in additionFieldElements)
-                {
-                    battleField[cell.X, cell.Y] = cell.Content;
-                }
+                battleField[cell.X, cell.Y] = cell.Content;
             }
             return battleField;
         }
     }
 
-    internal class ComparerTestScenarious : ComparerTestContext
+    internal static class Helpers
     {
-        internal static class FighterStub
+        internal static Fighter Run(this Fighter fighter, Direction direction, int times = 1)
         {
-            internal static Fighter TopRightLengthTwo()
-            {
-                return CreateFighter(25, 24, GreyEmptyInfront(), Direction.North);
-            }
+            for (var i = 0; i < times; i++)
+                fighter.Grow(Direction.North);
+            return fighter;
+        }
 
-            internal static ICollection<IEnumerable<ChipCell>> GreyEmptyInfront()
-            {
-                return new[]{ new List<ChipCell>
-                {
-                    new ChipCell {X = 5, Y = 6, Content = Content.Empty, Color = new Color.Grey()},
-                    new ChipCell {X = 5, Y = 5, Content = Content.Head, Color = new Color.Grey(), IsSelf = true}
-                }};
-            }
+        internal static Fighter Run(this Fighter fighter, params Direction[] directions)
+        {
+            foreach (var direction in directions)
+                fighter.Grow(direction);
+            return fighter;
+        }
+
+        internal static Fighter AttachChips(this Fighter fighter, params IEnumerable<ChipCell>[] chips)
+        {
+            foreach (var chip in chips)
+                fighter.Chips.Add(chip);
+            return fighter;
         }
     }
 }
