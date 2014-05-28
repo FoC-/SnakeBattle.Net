@@ -22,7 +22,7 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
             result = comparer.DecidedDirections(fighter, comparer.PossibleDirections(fighter, enemies));
 
         It should_return_move_on_that_row = () =>
-            result.ShouldContainOnly(Direction.North, Direction.South);
+            result.ShouldContainOnly(Direction.North, Direction.East);
 
         private static Direction[] result;
         private static Fighter fighter;

@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Reflection;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using SnakeBattleNet.Core.Contract;
@@ -78,13 +76,15 @@ namespace SnakeBattleNet.Web.DependencyResolution.Providers
                     cm.SetIgnoreExtraElements(true);
                 });
             }
-            var type = typeof(Color.IColor);
-            var types = Assembly.GetAssembly(type)
-                    .GetTypes()
-                    .Where(type.IsAssignableFrom)
-                    .Where(t => t.IsClass);
-            foreach (var t in types)
-                BsonClassMap.LookupClassMap(t);
+            if (!BsonClassMap.IsClassMapRegistered(typeof(Color)))
+            {
+                BsonClassMap.RegisterClassMap<Color>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetDiscriminator("Color");
+                    cm.SetIgnoreExtraElements(true);
+                });
+            }
         }
     }
 }

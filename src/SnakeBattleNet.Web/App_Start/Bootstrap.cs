@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -129,7 +128,7 @@ namespace SnakeBattleNet.Web
                 {
                     P = new Position { X = v.X, Y = v.Y },
                     C = v.Content,
-                    Color = v.Color.GetType().Name,
+                    Color = v.Color.Name,
                     Exclude = v.Exclude,
                     IsSelf = v.IsSelf
                 });
@@ -138,7 +137,7 @@ namespace SnakeBattleNet.Web
                 {
                     X = v.P.X,
                     Y = v.P.Y,
-                    Color = Color.ByName(v.Color),
+                    Color = Color.All[v.Color],
                     Content = v.C,
                     Exclude = v.Exclude,
                     IsSelf = v.IsSelf

@@ -69,15 +69,17 @@ namespace SnakeBattleNet.Core
         {
             var chipHead = chip.First(c => c.Content == Content.Head && c.IsSelf);
 
-            var bools = Color.All.Where(color => chip.Any(c => c.Color == color))
-                .Select(color => color.IsAnd
-                    ? chip.Where(cell => cell.Color == color)
+            var bools = Color.All
+                .Where(color => chip.Any(c => c.Color.Name == color.Key))
+                .Select(color => color.Value.IsAnd
+                    ? chip
+                        .Where(cell => cell.Color.Name == color.Key)
                         .All(c => IsEqual(fighter.BodyParts, field.RelativeCell(direction, fighter.Head, chipHead, c), c))
-                    : chip.Where(cell => cell.Color == color)
-                        .Any(c => IsEqual(fighter.BodyParts, field.RelativeCell(direction, fighter.Head, chipHead, c), c)))
-                .ToList();
+                    : chip
+                        .Where(cell => cell.Color.Name == color.Key)
+                        .Any(c => IsEqual(fighter.BodyParts, field.RelativeCell(direction, fighter.Head, chipHead, c), c)));
 
-            var andType = Color.All.Any(c => c.IsAnd && c == chipHead.Color);
+            var andType = Color.All.Any(c => c.Value.IsAnd && c.Key == chipHead.Color.Name);
             return andType
                 ? bools.All(b => b)
                 : bools.Any(b => b);

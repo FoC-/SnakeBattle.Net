@@ -1,54 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SnakeBattleNet.Core.Contract
 {
-    public abstract class Color
+    public class Color
     {
-        public interface IColor
+        public string Name { get; private set; }
+        public bool IsAnd { get; private set; }
+
+        public static Dictionary<string, Color> All = new Dictionary<string, Color>
         {
-            bool IsAnd { get; }
+            {"Blue", new Color { Name = "Blue", IsAnd = false }},
+            {"Green",new Color { Name = "Green", IsAnd = false }},
+            {"Grey", new Color { Name = "Grey", IsAnd = true }},
+            {"Red",  new Color { Name = "Red", IsAnd = true }},
+            {"Black",new Color { Name = "Black", IsAnd = true }},
+        };
+
+        public static Color Blue()
+        {
+            return All["Blue"];
         }
 
-        public class And : IColor
+        public static Color Green()
         {
-            public bool IsAnd { get { return true; } }
-        }
-        public class Or : IColor
-        {
-            public bool IsAnd { get { return false; } }
+            return All["Green"];
         }
 
-        public static IColor ByName(string name)
+        public static Color Grey()
         {
-            switch (name)
-            {
-                case "Blue": return new Blue();
-                case "Green": return new Green();
-                case "Grey": return new Grey();
-                case "Red": return new Red();
-                case "Black": return new Black();
-                default:
-                    throw new ArgumentOutOfRangeException("name", name);
-            }
+            return All["Grey"];
         }
 
-        public class Blue : Or
+        public static Color Red()
         {
-        }
-        public class Green : Or
-        {
-        }
-        public class Grey : And
-        {
-        }
-        public class Red : And
-        {
-        }
-        public class Black : And
-        {
+            return All["Red"];
         }
 
-        public static IEnumerable<IColor> All = new IColor[] { new Blue(), new Green(), new Grey(), new Red(), new Black() };
+        public static Color Black()
+        {
+            return All["Black"];
+        }
     }
 }
