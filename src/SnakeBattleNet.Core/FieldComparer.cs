@@ -74,10 +74,10 @@ namespace SnakeBattleNet.Core
                 .Select(color => color.Value.IsAnd
                     ? chip
                         .Where(cell => cell.Color.Name == color.Key)
-                        .All(c => IsEqual(fighter.Body, field.RelativeCell(direction, fighter.Head, chipHead, c), c))
+                        .All(c => IsEqual(fighter, field.RelativeCell(direction, fighter.Head, chipHead, c), c))
                     : chip
                         .Where(cell => cell.Color.Name == color.Key)
-                        .Any(c => IsEqual(fighter.Body, field.RelativeCell(direction, fighter.Head, chipHead, c), c)));
+                        .Any(c => IsEqual(fighter, field.RelativeCell(direction, fighter.Head, chipHead, c), c)));
 
             var andType = Color.All.Any(c => c.Value.IsAnd && c.Key == chipHead.Color.Name);
             return andType
@@ -85,12 +85,19 @@ namespace SnakeBattleNet.Core
                 : bools.Any(b => b);
         }
 
-        private static bool IsEqual(IEnumerable<Directed> bodyParts, Cell<Content> fieldCell, ChipCell chipCell)
+        private static bool IsEqual(Fighter fighter, Cell<Content> fieldCell, ChipCell chipCell)
         {
-            var fieldIsSelf = bodyParts.Any(m => m.X == fieldCell.X && m.Y == fieldCell.Y);
+            var fieldIsSelf = FieldIsSelf(fighter, fieldCell);
             return chipCell.Exclude
                 ? chipCell.Content != fieldCell.Content || chipCell.IsSelf != fieldIsSelf
                 : chipCell.Content == fieldCell.Content && chipCell.IsSelf == fieldIsSelf;
+        }
+
+        private static bool FieldIsSelf(Fighter fighter, Position fieldCell)
+        {
+            if (fighter.Head != null && fighter.Head.X == fieldCell.X && fighter.Head.Y == fieldCell.Y) return true;
+            if (fighter.Tail != null && fighter.Tail.X == fieldCell.X && fighter.Tail.Y == fieldCell.Y) return true;
+            return fighter.Body.Any(b => b.X == fieldCell.X && b.Y == fieldCell.Y);
         }
     }
 }
