@@ -21,7 +21,7 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
         Because of = () =>
             result = comparer.PossibleDirections(fighter, enemies);
 
-        It should_return_only_west_direction = () =>
+        It should_return_only_west_nort_east_direction = () =>
             result.ShouldContainOnly(Direction.West, Direction.North, Direction.East);
 
         private static Direction[] result;

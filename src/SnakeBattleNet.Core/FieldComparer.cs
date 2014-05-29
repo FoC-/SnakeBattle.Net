@@ -34,7 +34,7 @@ namespace SnakeBattleNet.Core
                 }
 
                 // Own tail
-                if (self.Body.Count > 3 && self.Tail.X == move.X && self.Tail.Y == move.Y)
+                if (self.Body.Count > 1 && self.Tail.X == move.X && self.Tail.Y == move.Y)
                 {
                     result.Add(move);
                     continue;
