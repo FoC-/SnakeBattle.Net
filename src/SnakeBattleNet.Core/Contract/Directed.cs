@@ -11,7 +11,7 @@ namespace SnakeBattleNet.Core.Contract
             switch (direction)
             {
                 case Direction.North:
-                    return ToNothFrom(position);
+                    return ToNorthFrom(position);
                 case Direction.West:
                     return ToWestFrom(position);
                 case Direction.East:
@@ -23,7 +23,7 @@ namespace SnakeBattleNet.Core.Contract
             }
         }
 
-        public static Directed ToNothFrom(Position position)
+        public static Directed ToNorthFrom(Position position)
         {
             return new Directed { X = position.X, Y = position.Y + 1, Direction = Direction.North };
         }
@@ -41,6 +41,31 @@ namespace SnakeBattleNet.Core.Contract
         public static Directed ToSouthFrom(Position position)
         {
             return new Directed { X = position.X, Y = position.Y - 1, Direction = Direction.South };
+        }
+
+        protected bool Equals(Directed other)
+        {
+            return Direction == other.Direction
+                && X == other.X
+                && Y == other.Y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Directed)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hash = X.GetHashCode();
+                hash = 31 * hash + Y.GetHashCode();
+                return 31 * hash + Direction.GetHashCode();
+            }
         }
 
         public override string ToString()

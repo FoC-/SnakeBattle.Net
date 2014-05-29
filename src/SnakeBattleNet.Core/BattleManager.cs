@@ -71,7 +71,7 @@ namespace SnakeBattleNet.Core
 
         private void PutOnBattleField(Fighter fighter)
         {
-            foreach (var part in fighter.BodyParts)
+            foreach (var part in fighter.Body)
             {
                 battleField[part.X, part.Y] = Content.Body;
             }
@@ -83,7 +83,7 @@ namespace SnakeBattleNet.Core
         {
             battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Empty;
             fighter.CutTail();
-            if (fighter.BodyParts.Count > 1)
+            if (fighter.Body.Count > 1)
                 battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Tail;
         }
 

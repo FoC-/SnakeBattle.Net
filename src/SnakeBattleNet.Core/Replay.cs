@@ -24,7 +24,7 @@ namespace SnakeBattleNet.Core
                 replayEvents = new Dictionary<string, IEnumerable<Cell<Content>>>();
                 Frames.Add(round, replayEvents);
             }
-            var cells = fighter.BodyParts.Select(x => new Cell<Content> { X = x.X, Y = x.Y, Content = Content.Body }).ToArray();
+            var cells = fighter.Body.Select(x => new Cell<Content> { X = x.X, Y = x.Y, Content = Content.Body }).ToArray();
             cells[cells.Length - 1].Content = Content.Tail;
             cells[0].Content = Content.Head;
             replayEvents.Add(fighter.Id, cells);

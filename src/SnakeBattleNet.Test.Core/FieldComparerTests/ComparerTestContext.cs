@@ -31,12 +31,14 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
             var battleField = new BattleField();
             foreach (var fighter in fighters)
             {
-                foreach (var part in fighter.BodyParts)
+                foreach (var part in fighter.Body)
                 {
                     battleField[part.X, part.Y] = Content.Body;
                 }
-                battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Tail;
-                battleField[fighter.Head.X, fighter.Head.Y] = Content.Head;
+                if (fighter.Tail != null)
+                    battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Tail;
+                if (fighter.Head != null)
+                    battleField[fighter.Head.X, fighter.Head.Y] = Content.Head;
             }
             foreach (var cell in additionFieldElements)
             {

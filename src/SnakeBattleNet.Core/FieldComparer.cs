@@ -18,7 +18,7 @@ namespace SnakeBattleNet.Core
             var fighters = enemies as Fighter[] ?? enemies.ToArray();
             var moves = new[]
             {
-                Directed.ToNothFrom(self.Head),
+                Directed.ToNorthFrom(self.Head),
                 Directed.ToWestFrom(self.Head),
                 Directed.ToEastFrom(self.Head),
                 Directed.ToSouthFrom(self.Head),
@@ -34,7 +34,7 @@ namespace SnakeBattleNet.Core
                 }
 
                 // Own tail
-                if (self.BodyParts.Count > 3 && self.Tail.X == move.X && self.Tail.Y == move.Y)
+                if (self.Body.Count > 3 && self.Tail.X == move.X && self.Tail.Y == move.Y)
                 {
                     result.Add(move);
                     continue;
@@ -43,7 +43,7 @@ namespace SnakeBattleNet.Core
                 // Enemy single heads and tails
                 foreach (var fighter in fighters)
                 {
-                    if (fighter.BodyParts.Count == 1 && fighter.Head.X == move.X && fighter.Head.Y == move.Y)
+                    if (fighter.Body.Count == 1 && fighter.Head.X == move.X && fighter.Head.Y == move.Y)
                     {
                         result.Add(move);
                         break;
@@ -74,10 +74,10 @@ namespace SnakeBattleNet.Core
                 .Select(color => color.Value.IsAnd
                     ? chip
                         .Where(cell => cell.Color.Name == color.Key)
-                        .All(c => IsEqual(fighter.BodyParts, field.RelativeCell(direction, fighter.Head, chipHead, c), c))
+                        .All(c => IsEqual(fighter.Body, field.RelativeCell(direction, fighter.Head, chipHead, c), c))
                     : chip
                         .Where(cell => cell.Color.Name == color.Key)
-                        .Any(c => IsEqual(fighter.BodyParts, field.RelativeCell(direction, fighter.Head, chipHead, c), c)));
+                        .Any(c => IsEqual(fighter.Body, field.RelativeCell(direction, fighter.Head, chipHead, c), c)));
 
             var andType = Color.All.Any(c => c.Value.IsAnd && c.Key == chipHead.Color.Name);
             return andType
