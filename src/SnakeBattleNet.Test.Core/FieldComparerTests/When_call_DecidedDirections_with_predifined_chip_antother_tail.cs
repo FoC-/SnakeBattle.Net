@@ -1,3 +1,4 @@
+using System;
 using Machine.Specifications;
 using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
@@ -21,10 +22,13 @@ namespace SnakeBattleNet.Test.Core.FieldComparerTests
         Because of = () =>
             result = comparer.DecidedDirections(fighter, comparer.PossibleDirections(fighter, enemies));
 
-        It should_return_move_on_that_row = () =>
-            result.ShouldContainOnly(Direction.North, Direction.East);
+        It should_return_exact_moves = () =>
+            result.Item2.ShouldContainOnly(Direction.North, Direction.East);
 
-        private static Direction[] result;
+        It should_use_chip_0 = () =>
+            result.Item1.ShouldEqual(0);
+
+        private static Tuple<int, Direction[]> result;
         private static Fighter fighter;
         private static FieldComparer comparer;
         private static Fighter[] enemies;

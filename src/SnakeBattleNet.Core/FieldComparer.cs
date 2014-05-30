@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
@@ -57,12 +58,20 @@ namespace SnakeBattleNet.Core
             return result.Select(_ => _.Direction).ToArray();
         }
 
-        public Direction[] DecidedDirections(Fighter fighter, Direction[] possibleDirections)
+        public Tuple<int, Direction[]> DecidedDirections(Fighter fighter, Direction[] possibleDirections)
         {
-            var directions = fighter.Chips
-                .Select(cells => possibleDirections.Where(direction => IsEqual(direction, cells.ToList(), fighter)))
-                .FirstOrDefault(d => d.Any());
-            return directions == null ? possibleDirections : directions.ToArray();
+            var chipNumber = 0;
+            foreach (var chip in fighter.Chips)
+            {
+                var cells = chip.ToList();
+                var directions = possibleDirections.Where(d => IsEqual(d, cells, fighter)).ToArray();
+                if (directions.Any())
+                {
+                    return new Tuple<int, Direction[]>(chipNumber, directions);
+                }
+                chipNumber++;
+            }
+            return new Tuple<int, Direction[]>(-1, possibleDirections);
         }
 
         private bool IsEqual(Direction direction, IList<ChipCell> chip, Fighter fighter)

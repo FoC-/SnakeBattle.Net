@@ -36,13 +36,13 @@ namespace SnakeBattleNet.Core
                 foreach (var fighter in Shuffle(fighters))
                 {
                     var possibleDirections = fieldComparer.PossibleDirections(fighter, fighters.Except(new[] { fighter }));
-                    var directions = fieldComparer.DecidedDirections(fighter, possibleDirections);
-                    if (directions.Length == 0)
+                    if (possibleDirections.Length == 0)
                     {
                         skipped++;
                         continue;
                     }
-                    var direction = directions[random.Next(directions.Length)];
+                    var directions = fieldComparer.DecidedDirections(fighter, possibleDirections);
+                    var direction = directions.Item2[random.Next(directions.Item2.Length)];
                     TryBite(fighter, direction);
                 }
 
@@ -83,7 +83,7 @@ namespace SnakeBattleNet.Core
         {
             battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Empty;
             fighter.CutTail();
-            if (fighter.Body.Count > 1)
+            if (fighter.Tail != null)
                 battleField[fighter.Tail.X, fighter.Tail.Y] = Content.Tail;
         }
 
