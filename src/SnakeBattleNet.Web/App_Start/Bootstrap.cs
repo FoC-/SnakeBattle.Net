@@ -15,8 +15,9 @@ using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using Newtonsoft.Json.Serialization;
 using Owin;
-using SnakeBattleNet.Core;
 using SnakeBattleNet.Core.Contract;
+using SnakeBattleNet.Core.Replay;
+using SnakeBattleNet.Core.Replay.GameEvents;
 using SnakeBattleNet.Web;
 using SnakeBattleNet.Web.Core;
 using SnakeBattleNet.Web.Core.Auth;
@@ -143,16 +144,17 @@ namespace SnakeBattleNet.Web
                     IsSelf = v.IsSelf
                 });
 
-            Mapper.CreateMap<Replay, ReplayViewModel>();
-            Mapper.CreateMap<BattleField, IEnumerable<ContentViewModel>>()
+            Mapper.CreateMap<GameRecorder, ReplayViewModel>();
+            Mapper.CreateMap<GameInit, dynamic>()
                 .ConvertUsing(v =>
                 {
                     var models = new List<ContentViewModel>();
-                    for (var x = 0; x < v.SideLength; x++)
-                        for (var y = 0; y < v.SideLength; y++)
-                            models.Add(new ContentViewModel { C = v[x, y], P = new Position { X = x, Y = y } });
-                    return models;
+                    for (var x = 0; x < v.BattleField.SideLength; x++)
+                        for (var y = 0; y < v.BattleField.SideLength; y++)
+                            models.Add(new ContentViewModel { C = v.BattleField[x, y], P = new Position { X = x, Y = y } });
+                    return new { Name = v.Name, RandomSeed = v.RandomSeed, BattleField = models };
                 });
+
             Mapper.CreateMap<Cell<Content>, ContentViewModel>()
                 .ConvertUsing(v => new ContentViewModel { C = v.Content, P = new Position { X = v.X, Y = v.Y } });
 

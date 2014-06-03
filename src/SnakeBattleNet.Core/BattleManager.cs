@@ -2,39 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using SnakeBattleNet.Core.Contract;
+using SnakeBattleNet.Core.Replay;
+using SnakeBattleNet.Core.Replay.GameEvents;
 
 namespace SnakeBattleNet.Core
 {
     public class BattleManager
     {
         private readonly IList<Fighter> fighters;
-        private readonly Replay replay;
+        private readonly GameRecorder gameRecorder;
         private readonly FieldComparer fieldComparer;
         private readonly BattleField battleField;
         private readonly Random random;
 
-        public BattleManager(IList<Fighter> fighters, Replay replay, FieldComparer fieldComparer, BattleField battleField, int randomSeed)
+        public BattleManager(IList<Fighter> fighters, GameRecorder gameRecorder, FieldComparer fieldComparer, BattleField battleField, int randomSeed)
         {
             this.fighters = fighters;
-            this.replay = replay;
+            this.gameRecorder = gameRecorder;
             this.fieldComparer = fieldComparer;
             this.battleField = battleField;
             random = new Random(randomSeed);
+
+            gameRecorder.StartNewFrame();
+            gameRecorder.FrameAdd(new GameInit { RandomSeed = randomSeed, BattleField = (BattleField)battleField.Clone() });
+            foreach (var fighter in fighters) gameRecorder.FrameAdd(new SnakeGrow { Snake = fighter.Id, NewHeadPosition = fighter.Tail });
         }
 
         public void Fight(int rounds)
         {
             foreach (var fighter in fighters)
             {
+                gameRecorder.StartNewFrame();
                 for (var i = 0; i < 9; i++)
                 {
                     fighter.Grow(fighter.Tail.Direction);
+                    gameRecorder.FrameAdd(new SnakeGrow { Snake = fighter.Id, NewHeadPosition = fighter.Head });
                 }
                 PutOnBattleField(fighter);
             }
 
             for (var round = 0; round < rounds; round++)
             {
+                gameRecorder.StartNewFrame();
                 var skipped = 0;
                 foreach (var fighter in Shuffle(fighters))
                 {
@@ -46,17 +55,13 @@ namespace SnakeBattleNet.Core
                     }
                     var directions = fieldComparer.DecidedDirections(fighter, possibleDirections);
                     var direction = directions.Item2[random.Next(directions.Item2.Length)];
-                    TryBite(fighter, direction);
+                    TryBite(fighter, direction, directions.Item1);
                 }
-
-                foreach (var fighter in fighters)
-                    replay.SaveFighter(round, fighter);
-
                 if (skipped == fighters.Count) break;
             }
         }
 
-        private void TryBite(Fighter biting, Direction direction)
+        private void TryBite(Fighter biting, Direction direction, int chip)
         {
             var newHead = Directed.ToDirection(biting.Head, direction);
             var bitten = fighters.FirstOrDefault(f => f.Tail.X == newHead.X && f.Tail.Y == newHead.Y);
@@ -64,11 +69,13 @@ namespace SnakeBattleNet.Core
             {
                 Grow(biting, direction);
                 CutTail(biting);
+                gameRecorder.FrameAdd(new SnakeMove { Snake = biting.Id, ChipUsed = chip, NewHeadPosition = newHead });
             }
             else
             {
                 CutTail(bitten);
                 Grow(biting, direction);
+                gameRecorder.FrameAdd(new SnakeBite { Snake = biting.Id, ChipUsed = chip, TargetSnake = bitten.Id });
             }
         }
 
