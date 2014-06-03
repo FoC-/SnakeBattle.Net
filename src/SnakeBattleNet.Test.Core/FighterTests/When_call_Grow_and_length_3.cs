@@ -14,7 +14,10 @@ namespace SnakeBattleNet.Test.Core.FighterTests
         };
 
         Because of = () =>
-            fighter.Grow(fighter.Tail.Direction, 2);
+        {
+            fighter.Grow(fighter.Tail.Direction);
+            fighter.Grow(fighter.Tail.Direction);
+        };
 
         It should_make_fighter_with_head = () =>
             fighter.Head.ShouldEqual(new Directed { X = 10, Y = 12, Direction = Direction.North });

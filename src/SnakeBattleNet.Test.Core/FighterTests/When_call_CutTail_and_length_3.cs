@@ -11,7 +11,9 @@ namespace SnakeBattleNet.Test.Core.FighterTests
         Establish context = () =>
         {
             fighter = new Fighter("fighter", new List<IEnumerable<ChipCell>>(), new Directed { X = 10, Y = 10, Direction = Direction.North });
-            fighter.Grow(fighter.Tail.Direction, 3);
+            fighter.Grow(fighter.Tail.Direction);
+            fighter.Grow(fighter.Tail.Direction);
+            fighter.Grow(fighter.Tail.Direction);
         };
 
         Because of = () =>

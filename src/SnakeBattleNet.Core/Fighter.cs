@@ -20,22 +20,19 @@ namespace SnakeBattleNet.Core
             Tail = tail;
         }
 
-        public void Grow(Direction direction, int length = 1)
+        public void Grow(Direction direction)
         {
-            for (var i = 0; i < length; i++)
+            if (Body.First == null && Tail == null) return;
+            if (Body.First == null && Head == null)
             {
-                if (Body.First == null && Tail == null) continue;
-                if (Body.First == null && Head == null)
-                {
-                    Head = Directed.ToDirection(Tail, direction);
-                    continue;
-                }
-                if (Head != null)
-                {
-                    Body.AddFirst(Head);
-                }
-                Head = Directed.ToDirection(Body.First.Value, direction);
+                Head = Directed.ToDirection(Tail, direction);
+                return;
             }
+            if (Head != null)
+            {
+                Body.AddFirst(Head);
+            }
+            Head = Directed.ToDirection(Body.First.Value, direction);
         }
 
         public void CutTail()

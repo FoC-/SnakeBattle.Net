@@ -26,7 +26,10 @@ namespace SnakeBattleNet.Core
         {
             foreach (var fighter in fighters)
             {
-                fighter.Grow(fighter.Tail.Direction, 9);
+                for (var i = 0; i < 9; i++)
+                {
+                    fighter.Grow(fighter.Tail.Direction);
+                }
                 PutOnBattleField(fighter);
             }
 
