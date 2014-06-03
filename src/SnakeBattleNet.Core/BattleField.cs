@@ -4,7 +4,7 @@ using SnakeBattleNet.Core.Contract;
 
 namespace SnakeBattleNet.Core
 {
-    public class BattleField
+    public class BattleField : ICloneable
     {
         public int SideLength { get; private set; }
         private readonly Content[,] field;
@@ -99,6 +99,17 @@ namespace SnakeBattleNet.Core
                 field[0, y] = Content.Wall;
                 field[SideLength - 1, y] = Content.Wall;
             }
+        }
+
+        public object Clone()
+        {
+            var newField = new BattleField();
+            for (var x = 0; x < SideLength; x++)
+                for (var y = 0; y < SideLength; y++)
+                {
+                    newField[x, y] = this[x, y];
+                }
+            return newField;
         }
 
         public override string ToString()
