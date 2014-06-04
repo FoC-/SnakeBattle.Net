@@ -47,25 +47,26 @@
 {
     <script type="text/javascript">
         $(function () {
-            SBN.App.set('settings', {
-                snake: {
-                    id: '@Model'
-                },
-                selectors: {
-                    chipView: 'script#chip_view',
-                    alertView: 'script#alert_view',
-                    kineticContainer: '.kinetic_container',
-                    selctorContainer: '#selector_container',
-                    container: '#chip_container',
-                    chip: '.chip',
-                    insertButton: '#button_insert_chip',
-                    deleteButton: '#button_delete_chip',
-                    addButton: '#button_add_chip',
-                    saveButton: '#button_save_snake',
-                    nameInput: '#input_name'
+            SBN.AEM.pub({
+                name: 'RenderEditSnake', msg: {
+                    snake: {
+                        id: '@Model'
+                    },
+                    selectors: {
+                        chipView: 'script#chip_view',
+                        alertView: 'script#alert_view',
+                        kineticContainer: '.kinetic_container',
+                        selctorContainer: '#selector_container',
+                        container: '#chip_container',
+                        chip: '.chip',
+                        insertButton: '#button_insert_chip',
+                        deleteButton: '#button_delete_chip',
+                        addButton: '#button_add_chip',
+                        saveButton: '#button_save_snake',
+                        nameInput: '#input_name'
+                    }
                 }
             });
-            SBN.App.run(['settings', 'Renderer', 'Snake', 'ImageLoader', SBN.Edit]);
         });
     </script>
 }

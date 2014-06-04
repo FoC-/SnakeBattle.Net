@@ -16,16 +16,216 @@ SBN.Contract = {
     },
     content: { Empty: 'empty', Wall: 'wall', Head: 'head', Body: 'body', Tail: 'tail', Gateway: 'gateway' }
 };
+SBN.Resource = new function () {
+    var self = this;
+    var endpoint = {};
+    var ajaxCall = function (success, error, verb, data) {
+        verb = verb || 'GET';
 
-SBN.Edit = function (settings, Renderer, Snake, ImageLoader) {
-    var imageLoader = ImageLoader.load(SBN.Contract.imageMap);
-    var snake = Snake(settings.snake);
+        var settings = {
+            url: endpoint[verb],
+            type: verb,
+            contentType: "application/json",
+            dataType: 'json',
+            success: success || $.noop,
+            error: error || $.noop
+        };
+        if (data) {
+            settings.data = JSON.stringify(data);
+        }
+
+        $.ajax(settings);
+    };
+    this.Get = function (success) {
+        ajaxCall(success);
+    };
+    this.Save = function (data, success, error) {
+        ajaxCall(success, error, 'POST', data);
+    };
+
+    this.Snake = function (query) {
+        endpoint.GET = '/api/Snake/' + (query ? 'Get?' + $.param(query) : 'Get');
+        endpoint.POST = '/api/Snake/Save';
+        return self;
+    };
+    this.Battle = function (query) {
+        endpoint.GET = '/api/Battle/' + (query ? 'Get?' + $.param(query) : 'Demo');
+        return self;
+    };
+};
+
+SBN.AEM = new function () {
+    var listeners = {};
+    this.sub = function (name, func) {
+        listeners[name] = listeners[name] || [];
+        listeners[name][listeners[name].length] = func;
+    };
+    this.pub = function (e) {
+        var cbs = listeners[e.name];
+        if (cbs) {
+            for (var j = 0; j < cbs.length; j++) {
+                (function (f) {
+                    setTimeout(function () {
+                        f(e.msg, e);
+                    }, 0);
+                })(cbs[j]);
+            }
+        }
+    }
+};
+SBN.AEM.sub('LoadImages', function (sources, header) {
+    var images = {}, loaded = 0, total = 0;
+    for (var source in sources) {
+        images[source] = new Image();
+        images[source].onload = function () {
+            if (++loaded >= total) SBN.AEM.pub({ name: 'ImagesLoaded', msg: images, chanel: header.chanel });
+        };
+        total++;
+    }
+    for (var src in sources) {
+        images[src].src = sources[src];
+    }
+});
+SBN.AEM.sub('RenderChip', function (message) {
+    var selectorModel = message.$selectorContainer.data('model');
+
+    var stage = new Kinetic.Stage({
+        container: message.$kineticContainer[0],
+        width: 350,
+        height: 350
+    });
+    var layer = new Kinetic.Layer();
+    var background = new Kinetic.Rect({
+        x: 0,
+        y: 0,
+        width: 350,
+        height: 350,
+        fill: '#555',
+        opacity: 0.1
+    });
+    layer.add(background);
+    stage.add(layer);
+
+    var map = [];
+    for (var x = 0; x < 7; x++) {
+        map[x] = [];
+        for (var y = 0; y < 7; y++) {
+            map[x][y] = { p: { x: x, y: y }, c: {} };
+        }
+    }
+    message.$kineticContainer.data('model', map);
+
+    $.each(message.model, function (index, cell) {
+        map[cell.p.x][cell.p.y] = cell;
+    });
+
+    $.each(map, function (i, col) {
+        $.each(col, function (j, cell) {
+            SBN.Kinetic.createCell(layer, cell, message.images, selectorModel);
+        });
+    });
+});
+SBN.AEM.sub('RenderSelector', function (message) {
+    var model = { content: 'Tail', color: 'Grey', isSelf: false, exclude: false };
+    message.$selectorContainer.data('model', model);
+
+    var size = SBN.Kinetic.Configuration.size;
+    var elementNumber = 0;
+    var stage = new Kinetic.Stage({
+        container: message.$selectorContainer[0],
+        width: size * 15,
+        height: size
+    });
+    var layer = new Kinetic.Layer();
+
+    $.each(SBN.Contract.colorMap, function (index, value) {
+        var element = new SBN.Kinetic.element({
+            x: elementNumber++ * size + 5,
+            y: 5,
+            name: 'color-selector',
+            selected: model.color === index,
+            color: value,
+            size: SBN.Kinetic.Configuration.size - 10
+        }, stage, function () {
+            model.color = index;
+        });
+        layer.add(element.get());
+    });
+
+    var excludeSelector = new SBN.Kinetic.element({
+        x: elementNumber++ * size + 5,
+        y: 5,
+        name: 'exclude-selector',
+        selected: model.exclude,
+        color: '#555',
+        size: SBN.Kinetic.Configuration.size - 10
+    }, stage, function () {
+        model.exclude = !model.exclude;
+    });
+    excludeSelector.putCross();
+    layer.add(excludeSelector.get());
+
+    $.each(SBN.Contract.content, function (index, value) {
+        var element = new SBN.Kinetic.element({
+            x: elementNumber++ * size + 5,
+            y: 5,
+            name: 'content-selector',
+            selected: model.content == index && model.isSelf == false,
+            color: '#555',
+            size: SBN.Kinetic.Configuration.size - 10
+        }, stage, function () {
+            model.content = index;
+            model.isSelf = false;
+        });
+        element.putImage(message.images[value] || message.images['e' + value]);
+
+        layer.add(element.get());
+        stage.draw();
+    });
+    $.each(SBN.Contract.content, function (index, value) {
+        var img = message.images['o' + value];
+        if (img) {
+            var element = new SBN.Kinetic.element({
+                x: elementNumber++ * size + 5,
+                y: 5,
+                name: 'content-selector',
+                selected: model.content == index && model.isSelf == true,
+                color: '#555',
+                size: SBN.Kinetic.Configuration.size - 10
+            }, stage, function () {
+                model.content = index;
+                model.isSelf = true;
+            });
+            element.putImage(img);
+
+            layer.add(element.get());
+            stage.draw();
+        }
+    });
+
+    stage.add(layer);
+});
+SBN.AEM.sub('SaveSnake', function (snake, header) {
+    SBN.Resource.Snake().Save(snake, function (data) {
+        SBN.AEM.pub({ name: 'SnakeSaveSucess', msg: data, chanel: header.chanel });
+    }, function (error) {
+        SBN.AEM.pub({ name: 'SnakeSaveError', msg: error, chanel: header.chanel });
+    });
+});
+SBN.AEM.sub('GetSnake', function (id, header) {
+    SBN.Resource.Snake({ id: id }).Get(function (data) {
+        SBN.AEM.pub({ name: 'SnakeRecieved', msg: data, chanel: header.chanel });
+    });
+});
+SBN.AEM.sub('RenderEditSnake', function (settings) {
+    var chanel = 'SBN.Edit';
     var selectors = settings.selectors;
     var chipView = $(selectors.chipView).html();
     var alertView = $(selectors.alertView).html();
     var $container = $(selectors.container);
     var $selectorContainer = $(selectors.selctorContainer);
     var $nameInput = $(selectors.nameInput);
+    var images;
 
     var mapToModel = function (map) {
         var m = [];
@@ -39,68 +239,71 @@ SBN.Edit = function (settings, Renderer, Snake, ImageLoader) {
         return m;
     };
 
-    function addChip(model) {
-        var $kineticContainer = $(chipView).appendTo($container).find(selectors.kineticContainer);
-        imageLoader.then(function (images) {
-            Renderer.render($kineticContainer, model, $selectorContainer, images);
+    SBN.AEM.sub('SnakeSaveError', function (data) {
+        if (data.statusText == 'OK') return;
+        var $alertView = $(alertView);
+        var $alertList = $alertView.find('dl');
+        var responseText = $.parseJSON(data.responseText);
+        $.each(responseText.modelState, function (key, value) {
+            $alertList.append('<dt>' + key + '</dt>');
+            $.each(value, function (index, message) {
+                $alertList.append('<dd>' + message + '</dd>');
+            });
         });
-    };
-
-    $container.on('click', selectors.insertButton, function () {
-        var parent = $(this).closest('.chip');
-        var $kineticContainer = $(chipView).insertBefore(parent).find(selectors.kineticContainer);
-        imageLoader.then(function (images) {
-            Renderer.render($kineticContainer, [], $selectorContainer, images);
-        });
+        $selectorContainer.append($alertView);
     });
+    SBN.AEM.sub('SnakeRecieved', function (snake) {
+        SBN.AEM.pub({ name: 'RenderSelector', msg: { $selectorContainer: $selectorContainer, images: images }, chanel: chanel });
 
-    $container.on('click', selectors.deleteButton, function () {
-        $(this).closest('.chip').remove();
-    });
-
-    $(selectors.addButton).on('click', function () {
-        addChip([]);
-    });
-
-    $(selectors.saveButton).on('click', function () {
-        $(".alert").alert('close');
-
-        var name = $nameInput.val();
-        var snakeTemplate = {
-            id: settings.snake.id,
-            name: name,
-            chips: []
+        function addChip(model) {
+            var $kineticContainer = $(chipView).appendTo($container).find(selectors.kineticContainer);
+            SBN.AEM.pub({ name: 'RenderChip', msg: { $kineticContainer: $kineticContainer, model: model, $selectorContainer: $selectorContainer, images: images }, chanel: chanel });
         };
 
-        $container.find(selectors.kineticContainer).each(function () {
-            snakeTemplate.chips[snakeTemplate.chips.length] = mapToModel($(this).data('model'));
+        $container.on('click', selectors.insertButton, function () {
+            var parent = $(this).closest('.chip');
+            var $kineticContainer = $(chipView).insertBefore(parent).find(selectors.kineticContainer);
+            SBN.AEM.pub({ name: 'RenderChip', msg: { $kineticContainer: $kineticContainer, model: [], $selectorContainer: $selectorContainer, images: images }, chanel: chanel });
         });
-        snake.Save(snakeTemplate, function (data) {
-            alert('Response: ' + JSON.stringify(data));
-        }, function (data) {
-            if (data.statusText == 'OK') return;
-            var $alertView = $(alertView);
-            var $alertList = $alertView.find('dl');
-            var responseText = $.parseJSON(data.responseText);
-            $.each(responseText.modelState, function (key, value) {
-                $alertList.append('<dt>' + key + '</dt>');
-                $.each(value, function (index, message) {
-                    $alertList.append('<dd>' + message + '</dd>');
-                });
-            });
-            $selectorContainer.append($alertView);
-        });
-    });
 
-    snake.Get(function (data) {
-        $.each(data.chips, function (index, value) {
+        $container.on('click', selectors.deleteButton, function () {
+            $(this).closest('.chip').remove();
+        });
+
+        $(selectors.addButton).on('click', function () {
+            addChip([]);
+        });
+
+        $(selectors.saveButton).on('click', function () {
+            $(".alert").alert('close');
+
+            var name = $nameInput.val();
+            var snakeTemplate = {
+                id: settings.snake.id,
+                name: name,
+                chips: []
+            };
+
+            $container.find(selectors.kineticContainer).each(function () {
+                snakeTemplate.chips[snakeTemplate.chips.length] = mapToModel($(this).data('model'));
+            });
+
+            SBN.AEM.pub({ name: 'SaveSnake', msg: snakeTemplate, chanel: chanel });
+        });
+
+        $.each(snake.chips, function (index, value) {
             addChip(value);
         });
     });
-    imageLoader.then(function (images) {
-        Renderer.renderSelector($selectorContainer, images);
+    SBN.AEM.sub('ImagesLoaded', function (message, headers) {
+        if (headers.chanel !== chanel) return;
+        images = message;
+        SBN.AEM.pub({ name: 'GetSnake', msg: settings.snake.id, chanel: chanel });
     });
-};
+
+    SBN.AEM.pub({ name: 'LoadImages', msg: SBN.Contract.imageMap, chanel: chanel });
+});
+
 SBN.Show = function (settings, Battle, ImageLoader) {
     var imageLoader = ImageLoader.load(SBN.Contract.imageMap);
     var $container = $(settings.selectors.container);
@@ -274,125 +477,6 @@ SBN.Kinetic = {
             return group;
         };
     },
-    render: function ($container, model, $selectorContainer, images) {
-        var selectorModel = $selectorContainer.data('model');
-
-        var stage = new Kinetic.Stage({
-            container: $container[0],
-            width: 350,
-            height: 350
-        });
-        var layer = new Kinetic.Layer();
-        var background = new Kinetic.Rect({
-            x: 0,
-            y: 0,
-            width: 350,
-            height: 350,
-            fill: '#555',
-            opacity: 0.1
-        });
-        layer.add(background);
-        stage.add(layer);
-
-        var map = [];
-        for (var x = 0; x < 7; x++) {
-            map[x] = [];
-            for (var y = 0; y < 7; y++) {
-                map[x][y] = { p: { x: x, y: y }, c: {} };
-            }
-        }
-        $container.data('model', map);
-
-        $.each(model, function (index, cell) {
-            map[cell.p.x][cell.p.y] = cell;
-        });
-
-        $.each(map, function (i, col) {
-            $.each(col, function (j, cell) {
-                SBN.Kinetic.createCell(layer, cell, images, selectorModel);
-            });
-        });
-    },
-    renderSelector: function ($container, images) {
-        var model = { content: 'Tail', color: 'Grey', isSelf: false, exclude: false };
-        $container.data('model', model);
-
-        var size = SBN.Kinetic.Configuration.size;
-        var elementNumber = 0;
-        var stage = new Kinetic.Stage({
-            container: $container[0],
-            width: size * 15,
-            height: size
-        });
-        var layer = new Kinetic.Layer();
-
-        $.each(SBN.Contract.colorMap, function (index, value) {
-            var element = new SBN.Kinetic.element({
-                x: elementNumber++ * size + 5,
-                y: 5,
-                name: 'color-selector',
-                selected: model.color === index,
-                color: value,
-                size: SBN.Kinetic.Configuration.size - 10
-            }, stage, function () {
-                model.color = index;
-            });
-            layer.add(element.get());
-        });
-
-        var excludeSelector = new SBN.Kinetic.element({
-            x: elementNumber++ * size + 5,
-            y: 5,
-            name: 'exclude-selector',
-            selected: model.exclude,
-            color: '#555',
-            size: SBN.Kinetic.Configuration.size - 10
-        }, stage, function () {
-            model.exclude = !model.exclude;
-        });
-        excludeSelector.putCross();
-        layer.add(excludeSelector.get());
-
-        $.each(SBN.Contract.content, function (index, value) {
-            var element = new SBN.Kinetic.element({
-                x: elementNumber++ * size + 5,
-                y: 5,
-                name: 'content-selector',
-                selected: model.content == index && model.isSelf == false,
-                color: '#555',
-                size: SBN.Kinetic.Configuration.size - 10
-            }, stage, function () {
-                model.content = index;
-                model.isSelf = false;
-            });
-            element.putImage(images[value] || images['e' + value]);
-
-            layer.add(element.get());
-            stage.draw();
-        });
-        $.each(SBN.Contract.content, function (index, value) {
-            var img = images['o' + value];
-            if (img) {
-                var element = new SBN.Kinetic.element({
-                    x: elementNumber++ * size + 5,
-                    y: 5,
-                    name: 'content-selector',
-                    selected: model.content == index && model.isSelf == true,
-                    color: '#555',
-                    size: SBN.Kinetic.Configuration.size - 10
-                }, stage, function () {
-                    model.content = index;
-                    model.isSelf = true;
-                });
-                element.putImage(img);
-
-                layer.add(element.get());
-                stage.draw();
-            }
-        });
-
-        stage.add(layer);
-    },
     renderBattleField: function (stage, cells, imageSelector) {
         var background = new Kinetic.Layer();
         $.each(cells, function (index, cell) {
@@ -425,79 +509,6 @@ SBN.Kinetic = {
             });
             layer.draw();
         }, layer);
-    },
-};
-
-SBN.Service = {
-    ImageLoader: new function () {
-        var self = this,
-            images = {},
-            loaded = 0,
-            total = 0,
-            clb = undefined,
-            isAsyncComplete = false;
-
-        this.load = function (sources) {
-            for (var source in sources) {
-                images[source] = new Image();
-                images[source].onload = function () {
-                    if (++loaded >= total) {
-                        isAsyncComplete = true;
-                        clb && clb(images);
-                    }
-                };
-                total++;
-            }
-            for (var src in sources) {
-                images[src].src = sources[src];
-            }
-            return self;
-        };
-
-        this.then = function (callback) {
-            if (isAsyncComplete) {
-                callback(images);
-            } else {
-                clb = callback;
-            }
-        };
-    },
-    Resource: new function () {
-        var self = this;
-        var endpoint = {};
-        var ajaxCall = function (success, error, verb, data) {
-            verb = verb || 'GET';
-
-            var settings = {
-                url: endpoint[verb],
-                type: verb,
-                contentType: "application/json",
-                dataType: 'json',
-                success: success || $.noop,
-                error: error || $.noop
-            };
-            if (data) {
-                settings.data = JSON.stringify(data);
-            }
-
-            $.ajax(settings);
-        };
-        this.Get = function (success) {
-            ajaxCall(success);
-        };
-        this.Save = function (data, success, error) {
-            ajaxCall(success, error, 'POST', data);
-        };
-
-        this.Snake = function (query) {
-            endpoint.GET = '/api/Snake/' + (query ? 'Get?' + $.param(query) : 'Get');
-            endpoint.POST = '/api/Snake/Save';
-            return self;
-        };
-        this.Battle = function (query) {
-            endpoint.GET = '/api/Battle/' + (query ? 'Get?' + $.param(query) : 'Demo');
-            return self;
-        };
     },
 };
 
@@ -537,29 +548,7 @@ SBN.App = new function () {
         target.apply(target, deps);
     };
 };
-SBN.App.set('Battle', SBN.Service.Resource.Battle);
-SBN.App.set('Snake', SBN.Service.Resource.Snake);
-SBN.App.set('ImageLoader', SBN.Service.ImageLoader);
+SBN.App.set('Battle', SBN.Resource.Battle);
+SBN.App.set('Snake', SBN.Resource.Snake);
 SBN.App.set('Renderer', SBN.Kinetic);
-
-SBN.AEM = new function () {
-    var listeners = {};
-
-    this.sub = function (name, func) {
-        listeners[name] = listeners[name] || [];
-        listeners[name][listeners[name].length] = func;
-    };
-
-    this.pub = function (e) {
-        var cbs = listeners[e.name];
-        if (cbs) {
-            for (var j = 0; j < cbs.length; j++) {
-                (function (f) {
-                    setTimeout(function () {
-                        f(e);
-                    }, 0);
-                })(cbs[j]);
-            }
-        }
-    }
-};
+SBN.App.set('MessageHandler', SBN.AEM);
