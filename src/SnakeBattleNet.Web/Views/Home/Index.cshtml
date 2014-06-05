@@ -7,17 +7,18 @@
 {
     <script type="text/javascript">
         $(function () {
-            SBN.App.set('settings', {
-                auto: {
-                    play: true,
-                    rewind: true,
-                    speed: 5
-                },
-                selectors: {
-                    container: '#replay_container',
+            SBN.AEM.pub({
+                name: 'RenderBattle', msg: {
+                    auto: {
+                        play: true,
+                        rewind: true,
+                        speed: 5
+                    },
+                    selectors: {
+                        container: '#replay_container',
+                    }
                 }
             });
-            SBN.App.run(['settings', 'Battle', 'ImageLoader', SBN.Show]);
         });
     </script>
 }

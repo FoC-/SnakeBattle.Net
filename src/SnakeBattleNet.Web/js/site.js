@@ -53,6 +53,28 @@ SBN.Resource = new function () {
         return self;
     };
 };
+SBN.AnimationStream = function () {
+    var frames = [],
+        speed = 8,
+        skipIndex = 0,
+        currentFrame;
+    this.get = function () {
+        if (++skipIndex % speed === 0) {
+            skipIndex = 0;
+            var tFrame = frames.shift();
+            if (tFrame) {
+                currentFrame = tFrame;
+            }
+        }
+        return currentFrame;
+    };
+    SBN.AEM.sub('NewAnimationFrame', function (frame) {
+        frames[frames.length] = frame;
+    });
+    SBN.AEM.sub('SetAnimationSpeed', function (spd) {
+        speed = spd;
+    });
+};
 
 SBN.AEM = new function () {
     var listeners = {};
@@ -217,8 +239,13 @@ SBN.AEM.sub('GetSnake', function (id, header) {
         SBN.AEM.pub({ name: 'SnakeRecieved', msg: data, chanel: header.chanel });
     });
 });
+SBN.AEM.sub('GetBattle', function (snakes, header) {
+    SBN.Resource.Battle(snakes).Get(function (data) {
+        SBN.AEM.pub({ name: 'BattleRecieved', msg: data.events, chanel: header.chanel });
+    });
+});
 SBN.AEM.sub('RenderEditSnake', function (settings) {
-    var chanel = 'SBN.Edit';
+    var chanel = 'RenderEditSnake';
     var selectors = settings.selectors;
     var chipView = $(selectors.chipView).html();
     var alertView = $(selectors.alertView).html();
@@ -303,75 +330,69 @@ SBN.AEM.sub('RenderEditSnake', function (settings) {
 
     SBN.AEM.pub({ name: 'LoadImages', msg: SBN.Contract.imageMap, chanel: chanel });
 });
-
-SBN.Show = function (settings, Battle, ImageLoader) {
-    var imageLoader = ImageLoader.load(SBN.Contract.imageMap);
+SBN.AEM.sub('RenderBattle', function (settings) {
+    var chanel = 'RenderBattle';
     var $container = $(settings.selectors.container);
     var $buttonStart = $(settings.selectors.buttonStart);
     var $selectSpeed = $(settings.selectors.selectSpeed);
-    var speedSelector;
+    var images;
+
     if ($selectSpeed[0]) {
-        speedSelector = function () {
-            return $selectSpeed.val();
-        };
+        $selectSpeed[0].change(function () {
+            SBN.AEM.pub({ name: 'SetAnimationSpeed', msg: $(this).val() });
+        });
     } else {
-        speedSelector = function () {
-            return settings.auto.speed;
-        };
+        SBN.AEM.pub({ name: 'SetAnimationSpeed', msg: settings.auto.speed });
     }
 
-    imageLoader.then(function (images) {
-        Battle(settings.snakes).Get(function (replay) {
-            var imageSelector = function (content) {
-                var c = SBN.Contract.content[content];
-                if (images[c]) {
-                    return images[c];
-                } else {
-                    return images['o' + c];
-                }
-            };
+    SBN.AEM.sub('BattleRecieved', function (replay) {
+        var imageSelector = function (content) {
+            var c = SBN.Contract.content[content];
+            if (images[c]) {
+                return images[c];
+            } else {
+                return images['o' + c];
+            }
+        };
 
-            var frameSelector = new function () {
-                var frames = replay.frames,
-                    frameNumber = 0,
-                    frameIndex = 0,
-                    frm = frames[0];
-                this.get = function () {
-                    if (++frameNumber % speedSelector() === 0) {
-                        frameIndex++;
-                        frm = frames[frameIndex];
-                        if (!frm) {
-                            frameIndex--;
-                            frm = frames[frameIndex];
-                        }
-                    }
-                    return frm;
-                };
-            };
+        var stage = new Kinetic.Stage({
+            container: $container[0],
+            width: 810,
+            height: 810
+        });
 
-            var stage = new Kinetic.Stage({
-                container: $container[0],
-                width: 810,
-                height: 810
-            });
-            SBN.Kinetic.renderBattleField(stage, replay.battleField, imageSelector);
+        SBN.AEM.sub('GameInit', function (e) {
+            SBN.Kinetic.renderBattleField(stage, e.battleField, imageSelector);
+        });
 
-            var anim = SBN.Kinetic.animateBattle(stage, imageSelector, frameSelector);
-            $buttonStart.on('click', function () {
-                if (anim.isRunning()) {
-                    $buttonStart.html('Start');
-                    anim.stop();
-                } else {
-                    $buttonStart.html('Stop');
-                    anim.start();
-                }
-            });
-            if (settings.auto && settings.auto.play) {
+        var event;
+        while (event = replay.shift()) {
+            SBN.AEM.pub({ name: event.name, msg: event });
+        }
+
+        var anim = SBN.Kinetic.animateBattle(stage, imageSelector, frameSelector);
+        $buttonStart.on('click', function () {
+            if (anim.isRunning()) {
+                $buttonStart.html('Start');
+                anim.stop();
+            } else {
+                $buttonStart.html('Stop');
                 anim.start();
             }
         });
+        if (settings.auto && settings.auto.play) {
+            anim.start();
+        }
     });
-};
+
+    SBN.AEM.sub('ImagesLoaded', function (message, headers) {
+        if (headers.chanel !== chanel) return;
+        images = message;
+        SBN.AEM.pub({ name: 'GetBattle', msg: settings.snakes, chanel: chanel });
+    });
+
+    SBN.AEM.pub({ name: 'LoadImages', msg: SBN.Contract.imageMap, chanel: chanel });
+});
 
 SBN.Kinetic = {
     Configuration: {
@@ -511,44 +532,3 @@ SBN.Kinetic = {
         }, layer);
     },
 };
-
-SBN.App = new function () {
-    var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
-    var FN_ARG_SPLIT = /,/;
-    var FN_ARG = /^\s*(_?)(\S+?)\1\s*$/;
-    var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-    var self = this;
-    var dependencies = {};
-
-    this.set = function (name, dependency) {
-        dependencies[name] = dependency;
-        return self;
-    };
-    this.run = function (o) {
-        var names = [],
-            target;
-
-        if (typeof o == 'function') {
-            var text = o.toString().replace(STRIP_COMMENTS, '');
-            var args = text.match(FN_ARGS)[1].split(FN_ARG_SPLIT);
-            names = args.map(function (value) {
-                return value.replace(FN_ARG, function (match, offset, name) { return name; });
-            });
-            target = o;
-        } else if (o instanceof Array) {
-            var last = o.length - 1;
-            names = o.slice(0, last);
-            target = o[last];
-        }
-
-        var deps = names.map(function (value) {
-            return dependencies[value];
-        });
-
-        target.apply(target, deps);
-    };
-};
-SBN.App.set('Battle', SBN.Resource.Battle);
-SBN.App.set('Snake', SBN.Resource.Snake);
-SBN.App.set('Renderer', SBN.Kinetic);
-SBN.App.set('MessageHandler', SBN.AEM);

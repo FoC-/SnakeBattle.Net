@@ -21,17 +21,18 @@
 {
     <script type="text/javascript">
         $(function () {
-            SBN.App.set('settings', {
-                snakes: {
-                    ids: [@Html.Raw("'" + string.Join("','", Model) + "'")]
-                },
-                selectors: {
-                    container: '#replay_container',
-                    buttonStart: '#button_start',
-                    selectSpeed: '#select_speed',
+            SBN.AEM.pub({
+                name: 'RenderBattle', msg: {
+                    snakes: {
+                        ids: [@Html.Raw("'" + string.Join("','", Model) + "'")]
+                    },
+                    selectors: {
+                        container: '#replay_container',
+                        buttonStart: '#button_start',
+                        selectSpeed: '#select_speed',
+                    }
                 }
             });
-            SBN.App.run(['settings', 'Battle', 'ImageLoader', SBN.Show]);
         });
     </script>
 }
