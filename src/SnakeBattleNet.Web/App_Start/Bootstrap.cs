@@ -13,6 +13,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Owin;
 using SnakeBattleNet.Core.Contract;
@@ -48,6 +49,7 @@ namespace SnakeBattleNet.Web
         {
             // Use camel case for JSON data.
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
 
             // Web API routes
             config.MapHttpAttributeRoutes();
