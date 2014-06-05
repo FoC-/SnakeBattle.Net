@@ -1,25 +1,19 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SnakeBattleNet.Core.Replay
 {
     public class GameRecorder
     {
-        public ICollection<IList<GameEvent>> Frames { get; private set; }
+        public ICollection<GameEvent> Events { get; private set; }
 
         public GameRecorder()
         {
-            Frames = new List<IList<GameEvent>>();
+            Events = new List<GameEvent>();
         }
 
-        public void StartNewFrame()
+        public void Add(GameEvent e)
         {
-            Frames.Add(new List<GameEvent>());
-        }
-
-        public void FrameAdd(GameEvent e)
-        {
-            Frames.Last().Add(e);
+            Events.Add(e);
         }
     }
 }

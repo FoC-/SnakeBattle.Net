@@ -39,7 +39,9 @@
     <Compile Include="Contract\Cell.cs" />
     <Compile Include="BattleField.cs" />
     <Compile Include="FieldComparer.cs" />
+    <Compile Include="Replay\GameEvents\GameFinished.cs" />
     <Compile Include="Replay\GameEvents\GameInit.cs" />
+    <Compile Include="Replay\GameEvents\GameStartRound.cs" />
     <Compile Include="Replay\GameEvents\SnakeGrow.cs" />
     <Compile Include="Replay\GameEvent.cs" />
     <Compile Include="Replay\GameRecorder.cs" />

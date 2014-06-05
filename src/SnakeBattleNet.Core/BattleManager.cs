@@ -23,27 +23,25 @@ namespace SnakeBattleNet.Core
             this.battleField = battleField;
             random = new Random(randomSeed);
 
-            gameRecorder.StartNewFrame();
-            gameRecorder.FrameAdd(new GameInit { RandomSeed = randomSeed, BattleField = (BattleField)battleField.Clone() });
-            foreach (var fighter in fighters) gameRecorder.FrameAdd(new SnakeGrow { Snake = fighter.Id, NewHeadPosition = fighter.Tail });
+            gameRecorder.Add(new GameInit { RandomSeed = randomSeed, BattleField = (BattleField)battleField.Clone() });
+            foreach (var fighter in fighters) gameRecorder.Add(new SnakeGrow { Snake = fighter.Id, NewHeadPosition = fighter.Tail });
         }
 
         public void Fight(int rounds)
         {
             foreach (var fighter in fighters)
             {
-                gameRecorder.StartNewFrame();
                 for (var i = 0; i < 9; i++)
                 {
                     fighter.Grow(fighter.Tail.Direction);
-                    gameRecorder.FrameAdd(new SnakeGrow { Snake = fighter.Id, NewHeadPosition = fighter.Head });
+                    gameRecorder.Add(new SnakeGrow { Snake = fighter.Id, NewHeadPosition = fighter.Head });
                 }
                 PutOnBattleField(fighter);
             }
 
             for (var round = 0; round < rounds; round++)
             {
-                gameRecorder.StartNewFrame();
+                gameRecorder.Add(new GameStartRound { RoundNumber = round });
                 var skipped = 0;
                 foreach (var fighter in Shuffle(fighters))
                 {
@@ -59,6 +57,7 @@ namespace SnakeBattleNet.Core
                 }
                 if (skipped == fighters.Count) break;
             }
+            gameRecorder.Add(new GameFinished());
         }
 
         private void TryBite(Fighter biting, Direction direction, int chip)
@@ -69,13 +68,13 @@ namespace SnakeBattleNet.Core
             {
                 Grow(biting, direction);
                 CutTail(biting);
-                gameRecorder.FrameAdd(new SnakeMove { Snake = biting.Id, ChipUsed = chip, NewHeadPosition = newHead });
+                gameRecorder.Add(new SnakeMove { Snake = biting.Id, ChipUsed = chip, NewHeadPosition = newHead });
             }
             else
             {
                 CutTail(bitten);
                 Grow(biting, direction);
-                gameRecorder.FrameAdd(new SnakeBite { Snake = biting.Id, ChipUsed = chip, TargetSnake = bitten.Id });
+                gameRecorder.Add(new SnakeBite { Snake = biting.Id, ChipUsed = chip, TargetSnake = bitten.Id });
             }
         }
 
