@@ -376,23 +376,42 @@ SBN.AEM.sub('RenderBattle', function (settings) {
         height: 810
     });
 
+    var background = new Kinetic.Layer();
     var layer = new Kinetic.Layer();
+    stage.add(background);
     stage.add(layer);
+
+    var putContent = function (x, y, content) {
+        layer.add(new Kinetic.Image({
+            x: x * 30,
+            y: y * 30,
+            image: imageSelector(content),
+            width: 30,
+            height: 30
+        }));
+    };
+
     var animation = new Kinetic.Animation(function () {
         var frame = SBN.AnimationStream.getStream().get();
         if (!frame) return;
 
         layer.removeChildren();
         $.each(frame, function (key, value) {
-            $.each(value, function (index, cell) {
-                layer.add(new Kinetic.Image({
-                    x: cell.p.x * 30,
-                    y: cell.p.y * 30,
-                    image: imageSelector(cell.c),
-                    width: 30,
-                    height: 30
-                }));
-            });
+            var len = value.length;
+            if (len > 0) {
+                var head = value[len - 1];
+                if (head) putContent(head.x, head.y, 'Head');
+            }
+            if (len > 1) {
+                var tail = value[0];
+                if (tail) putContent(tail.x, tail.y, 'Tail');
+            }
+            if (len > 2) {
+                for (var i = 1; i < len - 1; i++) {
+                    var body = value[i];
+                    putContent(body.x, body.y, 'Body');
+                }
+            }
         });
         layer.draw();
     }, layer);
@@ -403,18 +422,47 @@ SBN.AEM.sub('RenderBattle', function (settings) {
     SBN.AEM.sub('AnimationStop', function () {
         animation.stop();
     });
-    SBN.AEM.sub('GameInit', function (e) {
-        SBN.Kinetic.renderBattleField(stage, e.battleField, imageSelector);
-    });
     SBN.AEM.sub('BattleRecieved', function (replay) {
+        var snakes = {},
+            snake;
         var event;
         while (event = replay.shift()) {
             switch (event.name) {
+                case 'GameInit':
+                    {
+                        SBN.Kinetic.renderBattleField(background, event.battleField, imageSelector);
+                        break;
+                    }
                 case 'SnakeGrow':
+                    {
+                        snake = snakes[event.snake] || [];
+                        snake[snake.length] = event.newHeadPosition;
+                        snakes[event.snake] = snake;
+                        break;
+                    }
                 case 'SnakeMove':
+                    {
+                        snake = snakes[event.snake] || [];
+                        snake[snake.length] = event.newHeadPosition;
+                        snake.splice(0, 1);
+                        snakes[event.snake] = snake;
+                        break;
+                    }
                 case 'SnakeBite':
                     {
-                        SBN.AnimationStream.getStream().add(event);
+                        snake = snakes[event.snake] || [];
+                        var targetSnake = snakes[event.targetSnake] || [];
+                        var tail = targetSnake.shift();
+                        snake[snake.length] = tail;
+
+                        snakes[event.snake] = snake;
+                        snakes[event.targetSnake] = targetSnake;
+                        break;
+                    }
+                case 'GameStartRound':
+                    {
+                        var snks = JSON.parse(JSON.stringify(snakes));
+                        SBN.AnimationStream.getStream().add(snks);
                         break;
                     }
                 default:
@@ -548,8 +596,7 @@ SBN.Kinetic = {
             return group;
         };
     },
-    renderBattleField: function (stage, cells, imageSelector) {
-        var background = new Kinetic.Layer();
+    renderBattleField: function (background, cells, imageSelector) {
         $.each(cells, function (index, cell) {
             background.add(new Kinetic.Image({
                 x: cell.p.x * 30,
@@ -559,6 +606,6 @@ SBN.Kinetic = {
                 height: 30
             }));
         });
-        stage.add(background);
+        background.draw();
     },
 };
