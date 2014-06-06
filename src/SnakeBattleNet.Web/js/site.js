@@ -377,11 +377,11 @@ SBN.AEM.sub('RenderBattle', function (settings) {
     });
 
     var background = new Kinetic.Layer();
-    var layer = new Kinetic.Layer();
+    var animationLayer = new Kinetic.Layer();
     stage.add(background);
-    stage.add(layer);
+    stage.add(animationLayer);
 
-    var putContent = function (x, y, content) {
+    var putContent = function (layer, x, y, content) {
         layer.add(new Kinetic.Image({
             x: x * 30,
             y: y * 30,
@@ -395,26 +395,26 @@ SBN.AEM.sub('RenderBattle', function (settings) {
         var frame = SBN.AnimationStream.getStream().get();
         if (!frame) return;
 
-        layer.removeChildren();
+        animationLayer.removeChildren();
         $.each(frame, function (key, value) {
             var len = value.length;
             if (len > 0) {
                 var head = value[len - 1];
-                if (head) putContent(head.x, head.y, 'Head');
+                if (head) putContent(animationLayer, head.x, head.y, 'Head');
             }
             if (len > 1) {
                 var tail = value[0];
-                if (tail) putContent(tail.x, tail.y, 'Tail');
+                if (tail) putContent(animationLayer, tail.x, tail.y, 'Tail');
             }
             if (len > 2) {
                 for (var i = 1; i < len - 1; i++) {
                     var body = value[i];
-                    putContent(body.x, body.y, 'Body');
+                    putContent(animationLayer, body.x, body.y, 'Body');
                 }
             }
         });
-        layer.draw();
-    }, layer);
+        animationLayer.draw();
+    }, animationLayer);
 
     SBN.AEM.sub('AnimationStart', function () {
         animation.start();
@@ -430,7 +430,10 @@ SBN.AEM.sub('RenderBattle', function (settings) {
             switch (event.name) {
                 case 'GameInit':
                     {
-                        SBN.Kinetic.renderBattleField(background, event.battleField, imageSelector);
+                        $.each(event.battleField, function (index, cell) {
+                            putContent(background, cell.p.x, cell.p.y, cell.c);
+                        });
+                        background.draw();
                         break;
                     }
                 case 'SnakeGrow':
@@ -595,17 +598,5 @@ SBN.Kinetic = {
         this.get = function () {
             return group;
         };
-    },
-    renderBattleField: function (background, cells, imageSelector) {
-        $.each(cells, function (index, cell) {
-            background.add(new Kinetic.Image({
-                x: cell.p.x * 30,
-                y: cell.p.y * 30,
-                image: imageSelector(cell.c),
-                width: 30,
-                height: 30
-            }));
-        });
-        background.draw();
     },
 };
