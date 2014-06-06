@@ -53,28 +53,44 @@ SBN.Resource = new function () {
         return self;
     };
 };
-SBN.AnimationStream = function () {
-    var frames = [],
+SBN.AnimationStream = (function () {
+    var stream;
+    var createStream = function () {
+        var frames = [],
         speed = 8,
         skipIndex = 0,
         currentFrame;
-    this.get = function () {
-        if (++skipIndex % speed === 0) {
-            skipIndex = 0;
-            var tFrame = frames.shift();
-            if (tFrame) {
-                currentFrame = tFrame;
-            }
+        var add = function (frame) {
+            frames[frames.length] = frame;
         }
-        return currentFrame;
+        var get = function () {
+            if (++skipIndex % speed === 0) {
+                skipIndex = 0;
+                var tFrame = frames.shift();
+                if (tFrame) {
+                    currentFrame = tFrame;
+                }
+            }
+            return currentFrame;
+        };
+        var setSpeed = function (spd) {
+            speed = spd;
+        };
+        return {
+            get: get,
+            add: add,
+            setSpeed: setSpeed
+        }
     };
-    SBN.AEM.sub('NewAnimationFrame', function (frame) {
-        frames[frames.length] = frame;
-    });
-    SBN.AEM.sub('SetAnimationSpeed', function (spd) {
-        speed = spd;
-    });
-};
+    return {
+        getStream: function () {
+            if (!stream) {
+                stream = createStream();
+            }
+            return stream;
+        }
+    };
+})();
 
 SBN.AEM = new function () {
     var listeners = {};
@@ -337,61 +353,95 @@ SBN.AEM.sub('RenderBattle', function (settings) {
     var $selectSpeed = $(settings.selectors.selectSpeed);
     var images;
 
-    if ($selectSpeed[0]) {
-        $selectSpeed[0].change(function () {
-            SBN.AEM.pub({ name: 'SetAnimationSpeed', msg: $(this).val() });
+    if ($selectSpeed) {
+        $selectSpeed.change(function () {
+            SBN.AnimationStream.getStream().setSpeed($(this).val());
         });
     } else {
-        SBN.AEM.pub({ name: 'SetAnimationSpeed', msg: settings.auto.speed });
+        SBN.AnimationStream.getStream().setSpeed(settings.auto.speed);
     }
 
-    SBN.AEM.sub('BattleRecieved', function (replay) {
-        var imageSelector = function (content) {
-            var c = SBN.Contract.content[content];
-            if (images[c]) {
-                return images[c];
-            } else {
-                return images['o' + c];
-            }
-        };
-
-        var stage = new Kinetic.Stage({
-            container: $container[0],
-            width: 810,
-            height: 810
-        });
-
-        SBN.AEM.sub('GameInit', function (e) {
-            SBN.Kinetic.renderBattleField(stage, e.battleField, imageSelector);
-        });
-
-        var event;
-        while (event = replay.shift()) {
-            SBN.AEM.pub({ name: event.name, msg: event });
+    var imageSelector = function (content) {
+        var c = SBN.Contract.content[content];
+        if (images[c]) {
+            return images[c];
+        } else {
+            return images['o' + c];
         }
+    };
 
-        var anim = SBN.Kinetic.animateBattle(stage, imageSelector, frameSelector);
-        $buttonStart.on('click', function () {
-            if (anim.isRunning()) {
-                $buttonStart.html('Start');
-                anim.stop();
-            } else {
-                $buttonStart.html('Stop');
-                anim.start();
-            }
-        });
-        if (settings.auto && settings.auto.play) {
-            anim.start();
-        }
+    var stage = new Kinetic.Stage({
+        container: $container[0],
+        width: 810,
+        height: 810
     });
 
+    var layer = new Kinetic.Layer();
+    stage.add(layer);
+    var animation = new Kinetic.Animation(function () {
+        var frame = SBN.AnimationStream.getStream().get();
+        if (!frame) return;
+
+        layer.removeChildren();
+        $.each(frame, function (key, value) {
+            $.each(value, function (index, cell) {
+                layer.add(new Kinetic.Image({
+                    x: cell.p.x * 30,
+                    y: cell.p.y * 30,
+                    image: imageSelector(cell.c),
+                    width: 30,
+                    height: 30
+                }));
+            });
+        });
+        layer.draw();
+    }, layer);
+
+    SBN.AEM.sub('AnimationStart', function () {
+        animation.start();
+    });
+    SBN.AEM.sub('AnimationStop', function () {
+        animation.stop();
+    });
+    SBN.AEM.sub('GameInit', function (e) {
+        SBN.Kinetic.renderBattleField(stage, e.battleField, imageSelector);
+    });
+    SBN.AEM.sub('BattleRecieved', function (replay) {
+        var event;
+        while (event = replay.shift()) {
+            switch (event.name) {
+                case 'SnakeGrow':
+                case 'SnakeMove':
+                case 'SnakeBite':
+                    {
+                        SBN.AnimationStream.getStream().add(event);
+                        break;
+                    }
+                default:
+                    SBN.AEM.pub({ name: event.name, msg: event });
+            }
+        }
+
+        if (settings.auto && settings.auto.play) {
+            SBN.AEM.pub({ name: 'AnimationStart' });
+        }
+    });
     SBN.AEM.sub('ImagesLoaded', function (message, headers) {
         if (headers.chanel !== chanel) return;
         images = message;
         SBN.AEM.pub({ name: 'GetBattle', msg: settings.snakes, chanel: chanel });
     });
-
     SBN.AEM.pub({ name: 'LoadImages', msg: SBN.Contract.imageMap, chanel: chanel });
+
+    $buttonStart.on('click', function () {
+        if (animation.isRunning()) {
+            $buttonStart.html('Start');
+            SBN.AEM.pub({ name: 'AnimationStop' });
+        } else {
+            $buttonStart.html('Stop');
+            SBN.AEM.pub({ name: 'AnimationStart' });
+        }
+    });
 });
 
 SBN.Kinetic = {
@@ -510,25 +560,5 @@ SBN.Kinetic = {
             }));
         });
         stage.add(background);
-    },
-    animateBattle: function (stage, imageSelector, frameSelector) {
-        var layer = new Kinetic.Layer();
-        stage.add(layer);
-        return new Kinetic.Animation(function () {
-            layer.removeChildren();
-            var frame = frameSelector.get();
-            $.each(frame, function (key, value) {
-                $.each(value, function (index, cell) {
-                    layer.add(new Kinetic.Image({
-                        x: cell.p.x * 30,
-                        y: cell.p.y * 30,
-                        image: imageSelector(cell.c),
-                        width: 30,
-                        height: 30
-                    }));
-                });
-            });
-            layer.draw();
-        }, layer);
     },
 };
